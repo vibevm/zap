@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spec xmlns="https://vibevm.org/spec/1">
+  <title id="root">ZAP idea map: source concepts and an independent composition</title>
+  <status stage="doc" state="done" comment="Completed non-normative research and original design assessment. Qualitative fit, not empirical proof; no live campaign migration or Qwik application implementation."/>
+
+  <context title="1. What this map establishes">
+    <p>This map identifies concepts that fit the owner’s workflow and makes the reasons for adoption, adaptation or rejection explicit. Its completed status means that the research artifact was authored; it does not mean that these behaviors are implemented or that the pilot campaign has run.</p>
+    <p>The source was inspected at the recorded commit. This is an independently authored design with acknowledged inspiration, not an organizationally isolated clean-room process. The artifacts contain original explanations rather than copied prompt instructions, templates, taxonomy or implementation code.</p>
+    <p>Evidence labels distinguish principles stated by the source authors, qualitative experiences reported in their documentation, and our design composition. None is a measured ranking of the “best” skills.</p>
+    <source repository="https://example.invalid/removed-upstream" commit="3cca18b368ae95cdbdebbff572ccafa662551015"/>
+    <p>GitHub links identify research sources only. The proposed method has no GitHub or issue-tracker runtime dependency. Host-repository references preserve research context and are not package runtime dependencies.</p>
+  </context>
+
+  <application-context title="2. The VibeVM usage pattern">
+    <p role="workflow">Interactive owner drafting, then unattended execution governed by explicit owner-defined stop rules.</p>
+    <p role="foundation">Existing multi-user-planning responsibilities, VibeVM facts and evidence, and the saved recursive/staged-delivery idea.</p>
+    <p role="pilot">Design against the existing 425-node, 212-task graph; preserve source records and stable mappings. No live campaign mutation is performed by this research.</p>
+    <p role="future_viewer">A Qwik 2 viewer is future work. It should render deterministic projections and recorded event rationale, not ask a model to reconstruct plan state.</p>
+    <p role="documentation">Future owner-provided documentation is a versioned evidence and obligation input, not an assumed available source.</p>
+    <p>The owner-selected stop examples are a global pause before a public-format change whose migration affects user data, and a global pause after two failed architectural approaches to the same problem with options presented. These methodological pauses differ from unavoidable provider or resource waiting and actual system limits. A limitation is reported honestly; it never becomes a fabricated completed result.</p>
+  </application-context>
+
+  <source-concepts title="3. Source ideas assessed through our requirements">
+    <concept id="ZAP-I01" title="Represent uncertainty before it can become an executable question" origin="upstream-idea" evidence-level="authored-principle" disposition="adopt" status="doc/done">
+      <p role="reason">A precise unanswered question and an area whose questions are not yet expressible require different treatment. Creating detailed tasks for both conceals assumptions and makes later work depend on invented certainty.</p>
+      <p role="zap-application">Represent an unknown region separately from a question, a known fact and an exclusion. Link the region to the outcome it concerns and the observations that could clarify it. Refinement records whether it produced questions, tasks, exclusions or no further work. Do not claim that the absence of recorded unknowns proves the world has been fully analyzed.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="82-93" href="https://example.invalid/removed-upstream"/>
+        <source path="docs/engineering/wayfinder.md" lines="35-38" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I02" title="Keep scope boundaries separate from incomplete knowledge" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">An excluded area does not become authorized merely because it becomes better understood. However, requiring a completely new effort for every legitimate scope amendment would discard useful continuity.</p>
+      <p role="zap-application">Keep exclusions in the mandate and knowledge gaps in the uncertainty graph. An authorized mandate amendment can revise the affected region without replacing the whole campaign. Record the old scope, the amendment and its authority; a task or a worker note cannot grant itself more scope.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="95-101" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I03" title="Derive compact views from canonical records" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">An overview can make a large effort understandable without repeating every decision. Independently editable summaries create a second source of truth and eventually disagree with detailed records.</p>
+      <p role="zap-application">Give facts, decisions, tasks and evidence stable identities. Generate overview, current working context and dependency views from those records. Show readable names with links and available machine IDs. Refresh relevant records when their inputs change; avoid loading the complete historical body before every small action.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="21-29" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="122-126" href="https://example.invalid/removed-upstream"/>
+        <source path="docs/engineering/wayfinder.md" lines="31-40" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I04" title="Separate work purpose, result maturity and decision authority" origin="upstream-idea" evidence-level="our-design" disposition="adapt" status="doc/done">
+      <p role="reason">The source uses task categories to select a method, but also couples several categories to live human participation. That coupling does not fit an owner who drafts interactively and then leaves the agent working.</p>
+      <p role="zap-application">Use evidence, decision, change, verification and integration as work purposes. Prototype, functional MVP and productization describe result maturity and are a separate axis. Owner input is governed by the mandate and its stop rules, not by purpose or maturity. This classification is ZAP's own composition, not the upstream taxonomy.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="73-80" href="https://example.invalid/removed-upstream"/>
+        <source path="docs/engineering/wayfinder.md" lines="42-55" href="https://example.invalid/removed-upstream"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="17-22" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I05" title="Resolve question prerequisites before downstream choices" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">A decision depends on earlier choices and observations; asking downstream questions too soon invites answers based on assumptions that may immediately change. Asking every available question in a large batch can also overload the owner.</p>
+      <p role="zap-application">Give questions explicit prerequisites and affected obligations. During drafting, present bounded sets of independent material choices with reasons and recommendations. During unattended execution, resolve technical choices within delegated authority and evaluate the owner's stop rules for reserved choices. Recompute only the affected question frontier after new evidence.</p>
+      <sources>
+        <source path="skills/productivity/grilling/SKILL.md" lines="6-8" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/productivity/grilling/SKILL.md" lines="24-28" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I06" title="Discover facts autonomously and retain their sources" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">The owner should not have to supply observable repository or environment facts. A sourced observation still needs an applicability boundary; a research report alone does not establish every claim for every later revision.</p>
+      <p role="zap-application">Research local code, tools and external primary sources through bounded evidence tasks. Record the observed subject, revision or time, source, uncertainty and contradictions. Add candidate facts to the graph and accept them under the applicable evidence contract. Reuse valid facts before rediscovering them, and dispatch independent research only when review capacity can absorb it.</p>
+      <sources>
+        <source path="skills/productivity/grilling/SKILL.md" lines="26" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/research/SKILL.md" lines="6-12" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="115" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I07" title="Make domain meanings explicit and test them with concrete cases" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">A common term may conceal different state transitions or ownership rules. Checking a concrete scenario against both the declared meaning and actual code exposes disagreements that a vocabulary list alone cannot settle.</p>
+      <p role="zap-application">Bind domain terms to VibeVM fact and specification identities, including context boundaries, examples and contradictions. Treat observed code behavior and intended behavior as distinguishable claims. Keep consequential trade-offs with their decisions. Do not introduce a copied glossary-file convention as a second authority beside the existing fact graph.</p>
+      <sources>
+        <source path="skills/engineering/domain-modeling/SKILL.md" lines="44-64" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/domain-modeling/SKILL.md" lines="66-74" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I08" title="Preserve consequential decisions and revalidate their premises" origin="upstream-idea" evidence-level="reported-experience" disposition="adapt" status="doc/done">
+      <p role="reason">The source documentation reports weak handling of a previously closed decision that later proves wrong. Editing a summary or retaining a closed status is insufficient to explain which conclusions are now unreliable; the report is qualitative, not an effectiveness measurement.</p>
+      <p role="zap-application">Record premises, evidence, alternatives, concise rationale, authority and resulting obligations for consequential decisions. New contradictory evidence marks affected conclusions for revalidation. A successor decision supersedes the earlier one without erasing history. Follow explicit premise links to identify impacted work, while preserving acceptance whose subjects remain valid.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="125-126" href="https://example.invalid/removed-upstream"/>
+        <source path="docs/engineering/wayfinder.md" lines="83-84" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/domain-modeling/SKILL.md" lines="66-74" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I09" title="Use bounded experiments to answer design uncertainty" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">A concrete experiment can distinguish approaches more cheaply than prolonged speculation. A useful prototype is defined by its question and observations, not by a particular UI framework, by compulsory human selection or by an absolute prohibition on tests.</p>
+      <p role="zap-application">Name the uncertainty, distinguishing observations, effect perimeter and bounded experiment before implementation. Choose a headless probe, executable scenario or interactive artifact as appropriate. Keep observations, limitations and the resulting decision even if code is discarded. Tests are allowed when they are the cheapest discriminating instrument; a working prototype does not imply production acceptance.</p>
+      <sources>
+        <source path="skills/engineering/prototype/SKILL.md" lines="8-26" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/prototype/LOGIC.md" lines="18-33" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/prototype/LOGIC.md" lines="43-48" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/prototype/UI.md" lines="98-112" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I10" title="Use independent behavioral oracles and targeted checks" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">A test derived from the implementation's own calculation can pass while both are wrong. Testing a meaningful boundary supports refactoring, but neither an always-highest-boundary rule nor a full-suite run after every local task follows from that principle.</p>
+      <p role="zap-application">Choose the narrowest reliable observation that establishes the required behavior or invariant. Derive expected outcomes from independent specifications, worked examples or trusted observations. Reuse evidence only for matching consequential inputs. Retain VibeVM's targeted-test and suspicion-only mutation policies; record why a wider check is needed rather than turning each task into a full test campaign.</p>
+      <sources>
+        <source path="skills/engineering/tdd/SKILL.md" lines="12-32" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/implement/SKILL.md" lines="9-13" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I11" title="Review behavior and formal conformance as separate questions" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">A conforming implementation can solve the wrong problem, and a functional implementation can leave formal obligations open. Treating these as separate questions is useful; automatically allocating two reviewers to every change is not necessary.</p>
+      <p role="zap-application">Keep findings about behavior, conformance and permitted deferrals distinguishable. Use independent reviewers for consequential uncertainty, isolated review axes or difficult evidence, with a pinned subject and closed packet. Let deterministic tools handle what they can establish. Central acceptance includes all required axes and does not average away a failure in one of them.</p>
+      <sources>
+        <source path="skills/engineering/code-review/SKILL.md" lines="6-11" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/code-review/SKILL.md" lines="38-41" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/code-review/SKILL.md" lines="80-87" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I12" title="Plan increments around verifiable guarantees" origin="upstream-idea" evidence-level="authored-principle" disposition="adapt" status="doc/done">
+      <p role="reason">A small integrated result exposes problems earlier than a collection of unrelated layer edits. Some widespread changes cannot be split into independently valid product increments without an explicit compatibility transition.</p>
+      <p role="zap-application">Prefer increments that establish an observable guarantee, and make dependencies refer to the guarantee actually needed. For widespread migrations, model introduction of a compatible form, bounded caller migration and eventual removal. When only joint integration can establish the guarantee, name that boundary and its integrator rather than marking each partial branch as accepted product behavior.</p>
+      <sources>
+        <source path="skills/engineering/to-tickets/SKILL.md" lines="19-40" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/to-tickets/SKILL.md" lines="65" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I13" title="Coordinate parallelism using accepted inputs and real constraints" origin="upstream-idea" evidence-level="reported-experience" disposition="adapt" status="doc/done">
+      <p role="reason">Dependency edges help find independent work, but the source reports duplicated owner questions in parallel conversations. Unrestricted worker fanout also ignores shared files, build resources and the coordinator's capacity to review results.</p>
+      <p role="zap-application">Derive candidates from accepted input versions, question prerequisites, write perimeters, shared resources and pending review. Capture the inputs each worker used, assign integration ownership and bound concurrent heavy checks by observed capacity. Keep one durable owner-decision record. Parallel preparation and review can overlap execution without accepting a worker's own report as the final result.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="67-69" href="https://example.invalid/removed-upstream"/>
+        <source path="docs/engineering/wayfinder.md" lines="74-75" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/in-progress/implement-spec/SKILL.md" lines="11-29" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+  </source-concepts>
+
+  <original-composition title="4. Our composition: recursion, obligations, authority and observability">
+    <p>This section combines the owner’s prior recursive and staged-delivery idea with the requirements of long unattended execution. Citations indicate comparison points or saved design context; they do not attribute the resulting ZAP architecture to the upstream author.</p>
+    <concept id="ZAP-I14" title="Refine plans progressively while conserving obligations" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
+      <p role="reason">The owner's recursive planning idea combines broad intent with local execution refinement. Detailed instructions for distant work become stale, but leaving a region coarse must not erase its known obligations.</p>
+      <p role="zap-application">At any level, lower a parent result into executable work only when useful. Record mappings from each known obligation to implementation and proof, together with unresolved regions and inherited authority. Check explicit coverage and graph validity algorithmically; semantic equivalence still needs judgment. Refine the affected portion after discoveries, and terminate recursion at a sufficiently clear, verifiable action.</p>
+      <sources>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="11-14" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="34-39" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="docs/engineering/wayfinder.md" lines="65-72" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/to-tickets/SKILL.md" lines="19-40" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I15" title="Treat staged delivery as a route with conserved completion debt" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
+      <p role="reason">Prototype, functional MVP and productization can separate discovery from formal completion, especially under AI-Native requirements. Forcing every task through all stages would add overhead, while ignoring deferrals would silently reduce the final contract.</p>
+      <p role="zap-application">Choose direct delivery or the required subset of stages. Record permitted deferrals, the guarantee of the current stage and where each obligation will be discharged. Preserve functional invariants and effect boundaries throughout. Accept an experiment as an experiment; the parent remains open until its full contract is established. Demonstrate a path to final constraints early when that path is itself uncertain.</p>
+      <sources>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="17-31" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="42-45" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="skills/engineering/prototype/SKILL.md" lines="21-26" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I16" title="Separate owner authority from agent-editable planning" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
+      <p role="reason">The upstream documentation reports an agent writing an execution exception into its own notes and later treating that text as authorization. ZAP must make the authority of an instruction distinguishable from the plan that proposes how to act on it.</p>
+      <p role="zap-application">Record who established the mandate, delegation bounds and stop conditions. Agent decisions and plan changes cite their existing authority. They cannot promote an agent-authored note into an owner grant. A change in account, model or permission bypass mode does not create a new mandate. This is a provenance and validation requirement, not a promise that a document format can defeat arbitrary code execution.</p>
+      <sources>
+        <source path="docs/engineering/wayfinder.md" lines="68-69" href="https://example.invalid/removed-upstream"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="28" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="42-44" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I17" title="Make owner-defined stop rules an independent execution contract" origin="zap-composition" evidence-level="our-design" disposition="adapt" status="doc/done">
+      <p role="reason">The intended pattern is initial interactive drafting followed by hours, days or weeks of unattended work. Whether a task asks a question or builds a prototype should not itself force a pause; the owner determines the reserved boundaries.</p>
+      <p role="zap-application">Record evaluable stop rules with scope, triggering observations and the required response. The owner has selected a global pause for the stated examples: before a public-format change whose migration affects user data, and after two failed architectural approaches to the same problem, with options presented. Keep these methodological pauses distinct from unavoidable infrastructure waiting and actual system limits. A blocked external dependency is not successful completion.</p>
+      <sources>
+        <source path="skills/in-progress/loop-me/SKILL.md" lines="18-27" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/productivity/grilling/SKILL.md" lines="26-28" href="https://example.invalid/removed-upstream"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="42-45" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I18" title="Resume from durable work without inventing a new session ritual" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
+      <p role="reason">A long unattended campaign can outlive model context, quota availability and a client session. Session-shaped workflow boundaries cannot reliably represent whether a tool operation completed or whether an accepted result remains applicable.</p>
+      <p role="zap-application">Restore the exact campaign binding, artifact state, evidence and concise recorded decisions. Reconcile live workers and ambiguous external effects before resubmission. Keep retry episodes, unresolved obligations and owner stop-rule state across restarts. Unrecorded reasoning is not recoverable evidence and may require fresh justification. Restarting does not reset a failed-approach count or permit duplicate side effects.</p>
+      <sources>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="31" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="45" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="105-116" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="125-128" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+    <concept id="ZAP-I19" title="Record decisions once and explain graph changes deterministically" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
+      <p role="reason">The planned viewer must explain why the plan changed without a model rereading history and inventing an explanation. A free-form activity log alone cannot establish reproducible graph state or link a change to its justification.</p>
+      <p role="zap-application">Record versioned change events with stable subjects, input revision, decision or observation links, concise rationale and authority. Define deterministic validation and projection so backend and future UI can derive the same graph and event stream. Pin the reviewed schema and initial state. Preserve source data and explicit mappings when piloting on the existing MUP graph; this research does not migrate its live state or build the future Qwik 2 application.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="23-29" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="125-126" href="https://example.invalid/removed-upstream"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="38-39" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+        <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="45" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
+      </sources>
+    </concept>
+  </original-composition>
+
+  <not-adopted title="5. Rules deliberately excluded from ZAP">
+    <concept id="ZAP-I20" title="Reject session rituals and categorical cost rules as scheduling policy" origin="source-rules-not-adopted" evidence-level="our-design" disposition="reject" status="doc/done">
+      <p role="reason">Fixed context sizes, one-ticket sessions, always-human prototypes, questions on every decision, planning-only sessions, automatic research fanout, maximum worker concurrency, blanket no-test experiments and repeated full suites impose costs or pauses unrelated to the owner's outcome.</p>
+      <p role="zap-application">Choose refinement, experiment shape, review and test scope from the current contract and uncertainty. Preserve explicit owner stops and execution authority rather than inheriting upstream stopping defaults. Use ZAP-native identities and deterministic storage independent of issue trackers. Upstream repository links are research citations only; neither GitHub nor a remote tracker is a runtime dependency.</p>
+      <sources>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="57" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="75-80" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/wayfinder/SKILL.md" lines="105-116" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/productivity/grilling/SKILL.md" lines="8-28" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/prototype/SKILL.md" lines="24" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/engineering/implement/SKILL.md" lines="11" href="https://example.invalid/removed-upstream"/>
+        <source path="skills/in-progress/implement-spec/SKILL.md" lines="15-29" href="https://example.invalid/removed-upstream"/>
+        <source path="docs/engineering/wayfinder.md" lines="25-27" href="https://example.invalid/removed-upstream"/>
+      </sources>
+    </concept>
+  </not-adopted>
+
+  <relationships title="6. How the ideas support each other">
+    <p>The full relation set below is also present in idea-map.json. The diagram summarizes the main feedback path; it is explanatory, not an executable scheduler or a claim that all semantic decisions can be derived algorithmically.</p>
+    <diagram language="mermaid"><![CDATA[
+flowchart LR
+  M["Owner mandate"] --> U["Unknown regions"]
+  U --> Q["Precise questions"]
+  Q --> E["Research and experiments"]
+  E --> F["Facts and evidence"]
+  F --> D["Consequential decisions"]
+  D --> L["Local lowering"]
+  L --> T["Executable work and stage obligations"]
+  T --> V["Targeted verification and acceptance"]
+  V --> F
+  V --> U
+  M --> S["Owner stop rules"]
+  S --> T
+  D --> J["Recorded change events"]
+  L --> J
+  V --> J
+  J --> P["Deterministic plan and event views"]
+    ]]></diagram>
+    <relationship from="ZAP-I02" to="ZAP-I01" relation="bounds which unknown regions belong to the mandate"/>
+    <relationship from="ZAP-I01" to="ZAP-I05" relation="refines into specific questions when prerequisites become expressible"/>
+    <relationship from="ZAP-I05" to="ZAP-I06" relation="requests observable evidence before dependent choices"/>
+    <relationship from="ZAP-I05" to="ZAP-I09" relation="selects an experiment when reading alone cannot distinguish alternatives"/>
+    <relationship from="ZAP-I06" to="ZAP-I08" relation="supplies sourced premises and contradictory observations"/>
+    <relationship from="ZAP-I07" to="ZAP-I05" relation="makes the meaning of a question explicit"/>
+    <relationship from="ZAP-I07" to="ZAP-I08" relation="binds consequential decisions to stable domain meanings"/>
+    <relationship from="ZAP-I09" to="ZAP-I08" relation="provides distinguishing observations for a decision"/>
+    <relationship from="ZAP-I08" to="ZAP-I14" relation="supplies accepted choices and obligations to lowering"/>
+    <relationship from="ZAP-I14" to="ZAP-I01" relation="retains unresolved regions during local refinement"/>
+    <relationship from="ZAP-I14" to="ZAP-I04" relation="assigns independent purpose and maturity dimensions to executable work"/>
+    <relationship from="ZAP-I14" to="ZAP-I12" relation="produces increments with explicit guarantees"/>
+    <relationship from="ZAP-I15" to="ZAP-I14" relation="carries deferred obligations into child contracts"/>
+    <relationship from="ZAP-I09" to="ZAP-I15" relation="can establish a justified transition from experimentation"/>
+    <relationship from="ZAP-I10" to="ZAP-I11" relation="provides behavioral evidence to acceptance"/>
+    <relationship from="ZAP-I11" to="ZAP-I15" relation="distinguishes accepted stage results from remaining conformance debt"/>
+    <relationship from="ZAP-I12" to="ZAP-I13" relation="defines the guarantees required by parallel consumers"/>
+    <relationship from="ZAP-I13" to="ZAP-I11" relation="limits fanout by available integration and review capacity"/>
+    <relationship from="ZAP-I16" to="ZAP-I17" relation="establishes the owner authority behind a stop rule"/>
+    <relationship from="ZAP-I17" to="ZAP-I13" relation="can pause dispatch globally when the owner-selected condition holds"/>
+    <relationship from="ZAP-I16" to="ZAP-I14" relation="bounds recursive refinement without expanding permission"/>
+    <relationship from="ZAP-I18" to="ZAP-I17" relation="preserves stop-rule observations and counters across restarts"/>
+    <relationship from="ZAP-I08" to="ZAP-I19" relation="explains plan changes through recorded decisions and premises"/>
+    <relationship from="ZAP-I14" to="ZAP-I19" relation="records obligation-preserving graph transformations"/>
+    <relationship from="ZAP-I19" to="ZAP-I03" relation="provides canonical inputs for deterministic views"/>
+    <relationship from="ZAP-I19" to="ZAP-I18" relation="preserves the recoverable change history"/>
+    <relationship from="ZAP-I20" to="ZAP-I04" relation="prevents task classification from smuggling in a stopping ritual"/>
+    <relationship from="ZAP-I20" to="ZAP-I13" relation="replaces maximum fanout with context-sensitive scheduling"/>
+  </relationships>
+
+  <evaluation title="7. What remains to be demonstrated">
+    <p>IDs and relationship endpoints are mechanically checkable; semantic suitability still requires judgment.</p>
+    <p>Future evaluation should compare accepted behavior, rework, review backlog and verification cost on equivalent work; task count or disappearing recorded uncertainty is not a quality result.</p>
+    <p>Research completion records that the idea map was authored; it does not mark the ZAP implementation or the pilot campaign complete.</p>
+    <p>A useful pilot will retain the original MUP graph and compare explicit transformations, acceptance continuity and practical execution costs. The source records, existing accepted evidence and owner execution hold remain intact. Unknown-region counts may grow after useful investigation; their reduction is not by itself a measure of progress.</p>
+  </evaluation>
+</spec>

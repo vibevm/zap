@@ -1,0 +1,23 @@
+{
+  "schema": "zap-stop/1",
+  "status": "example_unapproved",
+  "rules": [
+    {
+      "id": "before-user-data-format-migration",
+      "when": {
+        "all": [
+          {"eq": {"field": "changes_public_format", "value": true}},
+          {"eq": {"field": "migration_affects_user_data", "value": true}}
+        ]
+      },
+      "scope": "run",
+      "timing": "before_action"
+    },
+    {
+      "id": "two-failed-architectural-approaches",
+      "when": {"failed_approaches": {"gte": 2}},
+      "scope": "run",
+      "timing": "before_next_action"
+    }
+  ]
+}

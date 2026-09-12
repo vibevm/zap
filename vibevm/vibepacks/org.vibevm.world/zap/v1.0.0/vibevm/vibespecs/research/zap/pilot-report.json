@@ -1,0 +1,52 @@
+{
+  "schema": "zap-pilot-report/1",
+  "kind": "synthetic-data-experiment",
+  "source_plan_revision": 3,
+  "source_plan_sha256": "0eecdbae2aa15542f4ac17fe2a8b5986ef4637bac3e041ed899a04e71e78284c",
+  "source_group_files": 90,
+  "source_nodes": 425,
+  "source_tasks": 212,
+  "source_mandates": 64,
+  "base_sha256": "bb19997636de8b22a3a2a7213816b1e7729734c110c3736872084755489f8cf2",
+  "kernel_sha256": "83ad7022aeb21b14943cd01e3d376c03e8810ccdd67addf0796fde576de18235",
+  "final_nodes": 428,
+  "final_revision": 12,
+  "events_including_import": 13,
+  "checks": [
+    "all imported plan values match",
+    "all 212 complete task contracts match",
+    "425 node identities/states/order preserved",
+    "initial frontier held",
+    "initial-clear: clear",
+    "unknown-is-not-false: needs_evidence",
+    "infrastructure-does-not-count: clear",
+    "unavailable-only semantic verdict refused without event",
+    "one-failure: clear",
+    "identical retry produces no second event",
+    "two-failures-after-replay: pause",
+    "format-before-action: pause",
+    "format-after-action: too_late",
+    "deterministic replay",
+    "immutable base",
+    "91 source files unchanged",
+    "all original nodes and task contracts unchanged after annotations",
+    "mandate meanings and original node links preserved",
+    "frontier still held; no authority activated"
+  ],
+  "source_files_unchanged": true,
+  "execution_mode": "draft",
+  "dispatch_allowed": false,
+  "scope": "import, data edits and stop simulations only",
+  "source_repository_commit": "4febb04d02bd7853776895c38ea87a9783e05a0c",
+  "verification": {
+    "unit_cases": 18,
+    "unit_result": "passed",
+    "package_lint_errors": 0,
+    "package_lint_warnings": 0,
+    "skills_validated": [
+      "zap-draft",
+      "zap-state"
+    ],
+    "product_test_panel_run": false
+  }
+}
