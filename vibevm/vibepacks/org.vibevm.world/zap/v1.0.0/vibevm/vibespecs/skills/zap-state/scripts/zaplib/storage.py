@@ -5,14 +5,22 @@ import base64
 from contextlib import contextmanager
 import os
 from pathlib import Path
+import shutil
 import stat
 import tomllib
-from typing import Any, Iterator, Mapping
+from typing import Any, Callable, Iterable, Iterator, Mapping
 import uuid
 
 from .common import SCHEMA, Refusal, exact, identity, need, packed, parse, sha
 from .graph import validate_plan, validate_tasks
 from .records import CORE_HANDLERS, HandlerSpec, State, apply_command, initial_state
+
+STORAGE_OPERATIONS = {
+    "import-mup": {"required": ["plan_path", "tasks_dir", "out"], "optional": [], "effect": "atomic_new_store",
+                   "writes": ["base.json", "events.jsonl"], "activates_charter": False, "executes_commands": False},
+    "record": {"required": ["store", "command"], "optional": ["handlers"], "effect": "append_committed_event",
+               "cas": True, "writer_lock": "exclusive_no_steal"},
+}
 
 
 def safe_path(path: str | os.PathLike[str]) -> Path:
@@ -35,7 +43,13 @@ def capture(path: Path, raw: bytes) -> dict[str, str]:
     return {"path": str(path), "sha256": sha(raw), "raw_base64": base64.b64encode(raw).decode("ascii")}
 
 
-def import_mup(plan_path: str | os.PathLike[str], tasks_dir: str | os.PathLike[str], out: str | os.PathLike[str]) -> dict[str, Any]:
+def import_mup(
+    plan_path: str | os.PathLike[str],
+    tasks_dir: str | os.PathLike[str],
+    out: str | os.PathLike[str],
+    *,
+    fault: Callable[[str], None] | None = None,
+) -> dict[str, Any]:
     plan_path, tasks_dir, out = map(safe_path, (plan_path, tasks_dir, out))
     need(not out.exists(), "OUTPUT_EXISTS", "import requires a fresh output directory")
     need(not plan_path.is_relative_to(out) and not out.is_relative_to(plan_path) and not tasks_dir.is_relative_to(out) and not out.is_relative_to(tasks_dir), "PATH", "output intersects imported sources")
@@ -54,14 +68,68 @@ def import_mup(plan_path: str | os.PathLike[str], tasks_dir: str | os.PathLike[s
     base = {"schema": SCHEMA, "plan": plan, "task_contracts": tasks, "sources": {"plan": capture(plan_path, raw), "tasks": sources}}
     base_bytes = packed(base) + b"\n"
     receipt = {"seq": 0, "revision": 0, "previous_revision": None, "event_id": str(uuid.uuid4()), "kind": "store.imported", "base_sha256": sha(base_bytes)}
-    out.mkdir(parents=True, exist_ok=False)
-    write_new(out / "base.json", base_bytes)
-    write_new(out / "events.jsonl", packed(receipt) + b"\n")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    staging = safe_path(out.parent / f".{out.name}.import-{uuid.uuid4().hex}")
+    staging.mkdir(exist_ok=False)
+    published = False
+    try:
+        write_new(staging / "base.json", base_bytes)
+        if fault:
+            fault("after_base")
+        write_new(staging / "events.jsonl", packed(receipt) + b"\n")
+        if fault:
+            fault("after_events")
+        staging.rename(out)
+        published = True
+        if fault:
+            fault("after_publish")
+    finally:
+        if not published and staging.exists():
+            need(staging.parent == out.parent, "PATH", "import staging escaped output parent")
+            shutil.rmtree(staging)
     return {"ok": True, "store": str(out), "schema": SCHEMA, "execution_mode": "draft", "plan_nodes": len(nodes), "task_contracts": len(tasks),
             "base_sha256": receipt["base_sha256"], "source_sha256": {"plan": sha(raw), "tasks": {row["path"]: row["sha256"] for row in sources}}, "owner_contract_activated": False}
 
 
-def load_store(store: str | os.PathLike[str], handlers: Mapping[str, HandlerSpec] = CORE_HANDLERS) -> tuple[State, list[dict[str, Any]], dict[str, Any] | None]:
+def read_committed_journal(store: str | os.PathLike[str]) -> tuple[list[bytes], dict[str, Any] | None]:
+    """Split the canonical journal without treating an incomplete tail as committed."""
+    store_path = safe_path(store)
+    lines = safe_path(store_path / "events.jsonl").read_bytes().splitlines(keepends=True)
+    pending = None
+    if lines and not lines[-1].endswith(b"\n"):
+        tail = lines.pop()
+        pending = {"bytes": len(tail), "sha256": sha(tail)}
+    return lines, pending
+
+
+def replay_committed(
+    state: State,
+    records: Iterable[dict[str, Any]],
+    handlers: Mapping[str, HandlerSpec] = CORE_HANDLERS,
+    *,
+    seen: Mapping[str, dict[str, Any]] | None = None,
+) -> tuple[State, list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Validate and replay committed non-import records from any trusted boundary."""
+    known = dict(seen or {})
+    applied: list[dict[str, Any]] = []
+    for event in records:
+        exact(event, {"seq", "revision", "previous_revision", "event_id", "kind", "reason", "payload", "command_sha256"})
+        key = identity(event["event_id"])
+        if key in known:
+            need(event == known[key], "JOURNAL", "conflicting duplicate event")
+            continue
+        need(type(event["seq"]) is int and type(event["revision"]) is int and event["seq"] == event["revision"] == state["revision"] + 1, "JOURNAL", "sequence/revision gap")
+        command = {field: event[field] for field in ("event_id", "kind", "reason", "payload")}
+        command["base_revision"] = event["previous_revision"]
+        need(sha(packed(command)) == event["command_sha256"], "JOURNAL", "command hash differs")
+        state = apply_command(state, command, handlers)
+        applied.append(event)
+        known[key] = event
+    return state, applied, known
+
+
+def load_base_state(store: str | os.PathLike[str]) -> tuple[Path, bytes, dict[str, Any], State]:
+    """Validate immutable base captures and return their initial projection."""
     store_path = safe_path(store)
     base_raw = safe_path(store_path / "base.json").read_bytes()
     base = parse(base_raw, tagged=True)
@@ -76,31 +144,19 @@ def load_store(store: str | os.PathLike[str], handlers: Mapping[str, HandlerSpec
         need(sha(raw) == row["sha256"], "STORE", "task source hash differs")
         groups.append(parse(raw))
     need(packed(validate_tasks(groups, nodes)) == packed(base["task_contracts"]), "STORE", "task captures differ")
-    lines = safe_path(store_path / "events.jsonl").read_bytes().splitlines(keepends=True)
-    pending = None
-    if lines and not lines[-1].endswith(b"\n"):
-        tail = lines.pop()
-        pending = {"bytes": len(tail), "sha256": sha(tail)}
+    return store_path, base_raw, base, initial_state(base, sha(base_raw))
+
+
+def load_store(store: str | os.PathLike[str], handlers: Mapping[str, HandlerSpec] = CORE_HANDLERS) -> tuple[State, list[dict[str, Any]], dict[str, Any] | None]:
+    store_path, base_raw, base, initial = load_base_state(store)
+    lines, pending = read_committed_journal(store_path)
     need(lines, "JOURNAL", "no committed import receipt")
     first = parse(lines[0], tagged=True)
     exact(first, {"seq", "revision", "previous_revision", "event_id", "kind", "base_sha256"})
     need(type(first["seq"]) is int and type(first["revision"]) is int and first["seq"] == first["revision"] == 0 and first["previous_revision"] is None and first["kind"] == "store.imported" and first["base_sha256"] == sha(base_raw), "JOURNAL", "import receipt differs")
     identity(first["event_id"])
-    state, events, seen = initial_state(base, sha(base_raw)), [first], {first["event_id"]: first}
-    for line in lines[1:]:
-        event = parse(line, tagged=True)
-        exact(event, {"seq", "revision", "previous_revision", "event_id", "kind", "reason", "payload", "command_sha256"})
-        key = identity(event["event_id"])
-        if key in seen:
-            need(event == seen[key], "JOURNAL", "conflicting duplicate event")
-            continue
-        need(type(event["seq"]) is int and type(event["revision"]) is int and event["seq"] == event["revision"] == state["revision"] + 1, "JOURNAL", "sequence/revision gap")
-        command = {field: event[field] for field in ("event_id", "kind", "reason", "payload")}
-        command["base_revision"] = event["previous_revision"]
-        need(sha(packed(command)) == event["command_sha256"], "JOURNAL", "command hash differs")
-        state = apply_command(state, command, handlers)
-        events.append(event)
-        seen[key] = event
+    state, applied, _ = replay_committed(initial, (parse(line, tagged=True) for line in lines[1:]), handlers, seen={first["event_id"]: first})
+    events = [first, *applied]
     return state, events, pending
 
 
