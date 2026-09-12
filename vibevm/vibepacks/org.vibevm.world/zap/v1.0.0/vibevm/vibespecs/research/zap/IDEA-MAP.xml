@@ -138,7 +138,7 @@
     <p>This section combines the owner’s prior recursive and staged-delivery idea with the requirements of long unattended execution. Citations indicate comparison points or saved design context; they do not attribute the resulting ZAP architecture to the upstream author.</p>
     <concept id="ZAP-I14" title="Refine plans progressively while conserving obligations" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
       <p role="reason">The owner's recursive planning idea combines broad intent with local execution refinement. Detailed instructions for distant work become stale, but leaving a region coarse must not erase its known obligations.</p>
-      <p role="zap-application">At any level, lower a parent result into executable work only when useful. Record mappings from each known obligation to implementation and proof, together with unresolved regions and inherited authority. Check explicit coverage and graph validity algorithmically; semantic equivalence still needs judgment. Refine the affected portion after discoveries, and terminate recursion at a sufficiently clear, verifiable action.</p>
+      <p role="zap-application">At any level, lower the current outcome revision into executable work only when useful. Map its active obligations to implementation and proof, retaining unresolved regions and inherited authority. An authorized outcome revision separately records which original obligations are retained, replaced or remain unmet, rather than silently deleting them. Check explicit coverage and graph validity algorithmically; semantic equivalence still needs judgment.</p>
       <sources>
         <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="11-14" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
         <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="34-39" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
@@ -148,7 +148,7 @@
     </concept>
     <concept id="ZAP-I15" title="Treat staged delivery as a route with conserved completion debt" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
       <p role="reason">Prototype, functional MVP and productization can separate discovery from formal completion, especially under AI-Native requirements. Forcing every task through all stages would add overhead, while ignoring deferrals would silently reduce the final contract.</p>
-      <p role="zap-application">Choose direct delivery or the required subset of stages. Record permitted deferrals, the guarantee of the current stage and where each obligation will be discharged. Preserve functional invariants and effect boundaries throughout. Accept an experiment as an experiment; the parent remains open until its full contract is established. Demonstrate a path to final constraints early when that path is itself uncertain.</p>
+      <p role="zap-application">Choose direct delivery or the useful subset of stages for the current outcome revision. Record permitted deferrals, current guarantees and where applicable obligations close. Preserve required invariants and effect boundaries. Accept an experiment as an experiment; a discarded prototype need not be productized merely to satisfy an obsolete route, but its remaining effects and inapplicable obligations need explicit disposition. Probe uncertain final constraints early.</p>
       <sources>
         <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="17-31" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
         <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="42-45" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
@@ -193,6 +193,12 @@
         <source path="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" lines="45" href="vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml" scope="host-repository research context, not a package runtime dependency"/>
       </sources>
     </concept>
+
+    <concept id="ZAP-I21" title="Continuously reassess knowledge, value and the achievable outcome" origin="zap-composition" evidence-level="our-design" disposition="adopt" status="doc/done">
+      <p role="reason">Changing the route alone leaves the original destination effectively fixed. Discoveries can expand uncertainty, change value and make a different approximate outcome more useful or feasible while preserving the owner intent.</p>
+      <p role="zap-application">Repeat observation, knowledge revision, value and feasibility assessment, outcome selection, plan and live-job reconciliation, then useful action. Reconsider affected regions and newly relevant unknowns; do not require a full review after every small edit. Choose a revised outcome within delegated tradeoffs, retaining the history and unmet parts of the original promise. Persist rationale and before/after assessments for deterministic views. A goal revision never resets owner stops or problem identity; this cycle is designed, not implemented by the current additive kernel.</p>
+      <sources><source path="vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml" href="../../flows/zap/ZAP-ADAPTIVE-CYCLE.xml" scope="package design from owner clarification, 2026-09-12"/></sources>
+    </concept>
   </original-composition>
 
   <not-adopted title="5. Rules deliberately excluded from ZAP">
@@ -220,7 +226,10 @@ flowchart LR
   U --> Q["Precise questions"]
   Q --> E["Research and experiments"]
   E --> F["Facts and evidence"]
-  F --> D["Consequential decisions"]
+  F --> R["Reassess unknowns, value and feasible outcomes"]
+  M --> R
+  R --> U
+  R --> D["Consequential decisions"]
   D --> L["Local lowering"]
   L --> T["Executable work and stage obligations"]
   T --> V["Targeted verification and acceptance"]
@@ -261,6 +270,14 @@ flowchart LR
     <relationship from="ZAP-I19" to="ZAP-I18" relation="preserves the recoverable change history"/>
     <relationship from="ZAP-I20" to="ZAP-I04" relation="prevents task classification from smuggling in a stopping ritual"/>
     <relationship from="ZAP-I20" to="ZAP-I13" relation="replaces maximum fanout with context-sensitive scheduling"/>
+    <relationship from="ZAP-I01" to="ZAP-I21" relation="supplies unknown regions for relevance and knowledge reassessment"/>
+    <relationship from="ZAP-I06" to="ZAP-I21" relation="provides observations that can change outcome feasibility"/>
+    <relationship from="ZAP-I08" to="ZAP-I21" relation="exposes revised premises and decision consequences"/>
+    <relationship from="ZAP-I16" to="ZAP-I21" relation="defines delegated outcome tradeoffs"/>
+    <relationship from="ZAP-I21" to="ZAP-I14" relation="selects the current outcome revision before lowering"/>
+    <relationship from="ZAP-I21" to="ZAP-I15" relation="reassesses stage obligations and discarded artifacts"/>
+    <relationship from="ZAP-I21" to="ZAP-I19" relation="records why value and destination changed"/>
+    <relationship from="ZAP-I21" to="ZAP-I13" relation="reconciles active jobs with the revised route"/>
   </relationships>
 
   <evaluation title="7. What remains to be demonstrated">
