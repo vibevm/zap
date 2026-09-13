@@ -1,0 +1,22 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0002",
+  "time_utc": "2026-09-13T08:06:55.1459150Z",
+  "campaign": "ZAP-RUST-MVP-2026-09-13",
+  "head": "2d48bd51",
+  "accepted": [
+    "Owner-approved vision",
+    "R00 plan and durable packets"
+  ],
+  "candidate_archive": "C:/Users/olegc/.vibe/zap/development/vibevm-next/checkpoints/python-candidate-before-rust-20260913",
+  "candidate_sources": 134,
+  "active": [
+    "R01 zap_vision_rust",
+    "R02 zap_vision_method",
+    "R14-PREP zap_rust_legacy_prep"
+  ],
+  "next": "Commit only approved vision/plan/checkpoints; review first R01 API then launch R03 Middle code",
+  "checks": "Document diff check clean excluding exact raw Owner source, whose original whitespace/separator is intentional; local source hash preserved by -text attribute",
+  "effects": "No Rust build/model probe/NEXT/publication; legacy pure fixture generation assigned",
+  "staged_scope": "11 exact approved planning/source files, not current normative or Python candidate"
+}

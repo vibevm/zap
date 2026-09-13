@@ -1,0 +1,332 @@
+{
+  "schema": "zap-rust-development-campaign/1",
+  "id": "ZAP-RUST-MVP-2026-09-13",
+  "revision": 1,
+  "workspace": "C:/Users/olegc/git/v/vibevm-next",
+  "branch": "next",
+  "baseline_commit": "2d48bd51",
+  "state": "executing",
+  "owner_authorization": "OWNER accepted full vision and instructed plan+execution with frequent filesystem checkpoints",
+  "roles": {
+    "senior": "gpt-5.6-sol/ultra",
+    "middle": "gpt-5.6-sol/high",
+    "junior": "gpt-5.6-luna/high"
+  },
+  "constraints": [
+    "Production Rust only",
+    "English authored specifications",
+    "Native workers by default",
+    "No local Qwen inference",
+    "No NEXT product execution",
+    "No full VibeVM panel or blanket mutations",
+    "No automatic reset redemption",
+    "Root alone accepts and commits"
+  ],
+  "frontier": [
+    "R01",
+    "R02"
+  ],
+  "next": "Accept foundation API, then launch R03 Middle implementation",
+  "tasks": [
+    {
+      "id": "R00",
+      "outcome": "Approved plan and recovery checkpoints",
+      "depends_on": [],
+      "state": "accepted",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R01",
+      "outcome": "Rust integration API and storage ADR",
+      "depends_on": [
+        "R00"
+      ],
+      "state": "working",
+      "packet": "packets/R01-architecture.md",
+      "agent": "zap_vision_rust",
+      "evidence": [],
+      "findings": [],
+      "next_action": "Freeze foundation API and storage/build decisions; checkpoint first"
+    },
+    {
+      "id": "R02",
+      "outcome": "Normative requirements and complete denominator",
+      "depends_on": [
+        "R00"
+      ],
+      "state": "working",
+      "packet": "packets/R02-specifications.md",
+      "agent": "zap_vision_method",
+      "evidence": [],
+      "findings": [],
+      "next_action": "Reconcile normative facts and V01-V24 mapping; checkpoint first"
+    },
+    {
+      "id": "R03",
+      "outcome": "Portable Cargo workspace and typed core",
+      "depends_on": [
+        "R01"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R04",
+      "outcome": "Transactional store and indexed queries",
+      "depends_on": [
+        "R03"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R05",
+      "outcome": "Domain authority obligations and completion",
+      "depends_on": [
+        "R03"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R06",
+      "outcome": "Knowledge evidence and adaptive changes",
+      "depends_on": [
+        "R04",
+        "R05"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R07",
+      "outcome": "Economics forecasts holds and closure",
+      "depends_on": [
+        "R04",
+        "R05"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R08",
+      "outcome": "Lowering roles packets and verification selection",
+      "depends_on": [
+        "R05",
+        "R06"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R09",
+      "outcome": "Weak execution roundtrip and encounters",
+      "depends_on": [
+        "R04",
+        "R08"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R10",
+      "outcome": "Dreamer overlays grill and live adoption",
+      "depends_on": [
+        "R06",
+        "R07",
+        "R08"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R11",
+      "outcome": "Concurrent native host runtime and recovery",
+      "depends_on": [
+        "R04",
+        "R05"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R12",
+      "outcome": "Capabilities role profiles resume and goals",
+      "depends_on": [
+        "R08",
+        "R11"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R13",
+      "outcome": "CLI backend observability and typed queries",
+      "depends_on": [
+        "R04",
+        "R05",
+        "R11"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R14",
+      "outcome": "Lossless legacy and actual NEXT migration",
+      "depends_on": [
+        "R04",
+        "R05",
+        "R06"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R15",
+      "outcome": "Installed package skills and production documentation",
+      "depends_on": [
+        "R02",
+        "R03",
+        "R08",
+        "R11",
+        "R12",
+        "R13"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R16",
+      "outcome": "Integrated behavior acceptance",
+      "depends_on": [
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R17",
+      "outcome": "Measured graph and history scalability",
+      "depends_on": [
+        "R04",
+        "R06",
+        "R13"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R18",
+      "outcome": "Production discipline and final package gate",
+      "depends_on": [
+        "R16",
+        "R17"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    },
+    {
+      "id": "R19",
+      "outcome": "Publication installed proof and completion",
+      "depends_on": [
+        "R18"
+      ],
+      "state": "planned",
+      "packet": null,
+      "agent": null,
+      "evidence": [],
+      "findings": [],
+      "next_action": null
+    }
+  ],
+  "accepted": [
+    "R00"
+  ],
+  "open_findings": [
+    "Python economics completion-ready/direct-close P1 must be repaired in shared Rust lifecycle predicate"
+  ],
+  "last_checkpoint": "checkpoints/ROOT-0001.json",
+  "publication": {
+    "authorized": true,
+    "version": "1.0.0",
+    "state": "waiting_for_R18"
+  },
+  "updated_utc": "2026-09-13T08:04:08.3423089Z"
+}

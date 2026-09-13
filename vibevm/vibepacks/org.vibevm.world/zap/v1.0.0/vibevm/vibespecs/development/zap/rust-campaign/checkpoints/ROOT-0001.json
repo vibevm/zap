@@ -1,0 +1,28 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0001",
+  "time_utc": "2026-09-13T08:04:08.3634457Z",
+  "campaign": "ZAP-RUST-MVP-2026-09-13",
+  "head": "2d48bd51",
+  "accepted": [
+    "Owner-approved vision",
+    "R00 plan and packet setup"
+  ],
+  "candidates": [
+    "Unaccepted Python economics candidate retained"
+  ],
+  "active": [
+    {
+      "task": "R01",
+      "agent": "zap_vision_rust"
+    },
+    {
+      "task": "R02",
+      "agent": "zap_vision_method"
+    }
+  ],
+  "next": "Read R01 foundation API/ADR and R02 fact anchors, review then dispatch R03",
+  "effects": "No Rust worker or NEXT job launched yet; no publication",
+  "tests": "No tests run this checkpoint",
+  "notes": "Code and architectural decisions must survive account/reset through saved packets and per-task checkpoints."
+}
