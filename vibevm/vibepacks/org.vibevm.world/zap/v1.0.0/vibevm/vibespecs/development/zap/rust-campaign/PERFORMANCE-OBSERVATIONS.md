@@ -51,3 +51,10 @@ operation duration and physical allocation still require the worker receipt.
 Peak memory and amplification on this small input require repair before the
 full performance/product gate. Do not rerun another identical whole-store
 audit merely to repeat evidence already obtained by the operation's two audits.
+
+Read-only source accounting by root after the import: the90 captured task
+groups contain212 tasks and1,057,941 raw bytes once per group. The current
+per-task copy scheme retains2,671,173 raw source bytes, a2.5249x duplication
+ratio before any JSON/envelope/history representation. These measured totals
+bound that particular contributor; they are not an explanation of the whole
+671MB database or14GB peak. No import or store audit was rerun to obtain them.

@@ -17,13 +17,20 @@ Never silently accept, discard, or mix it with Rust commits.
 
 Current frontier: R07 shared core/control implementation, R08 executable
 lowering/packet implementation, R14 bounded recovery repairs and R17 measured
-representation repair. Active coding workers are zap_r07_recovery and
-zap_r08_execution (actual native Sol/xhigh). R14 worker delivered
+representation repair. Active coding workers are zap_r07_finish and
+zap_r08_finish (both native Sol/xhigh). R14 worker delivered
 REPORT-R14-FINAL.md and has no new coding task. Check the actual native tree
 before dispatch: terminal completion and capacity release can lag, and an
 unexpected pending_init state must be reconciled without restarting effects.
-Senior zap_repair_core_api completed the accepted R09/lifecycle design; the
-next assigned architecture task is packets/R17-representation-design.md.
+Senior zap_r17_design now executes packets/R17-representation-design.md.
+The prior R07/R08 workers ended with the transport error "Unable to verify
+model access right now". Owner twice said continue; fresh usage was30percent
+used with ordinary usage allowed, no cargo/zap process remained, and all three
+new native workers spawned successfully. No reset was redeemed. Recovery
+packets R07-final-integration-recovery.md and R08-runtime-recovery.md preserve
+the last accepted effect-evidence and current-packet-selection seams even
+where the older worker checkpoints lag their source edits. The old R14
+pending_init capacity anomaly cleared with this continuation.
 Root accepted
 REPAIR-R08-EXECUTION-API.md with SHA256
 7928422d8d160679ecbaa96badfac8de7d27cafcba63e1528d0b33a2c9417e32;
