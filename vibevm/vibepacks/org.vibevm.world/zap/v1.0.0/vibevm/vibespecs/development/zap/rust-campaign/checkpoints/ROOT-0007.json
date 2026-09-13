@@ -1,0 +1,28 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0007",
+  "time_utc": "2026-09-13T08:42:41.5887381Z",
+  "head": "04b6b615",
+  "accepted": [
+    "R00",
+    "R01 foundation and architecture through requested rev6",
+    "R02 normative requirements",
+    "R14-PREP reference corpus"
+  ],
+  "active": [
+    "R03 wire/core code",
+    "R05 domain code",
+    "R01 saving final APIrev6 checkpoint"
+  ],
+  "next": "Launch R11 runtime Middle as soon as R01 frees slot; review wire candidate and core integration",
+  "api_changes": [
+    "Per-operation goal capabilities and trusted core registrar",
+    "OwnerControl(ControlClass) permits activation without prior active charter",
+    "ActorRef/ProducerRef bound to admitted private authority",
+    "Core CompletionEvaluator composes required domain/economics/runtime providers; absent provider is not no blockers"
+  ],
+  "wire_candidate": "cargo check -p zap-wire passed, domain boundary tests/core compilation pending",
+  "prepared_runtime": "packets/R11-runtime.md (APIrev6)",
+  "effects": "Package-local build only; no NEXT/local inference/publication",
+  "coordination": "Further routine missing IDs may be added by R03 with recorded API revision; substantive authority/semantic changes return to root"
+}

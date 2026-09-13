@@ -1,0 +1,33 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0016",
+  "time_utc": "2026-09-13T10:15:14.5247198Z",
+  "head": "04b6b615",
+  "active": [
+    {
+      "task": "R04.json",
+      "file_modified_utc": "2026-09-13T10:13:17.2696495Z",
+      "state": "working",
+      "boundary": "Bounded scan compile reached one redb range generic inference error; explicit &[u8] range-key typing is patched.",
+      "next": "Rerun the scoped compile after the explicit redb range key type."
+    },
+    {
+      "task": "R06.json",
+      "file_modified_utc": "2026-09-13T10:10:21.6825831Z",
+      "state": "working",
+      "boundary": "Shared basis API, ten knowledge record families, fact proposal/adjudication, adaptive review proposal and proof-reuse records, current source/proof integration, trusted promotion receipt, and exact R11 release-backed work-revalidation cell compile together.",
+      "next": "Implement adaptive review application and proof reuse against current source/contract/generation records; keep nonempty live-job plans pending until R11 supplies a pre-apply current-job observation seam."
+    },
+    {
+      "task": "R11.json",
+      "file_modified_utc": "2026-09-13T09:59:52.7945401Z",
+      "state": "working",
+      "boundary": "Repair units saved: closed AgentMessage payload family replaces generic kind/payload pairing; generic SemanticProvider escape was removed and semantic capability remains absent; goal application consumes whole scope capability and rendered campaign/assignment goals include stop/completion/safe/acceptance references; capability validation requires evidence and a valid goal matrix; contradictory cache evidence remains pending adjudication; retry reconciliation condition now binds DispatchIntentDigest and later ReconciliationObservation; exact DriverProvenance and bridge capability/harness/adapter/observation binding are in progress; DispatchEligibilityProvider/View/Request types and pre-effect/reconciliation records are saved pending R03 CommitService context wiring.",
+      "next": "Finish JobClaim and pre-effect authorization cells against the confirmed dispatch-eligibility accessor, then add durable driver/reconciliation/candidate/stop/safe/retry/capability/goal/liveness/repair transitions while R03 wires CommitService."
+    }
+  ],
+  "next": "Complete provider-bound service and real runtime ingress; review knowledge/adaptive integration",
+  "accepted": "R00/R01/R02/R03/R05 and bounded legacy corpus unchanged",
+  "effects": "No NEXT/local inference/publication",
+  "recovery": "Current source is saved; task checkpoints above are parse-verified; prior valid copies and R03 source archive remain"
+}

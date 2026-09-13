@@ -38,6 +38,14 @@ next concrete action, and packet/API revision. No hidden reasoning or credential
 are saved. Unknown operation outcomes are reconciled before retry. Reset/account
 replacement does not start a new logical campaign or erase failure history.
 
+Checkpoint integrity is mechanical: create JSON through structured serialization,
+parse the prepared sibling file, then atomically replace the current checkpoint
+while retaining a previous valid copy. Never hand-patch JSON string fragments.
+Capture timestamps from the actual process clock; do not guess them. Sequence,
+task/attempt identity, exact source/API versions and receipts govern recovery,
+not filename time alone. The coordinator also validates active checkpoint JSON
+at material boundaries. A failed preparation leaves the prior checkpoint intact.
+
 Keep code edits small and saved on disk. A compilable candidate may be committed
 only after review and adequate scoped checks. Earlier unaccepted Python changes
 must not be bundled into accepted Rust commits. Frequent checkpoint files do
@@ -50,16 +58,17 @@ not mean repeatedly rerunning tests or making semantically mixed commits.
 | R00 | Approved vision, durable plan/packets/resume; prototype candidate preserved separately | none | coordinator / all |
 | R01 | Explicit Rust types/seams, storage and trust ADR, portable build/toolchain plan, module ownership; no ambiguous shared APIs | R00 | Senior architecture / V01,V02,V10-V13,V17-V19,V22 |
 | R02 | Normative English requirements reconcile V01-V24 and existing behavior; complete requirement-to-task denominator | R00 | Senior specification / all |
-| R03 | Standalone package Cargo workspace, typed wire/core contracts and real specmark/toolchain binding; scoped build | R01 | Middle foundation / V04,V12,V18,V19 |
+| R01-FOUNDATION | Corrected frozen sections 1-7 of the shared API unblock bootstrap while R01 finishes storage/semantic detail | R00 | Senior architecture, coordinator acceptance |
+| R03 | Standalone package Cargo workspace, typed wire/core contracts and real specmark/toolchain binding; scoped build | R01-FOUNDATION | Middle foundation / V04,V12,V18,V19 |
 | R04 | Transactional event store, CAS/idempotency, bounded indexed queries, snapshots/recovery and exact history | R03 | Middle storage / V09,V13,V18,V20 |
-| R05 | Intent/charter authority, graph obligations, stages/debt, applicability and shared completion predicate | R03 | Middle domain / V01,V02,V03,V17 |
-| R06 | Fact/source capture, uncertainty, scoped adaptive change and preserved evidence | R04,R05 | Middle domain / V01,V07,V16,V20 |
+| R05 | Intent/charter authority, graph obligations, stages/debt, applicability and shared completion predicate | R01-FOUNDATION,R02; acceptance requires R03 | Middle domain / V01,V02,V03,V17 |
+| R06 | Fact/source capture, uncertainty, scoped adaptive change and preserved evidence | R01,R05; acceptance requires R04 | Middle domain / V01,V07,V16,V20 |
 | R07 | Economics assessments/forecasts, exact four-hour decisions, affected holds, general stop precedence and closure P1 repair | R04,R05 | Middle control / V16,V17 |
 | R08 | Checked strategic lowering, typed packet lineage, role routing, progressive disclosure/abstraction and selected checks | R05,R06 | Middle planning / V03-V07,V21 |
 | R09 | Portable weak-execution bundles and encounter journal with idempotent stale-aware return import | R04,R08 | Middle planning / V08 |
 | R10 | Isolated Dreamer overlays, persisted grill questions/answers, exact promotion/removal with cost/authority/reconciliation | R06,R07,R08 | Middle planning / V15 |
-| R11 | Concurrent durable scheduler, resource/subject claims, native host bridge, typed results, liveness, retry and effect reconciliation | R04,R05 | Middle runtime / V10-V13 |
-| R12 | Capability cache, desired/resolved role profiles, generated resume/GOAL, actual/manual/unavailable application states | R08,R11 | Middle runtime / V04,V05,V14 |
+| R11 | Concurrent durable scheduler, resource/subject claims, native host bridge, typed results, liveness, retry and effect reconciliation | R01,R02; acceptance requires R03,R04,R05 | Middle runtime / V10-V13 |
+| R12 | Capability cache, desired/resolved role profiles, generated resume/GOAL, actual/manual/unavailable application states | R01,R02; acceptance requires R08,R11 | Middle runtime / V04,V05,V14 |
 | R13 | Rust CLI and machine backend, consistent snapshots/tails, bounded graph/detail/search/why queries, trusted route separation | R04,R05,R11 | Middle surface / V09,V20 |
 | R14 | Read-only legacy codec/history importer and isolated actual NEXT migration with exact mappings; no source changes/activation | R04,R05,R06 | Middle migration / V22 |
 | R15 | Portable package binary declaration/install flow, thin native-agent skills, no shipped production Python, permanent APIs/specmaps | R02,R03,R08,R11,R12,R13 | Middle packaging / V18,V19,V22 |
@@ -74,6 +83,13 @@ foundation/store/migration; semantic planning/control; runtime/surfaces. Crate
 and module composition belongs to the named integrator. Workers must request
 an API revision rather than editing another track's exports. Shared compilation
 is coordinated; a heavy gate never holds the sole scheduling thread.
+
+Preparation and acceptance dependencies are distinct: R05 can implement its
+owned typed domain against the accepted interface while R03 compiles it, but
+cannot be accepted or integrated until the R03 foundation is verified. The
+machine graph records acceptance_depends_on explicitly. Missing shared exports
+cause a bounded integration wait, never local substitute core types or a fake
+successful check.
 
 The table names result boundaries, not permission prompts. Routine implementation
 continues under the accepted vision. A new material scope change outside this

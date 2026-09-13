@@ -1,0 +1,23 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0010",
+  "time_utc": "2026-09-13T09:11:49.6629658Z",
+  "head": "04b6b615",
+  "accepted": [
+    "R00",
+    "R01 and bounded APIrev8/9 amendments",
+    "R02 normative279",
+    "R14-PREP reference corpus"
+  ],
+  "active": [
+    "R03 core service/composition",
+    "R05 domain checks",
+    "R11 shared/runtime DTOs"
+  ],
+  "candidate": "wire8 boundary tests passed including typed nested NaN; core compiled; first in-memory core tests being completed",
+  "reviewed": "Typed serialization now rejects nonfinite recursively before JSON; BasisBinding rejects unknown fields; wire concern repaired",
+  "checkpoint_incident": "R03 JSON malformed by manual edit, repaired via structured serialization+parse+atomic replace; prior valid sibling retained. All workers now use this protocol.",
+  "next": "Accept R03 generic foundation and move same Middle to R04 durable store; continue domain/runtime",
+  "effects": "No NEXT/local inference/publication",
+  "recovery": "Use RESUME + campaign + API-AMENDMENTS + per-worker checkpoint/previous-valid copies; code candidates remain on disk"
+}

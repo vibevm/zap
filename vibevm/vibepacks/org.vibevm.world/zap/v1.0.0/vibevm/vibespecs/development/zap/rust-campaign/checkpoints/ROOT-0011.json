@@ -1,0 +1,23 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0011",
+  "time_utc": "2026-09-13T09:31:48.1031296Z",
+  "head": "04b6b615",
+  "accepted": [
+    "R00",
+    "R01-FOUNDATION",
+    "R02",
+    "R01",
+    "R03"
+  ],
+  "active": [
+    "R04 zap_rust_legacy_prep",
+    "R05 repair zap_rust_domain",
+    "R11/R12 zap_rust_runtime"
+  ],
+  "source_snapshot": "C:/Users/olegc/.vibe/zap/development/vibevm-next/checkpoints/r03-before-store-20260913T093018530Z",
+  "snapshot_note": "106 files hash-captured, per-file current after copy; mixed domain/runtime candidate, not whole-tree acceptance",
+  "next": "Review first durable store/service slice and domain repairs; continue runtime",
+  "effects": "No NEXT/local inference/publication; only active implementation scopes",
+  "git_note": "Only plan/legacy corpus/normative docs committed so far; integrated Rust remains on filesystem pending coherent acceptance commit"
+}

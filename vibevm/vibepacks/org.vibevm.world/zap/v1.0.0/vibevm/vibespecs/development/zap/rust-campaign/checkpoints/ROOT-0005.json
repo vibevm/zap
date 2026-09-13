@@ -1,0 +1,25 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0005",
+  "time_utc": "2026-09-13T08:24:56.0160131Z",
+  "head": "5745c866",
+  "accepted": [
+    "R00 plan/vision commit047e8834",
+    "R01-FOUNDATION corrected typed API",
+    "R14-PREP legacy corpus commit5745c866"
+  ],
+  "active": [
+    "R03 wire/core implementation",
+    "R01 ADR/contracts",
+    "R02 requirement map"
+  ],
+  "next": "Review R03 compiled types and R02 final report; release domain/runtime coding once shared foundation is accepted",
+  "findings": [
+    "R02 REQUIREMENTS baseline source paths need ../../../ instead of ../../; sent correction",
+    "R01 permit must authorize transaction entry, validated intent only after in-transaction gates; blob hashing outside DB writer; fixes requested"
+  ],
+  "candidate_evidence": "R03 installed own declared rust-ai-native-lang/core-ai-native dependencies without hooks; Cargo coding follows",
+  "checks": "Original source Git blob verified identical; legacy data/doc commit clean; no full panel",
+  "effects": "No NEXT, local inference or publication; native R03 writer active",
+  "recovery": "Read campaign.json + packets + per-worker checkpoints, reconcile jobs before replacement"
+}

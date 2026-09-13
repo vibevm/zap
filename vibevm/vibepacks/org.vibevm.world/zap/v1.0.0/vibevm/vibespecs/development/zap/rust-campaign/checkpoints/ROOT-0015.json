@@ -1,0 +1,21 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0015",
+  "time_utc": "2026-09-13T10:06:20.0274679Z",
+  "head": "04b6b615",
+  "active": [
+    "R04 service/provider integration",
+    "R06 knowledge/basis/adaptive",
+    "R11 runtime repair"
+  ],
+  "evidence": "R04 public CommitService+real redb vertical slice passed: trusted Owner scope, transaction permit, typed cell, event/command/record/head, exact retry/conflict, reopen typed read;2 tests0.05s",
+  "boundary": "Private and public store atoms are evidence, not full R04 acceptance. Exact-basis/privileged/dispatch providers remain refused or pending.",
+  "next": "Wire current basis and effect gates, test real coordinator persistence/recovery, then finish domain/runtime acceptance",
+  "prohibited": [
+    "NEXT execution",
+    "local Qwen inference",
+    "automatic reset redemption",
+    "publication before final acceptance"
+  ],
+  "recovery": "Follow campaign/RESUME/current packets and validated task checkpoints; unpublished Rust source stays on disk with R03 snapshot available"
+}

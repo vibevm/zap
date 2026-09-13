@@ -1,0 +1,19 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0018",
+  "time_utc": "2026-09-13T10:36:31.9913950Z",
+  "head": "04b6b615",
+  "incident": "Two native workers had no file/checkpoint progress for20-30minutes and no cargo/rustc process; cause unknown, account limit not reported reached",
+  "interrupted": [
+    "R04 zap_rust_legacy_prep",
+    "R11 zap_rust_runtime"
+  ],
+  "continuing": "R06 zap_rust_domain",
+  "next": "Restart the two existing native workers from exact disk checkpoint and current source; first reconcile/fresh checkpoint, no blind rerun",
+  "last_observed": [
+    "R04 store source last touched10:13Z, checkpoint10:13Z",
+    "R11 runtime source last touched10:03Z, checkpoint09:59Z"
+  ],
+  "effects": "No model launch/native campaign effect occurred in these tasks; no NEXT/local Qwen/publication or reset redemption",
+  "authority": "Owner-authorized ZAP implementation continues; this is process recovery, not changed architectural attempt or new scope"
+}

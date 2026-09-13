@@ -1,0 +1,27 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0006",
+  "time_utc": "2026-09-13T08:37:19.6443745Z",
+  "head": "04b6b615",
+  "accepted": [
+    "R00",
+    "R01-FOUNDATION",
+    "R02 normative/map",
+    "R14-PREP reference corpus"
+  ],
+  "active": [
+    "R03 zap_rust_legacy_prep Sol/high",
+    "R05 zap_rust_domain Sol/high",
+    "R01 zap_vision_rust Sol/ultra"
+  ],
+  "candidate": "R03 cargo check -p zap-wire passed; scoped warnings cleanup and tests/core remain",
+  "next": "Accept completed wire/core and domain candidates; finish R01 rev4 to start runtime/store integration",
+  "pending_api": [
+    "Rev4 per-verb goal capabilities",
+    "Trusted grant construction across crates",
+    "Typed runtime frontier/work views",
+    "Approved additional IDs for R05"
+  ],
+  "checks": "Root actual XML/map279/279, no removed legacy fact IDs; R02 committed04b6b615",
+  "effects": "Own package dependencies/materialized Cargo build only; no NEXT/local inference/publication"
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0003",
+  "time_utc": "2026-09-13T08:10:46.2499412Z",
+  "head": "047e8834",
+  "accepted": [
+    "R00 approved vision/plan committed"
+  ],
+  "active": [
+    "R01 architecture",
+    "R02 normative XML mapping",
+    "R14-PREP pure legacy corpus"
+  ],
+  "prepared": "packets/R03-foundation.md, not dispatched until API accepted",
+  "findings": [
+    "git index lock briefly held by another live process, retry succeeded without deletion",
+    "Original Owner input has literal whitespace and separator markers; -text preserves exact bytes; source excluded from code-style diff check"
+  ],
+  "next": "Accept first R01 foundation API and assign R03 coding; review R02 complete denominator",
+  "effects": "No publication/NEXT/local inference; prototype copy complete"
+}

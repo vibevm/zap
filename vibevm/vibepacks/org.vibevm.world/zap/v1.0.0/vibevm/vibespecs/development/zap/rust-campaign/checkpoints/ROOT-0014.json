@@ -1,0 +1,18 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0014",
+  "time_utc": "2026-09-13T10:02:15.3257138Z",
+  "head": "04b6b615",
+  "active": [
+    "R04 store/service typed integration",
+    "R06 source/knowledge/adaptive cells",
+    "R11 full runtime review repairs"
+  ],
+  "accepted": "Unchanged R00/R01/R02/R03/R05 + bounded legacy reference",
+  "next": "Accept integrated service/store and source candidate, re-review runtime with real coordinator/store evidence",
+  "recent": "R06 basis/knowledge module wiring verified on disk, so no stale integration wait is needed",
+  "shared_integration": "Core revalidation release record approved with composite review/job/attempt/request key, exact work/generation/action/safe observation; R11/R06 coordinate",
+  "pending": "R07 economics/control, R08 lowering, R09 weak bundles, R10 Dreamer, R13 surfaces, R14 import and final production/release are still open",
+  "effects": "No NEXT/local inference/publication",
+  "checkpoint_policy": "Latest task files and previous valid backups are authoritative; timestamps from actual clock, identities/cursors govern recovery"
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "zap-rust-campaign-checkpoint/1",
+  "packet": "R01-architecture",
+  "api_revision": 7,
+  "status": "accepted",
+  "updated_at": "2026-09-13T11:45:02.7716225+03:00",
+  "completed_boundaries": [
+    "packet_loaded",
+    "requirements_and_discipline_read",
+    "foundation_workspace_and_api_seams",
+    "foundation_review_corrections",
+    "worker_ownership_and_port_boundary",
+    "foundation_review_repairs",
+    "transactional_storage_adr",
+    "transaction_permit_and_commit_intent_boundary",
+    "artifact_preparation_boundary",
+    "semantic_runtime_public_contracts",
+    "vision_acceptance_map",
+    "semantic_provider_and_agent_host_contract",
+    "lowering_weak_bundle_dreamer_resume_goal_contracts",
+    "r02_anchor_alignment",
+    "candidate_consistency_audit",
+    "goal_operation_capability_matrix",
+    "trusted_bootstrap_registrar",
+    "owner_control_route",
+    "producer_acceptor_identity",
+    "composed_completion_provider_boundary",
+    "typed_runtime_frontier_port",
+    "record_page_query_epoch_fix",
+    "root_acceptance_received"
+  ],
+  "current_boundary": "accepted_complete",
+  "accepted_boundary": "Root accepted R01 API revision 7, its one-transaction storage/trust ADR, implementation ownership, typed domain/runtime ports, native-host limitation, legacy epochs, and complete V01-V24 acceptance map for implementation. Actual feature correctness and performance remain their campaign evidence gates.",
+  "candidate_boundary": null,
+  "files": [
+    "vibevm/vibespecs/development/zap/rust-campaign/RUST-API.md",
+    "vibevm/vibespecs/development/zap/rust-campaign/STORAGE-ADR.md",
+    "vibevm/vibespecs/development/zap/rust-campaign/WORKER-BOUNDARIES.md",
+    "vibevm/vibespecs/development/zap/rust-campaign/checkpoints/R01.json"
+  ],
+  "checks": [
+    {
+      "name": "named_packet_inputs_read",
+      "status": "passed",
+      "exit_code": 0
+    },
+    {
+      "name": "rustc_version_probe",
+      "status": "passed: rustc 1.93.1",
+      "exit_code": 0
+    },
+    {
+      "name": "redb_metadata_probe",
+      "status": "passed: redb 4.2.0 declares rust-version 1.90",
+      "exit_code": 0
+    },
+    {
+      "name": "markdown_fence_and_stale_term_audit",
+      "status": "passed after API revision 7: all Markdown fences balanced and stale-term search empty; this is a text audit, not a code gate",
+      "exit_code": 0
+    }
+  ],
+  "live_processes": [],
+  "live_jobs": [],
+  "unresolved_effects": [],
+  "findings": [
+    "The real specmark dependency is the materialized rust-ai-native-lang package path; no host source checkout is a valid seam.",
+    "redb 4.2.0 is MSRV-compatible but behavior and performance remain R04/R17 evidence, not an accepted claim.",
+    "A standalone Rust process cannot invoke harness-only native tools; the committed intent and harness receipt bridge is mandatory.",
+    "Legacy zap/1 digest domains and IDs remain separate from zap/2 identity and corrected reducer behavior.",
+    "Owner control is a distinct credentialed route; activation does not require an already active charter and coordinator action grants cannot yield OwnerControl.",
+    "Completion blockers are supplied by a fixed required provider composition, so absent economics/runtime providers cannot look like an empty blocker set.",
+    "Producer and acceptor identities come from service-created admission context and durable producer records, never caller payload authority."
+  ],
+  "remaining_questions": [],
+  "deferred_evidence": [
+    "R03/R05/R11 compilation and scoped tests prove the documented signatures and semantics.",
+    "R04 proves redb commit/reopen/quick-repair behavior; R17 measures its costs.",
+    "R11 captures actual native harness capabilities and reports unsupported operations honestly."
+  ],
+  "next_exact_action": "No further R01 work. Root continues R03, R05 and R11; any later concrete contract defect is a bounded follow-up with an incremented API revision."
+}

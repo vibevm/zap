@@ -1,0 +1,26 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0008",
+  "time_utc": "2026-09-13T08:47:03.1048355Z",
+  "head": "04b6b615",
+  "accepted": [
+    "R00",
+    "R01 APIrev7 architecture",
+    "R02 normative279 facts",
+    "R14-PREP bounded legacy evidence"
+  ],
+  "active": [
+    "R03 zap_rust_legacy_prep Sol/high",
+    "R05 zap_rust_domain Sol/high",
+    "R11/R12 zap_rust_runtime Sol/high"
+  ],
+  "next": "Review compiled core/wire, domain and runtime candidates; then schedule durable R04 storage",
+  "pending_reviews": [
+    "R03 nested nonfinite Serialize-to-null and BasisBinding unknown fields",
+    "LegacyIdentity constructor/deserializer invariant",
+    "Actual core/store/route integration, not just types"
+  ],
+  "evidence": "R03 wire cargo check passed; core/behavior still candidate",
+  "effects": "Only scoped Rust work/materialization, no NEXT/local inference/publication",
+  "recovery": "Saved packets + current task checkpoints; native handle names above must be reconciled before any replacement"
+}

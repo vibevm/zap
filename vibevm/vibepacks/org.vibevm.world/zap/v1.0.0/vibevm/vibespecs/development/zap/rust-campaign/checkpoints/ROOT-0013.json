@@ -1,0 +1,24 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0013",
+  "time_utc": "2026-09-13T09:51:47.6506564Z",
+  "head": "04b6b615",
+  "accepted": [
+    "R00",
+    "R01 API+amendments",
+    "R02 normative279",
+    "R03 generic foundation",
+    "R05 repaired domain foundation",
+    "R14-PREP bounded reference"
+  ],
+  "active": [
+    "R04 real store/service",
+    "R06 knowledge/basis",
+    "R11/R12 rejected candidate repairs"
+  ],
+  "runtime_review": "REVIEW-R11.md:2P0,4P1,2P2; actual pause/hold recheck, durable native ingress/recovery, capability/provenance, registered full lifecycle, typed kind binding, retry release, goals/cache and nonblocking effect boundary",
+  "next": "Review repaired runtime through real store/coordinator; complete store and source integration before any native probe",
+  "ownership": "R06 additionally owns core/basis/**; R11 core/agent/**+execution_views/**; R04 generic core/store/libs",
+  "effects": "No NEXT/local inference/publication",
+  "checkpoint_policy": "Serialize, parse sibling, atomic replace, previous-valid file; bounded current state, no recursive previous-checkpoint objects"
+}

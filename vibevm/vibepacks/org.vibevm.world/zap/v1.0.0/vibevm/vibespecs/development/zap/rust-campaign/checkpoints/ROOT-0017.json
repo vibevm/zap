@@ -1,0 +1,91 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0017",
+  "time_utc": "2026-09-13T10:20:12.3348810Z",
+  "head": "04b6b615",
+  "active": [
+    "R04",
+    "R06",
+    "R11/R12 repairs"
+  ],
+  "next": "Accept service+source integration and all runtime review repairs before further capability claims",
+  "recent_source": [
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\basis.rs",
+      "modified_utc": "2026-09-13T10:20:00.0096307Z",
+      "sha256": "9D3D1D8618D2EAEE37DD316B6AE042880A936BBE042E4AE75E99E1CFA4D81297"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\mod.rs",
+      "modified_utc": "2026-09-13T10:20:00.0086255Z",
+      "sha256": "7CF477DDE662A0560ABFA64D9BE126CCEE5EEBC3A8FE916866AB111A784F360B"
+    },
+    {
+      "path": "crates\\zap-core\\src\\basis\\mod.rs",
+      "modified_utc": "2026-09-13T10:20:00.0081252Z",
+      "sha256": "968154072E9B41B0A69437B41490C0A0E304F7F587F62FED9D8950DC3051E230"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\acceptance\\cells.rs",
+      "modified_utc": "2026-09-13T10:17:19.7210246Z",
+      "sha256": "77DD84371D21D5FA748801FC9CE1A7AEECB1452709859570A4815E8065B078D0"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\cells\\adaptive_apply.rs",
+      "modified_utc": "2026-09-13T10:17:19.6412810Z",
+      "sha256": "EFCD98111901EF519C2E2AEA279FBF95332C04E5A889BDEE042DF8A0AD78C9C4"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\cells\\graph.rs",
+      "modified_utc": "2026-09-13T10:17:19.6322687Z",
+      "sha256": "5303895B65352FF63F61D8075173A60CB72FC42CDFEB0784931D2902A23A3CDB"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\cells\\mod.rs",
+      "modified_utc": "2026-09-13T10:17:19.6267391Z",
+      "sha256": "1C2C525120A0A9DECA3ED08B2C67D07D7CA0F98A571E16107530E0A90BDF0050"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\cells\\region.rs",
+      "modified_utc": "2026-09-13T10:17:19.6242397Z",
+      "sha256": "EFD49A7918C8752B7E1EC46747F15685BB14E11BE647669A3384D61C79982838"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\cells\\revalidation.rs",
+      "modified_utc": "2026-09-13T10:17:19.6207397Z",
+      "sha256": "C954C08DC83CCD1640EE70E4A263380EE4013334CA9A4D46BF6D931E66574CA7"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\cells\\review.rs",
+      "modified_utc": "2026-09-13T10:17:19.6177289Z",
+      "sha256": "AC9A48FA9FEFEC2E497079D5EDA04EB3DC39FFB81FDEEAD084780118B745B574"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\cells\\source.rs",
+      "modified_utc": "2026-09-13T10:17:19.6122246Z",
+      "sha256": "A217D7AC1A98F9B940CB763284FD890B37B953CCD2C355736D9980F18FFA0025"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\queries.rs",
+      "modified_utc": "2026-09-13T10:17:19.6075513Z",
+      "sha256": "2520752245551DF0C6700C1763FF2D3A838E928021C15CCD8349E94A5D6AA862"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\identifiers.rs",
+      "modified_utc": "2026-09-13T10:17:19.5454514Z",
+      "sha256": "450E9FC1EC4D028D1D280BCD83B3778760E7ACD5E27F2B7C9C6B4A0EB0F14417"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\payloads.rs",
+      "modified_utc": "2026-09-13T10:17:19.5379275Z",
+      "sha256": "6DC8AE193E1ED005AA160CF639D2203F9445C344A45285FC2AD90773531AC85D"
+    },
+    {
+      "path": "crates\\zap-domain\\src\\knowledge\\records.rs",
+      "modified_utc": "2026-09-13T10:17:19.5344282Z",
+      "sha256": "ED64233FC8199D4EA3C14E027A5D4F5F92631F0BD5C7A910A8D941BE161B1456"
+    }
+  ],
+  "meaning": "Mechanical source inventory supplements task checkpoints; timestamps/hashes do not imply acceptance or a coherent tree snapshot",
+  "effects": "No NEXT/local inference/publication"
+}

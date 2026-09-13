@@ -1,0 +1,23 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0009",
+  "time_utc": "2026-09-13T09:00:33.6072372Z",
+  "head": "04b6b615",
+  "accepted": [
+    "R00",
+    "R01 architecture with bounded rev8/9 refinements",
+    "R02 normative279",
+    "R14-PREP legacy evidence"
+  ],
+  "active": [
+    "R03 generic core/wire and integration",
+    "R05 domain acceptance/requirements",
+    "R11 shared runtime DTOs and runtime/continuation"
+  ],
+  "candidate": "cargo check -p zap-core passed; changed typed-nonfinite wire regression and in-memory transition proof still pending",
+  "ownership": "R11 owns core/agent and core/execution_views; R03 core/candidate and generic core + lib.rs/manifests; R05 domain cells",
+  "api": "Read API-AMENDMENTS.md for rev8 descriptors and rev9 CandidateProvenanceRecord/acceptance CandidateId/Outcome completion duties",
+  "next": "Accept R03 generic foundation after scoped changed checks and transition proof; assign R04 persistent store next",
+  "open": "Domain/runtime integration and all later phases remain unaccepted; no semantic success from compiled stubs",
+  "effects": "No NEXT/local inference/publication; three native code workers active"
+}

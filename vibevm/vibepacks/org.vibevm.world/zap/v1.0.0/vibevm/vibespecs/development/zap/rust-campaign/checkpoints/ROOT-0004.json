@@ -1,0 +1,22 @@
+{
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0004",
+  "time_utc": "2026-09-13T08:18:49.3662518Z",
+  "head": "047e8834",
+  "accepted": [
+    "R00",
+    "R01-FOUNDATION",
+    "R14-PREP bounded legacy evidence"
+  ],
+  "active": [
+    "R03 zap_rust_legacy_prep Sol/high",
+    "R01 zap_vision_rust Sol/ultra",
+    "R02 zap_vision_method Sol/ultra"
+  ],
+  "next": "Review first compiled R03 foundation; finish R01 and R02 to release domain/runtime tracks",
+  "api": "Corrected RUST-API sections1-7, exact evidence in R01-FOUNDATION node",
+  "checks": "Root reviewed reports, corpus metadata and generator reference calls; worker reproducibility and cold replay receipts reused. Git blob equals exact original Owner source",
+  "unresolved": "R01/R04 trusted journal commit port, full semantic/runtime contracts, all later code/evidence",
+  "effects": "R03 authorized own dependency materialization/build; no NEXT/local inference/publication",
+  "target_dir": "C:/Users/olegc/.vibe/zap/build/next-rust"
+}
