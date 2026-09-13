@@ -42,6 +42,14 @@ truncated world as complete, and stale indexes fail or rebuild explicitly.
 Only add tests that distinguish an actual optimization risk. Reuse previously
 valid correctness receipts and avoid rerunning scale fixtures after doc edits.
 
+Check whether byte-identical source recapture unnecessarily invalidates reusable
+verification: the current verification subject fingerprint normalizes Work but
+may retain a Source record's revision/observation metadata. Distinguish changed
+semantic inputs, scope and applicability from equivalent refreshed provenance.
+Keep any resulting optimization exact and scoped; never drop a real dependency
+merely to improve reuse measurements. R06's repair reviewer may refine this
+observation before this task begins.
+
 Keep generated stores outside the shipped package and shared host source.
 Coordinate heavy benchmark runs; short scoped checks use Cargo's existing
 cache lock. Checkpoint every coherent unit and before/after long runs using

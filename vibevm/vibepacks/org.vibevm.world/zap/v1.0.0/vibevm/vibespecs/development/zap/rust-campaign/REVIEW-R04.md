@@ -1,5 +1,11 @@
 # R04 source review: official mutation admission
 
+Current disposition at ROOT-0034: bounded R04 kernel accepted. Root reviewed
+the final static entitlement before idempotency lookup and reused the four
+store cases plus scoped core/store clippy receipt. The findings below document
+their original triggers. REPORT-R04.md preserves the remaining R11 artifact
+consumer, R13 exclusive service lifecycle, R14 import and R18 discipline debt.
+
 Status: the three findings below are repaired in the current service candidate.
 Root reviewed the new identity/basis/action-request gate order and reused the
 three real-service/redb test receipts. This accepts these repairs, not the
