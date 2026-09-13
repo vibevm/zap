@@ -7,8 +7,8 @@ epoch = 1
 format = "normal"
 authors = ["Oleg Chirukhin"]
 license = "UPL-1.0"
-description = "Adaptive campaign design with explicit uncertainty, owner-defined stops, and a replayable planning data prototype"
-keywords = ["planning", "campaigns", "facts", "observability", "decisions", "recovery", "lowering"]
+description = "Adaptive campaign runtime with explicit uncertainty, owner-defined stops, trusted control, replay, graph queries, and durable execution"
+keywords = ["planning", "campaigns", "facts", "observability", "decisions", "recovery", "lowering", "runtime", "backend"]
 
 [compatibility]
 min_vibe_version = "0.1.0"
@@ -30,4 +30,9 @@ description = "Draft or revise a ZAP campaign methodology, owner contract and ob
 [[skill]]
 name = "zap-state"
 path = "vibevm/vibespecs/skills/zap-state"
-description = "Import an isolated MUP plan copy, inspect replayed ZAP data, record supported draft events or simulate stop rules"
+description = "Import, migrate, inspect, query, repair and operate an isolated ZAP campaign store through its public Python CLI"
+
+[[skill]]
+name = "zap-run"
+path = "vibevm/vibespecs/skills/zap-run"
+description = "Configure trusted ZAP control, run the persistent coordinator, and serve the authenticated graph backend"

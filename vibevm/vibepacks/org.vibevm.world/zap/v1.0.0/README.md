@@ -1,166 +1,229 @@
 # ZAP
 
-ZAP — проект методологии для длинных кампаний: Владелец вместе с агентом
-согласует нужную пользу, существенные ограничения и границы самостоятельности.
-По ходу работы агент пересматривает знание, приоритеты, достижимость и сам
-ожидаемый результат в пределах допустимых компромиссов. План — текущая
-гипотеза о полезном пути; первоначальный список задач не является самоцелью.
+ZAP is a methodology and runtime for long campaigns. The Owner and coordinator
+agree on required benefit, essential constraints, and the boundary of
+autonomy. As work proceeds, the coordinator revises knowledge, priorities,
+feasibility, and the expected outcome within authorized tradeoffs. The plan is
+a current hypothesis about a valuable route; the initial task list is not an
+end in itself.
 
-Пакет `flow:org.vibevm.world/zap:1.0.0` содержит исследование, XML-проект
-методологии и исполняемый прототип данных. Он создан отдельно от
-`multi-user-planning`; действующий план NEXT остаётся на прежнем протоколе.
-Пакет не установлен в boot проекта и не активирует кампанию.
+`flow:org.vibevm.world/zap:1.0.0` contains research, the methodology, an
+executable kernel, a trusted control service, an automatic coordinator, and a
+data backend. It is separate from `multi-user-planning`. Installing or
+importing it does not activate a campaign, and NEXT remains on its existing
+protocol until a separate Owner decision and explicit migration.
 
-## Что берём из исследования
+## Research basis
 
-[Полная карта](vibevm/vibespecs/research/zap/IDEA-MAP.xml) содержит 21 идею
-и 36 связей, включая цикл пересмотра по уточнению Владельца. Та же карта есть в
-[JSON](vibevm/vibespecs/research/zap/idea-map.json);
-[инвентарь](vibevm/vibespecs/research/zap/source-inventory.json) фиксирует
-все 37 скиллов, глубину чтения и хеши источников. Основной разбор — Wayfinder
-и семейство Grill, а также research, prototype, domain modeling, TDD,
-implement, review и формирование заданий.
+The [idea map](vibevm/vibespecs/research/zap/IDEA-MAP.xml) contains 21 ideas
+and 36 relations, including the Owner-requested adaptive review cycle. A
+[JSON projection](vibevm/vibespecs/research/zap/idea-map.json) and
+[source inventory](vibevm/vibespecs/research/zap/source-inventory.json) record
+all 37 skills, read depth, and source hashes. The main review covers Wayfinder,
+the Grill family, research, prototyping, domain modeling, TDD, implementation,
+review, and task design. The
+[ancillary review](vibevm/vibespecs/research/zap/ANCILLARY-REVIEW.xml) covers
+12 additional writing, teaching, setup, hook, fixture, and handoff skills.
 
-[Дополнительный разбор](vibevm/vibespecs/research/zap/ANCILLARY-REVIEW.xml)
-покрывает ещё 12 скиллов: письмо, обучение, setup, hooks, fixtures и handoff.
-
-| Полезная идея | Применение в ZAP |
+| Research idea | ZAP application |
 | --- | --- |
-| «Туман войны» | Отдельно неизвестная область, точный вопрос, доказанный факт и исключённый объём. Детализируем то, что нужно для следующего полезного результата. |
-| Вопросы образуют зависимости | Сначала выясняем предпосылки; Владелец выбирает намерения и компромиссы, агент самостоятельно исследует доступные факты. |
-| Разным работам нужны разные методы | Назначение работы: исследование, решение, изменение, проверка, интеграция. Оно отдельно от зрелости результата и права действовать. |
-| Маленький опыт дешевле долгого спора | Прототип отвечает на определённый вопрос. Его вывод остаётся полезным и при отказе от кода. |
-| Краткая карта над подробными записями | Обзор вычисляется из общего графа; решение сохраняет альтернативы, причину, источники и последствия. |
-| Решения иногда приходится пересматривать | Изменившаяся предпосылка указывает, какие выводы и проверки нужно пересмотреть. История не стирается. |
+| Fog of war | Unknown regions, precise questions, evidenced facts, and authorized exclusions are distinct. Refine what the next valuable result needs. |
+| Questions form dependencies | Resolve prerequisites first. The Owner chooses intent and tradeoffs; the coordinator investigates available facts. |
+| Work needs different methods | Evidence, decision, change, verification, and integration are separate from maturity and authority. |
+| A small experiment can beat a long argument | A prototype answers a named question, and its conclusion can remain useful even when its code is discarded. |
+| A concise map sits above detailed records | Overview derives from one graph; decisions retain alternatives, rationale, sources, and consequences. |
+| Decisions may need revision | Changed premises identify conclusions and checks to revisit without deleting history. |
 
-Одну задачу на сессию, обязательное ожидание человека для каждого вопроса,
-фиксированный размер контекста, максимальную параллельность любой ценой
-и полную тестовую панель на каждый коммит в ZAP не переносим.
+ZAP does not adopt one-task-per-session, mandatory Owner waiting for every
+question, fixed context size, maximum parallelism at any cost, or the full test
+panel on every commit.
 
-Это оценка пригодности идей для нашего процесса. Источники содержат принципы
-и качественные рассказы об опыте, а не сравнительные измерения эффективности.
-Формулировки, классификация ZAP и код написаны самостоятельно. Источник
-прочитан, поэтому работа не заявляется как организационно изолированный
-clean-room процесс. Ссылки на GitHub служат происхождению исследования;
-методология и прототип не зависят от GitHub, внешнего трекера или его API.
+These are project judgments about applicability, not comparative measurements
+of effectiveness. The sources were read, so this is not described as a formal
+clean-room process. GitHub links provide research provenance; the methodology
+and runtime do not depend on GitHub, an external tracker, or its API.
 
-## Как складывается методология
+## Method
 
 ```mermaid
 flowchart TD
-    O[Замысел и допустимые компромиссы] --> R[Текущий ожидаемый результат]
-    F[Новые наблюдения и факты] --> G[Пересмотр тумана войны]
-    G --> V[Переоценка пользы, стоимости и достижимости]
+    O[Intent and admissible tradeoffs] --> R[Current expected outcome]
+    F[New observations and facts] --> G[Recompute fog of war]
+    G --> V[Reassess value, cost, and feasibility]
     R --> V
-    V --> D[Сохранить или пересмотреть результат и маршрут]
+    V --> D[Keep or revise outcome and route]
     D --> R
-    D --> L[Согласовать план, доказательства и живые работы]
-    L --> S[Проверить условия остановки]
+    D --> L[Reconcile plan, evidence, and live work]
+    L --> S[Evaluate stop conditions]
     O --> S
-    S --> W[Полезное действие и проверка]
+    S --> W[Valuable action and verification]
     W --> F
-    D --> E[Журнал событий]
+    D --> E[Event journal]
     L --> E
     W --> E
-    E --> UI[Детерминированные проекции и будущий viewer]
+    E --> UI[Deterministic projections and future viewer]
 ```
 
-Та же процедура применяется к кампании, направлению и сложной задаче.
-Туман войны может расширяться: ответ на один вопрос обнаруживает новые,
-старый факт теряет применимость, прежняя полезная работа становится ненужной.
-Существенное открытие запускает [цикл пересмотра](vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml).
-Решение сохранить прежний маршрут тоже допустимо. Каждый мелкий шаг не требует
-полного пересмотра графа.
+The same cycle applies to a campaign, workstream, or complex task. Fog may
+expand: one answer can reveal more questions, a fact can lose applicability,
+or formerly valuable work can become unnecessary. A material discovery starts
+the [adaptive cycle](vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml). A
+reasoned keep-route decision is also valid; small steps do not require global
+replanning.
 
-Если исходная точка недостижима или появился лучший вариант, агент может выбрать
-близкий полезный результат внутри согласованных компромиссов. Например, при
-разрешённом ручном шаге — автоматизировать остальную настройку, когда внешний
-сервис не предоставляет нужного API. Отчёт покажет и пользу, и оставшееся
-ограничение; полная автоматизация не будет объявлена достигнутой.
+If the original variant is unattainable or a better opportunity appears, the
+coordinator may select a nearby valuable outcome inside authorized tradeoffs.
+For example, when one manual step is allowed and an external service lacks an
+API, the remaining setup may be automated. The result reports both benefit and
+the remaining limitation; it does not claim full automation.
 
-Lowering сохраняет обязательства текущей редакции результата. При разрешённой
-смене результата прежний пункт получает явный исход и причину, а не исчезает.
-Прямое выполнение остаётся нормальным маршрутом. Прототип, функциональный MVP
-и продуктизация включаются по необходимости; временно отложенные формальные
-обязанности получают обязательное место закрытия. Выбранный маршрут,
-заявленная зрелость, доказанный результат и приёмка — разные данные.
+Lowering preserves obligations of the current outcome revision. An authorized
+outcome change gives every old obligation an explicit disposition and reason.
+Direct execution remains normal; prototype, functional MVP, and productization
+are selected as needed. Formal deferrals have an explicit closure location.
+Route, declared maturity, proven result, and acceptance are distinct data.
 
-Смысловую оценку делает агент: например, затронет ли миграция пользовательские
-данные. Машина вычисляет правило над этой сохранённой оценкой; неизвестность
-означает необходимость получить доказательства. Машина не обещает сама понять
-произвольную фразу и доказать верность оценки.
+The coordinator makes semantic assessments, such as whether migration affects
+user data. The kernel evaluates rules over stored assessments. Unknown means
+evidence is required; the machine does not claim to understand and prove an
+arbitrary sentence by itself.
 
-Владелец подтвердил два примера: остановиться **до смены публичного формата,
-если миграция затронет пользовательские данные**; остановиться **после двух
-неудачных архитектурных подходов к одной проблеме и показать варианты**.
-По умолчанию останавливается **вся кампания**: новые работы не выдаются,
-текущие достигают безопасной границы. Сбой провайдера не считается новым
-архитектурным подходом. Перезапуск сессии или смена аккаунта не обнуляют историю.
+Two Owner examples are implemented: stop before a public-format change when
+user-data migration is affected, and present options after two failed
+architectural approaches to one problem. A triggered rule pauses the whole
+campaign by default: no new work starts, and active work reaches a declared
+safe boundary. Provider failure is not a new architectural approach, and a
+session or account change does not reset history.
 
-Изменяемые агентом заметки и план не могут выдавать агенту дополнительные
-полномочия. Будущий управляющий адаптер связывает действие Владельца с точной
-редакцией договора и конкретной паузой. Его реализация ещё предстоит;
-самозаписанного поля `owner` для этого недостаточно.
+Agent-editable notes and plans grant no authority. The control service binds an
+Owner action to the exact campaign, base, charter revision, command content,
+and pause. Trust is configured outside the campaign store; a self-authored
+`owner` field is insufficient.
 
-## Что уже можно проверить
+## Implemented and verifiable
 
-- Импорт MUP в новое локальное хранилище с сохранением исходных байтов,
-  неизвестных полей, мандатов, узлов, связей и контрактов задач.
-- Добавляемый журнал и повторное вычисление проекции без нейросети.
-- Запись причин изменений, фактов-кандидатов, решений, подходов и аннотаций.
-- Добавление подработ с проверкой DAG и явного покрытия родительской приёмки.
-- Конфликт редакций, идемпотентный повтор, обнаружение повреждения и частичного хвоста.
-- Вычисление примеров остановок с результатами `clear`, `needs_evidence`,
-  `pause`, `too_late` и счётчиком разных подходов к одной проблеме.
+- Lossless MUP import preserving source bytes, unknown fields, mandates, nodes,
+  relations, and task contracts.
+- Append-only journal, deterministic replay without a model, CAS conflicts,
+  idempotent retry, corruption detection, and explicit partial-tail repair.
+- Sourced candidate facts, decisions, approaches, annotations, recursive DAG
+  lowering, and explicit parent-acceptance coverage.
+- Versioned Owner charter, scoped sticky pauses, truthful safe drain, exact
+  resume, one-shot exceptions, and approach counters.
+- Complete outcome, obligation, ownership, work, evidence, stage, deferral,
+  acceptance, adaptive-review, and fact-promotion domain graph.
+- Trusted source capture, content-addressed private blobs, snapshots, migration,
+  and promotion into permanent project facts.
+- Persistent automatic coordinator with literal-argv subprocess transport,
+  observed receipts, waits, recovery, independent verification, selective
+  evidence reuse, and durable adaptive job reconciliation.
+- Authenticated localhost JSON/SSE backend with large-graph pagination, search,
+  subgraphs, explanations, and complete entity inspection.
 
-[zap-state](vibevm/vibespecs/skills/zap-state/SKILL.md) описывает CLI.
-[Точный контракт команд](vibevm/vibespecs/examples/zap/command-contract.json)
-содержит поля JSON, перечисления, ограничения и ответы реализованного прототипа.
-Python 3.11+, только стандартная библиотека. Команды `import-mup`, `inspect`,
-`events`, `record`, `evaluate-stop` работают с JSON; справка `--help` — текстовая.
-Образцы правил имеют статус `example_unapproved`; результат симуляции никогда
-не разрешает выполнение действия. Проверка структуры не доказывает смысловую
-полноту lowering или истинность записанного факта.
+[zap-state](vibevm/vibespecs/skills/zap-state/SKILL.md) and
+[zap-run](vibevm/vibespecs/skills/zap-run/SKILL.md) describe the CLI and runtime.
+The [machine command contract](vibevm/vibespecs/examples/zap/command-contract.json)
+publishes implemented JSON fields, enums, constraints, responses, registries,
+and routes. ZAP requires Python 3.11+ and uses only the standard library. The
+original `import-mup`, `inspect`, `events`, `record`, and `evaluate-stop`
+commands remain. `--help` lists the complete surface and `capabilities` reports
+actual registries. Example rules are `example_unapproved`; simulation never
+authorizes an action. Structural validation does not prove semantic lowering
+completeness or the truth of a recorded fact.
 
-Здесь ещё нет автономного runner, активации и возобновления через доверенный
-канал Владельца, принятия продуктовой работы, native facts adapter,
-автоматического ремонта журнала, серверного стрима или интерфейса Qwik.
-Адаптивный цикл также пока спроектирован: действующий `plan.refined` умеет
-добавлять подработы, но ещё не пересматривает цели, ценность и состояния знания.
-Данные уже спроектированы для внешнего просмотра; интерактивное приложение
-остаётся отдельной следующей работой.
+The interactive canvas, Qwik/Three.js UI, and IDE plugin remain separate work.
+The backend already exposes the required details and semantic distinctions, so
+a future viewer need not infer them from prose. Installation, import, and
+migration do not activate or execute work.
 
-## Пилот на NEXT
-
-[Отчёт](vibevm/vibespecs/research/zap/PILOT-REPORT.xml) и
-[его JSON](vibevm/vibespecs/research/zap/pilot-report.json) фиксируют успешный
-импорт 425 узлов, 212 контрактов и 64 мандатов. В отдельной копии записаны
-12 событий, включая синтетическое уточнение трёх подработ и решения для
-проверки stop rules. Повторный replay совпал; исходные файлы сохранены;
-разрешение на исполнение отсутствует.
-
-Прошли 18 узких тестов ядра и проверка пакета без ошибок и предупреждений.
-Тесты запускаются из корня пакета:
+## Quick start
 
 ```text
-python -B -m unittest discover -s vibevm/vibespecs/skills/zap-state/scripts -p test_zap_state.py
+python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py init \
+  --plan PLAN.toml --tasks-dir TASKS --out STORE
+python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py trust-bootstrap \
+  --store STORE --trust-dir PRIVATE_TRUST
+python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py capabilities \
+  --store STORE
+python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py overview \
+  --store STORE --limit 100
 ```
 
-## Канонические документы
+`charter-prepare` validates a full charter and writes exact draft and activation
+command files. The draft uses the data route; activation uses an Owner
+credential and exact hash. Profiles with verification use `--artifact-store`:
+a successful output is captured before explicit applicability and closure
+assessment. `tick` runs one coordinator pass, `run` runs the continuing loop,
+and `serve` starts the backend. Tokens remain in protected files outside STORE
+and never enter JSON, argv, environment, or worker packets. See
+`vibevm/vibespecs/examples/zap/runtime-profile.json`,
+[ZAP-CLI](vibevm/vibespecs/flows/zap/ZAP-CLI.md),
+[ZAP-BACKEND-API](vibevm/vibespecs/flows/zap/ZAP-BACKEND-API.md), and
+[ZAP-PYTHON-API](vibevm/vibespecs/flows/zap/ZAP-PYTHON-API.md).
 
-- [Методология](vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml): договор,
-  остановки, рекурсия, этапы, факты, проверки, параллельность и восстановление.
-- [Адаптивный цикл](vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml):
-  переоценка неизвестности, ценности и достижимости, изменение ожидаемого
-  результата и честная история исходных обязательств.
-- [Данные и будущий viewer](vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml):
-  неизменяемый импорт, команды, события, replay и внешний интерфейс.
-- [zap-draft](vibevm/vibespecs/skills/zap-draft/SKILL.md): вход в подготовку
-  кампании; установка пакета не заменяет решение о её запуске.
+The isolated end-to-end command is:
 
-Перед будущим переводом NEXT требуется отдельно сопоставить действующие
-ограничения с договором ZAP, включая запрет старта, D-022 и внешние действия.
-Пилот использует общий seed в отдельной локальной копии. Ни новый формат,
-ни успешный импорт не переписывают личный MUP-контекст и не снимают его ограничений.
+```text
+python -B -m zaplib.runtime_live_probe --root ISOLATED_DIRECTORY
+```
 
-Лицензия собственного пакета: [UPL-1.0](LICENSE.md).
+Without `--execute` it only prepares an isolated activated fixture and creates
+no provider or transport job. An authorized isolated Sol/xhigh proof used one
+worker attempt and one independent verification. Its 15-byte artifact SHA-256
+was `19b32baf08503ceab0fc41f2e4880162cc8528ec040be59e71eed35787de65af`;
+original closure was accepted at revision 79, and semantic restart reused the
+captured artifact and check. No private path, prompt, credential, or transcript
+is part of this public evidence.
+
+## NEXT pilot
+
+The [pilot report](vibevm/vibespecs/research/zap/PILOT-REPORT.xml) and
+[JSON report](vibevm/vibespecs/research/zap/pilot-report.json) record a
+successful import of 425 nodes, 212 task contracts, and 64 mandates. An isolated
+copy recorded 12 events, including synthetic lowering of three subitems and
+stop-rule decisions. Replay matched, source files were preserved, and execution
+authority was absent.
+
+A later read-only exercise over the same current input materialized 1,292
+derived obligations. Exact migration retry was idempotent, source hashes did
+not change, the charter remained inactive, and transport activity was zero.
+The exercise did not move the active NEXT campaign to ZAP.
+
+Run the package-local panel from the package root:
+
+```text
+python -B -m unittest discover -s vibevm/vibespecs/skills/zap-state/scripts -p 'test_*.py'
+```
+
+## Canonical documents
+
+The future viewer is a **strategy map** inspired by Heroes 3 and StarCraft: a
+clear saturated explored region, research frontier, and fog of the unknown.
+Clicking a node, edge, unknown region, job, or decision opens content,
+provenance, and history in a map inspector. Color, shape, outline, icons, and
+text distinguish independent properties. Unknown, stale, excluded, and not-yet
+loaded data remain distinct. Three.js is a rendering candidate; the viewer is
+separate future work. Its art direction is a vivid illustrated map with
+expressive objects, paths, fog, and detailed game-like panels.
+
+- [Methodology](vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml): charter,
+  stops, recursion, stages, facts, verification, parallelism, and recovery.
+- [Adaptive cycle](vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml):
+  reassessing uncertainty, value, and feasibility; revising outcomes; and
+  preserving truthful obligation history.
+- [Data and future viewer](vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml):
+  immutable import, commands, events, replay, and external data interface.
+- [zap-draft](vibevm/vibespecs/skills/zap-draft/SKILL.md): campaign
+  preparation; installing the package does not authorize a start.
+
+Before any future NEXT transition, its active constraints must be mapped into
+the ZAP charter, including the start prohibition, D-022, and external actions.
+The pilot uses the shared seed only in an isolated local copy. Neither the new
+format nor successful import rewrites personal MUP context or removes its
+constraints.
+
+ZAP-authored specifications, public documentation, skills, and examples are
+English. Imported source and legacy payloads remain byte-faithful, and
+intentional Unicode fixtures preserve the data under test.
+
+License: [UPL-1.0](LICENSE.md).

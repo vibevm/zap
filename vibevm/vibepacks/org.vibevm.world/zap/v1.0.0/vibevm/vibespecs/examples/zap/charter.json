@@ -1,0 +1,64 @@
+{
+  "schema": "zap-charter/1",
+  "charter_id": "charter-example",
+  "campaign_id": "replace-with-plan-id",
+  "base_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "revision": 1,
+  "parent_sha256": null,
+  "intent": "Deliver the useful verified outcome within the listed constraints.",
+  "intent_binding": {
+    "intent_id": "intent-example",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "expected_outcome": {
+    "outcome_id": "outcome-example",
+    "summary": "A verified useful result"
+  },
+  "delegation": {
+    "allowed_actions": [
+      "adaptive.apply",
+      "campaign.close",
+      "evidence.adjudicate",
+      "fact.promote",
+      "outcome.adopt",
+      "plan.lower",
+      "stage.accept",
+      "task.update",
+      "verification.run",
+      "work.accept",
+      "work.dispatch"
+    ],
+    "adaptation": {
+      "allow_target_revision": true,
+      "mutable_obligations": [],
+      "essential_obligations": [],
+      "allowed_dispositions": [
+        "excluded",
+        "replaced",
+        "retained",
+        "unattainable"
+      ]
+    }
+  },
+  "legacy_authority": [],
+  "stop_policy": {
+    "schema": "zap-stop-policy/1",
+    "policy_id": "policy-example",
+    "revision": 1,
+    "rules": [
+      {
+        "id": "two-failed-approaches",
+        "applies_to_actions": [
+          "work.dispatch"
+        ],
+        "scope": "campaign",
+        "timing": "before_next_action",
+        "when": {
+          "failed_approaches": {
+            "gte": 2
+          }
+        }
+      }
+    ]
+  }
+}

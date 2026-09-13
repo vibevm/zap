@@ -4,7 +4,10 @@ from __future__ import annotations
 from typing import Any
 
 from .common import Refusal, need
-from .domain_model import content_hash, domain_state, effective_nodes, inherited_dependencies, owned_obligations
+from .domain_model import (
+    content_hash, domain_state, effective_nodes, inherited_dependencies,
+    owned_obligations, validation_generation,
+)
 
 
 COLLECTIONS = {
@@ -76,8 +79,10 @@ def _work_unchanged(state: dict[str, Any], domain: dict[str, Any], work_id: str)
     node = effective_nodes(state, domain).get(work_id)
     need(node is not None and node["state"] not in {"dropped", "superseded"},
          "DOMAIN_EVIDENCE", "preserved proof work subject changed or disappeared")
-    need(not domain["work_updates"].get(work_id, {}).get("revalidation_required"),
-         "DOMAIN_EVIDENCE", "preserved proof work requires revalidation")
+    update = domain["work_updates"].get(work_id, {})
+    if update.get("revalidation_required"):
+        need(validation_generation(domain, work_id) > update.get("revalidation_from_generation", 0),
+             "DOMAIN_EVIDENCE", "preserved proof work requires revalidation")
 
 
 def _sources_current(state: dict[str, Any], source_refs: list[str]) -> None:
@@ -106,6 +111,12 @@ def evidence_for_outcome(state, domain, evidence_id, outcome_id):
     need(row["disposition"] == "accepted", "DOMAIN_EVIDENCE", "preserved evidence is not accepted")
     _sources_current(state, row["source_refs"])
     captures = _evidence_captures(state, row)
+    expected_generations = row.get("validation_generations", {
+        work_id: 0 for work_id in row["applies_to"]["work_ids"]
+    })
+    need(all(expected_generations.get(work_id) == validation_generation(domain, work_id)
+             for work_id in row["applies_to"]["work_ids"]),
+         "DOMAIN_EVIDENCE", "evidence belongs to an earlier validation generation")
     nodes = effective_nodes(state, domain)
     for work_id in row["applies_to"]["work_ids"]:
         need(work_id in nodes, "DOMAIN_EVIDENCE", "preserved evidence work subject disappeared")
@@ -132,6 +143,8 @@ def evidence_for_outcome(state, domain, evidence_id, outcome_id):
 def stage_for_outcome(state, domain, stage_id, outcome_id):
     row, pointer = _source(domain, "stages", stage_id, outcome_id)
     _work_unchanged(state, domain, row["work_id"])
+    need(row.get("validation_generation", 0) == validation_generation(domain, row["work_id"]),
+         "DOMAIN_EVIDENCE", "stage belongs to an earlier validation generation")
     need(set(row["obligation_ids"]) <= owned_obligations(domain, row["work_id"]),
          "DOMAIN_EVIDENCE", "preserved stage obligations changed")
     for evidence_id in row["evidence_ids"]:
@@ -150,6 +163,8 @@ def stage_for_outcome(state, domain, stage_id, outcome_id):
 def integration_for_outcome(state, domain, integration_id, outcome_id, trail=None):
     row, pointer = _source(domain, "integrations", integration_id, outcome_id)
     _work_unchanged(state, domain, row["work_id"])
+    need(row.get("validation_generation", 0) == validation_generation(domain, row["work_id"]),
+         "DOMAIN_ACCEPTANCE", "integration belongs to an earlier validation generation")
     need(set(row["obligation_ids"]) <= owned_obligations(domain, row["work_id"]),
          "DOMAIN_ACCEPTANCE", "preserved integration obligations changed")
     for evidence_id in row["evidence_ids"]:
@@ -172,6 +187,8 @@ def acceptance_for_outcome(state, domain, acceptance_id, outcome_id, trail=None)
     row, pointer = _source(domain, "acceptances", acceptance_id, outcome_id)
     work_id = row["work_id"]
     _work_unchanged(state, domain, work_id)
+    need(row.get("validation_generation", 0) == validation_generation(domain, work_id),
+         "DOMAIN_ACCEPTANCE", "acceptance belongs to an earlier validation generation")
     version, contract = _active_contract(domain, work_id)
     need(version == row["contract_version"], "DOMAIN_CONTRACT", "preserved work contract version changed")
     need(set(row["obligation_ids"]) == owned_obligations(domain, work_id),

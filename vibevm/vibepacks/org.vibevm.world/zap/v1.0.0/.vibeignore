@@ -1,0 +1,6 @@
+vibevm/vibespecs/development/**
+**/__pycache__/**
+**/*.pyc
+**/*.token
+**/trust.json
+private/**

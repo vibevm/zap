@@ -181,6 +181,7 @@ def initial_domain(state: dict[str, Any]) -> dict[str, Any]:
         "obligations": obligations, "ownership": ownership,
         "work_nodes": {}, "work_updates": {}, "work_successors": {},
         "task_contracts": task_history,
+        "validation_generations": {}, "revalidation_history": [],
         "reviews": {}, "last_applied_review_id": None,
         "evidence_adjudications": {}, "stages": {}, "deferrals": {},
         "acceptances": {}, "integration_acceptances": {},
@@ -214,6 +215,10 @@ def require_action(state: dict[str, Any], action_class: str) -> dict[str, Any]:
     """Late import keeps the domain/control dependency one-way."""
     from .control import require_action as control_require_action
     return control_require_action(state, action_class)
+
+
+def validation_generation(domain: dict[str, Any], work_id: str) -> int:
+    return domain.get("validation_generations", {}).get(work_id, 0)
 
 
 DomainApply = Callable[[dict[str, Any], dict[str, Any], dict[str, Any], str], None]

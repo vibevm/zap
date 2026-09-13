@@ -1,0 +1,17 @@
+{
+  "schema": "zap-domain/sparse-review-transition/1",
+  "intent_id": null,
+  "outcome_id": "replace-with-next-proposed-outcome-id",
+  "changed_dispositions": [],
+  "ownership_changes": [],
+  "work_changes": [],
+  "preserved_evidence_ids": [],
+  "preserved_stage_acceptance_ids": [],
+  "preserved_work_acceptance_ids": [],
+  "preserved_integration_acceptance_ids": [],
+  "job_reconciliation": [],
+  "tradeoffs": [],
+  "preserved_benefits": [
+    "replace-with-benefit-retained-from-active-outcome"
+  ]
+}

@@ -8,6 +8,7 @@ from .domain_model import (
     STAGES, active_obligations, digest, domain_handler, effective_nodes, integer,
     inherited_dependencies, nonblank_list, owned_obligations, require_action, require_refs, rows, strict,
     text, unique_ids, work_is_accepted,
+    validation_generation,
 )
 from .domain_reuse import evidence_for_outcome, stage_for_outcome, work_acceptance_current
 
@@ -81,14 +82,20 @@ def _apply_evidence(state, domain, payload, event_id):
     need(set(applies["work_ids"]) <= set(evidence.get("node_refs", [])),
          "DOMAIN_EVIDENCE", "core evidence does not identify every claimed work subject")
     applicability = _applicability(state, payload["source_refs"])
+    generations = {work_id: validation_generation(domain, work_id) for work_id in applies["work_ids"]}
     if payload["disposition"] == "accepted":
         need(evidence.get("result") in {"observed_pass", "observed_fail"},
              "DOMAIN_EVIDENCE", "accepted evidence requires an observed result")
         need(evidence.get("artifact_refs"), "DOMAIN_EVIDENCE", "accepted evidence needs a durable artifact reference")
         need(applicability["status"] == "applicable" and not applicability.get("incomplete_closure"),
              "DOMAIN_EVIDENCE", "stale, unknown or incomplete source closure cannot be accepted")
+        if current is not None:
+            previous = current.get("validation_generations", {work_id: 0 for work_id in current["applies_to"]["work_ids"]})
+            need(all(previous.get(work_id) == generation for work_id, generation in generations.items()),
+                 "DOMAIN_EVIDENCE", "revalidation requires a fresh evidence identity")
     version = {**payload, "revision": current_revision + 1, "event_id": event_id,
                "applicability_at_adjudication": applicability,
+               "validation_generations": generations,
                "source_captures_at_adjudication": _source_captures(
                    state, payload["source_refs"], require_current=payload["disposition"] == "accepted"
                )}
@@ -148,7 +155,8 @@ def _apply_stage(state, domain, payload, event_id):
     accepted_evidence(state, domain, payload["evidence_ids"], work_id=payload["work_id"],
                       stage=payload["stage"], obligation_ids=payload["obligation_ids"],
                       require_pass=True, collective=True)
-    domain["stages"][key] = {**payload, "event_id": event_id, "status": "accepted"}
+    domain["stages"][key] = {**payload, "event_id": event_id, "status": "accepted",
+                              "validation_generation": validation_generation(domain, payload["work_id"])}
 
 
 def _integration_payload(value):
@@ -185,7 +193,8 @@ def _apply_integration(state, domain, payload, event_id):
     accepted_evidence(state, domain, payload["evidence_ids"], work_id=payload["work_id"],
                       obligation_ids=payload["obligation_ids"], require_pass=True, collective=True)
     domain["integration_acceptances"][key] = {**payload, "event_id": event_id, "status": "accepted",
-                                               "legacy_inputs_are_assertions": bool(legacy)}
+                                               "legacy_inputs_are_assertions": bool(legacy),
+                                               "validation_generation": validation_generation(domain, payload["work_id"])}
 
 
 def _work_accept_payload(value):
@@ -235,9 +244,11 @@ def _apply_work_accept(state, domain, payload, event_id):
              "DOMAIN_ACCEPTANCE", "parent work lacks complete integration acceptance")
     domain["acceptances"][payload["acceptance_id"]] = {
         **payload, "event_id": event_id, "status": "accepted", "contract_version": history["active_version"],
+        "validation_generation": validation_generation(domain, key),
     }
     domain["work_updates"].setdefault(key, {})["state"] = "accepted"
     domain["work_updates"][key].pop("revalidation_required", None)
+    domain["work_updates"][key].pop("revalidation_from_generation", None)
 
 
 def _promotion_payload(value):

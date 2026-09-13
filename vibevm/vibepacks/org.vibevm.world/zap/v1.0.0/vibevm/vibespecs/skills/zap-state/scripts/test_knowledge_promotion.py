@@ -52,6 +52,7 @@ class PromotionTests(unittest.TestCase):
             "limitations": ["fixture scope"], "revision": state["revision"], "event_id": "adjudication-E",
             "applicability_at_adjudication": applicability,
             "source_captures_at_adjudication": [{"source_id": "S", "sha256": state["extensions"]["knowledge"]["sources"]["S"]["content_sha256"]}],
+            "validation_generations": {"T": 2},
             "history": []}}}
         return state, build_promotion_proposal(state, promotion_id="promotion-1", fact_id="F", source_refs=["S"], target=target)
 
@@ -77,6 +78,7 @@ class PromotionTests(unittest.TestCase):
         self.assertEqual(artifact["portable_proofs"][0]["observation"]["subject"], "source:S")
         self.assertEqual(artifact["portable_proofs"][0]["method"]["argv"], ["python", "-B", "-m", "unittest"])
         self.assertEqual(artifact["portable_proofs"][0]["source_captures_at_adjudication"][0]["source_id"], "S")
+        self.assertEqual(artifact["portable_proofs"][0]["validation_generations"], {"T": 2})
         self.assertEqual(artifact["source_reobservations"][0]["observed"]["status"], "current")
         self.assertEqual(artifact["sources"][0]["content_sha256"], state["extensions"]["knowledge"]["sources"]["S"]["content_sha256"])
         self.assertEqual(effects[0]["kind"], "fact.promotion-effect-recorded")
@@ -93,6 +95,17 @@ class PromotionTests(unittest.TestCase):
         self.assertEqual(result["artifact_status"], "rolled_back")
         self.assertFalse((self.project / "facts" / "rollback.json").exists())
         self.assertFalse(result["event_recorded"])
+
+    def test_legacy_evidence_without_generation_materializes_only_generation_zero(self):
+        state, proposal = self.proposal("facts/legacy-generation.json")
+        state["extensions"]["domain"]["evidence_adjudications"]["E"].pop("validation_generations")
+        result = promote_fact(
+            state, proposal, self.project, authorization=self.authorize,
+            event_writer=lambda _effect: {"event_id": "legacy-generation"},
+        )
+        self.assertTrue(result["ok"])
+        artifact = parse(Path(result["target"]).read_bytes(), tagged=True)
+        self.assertEqual(artifact["portable_proofs"][0]["validation_generations"], {"T": 0})
 
     def test_receipt_failure_never_deletes_a_foreign_replacement(self):
         state, proposal = self.proposal("facts/foreign.json")

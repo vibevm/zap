@@ -1,0 +1,49 @@
+{
+  "schema": "zap-runtime-profile/1",
+  "transport": {
+    "root": "private/transport",
+    "allowed_workspace_roots": [
+      "replace-with-workspace-root"
+    ],
+    "inherited_environment": null,
+    "environment_allowlist": [],
+    "allow_process_termination": false
+  },
+  "semantic_transport": {
+    "root": "private/semantic",
+    "allowed_workspace_roots": [
+      "replace-with-workspace-root"
+    ],
+    "inherited_environment": null,
+    "environment_allowlist": [],
+    "allow_process_termination": false
+  },
+  "semantic": {
+    "kind": "codex-sol-xhigh",
+    "argv": [],
+    "cwd": "replace-with-workspace-root",
+    "launcher": null
+  },
+  "artifact_capture": {
+    "allowed_root": "replace-with-workspace-root"
+  },
+  "worker": {
+    "kind": "codex-sol-xhigh",
+    "launcher": null,
+    "argv": [],
+    "cwd": "replace-with-workspace-root",
+    "standing_rule_paths": [],
+    "environment": {},
+    "resource_capacities": {},
+    "review_capacity": 1,
+    "integration_capacity": 1,
+    "branch_for_work": {},
+    "stop_mode": "cooperative",
+    "terminate_after_seconds": null
+  },
+  "verifications": {},
+  "runtime": {
+    "transient_backoff_ns": 30000000000,
+    "idle_poll_seconds": 0.5
+  }
+}

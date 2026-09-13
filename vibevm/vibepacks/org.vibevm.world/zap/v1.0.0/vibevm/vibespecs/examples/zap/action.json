@@ -1,0 +1,25 @@
+{
+  "status": "state_bound_fragments_not_a_cli_command",
+  "action": {
+    "schema": "zap-action/1",
+    "action_id": "action-example",
+    "action_class": "outcome.adopt",
+    "campaign_id": "replace-with-plan-id",
+    "base_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "charter_revision": 1,
+    "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "source_captures": [],
+    "branch_id": null,
+    "run_id": null,
+    "problem_id": null
+  },
+  "assessment": {
+    "schema": "zap-assessment/1",
+    "assessment_id": "assessment-example",
+    "policy_id": "policy-example",
+    "policy_revision": 1,
+    "phase": "before_action",
+    "values": {},
+    "drain_targets": []
+  }
+}

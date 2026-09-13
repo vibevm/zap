@@ -39,6 +39,7 @@ DOMAIN_ACTION_KINDS = MappingProxyType({
     "domain.intent-adopted": "outcome.adopt",
     "domain.outcome-adopted": "outcome.adopt",
     "domain.task-contract-replaced": "task.update",
+    "domain.work-revalidation-readied": "plan.lower",
     "domain.work-renamed": "plan.lower",
     "domain.work-transitioned": "plan.lower",
     "domain.work-dispatched": "work.dispatch",

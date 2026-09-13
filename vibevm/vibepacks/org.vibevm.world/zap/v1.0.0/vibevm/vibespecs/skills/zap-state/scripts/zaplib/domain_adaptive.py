@@ -8,7 +8,7 @@ from .domain_graph import _adopt_intent, _adopt_outcome, _disposition_rows
 from .domain_model import (
     active_obligations, boolean, digest, domain_handler, effective_nodes, integer,
     domain_state, nonblank_list, optional_identity, owned_obligations, require_action, rows,
-    strict, text, unique_ids,
+    strict, text, unique_ids, validation_generation,
 )
 from .domain_proof import accepted_evidence
 from .domain_reuse import (
@@ -248,7 +248,8 @@ def _check_jobs(state, captured):
     need(not captured or jobs, "DOMAIN_STALE", "captured jobs unavailable")
     for row in captured:
         current = jobs.get(row["job_id"])
-        need(current and current.get("status") == row["status"] and current.get("attempt_id") == row["attempt_id"],
+        need(current and current.get("state", current.get("status")) == row["status"]
+             and current.get("attempt_id") == row["attempt_id"],
              "DOMAIN_STALE", "captured job changed")
 
 
@@ -279,6 +280,7 @@ def _apply_work_changes(state, domain, changes):
             update["order"] = change["order"]
         elif operation == "revalidate":
             update["revalidation_required"] = True
+            update["revalidation_from_generation"] = validation_generation(domain, key)
         elif operation == "supersede":
             need(set(change["successor_ids"]) <= set(nodes) - {key}, "REFERENCE", "review successor missing")
             need(not owned_obligations(domain, key), "DOMAIN_OBLIGATION", "superseded work still owns active obligations")

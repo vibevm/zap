@@ -1,0 +1,17 @@
+{
+  "schema": "zap-backend-cli-example/1",
+  "status": "illustrative_not_consumed",
+  "command": "zap.py serve",
+  "host": "127.0.0.1",
+  "port": 8765,
+  "allow_nonlocal": false,
+  "allowed_origins": [
+    "http://127.0.0.1:5173"
+  ],
+  "max_body_bytes": 2097152,
+  "max_follow_seconds": 30.0,
+  "trust_config": "replace-with-trust.json",
+  "artifact_store": "replace-with-private-artifact-store",
+  "host_principal_id": "coordinator-principal",
+  "runtime_profile": "replace-with-runtime-profile.json"
+}

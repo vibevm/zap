@@ -1,6 +1,6 @@
 ---
 name: zap-draft
-description: Draft or revise a ZAP campaign's outcomes, owner contract, uncertainty map and lowering strategy. Use for ZAP methodology or campaign preparation; this package does not activate or execute campaigns.
+description: Draft or revise a ZAP campaign's intent, outcomes, owner charter, uncertainty map and lowering strategy without implicitly activating execution.
 ---
 
 # ZAP drafting
@@ -52,11 +52,13 @@ obligations as durable data. Preserve conflicting observations and superseded de
 Use the fact graph to identify affected work and checks; do not turn every new finding
 into a full-suite run or mutation campaign. Reconsider the relevant region and missing
 links; unchanged assumptions need no repeated full review. A new target does not
-reset problem identity, failure counters or an owner pause. The current data kernel
-only demonstrates additive refinement; do not claim it implements the adaptive cycle.
+reset problem identity, failure counters or an owner pause. The runtime can
+apply an adopted review, but a proposal remains data until the authenticated
+application service admits the exact delegated action.
 
 Deliver a reviewable draft and explicit unresolved choices. Existing permission to
-design does not activate execution. A trusted owner activation mechanism is future
-work in this package; never fabricate its receipt. Import experiments belong in a
+design does not activate execution. The implemented owner channel activates only
+an exact full charter bound to campaign/base, legacy classifications, intent
+fingerprint and policy revision; never fabricate or infer its receipt. Import experiments belong in a
 fresh local store, with the original plan and its execution holds preserved. Do not
 start NEXT, replace its context, or publish personal state as a side effect of drafting.

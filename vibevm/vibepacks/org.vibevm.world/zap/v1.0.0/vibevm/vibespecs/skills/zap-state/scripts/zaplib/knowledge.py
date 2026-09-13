@@ -6,6 +6,7 @@ from types import MappingProxyType
 from typing import Any, Iterable, Mapping
 
 from .common import exact, identity, need, packed, sha, string, strings
+from .knowledge_schemas import KNOWLEDGE_EVENT_SCHEMAS, KNOWLEDGE_SCHEMA_DIALECT, KNOWLEDGE_SCHEMA_VERSION
 from .records import HandlerSpec, State
 from .sources import endpoint_key, validate_endpoint, validate_scope, validate_source_descriptor
 
@@ -13,20 +14,6 @@ KNOWLEDGE_VERSION = 1
 DEPENDENCY_RELATIONS = {"depends_on", "derived_from", "supports", "verifies", "affects", "consumes"}
 REGION_STATES = {"unexamined", "bounded", "evidenced", "invalidated"}
 RELEVANCE = {"relevant", "irrelevant", "unknown"}
-KNOWLEDGE_EVENT_SCHEMAS = {
-    "knowledge.source-recorded": {"required": ["source"]},
-    "knowledge.native-facts-recorded": {"required": ["capture"]},
-    "knowledge.source-recaptured": {"required": ["previous_sha256", "source"]},
-    "knowledge.source-observation-recorded": {"required": ["source_id", "observed", "claim", "artifact_refs"]},
-    "knowledge.source-observed": {"required": ["source_id", "observed"]},
-    "knowledge.dependency-recorded": {"required": ["id", "prerequisite", "dependent", "relation"]},
-    "knowledge.closure-assessed": {"required": ["subject", "status", "boundary", "missing", "evidence_refs", "basis"]},
-    "knowledge.applicability-assessed": {"required": ["source_id", "status", "scope", "evidence_refs", "basis"]},
-    "knowledge.region-transitioned": {"required": ["region_id", "from", "to", "evidence_refs", "reason"]},
-    "knowledge.region-relevance-set": {"required": ["region_id", "relevance", "reason"]},
-    "knowledge.region-split": {"required": ["region_id", "children", "reason"]},
-    "knowledge.region-merged": {"required": ["region_ids", "merged", "reason"]},
-}
 KNOWLEDGE_EVENT_ROUTES = {
     "knowledge.source-recorded": {"route": "effect_adapter", "action": "evidence.adjudicate", "affects_readiness": False},
     "knowledge.native-facts-recorded": {"route": "effect_adapter", "action": "evidence.adjudicate", "affects_readiness": False},

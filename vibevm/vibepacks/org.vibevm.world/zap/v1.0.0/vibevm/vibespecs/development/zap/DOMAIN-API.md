@@ -9,7 +9,7 @@ filesystem writes, clock reads, network calls, or semantic model calls.
 
 `zaplib.domain` exports:
 
-- `DOMAIN_HANDLERS`: immutable mapping of the 21 exact event kinds below.
+- `DOMAIN_HANDLERS`: immutable mapping of the 22 exact event kinds below.
 - `DOMAIN_EVENT_SCHEMAS`: JSON-Schema-style exact payload descriptors for the
   same 21 kinds. Every object has `additionalProperties=false`.
 - `DOMAIN_DATA_KINDS`: the three harmless proposal events.
@@ -88,6 +88,7 @@ honor sticky pause.
 | `domain.outcome-proposed` | `zap-domain/outcome-proposed/1` | `outcome_id, revision, previous_outcome_id, intent_id, summary, benefits, guarantees, tradeoffs, obligations` | data |
 | `domain.outcome-adopted` | `zap-domain/outcome-adopted/1` | `outcome_id, obligation_dispositions` | `outcome.adopt` |
 | `domain.task-contract-replaced` | `zap-domain/task-contract-replaced/1` | `work_id, expected_version, contract` | `task.update` |
+| `domain.work-revalidation-readied` | `zap-domain/work-revalidation-readied/1` | `work_id, review_id, job_id, from_generation, expected_state` | `plan.lower` |
 | `domain.work-renamed` | `zap-domain/work-renamed/1` | `work_id, expected_title, new_title` | `plan.lower` |
 | `domain.work-transitioned` | `zap-domain/work-transitioned/1` | `work_id, from_state, to_state, successor_ids` | `plan.lower` |
 | `domain.work-dispatched` | `zap-domain/work-dispatched/1` | `work_id, from_state, job_id` | `work.dispatch` |
@@ -135,6 +136,16 @@ functional and productized. `required_stage` names the stage central acceptance
 must prove. `obligation_ids` binds every current obligation owned by the work
 exactly; contract replacement and lowering refuse an omitted or invented
 obligation.
+
+Each work has an implicit validation generation zero. The dedicated
+`domain.work-revalidation-readied` event is valid only after an applied review
+requested revalidation and the runtime's captured prior job reached its durable
+`released` reconciliation state. It increments the generation and readies the
+same work/problem identity. Evidence stores exact work-generation bindings;
+stage, integration and work acceptance store their work generation. Older rows
+with no generation field mean zero. Prior-generation proof remains historical
+and cannot satisfy current acceptance, and re-adjudicating the same old evidence
+identity cannot manufacture fresh proof.
 
 A lowered node is exactly
 `{id, parent, title, kind, state, order, depends_on, acceptance,

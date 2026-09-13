@@ -108,6 +108,10 @@ class ApplicationService:
         need(pending is None, "PENDING_TAIL", "incomplete journal tail prevents control admission")
         return state
 
+    def load_projection(self) -> tuple[State, list[dict[str, Any]], dict[str, Any] | None]:
+        """Return the configured loader's detached projection and tail boundary."""
+        return self._loader(self.store, self.handlers)
+
     def _load_all(self) -> tuple[State, list[dict[str, Any]]]:
         state, events, pending = self._loader(self.store, self.handlers)
         need(pending is None, "PENDING_TAIL", "incomplete journal tail prevents control admission")

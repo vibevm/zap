@@ -147,6 +147,10 @@ DOMAIN_EVENT_SCHEMAS = MappingProxyType({
     "domain.task-contract-replaced": obj("zap-domain/task-contract-replaced/1", {
         "work_id": ID, "expected_version": INT, "contract": CONTRACT,
     }),
+    "domain.work-revalidation-readied": obj("zap-domain/work-revalidation-readied/1", {
+        "work_id": ID, "review_id": ID, "job_id": ID, "from_generation": INT,
+        "expected_state": {"enum": ["planned", "ready", "active", "candidate", "accepted", "blocked", "deferred", "dropped", "superseded"]},
+    }),
     "domain.work-renamed": obj("zap-domain/work-renamed/1", {"work_id": ID, "expected_title": TEXT, "new_title": TEXT}),
     "domain.work-transitioned": obj("zap-domain/work-transitioned/1", {
         "work_id": ID,

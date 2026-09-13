@@ -584,7 +584,7 @@
       "evidence_level": "our-design",
       "disposition": "adopt",
       "reason": "Changing the route alone leaves the original destination effectively fixed. Discoveries can expand uncertainty, change value and make a different approximate outcome more useful or feasible while preserving the owner intent.",
-      "zap_application": "Repeat observation, knowledge revision, value and feasibility assessment, outcome selection, plan and live-job reconciliation, then useful action. Reconsider affected regions and newly relevant unknowns; do not require a full review after every small edit. Choose a revised outcome within delegated tradeoffs, retaining the history and unmet parts of the original promise. Persist rationale and before/after assessments for deterministic views. A goal revision never resets owner stops or problem identity; this cycle is designed, not implemented by the current additive kernel."
+      "zap_application": "Repeat observation, knowledge revision, value and feasibility assessment, outcome selection, plan and live-job reconciliation, then useful action. Reconsider affected regions and newly relevant unknowns; do not require a full review after every small edit. Choose a revised outcome within delegated tradeoffs, retaining the history and unmet parts of the original promise. Persist rationale and before/after assessments for deterministic views. A goal revision never resets owner stops or problem identity; when this research snapshot was authored, the cycle was designed but not implemented by the additive kernel then available."
     }
   ],
   "relationships": [

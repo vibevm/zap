@@ -1,188 +1,181 @@
 {
-  "schema": "zap-command-contract/1",
-  "status": "implemented_prototype_description",
-  "implementation": "vibevm/vibespecs/skills/zap-state/scripts/zap_state.py",
+  "schema": "zap-command-contract/2",
+  "status": "implementation_candidate",
   "runtime": "Python 3.11+ standard library",
-  "scope": "Describes the current reference CLI and data projection; not a complete future ZAP schema or execution service.",
+  "entrypoints": {
+    "public": "vibevm/vibespecs/skills/zap-state/scripts/zap.py",
+    "legacy_compatible": "vibevm/vibespecs/skills/zap-state/scripts/zap_state.py"
+  },
+  "output": {
+    "success": "one canonical JSON value on stdout and exit 0",
+    "failure": "one object with ok=false, code, message, dispatch_allowed=false and exit 2",
+    "help": "human-readable argparse output"
+  },
   "commands": {
+    "init": {
+      "required": ["--plan", "--tasks-dir", "--out"],
+      "effect": "atomically create a fresh draft store from MUP sources",
+      "activates": false,
+      "executes": false
+    },
     "import-mup": {
-      "required_args": ["--plan <TOML-file>", "--tasks-dir <directory>", "--out <fresh-directory>"],
-      "optional_args": [],
-      "effect": "Capture and validate a MUP schema-1 plan and all *.json task-group files into a new draft store.",
-      "result_fields": ["ok", "store", "schema", "execution_mode", "plan_nodes", "task_contracts", "base_sha256", "source_sha256", "owner_contract_activated"]
+      "required": ["--plan", "--tasks-dir", "--out"],
+      "effect": "legacy alias of init"
+    },
+    "migrate-mup": {
+      "required": ["--plan", "--tasks-dir", "--out"],
+      "effect": "fresh lossless store plus migration report; source remains unchanged",
+      "activates": false,
+      "executes": false
     },
     "inspect": {
-      "required_args": ["--store <directory>"],
-      "optional_args": [],
-      "effect": "Read and replay; no writes.",
-      "result_fields": ["ok", "state", "frontier", "dispatch_allowed", "pending_tail"],
-      "frontier_meaning": "Structurally eligible leaf IDs ordered by node.order and node.id; ancestor suppression and inherited dependencies apply. Not dispatch authority or semantic readiness."
+      "required": ["--store"],
+      "effect": "legacy full committed projection read; pending final tail is reported"
     },
     "events": {
-      "required_args": ["--store <directory>"],
-      "optional_args": ["--after <integer>"],
-      "defaults": {"after": -1},
-      "effect": "Read committed events whose seq is strictly greater than after; no writes.",
-      "result_fields": ["ok", "events", "cursor", "pending_tail"]
+      "required": ["--store"],
+      "optional": ["--after"],
+      "effect": "legacy committed event tail read"
     },
     "record": {
-      "required_args": ["--store <directory>", "--command <JSON-file>"],
-      "optional_args": [],
-      "effect": "Under an exclusive writer lock, validate and append one supported reference-state event or return its identical prior receipt.",
-      "result_fields": ["ok", "idempotent", "event", "revision", "execution_mode"]
+      "required": ["--store", "--command"],
+      "effect": "submit through ApplicationService agent-data route; privileged and trusted-observation kinds refuse"
     },
     "evaluate-stop": {
-      "required_args": ["--store <directory>", "--input <JSON-file>"],
-      "optional_args": [],
-      "effect": "Pure evaluation of explicitly supplied unapproved rule examples against the replayed state and supplied assessment.",
-      "input_required": ["rules", "assessment"],
-      "input_optional": [],
-      "result_fields": ["ok", "revision", "execution_mode", "policy_origin", "policy_result", "matched_rules", "unknown_rules", "rules", "scope", "action_admitted", "owner_contract_activated", "action_already_occurred", "prevented_action", "response"]
+      "required": ["--store", "--input"],
+      "effect": "legacy pure unapproved stop-rule probe"
+    },
+    "capabilities": {
+      "required": ["--store"],
+      "effect": "actual composed handlers, descriptors, routes, roles and operation capabilities"
+    },
+    "overview": {
+      "required": ["--store"],
+      "optional": ["--limit", "--cursor", "--states", "--work-types", "--knowledge-states", "--entity-kinds"],
+      "effect": "paginated graph overview with semantic visual dimensions"
+    },
+    "subgraph": {
+      "required": ["--store", "--id"],
+      "optional": ["--depth", "--limit", "--cursor"],
+      "effect": "paginated bounded graph neighborhood and typed edges"
+    },
+    "search": {
+      "required": ["--store", "--query"],
+      "optional": ["--kinds", "--limit", "--cursor"],
+      "effect": "paginated search over addressable entities"
+    },
+    "detail": {
+      "required": ["--store", "--kind", "--id"],
+      "effect": "full entity inspector with explicit availability, provenance, history and staleness; node detail also includes contract, criteria, steps, checks, sources, evidence, obligations and edges"
+    },
+    "materialize-review-transition": {
+      "required": ["--store", "--request"],
+      "effect": "purely expand a sparse review request to the complete domain.review-proposed.transition; appends nothing"
+    },
+    "source-content": {
+      "required": ["--store", "--artifact-store", "--id", "--sha256"],
+      "optional": ["--offset", "--limit"],
+      "effect": "guarded captured source bytes by registered handle and exact hash"
+    },
+    "artifact-content": {
+      "required": ["--store", "--artifact-store", "--id", "--sha256"],
+      "optional": ["--offset", "--limit"],
+      "effect": "guarded private artifact bytes by registered handle and exact hash"
+    },
+    "trust-bootstrap": {
+      "required": ["--store", "--trust-dir"],
+      "effect": "create protected owner/coordinator/reader trust material outside campaign storage",
+      "secrets_in_output": false
+    },
+    "charter-prepare": {
+      "required": ["--store", "--charter", "--out-dir"],
+      "effect": "validate/normalize a full charter and write exact draft plus next-revision activation command files; does not append, activate or execute"
+    },
+    "control": {
+      "required": ["--store", "--trust-config", "--credential-id", "--credential-file", "--command"],
+      "effect": "authenticated owner/coordinator control command"
+    },
+    "observe": {
+      "required": ["--store", "--trust-config", "--credential-id", "--credential-file", "--command"],
+      "effect": "authenticated registered runtime/effect observation; allowed while paused and before activation; source captures must use capture-source"
+    },
+    "action": {
+      "required": ["--store", "--trust-config", "--credential-id", "--credential-file", "--command", "--action", "--assessment"],
+      "optional": ["--exception-id"],
+      "effect": "authenticated exact policy assessment, reservation and product transition"
+    },
+    "capture-source": {
+      "required": ["--store", "--trust-config", "--credential-id", "--credential-file", "--artifact-store", "--path", "--allowed-root"],
+      "optional": ["--source-id", "--kind", "--event-id"],
+      "effect": "actual byte capture into private content-addressed storage, followed by trusted source/native-facts observation"
+    },
+    "snapshot-create": {
+      "required": ["--store", "--out"],
+      "effect": "create a derived authenticated snapshot"
+    },
+    "snapshot-load": {
+      "required": ["--store", "--snapshot"],
+      "effect": "verify snapshot from committed prefix and replay exact tail"
+    },
+    "repair-pending-tail": {
+      "required": ["--store", "--trust-config", "--credential-id", "--credential-file", "--repair-id", "--expected-tail-sha256"],
+      "effect": "owner-authenticated quarantine and removal of one exact uncommitted final fragment"
+    },
+    "promote-fact": {
+      "required": ["--store", "--trust-config", "--credential-id", "--credential-file", "--project-root", "--artifact-store", "--promotion-id", "--fact-id", "--source-ref", "--target", "--proof-ref", "--authorization-ref"],
+      "optional": ["--assessment"],
+      "effect": "reobserve bound sources, write portable proof artifact, and record domain.fact-promotion-recorded through fact.promote"
+    },
+    "tick": {
+      "required": ["--store", "--trust-config", "--host-principal-id", "--profile"],
+      "optional": ["--artifact-store"],
+      "effect": "run one real coordinator reconciliation/scheduling iteration"
+    },
+    "run": {
+      "required": ["--store", "--trust-config", "--host-principal-id", "--profile"],
+      "optional": ["--max-ticks", "--artifact-store"],
+      "effect": "run the persistent coordinator loop"
+    },
+    "serve": {
+      "required": ["--store", "--trust-config", "--host-principal-id"],
+      "optional": ["--artifact-store", "--profile", "--host", "--port", "--allow-nonlocal", "--allowed-origin", "--max-body-bytes", "--max-follow-seconds"],
+      "effect": "authenticated HTTP JSON/SSE backend; localhost by default"
     }
   },
   "command_envelope": {
     "required": ["event_id", "base_revision", "kind", "reason", "payload"],
-    "optional": [],
-    "event_id_pattern": "^[A-Za-z0-9._:-]+$",
-    "base_revision": "Integer equal to the current ZAP store revision for a new event; not the imported MUP plan.revision.",
-    "reason": {
-      "required": ["summary"],
-      "optional": ["evidence_refs", "decision_ref"],
-      "summary": "Nonblank concise explanation; not a private reasoning transcript.",
-      "references": "Optional evidence_refs and decision_ref must identify already recorded evidence and decisions."
-    },
-    "unknown_fields": "Refused in the command envelope, reason and event payload."
+    "unknown_fields": "refused",
+    "cas": "base_revision equals current committed projection revision for a new event",
+    "idempotency": "same event_id and exact logical command returns existing result; changed bytes refuse"
   },
-  "event_payloads": {
-    "node.classified": {
-      "required": ["node_id", "work_type", "maturity"],
-      "optional": [],
-      "constraints": ["node_id exists", "work_type and maturity use the declared enums"],
-      "effect": "Set an orthogonal annotation with assertion_status=declared; neither node.kind nor node.state/evidence changes. Maturity is declared intent, not an achieved result."
-    },
-    "knowledge.region-recorded": {
-      "required": ["id", "question", "node_refs"],
-      "optional": [],
-      "effect": "Add an unknown-region question linked to existing plan nodes; no automatic resolution."
-    },
-    "evidence.recorded": {
-      "required": ["id", "claim", "subject", "result", "artifact_refs", "node_refs"],
-      "optional": [],
-      "constraints": ["claim and subject are nonblank strings", "result uses evidence_result", "artifact_refs is a string list", "node_refs identify existing nodes"],
-      "effect": "Record an observation claim with adjudication=unverified; artifact pointers are not fetched or independently checked."
-    },
-    "fact.recorded": {
-      "required": ["id", "statement", "status", "node_refs", "evidence_refs", "source_refs"],
-      "optional": [],
-      "constraints": ["status uses fact_status", "observed requires at least one existing evidence reference", "source_refs is a string list"],
-      "effect": "Add a fact assertion with adjudication=unverified; a status label cannot certify implementation or acceptance."
-    },
-    "decision.recorded": {
-      "required": ["id", "question", "alternatives", "chosen", "rationale", "authority_ref", "consequences", "node_refs", "evidence_refs"],
-      "optional": [],
-      "alternatives_item": {"required": ["id", "description"], "optional": []},
-      "constraints": ["At least two alternatives with unique stable IDs", "chosen identifies one alternative", "question, rationale and authority_ref are nonblank strings", "consequences is a string list"],
-      "effect": "Record the model decision, with authority_origin=unverified and activates_contract=false. An authority_ref string is a reference claim, not an authorization credential."
-    },
-    "approach.declared": {
-      "required": ["id", "problem_id", "description"],
-      "optional": [],
-      "constraints": ["problem_id is an existing plan node", "description is nonblank", "The same problem cannot receive another approach with the same casefolded, whitespace-normalized description"],
-      "effect": "Declare an approach with outcome=unresolved and an empty verdict history. IDs and strategy records persist across replay."
-    },
-    "approach.verdict": {
-      "required": ["approach_id", "outcome", "evidence_refs"],
-      "optional": [],
-      "constraints": ["Approach was declared and remains unresolved", "outcome uses approach_verdict", "failed or succeeded requires at least one referenced observed_pass or observed_fail result"],
-      "effect": "Append a verdict record. failed/succeeded fixes the semantic outcome; inconclusive/infrastructure_failure leaves it unresolved. Unavailable or inconclusive evidence alone cannot establish a semantic outcome."
-    },
-    "plan.refined": {
-      "required": ["parent_id", "nodes", "edges", "coverage"],
-      "optional": [],
-      "edge_item": {"required": ["node_id", "depends_on"], "optional": []},
-      "coverage_item": {"required": ["acceptance_index", "node_ids"], "optional": []},
-      "constraints": ["parent_id names an existing nonterminal node", "nodes is nonempty and contains fresh IDs below the parent", "New nodes are planned and carry the parent's mandates", "Edges only add prerequisites to nonterminal nodes within the refined subtree", "Coverage names every zero-based parent acceptance index exactly once and accounts for every added node", "The resulting parent/dependency/completion graph validates"],
-      "effect": "Add nodes, dependency edges, reciprocal mandate links and coverage relations. Preserve existing node acceptance and evidence. Coverage relations carry semantic_review=unverified."
-    }
+  "authority": {
+    "agent_data": "data-only route; authenticated HTTP reader credentials cannot mutate",
+    "owner_control": "owner credential or configured owner host principal",
+    "coordinator_control": "owner/coordinator credential or configured host principal",
+    "action": "principal action scope plus active charter, current assessment, CAS and sticky-pause policy",
+    "trusted_observation": "owner/coordinator or configured host; records existing effects and grants no action; captured-byte descriptors enter only through the guarded capture adapter",
+    "reader": "campaign/base-bound read access only",
+    "credentials": "opaque values read from protected files; never command/event/worker argv/environment data"
   },
-  "enums": {
-    "work_type": ["evidence", "decision", "change", "verification", "integration"],
-    "initial_work_type": "unclassified",
-    "maturity": ["unspecified", "prototype", "functional", "productized"],
-    "classification_assertion_status": ["declared"],
-    "evidence_result": ["observed_pass", "observed_fail", "unavailable", "inconclusive"],
-    "fact_status": ["hypothesis", "asserted", "observed"],
-    "approach_verdict": ["failed", "succeeded", "inconclusive", "infrastructure_failure"],
-    "initial_approach_outcome": "unresolved",
-    "mup_node_kind": ["portfolio", "campaign", "phase", "workstream", "group", "atom", "gate", "horizon"],
-    "mup_node_state": ["planned", "ready", "active", "candidate", "accepted", "blocked", "deferred", "dropped", "superseded"],
-    "stop_policy_result": ["pause", "needs_evidence", "clear", "too_late"]
+  "backend": {
+    "default_bind": "127.0.0.1:8765",
+    "nonlocal": "requires --allow-nonlocal",
+    "cors": "exact configured origins only; no wildcard",
+    "authentication": "X-ZAP-Credential-ID plus Authorization: Bearer token before disclosure",
+    "json_routes": ["/v1/capabilities", "/v1/snapshot", "/v1/events", "/v1/assessments", "/v1/graph/overview", "/v1/graph/subgraph", "/v1/search", "/v1/entities/<kind>/<id>", "/v1/content/source/<id>", "/v1/content/artifact/<handle>"],
+    "stream_routes": ["/v1/stream", "/v1/follow"],
+    "command_routes": ["/v1/review-transition/materialize", "/v1/agent", "/v1/control", "/v1/observation", "/v1/action", "/v1/tick"],
+    "sse": "/v1/stream is a finite resumable batch; /v1/follow is a live operator-bounded subscription; both use Last-Event-ID",
+    "pending_tail": "authorized reads return the last committed boundary plus pending tail descriptor; mutation refuses"
   },
-  "new_node_whitelist": {
-    "required": ["id", "parent", "title", "kind", "state", "order", "depends_on", "mandates", "acceptance", "evidence"],
-    "optional": ["zoom", "contract", "contract_sha256"],
-    "unknown_fields": "Refused only on new refinement nodes; existing imported extensions remain preserved."
+  "capability_source": {
+    "handlers": "CORE_HANDLERS + CONTROL_HANDLERS + DOMAIN_HANDLERS + KNOWLEDGE_HANDLERS + RUNTIME_HANDLERS",
+    "route_partition": "ENGINE_DATA_KINDS + ENGINE_ACTION_KINDS + ENGINE_OBSERVATION_KINDS",
+    "descriptors": "actual module descriptor registries; each event reports dialect/version, knowledge payloads and operations.runtime_profile_schema use JSON Schema draft 2020-12, and remaining event maps use zap-payload-descriptor/1"
   },
-  "import_preservation": {
-    "plan": "The complete parsed MUP plan, node/mandate arrays, order values, acceptance, evidence and unknown fields are retained. No classification is inferred from titles.",
-    "required_task_fields": ["id", "title", "goal", "read_paths", "write_paths", "steps", "positive_cases", "negative_cases", "checks", "acceptance", "safe_stop", "commit_subject", "notes"],
-    "task_extensions": "Unknown task fields are retained. Unknown group metadata remains in its raw source capture.",
-    "raw_sources": "The original plan and every task-group file are captured with path, sha256 and raw_base64, preserving exact bytes and original textual ordering.",
-    "toml_values": "Tagged JSON values preserve TOML date/time/nonfinite-number values and escape literal mappings containing the reserved $zap_type key.",
-    "output": "Must be a fresh nonexistent directory outside the imported source intersection. Symlink/reparse paths are refused; no source is modified.",
-    "holds": "Imported blocked/terminal states, dependencies and accepted evidence remain unchanged."
-  },
-  "storage_and_revision": {
-    "files": ["base.json", "events.jsonl"],
-    "temporary_writer_coordination": "writer.lock, created exclusively during record; an existing lock is never stolen automatically.",
-    "base": "Immutable import capture with schema=zap/1; no derived state file is written.",
-    "import_receipt": {
-      "kind": "store.imported",
-      "fields": ["seq", "revision", "previous_revision", "event_id", "kind", "base_sha256"],
-      "seq": 0,
-      "revision": 0,
-      "previous_revision": null
-    },
-    "record_event_fields": ["seq", "revision", "previous_revision", "event_id", "kind", "reason", "payload", "command_sha256"],
-    "revision": "Each new event advances seq and revision by one. previous_revision must match the prior replayed revision. Imported plan.revision remains its original MUP value; ZAP revision identifies the evolving projection.",
-    "idempotency": "An identical command with the same event_id returns its existing receipt without append, even after the store advances. Reusing that ID with another command refuses.",
-    "cursor": "events --after accepts integers from -1 through the current committed revision. -1 includes the import receipt; a future cursor is a CURSOR error.",
-    "pending_tail": "A final journal fragment without newline is not committed. inspect/events expose its byte count/hash and replay only committed events; record/evaluate-stop refuse until explicit repair. No automatic truncation.",
-    "durability_limit": "Import writes base and journal separately and claims no atomic multi-file transaction. Journal append uses file locking and fsync. This is not tamper resistance against a malicious writer sharing filesystem access."
-  },
-  "stop_probe": {
-    "rules_required": ["schema", "status", "rules"],
-    "rules_schema": "zap-stop/1",
-    "rules_status": "example_unapproved",
-    "rule_required": ["id", "when", "scope", "timing"],
-    "scope": ["run"],
-    "timing": ["before_action", "before_next_action"],
-    "assessment_phase": ["before_action", "after_action"],
-    "operators": {
-      "all": "Nonempty array of expressions; false dominates unknown.",
-      "any": "Nonempty array of expressions; true dominates unknown.",
-      "not": "One expression; unknown remains unknown.",
-      "eq": "Object with field and value. Reads a top-level assessment field; missing/null is unknown, incompatible scalar types refuse.",
-      "failed_approaches": "Object with positive integer gte. Counts declared approaches with failed outcomes separately for every problem_id; matches if any problem reaches the threshold."
-    },
-    "unknown": "An unresolved rule yields needs_evidence unless another rule already requires pause; it never grants action permission.",
-    "late_assessment": "A matching before_action rule assessed after the action reports too_late. A before_next_action rule can still require pause before subsequent work. No probe claims it prevented an actual effect.",
-    "whole_run_response": "A match describes no new jobs, safe draining of existing operations and preparation of owner options; the kernel does not perform these actions."
-  },
-  "authority_and_evidence_limits": {
-    "execution_mode": "draft",
-    "owner_contract": null,
-    "owner_contract_activated": false,
-    "action_admitted": false,
-    "unsupported": ["Owner activation or authenticated owner-control adapter", "Execution dispatch or scheduler", "Node acceptance/status mutation", "Task-contract replacement", "Automatic journal repair", "Direct maturity promotion or formal-deferral closure", "Automatic semantic verification of facts, evidence or architectural distinction", "UI, server or network endpoints"],
-    "record_truth": "Successful recording proves schema/reference consistency, not the truth of producer assertions. Facts and evidence remain unverified; decision authority references cannot activate a contract.",
-    "approach_count": "Retries and infrastructure failures do not count as failed architectural approaches. Stable IDs and normalized descriptions catch structural duplicates; detecting a semantically renamed strategy or problem remains a coordinator judgment."
-  },
-  "output": {
-    "format": "One JSON value on stdout per command, ASCII-safe escaping of Unicode; no model is called during queries or replay.",
-    "success_exit_code": 0,
-    "failure_exit_code": 2,
-    "failure_fields": ["ok", "code", "message", "dispatch_allowed"],
-    "help": "argparse --help remains human-readable help, not a state-query response."
+  "viewer_boundary": {
+    "backend_implemented": true,
+    "canvas_application_implemented": false,
+    "data_support": "stable IDs, paginated overview/subgraph/search, clickable node/edge/region/job/decision/entity detail with explicit availability/provenance/history/staleness, semantic visual dimensions, explicit unloaded/filter/knowledge distinctions and guarded captured content"
   }
 }

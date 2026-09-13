@@ -17,4 +17,5 @@ from zaplib import *  # noqa: F401,F403,E402 - deliberate compatibility surface
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    from zaplib.application_cli import main as application_main
+    sys.exit(application_main())

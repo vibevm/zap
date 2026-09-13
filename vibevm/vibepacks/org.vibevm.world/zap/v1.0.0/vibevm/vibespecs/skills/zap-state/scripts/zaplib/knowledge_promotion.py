@@ -80,7 +80,7 @@ def portable_accepted_proofs(state: dict[str, Any], proof_ids: list[str], bound_
     for proof_id in proof_ids:
         row = adjudications.get(proof_id)
         need(row is not None, "ACCEPTANCE", f"accepted proof does not exist: {proof_id}")
-        exact(row, DOMAIN_EVIDENCE_FIELDS)
+        exact(row, DOMAIN_EVIDENCE_FIELDS, {"validation_generations"})
         need(row["schema"] == DOMAIN_EVIDENCE_SCHEMA and row["evidence_id"] == proof_id and row["disposition"] == "accepted", "ACCEPTANCE", f"proof is not accepted: {proof_id}")
         core = evidence.get(proof_id)
         need(core is not None and core.get("result") in {"observed_pass", "observed_fail"}, "ACCEPTANCE", f"accepted proof lacks a concrete observation: {proof_id}")
@@ -97,6 +97,12 @@ def portable_accepted_proofs(state: dict[str, Any], proof_ids: list[str], bound_
                  "ACCEPTANCE", "accepted proof source witness is invalid")
             by_source[source_id] = witness["sha256"]
         need(set(by_source) == set(source_refs), "ACCEPTANCE", "accepted proof source witness differs from source refs")
+        generations = row.get("validation_generations")
+        if generations is None:
+            generations = {work_id: 0 for work_id in row["applies_to"]["work_ids"]}
+        need(isinstance(generations, dict) and set(generations) == set(row["applies_to"]["work_ids"])
+             and all(type(value) is int and value >= 0 for value in generations.values()),
+             "ACCEPTANCE", "accepted proof validation generations differ from work scope")
         applicability = current_applicability(state, source_refs)
         need(applicability["status"] == "applicable" and not applicability["incomplete_closure"], "APPLICABILITY", f"accepted proof is no longer applicable: {proof_id}")
         source_rows = []
@@ -111,6 +117,7 @@ def portable_accepted_proofs(state: dict[str, Any], proof_ids: list[str], bound_
                        "applies_to": copy.deepcopy(row["applies_to"]), "method": copy.deepcopy(row["method"]),
                        "limitations": copy.deepcopy(row["limitations"]), "sources": source_rows,
                        "source_captures_at_adjudication": copy.deepcopy(row["source_captures_at_adjudication"]),
+                       "validation_generations": copy.deepcopy(generations),
                        "applicability_at_adjudication": copy.deepcopy(row["applicability_at_adjudication"]),
                        "current_applicability": applicability})
     return proofs

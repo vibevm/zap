@@ -79,6 +79,56 @@ def _apply_contract(state, domain, payload, event_id):
     domain["task_contracts"][payload["work_id"]] = history
 
 
+def _revalidation_payload(value):
+    value = strict("zap-domain/work-revalidation-readied/1", {
+        "work_id", "review_id", "job_id", "from_generation", "expected_state",
+    })(value)
+    identity(value["work_id"]); identity(value["review_id"]); identity(value["job_id"])
+    integer(value["from_generation"], "validation generation")
+    need(value["expected_state"] in WORK_STATES, "DOMAIN_VALUE", "invalid revalidation work state")
+    return value
+
+
+def _apply_revalidation(state, domain, payload, event_id):
+    require_action(state, "plan.lower")
+    review = domain["reviews"].get(payload["review_id"])
+    need(review is not None and review["status"] == "applied", "DOMAIN_REVIEW", "applied revalidation review missing")
+    need(any(row["work_id"] == payload["work_id"] and row["operation"] == "revalidate"
+             for row in review["transition"]["work_changes"]),
+         "DOMAIN_REVIEW", "review did not require work revalidation")
+    need(any(row["job_id"] == payload["job_id"] and row["action"] == "revalidate"
+             for row in review["transition"]["job_reconciliation"]),
+         "DOMAIN_REVIEW", "review did not reconcile this job for revalidation")
+    runtime = state.get("extensions", {}).get("runtime", {})
+    reconciliation = runtime.get("reconciliations", {}).get(payload["review_id"])
+    item = reconciliation.get("items", {}).get(payload["job_id"]) if isinstance(reconciliation, dict) else None
+    job = runtime.get("jobs", {}).get(payload["job_id"])
+    need(item is not None and item.get("status") == "released" and job is not None
+         and job.get("state") == "retry_released" and job.get("work_id") == payload["work_id"],
+         "DOMAIN_REVIEW", "prior job is not safely released for revalidation")
+    generation = domain.setdefault("validation_generations", {}).get(payload["work_id"], 0)
+    need(generation == payload["from_generation"], "DOMAIN_STALE", "validation generation changed")
+    nodes = effective_nodes(state, domain)
+    node = nodes.get(payload["work_id"])
+    need(node is not None and node["state"] == payload["expected_state"],
+         "DOMAIN_STALE", "revalidation work state changed")
+    need(domain["work_updates"].get(payload["work_id"], {}).get("revalidation_required") is True,
+         "DOMAIN_REVIEW", "work is not marked for revalidation")
+    need(domain["work_updates"][payload["work_id"]].get("revalidation_from_generation") == generation,
+         "DOMAIN_STALE", "pending revalidation generation differs")
+    active_states = {"claimed", "dispatched", "starting", "running", "stop_requested", "stopping", "unknown_effect"}
+    need(not any(key != payload["job_id"] and row.get("work_id") == payload["work_id"]
+                 and row.get("state") in active_states for key, row in runtime.get("jobs", {}).items()),
+         "DOMAIN_REVIEW", "another work attempt is still active")
+    domain["validation_generations"][payload["work_id"]] = generation + 1
+    domain["work_updates"].setdefault(payload["work_id"], {})["state"] = "ready"
+    domain.setdefault("revalidation_history", []).append({
+        "work_id": payload["work_id"], "review_id": payload["review_id"], "job_id": payload["job_id"],
+        "from_generation": generation, "to_generation": generation + 1,
+        "previous_state": payload["expected_state"], "event_id": event_id,
+    })
+
+
 def _validate_rename(value):
     value = strict("zap-domain/work-renamed/1", {"work_id", "expected_title", "new_title"})(value)
     identity(value["work_id"]); text(value["expected_title"], "expected title"); text(value["new_title"], "new title")
@@ -150,6 +200,7 @@ def _apply_dispatch(state, domain, payload, event_id):
 DOMAIN_WORK_HANDLERS = {
     spec.kind: spec for spec in (
         domain_handler("domain.task-contract-replaced", _contract_payload, _apply_contract),
+        domain_handler("domain.work-revalidation-readied", _revalidation_payload, _apply_revalidation),
         domain_handler("domain.work-renamed", _validate_rename, _apply_rename),
         domain_handler("domain.work-transitioned", _validate_transition, _apply_transition),
         domain_handler("domain.work-dispatched", _validate_dispatch, _apply_dispatch),
