@@ -1,0 +1,358 @@
+{
+  "schema": "zap-rust-mvp-requirements/1",
+  "baseline": {
+    "owner_vision": "../../../research/zap/ZAP-RUST-MVP-VISION-2026-09-13.md",
+    "owner_source": "../../../research/zap/OWNER-VISION-INPUT-2026-09-13.txt",
+    "campaign_plan": "PLAN.md",
+    "authority": "The Owner accepted V01-V24 and authorized ZAP Rust MVP implementation and publication on 2026-09-13. NEXT execution and installed local Qwen inference remain prohibited.",
+    "normative_sources": [
+      "../../../flows/zap/ZAP-METHODOLOGY.xml",
+      "../../../flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+      "../../../flows/zap/ZAP-DATA-AND-VIEWER.xml",
+      "../../../flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+      "../../../flows/zap/ZAP-RUNTIME.xml",
+      "../../../flows/zap/ZAP-AGENT-PROTOCOL.xml",
+      "../../../flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+      "../../../flows/zap/ZAP-RUST-STORAGE.xml"
+    ]
+  },
+  "implementation_state_legend": {
+    "normative_complete_product_unverified": "Permanent requirement text exists; Rust product evidence is not yet accepted.",
+    "mixed_prototype_evidence_and_planned_rust": "Some legacy behavior exists, but the Rust requirement still needs implementation and acceptance evidence.",
+    "accepted_legacy_evidence_rust_import_pending": "A bounded legacy corpus is coordinator-accepted; Rust import and integration evidence remain pending.",
+    "prohibited_until_owner_command": "The capability is designed but may not be exercised under current authority."
+  },
+  "final_disposition_legend": {
+    "accept_by_R18": "Must have applicable accepted evidence or an authorized, reasoned not-applicable disposition before R18 closes.",
+    "accept_and_publish_by_R19": "Must remain true in installed payload and publication evidence through R19.",
+    "retain_as_legacy_mapping": "Must remain an auditable legacy fact and mapping even when corrected Rust behavior uses a new epoch.",
+    "remain_prohibited": "Must remain blocked and visible until a later exact Owner command changes it."
+  },
+  "vision_requirements": [
+    {
+      "vision": "V01",
+      "requirement": "Durable state owns continuity while models provide bounded semantic judgments.",
+      "fact_ids": ["DURABLE-CONTINUITY-BOUNDARY", "FEEDBACK-LOOP", "MODEL-AND-KERNEL", "RUST-STORAGE-DURABLE-RESUME", "RUNTIME-COMPACTION-RESUME"],
+      "tasks": ["R04", "R05", "R06", "R11", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Restart and compaction restore the exact accepted boundary and next admissible action.", "Semantic judgments remain sourced records while deterministic transitions replay without a model."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V02",
+      "requirement": "Owner charter, StrategicPlan, Lowering, and packet or client projections retain explicit authority and lineage.",
+      "fact_ids": ["LINKED-PLAN-REPRESENTATIONS", "LOWERING-REPRESENTATION-LAYERS", "LOWERING-STRATEGY-SURVIVES", "RUST-STORAGE-CANONICAL-HISTORY"],
+      "tasks": ["R01", "R05", "R08", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Editing a derived projection cannot mutate intent or live strategy.", "Strategy remains inspectable after repeated lowering and rerendering."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V03",
+      "requirement": "Lowering is checked, lossless, scoped, and distinct from pure capability rendering.",
+      "fact_ids": ["LOWERING-COVERAGE-CHECK", "LOWERING-OBLIGATION-CONSERVATION", "LOWERING-SEMANTIC-VERSUS-RENDER", "LOWERING-SCOPED-INVALIDATION", "SEMANTIC-LOWERING-ECONOMICS"],
+      "tasks": ["R05", "R06", "R08", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Coverage catches missing obligation, verification, integration, deferral, and stage-debt dispositions.", "Pure rerender preserves meaning without a new economics decision; meaning changes cannot use that route."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V04",
+      "requirement": "Senior, Middle, and Junior responsibilities remain separate from capability and trusted authority.",
+      "fact_ids": ["AGENT-ROLE-AUTHORITY-SEPARATION", "AGENT-ROLE-RESPONSIBILITIES", "AGENT-DEFAULT-PROFILES", "AGENT-WEAK-ROLE-COMPOSITION", "AGENT-PRODUCER-ACCEPTOR-SEPARATION"],
+      "tasks": ["R08", "R12", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Desired and resolved profiles are independently visible.", "A producer cannot accept its own candidate even when one model fills several roles.", "Senior production writes are refused by role capability."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V05",
+      "requirement": "Token economics, quiet packets, progressive disclosure, and content reuse begin before dispatch.",
+      "fact_ids": ["AGENT-TOKEN-FIRST", "AGENT-PROGRESSIVE-DISCLOSURE", "AGENT-PACKET-SOURCE-CLOSURE", "AGENT-ALGORITHMIC-FIRST"],
+      "tasks": ["R08", "R12", "R17"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Ordinary worker packet excludes full boot while declaring all omitted or unavailable context.", "Mandatory context overflow fails, retrieves, splits, or reroutes instead of truncating."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V06",
+      "requirement": "Abstraction is typed, reversible, consumer-checked, and never hides material constraints.",
+      "fact_ids": ["AGENT-TYPED-ABSTRACTION"],
+      "tasks": ["R08", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Fixture preserves invariant and mapping through abstraction and reconstruction.", "Unsafe authority or migration abstraction is refused."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V07",
+      "requirement": "Material strategic forks preserve alternatives, recommendations, authority, and encounter outcomes without becoming work.",
+      "fact_ids": ["LOWERING-STRATEGIC-FORK", "LOWERING-FORK-SELECTION", "LOWERING-DORMANT-OPTION", "APPROACH-IDENTITY"],
+      "tasks": ["R06", "R08", "R09", "R10", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Prepared branch selection is admitted only under current preconditions and delegated authority.", "Unknown branch condition yields evidence request and approach history survives switching."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V08",
+      "requirement": "Strong planning and weak offline execution exchange bounded, lineage-preserving bundles and encounter journals.",
+      "fact_ids": ["LOWERING-WEAK-BUNDLE-EXPORT", "LOWERING-ENCOUNTER-JOURNAL", "LOWERING-WEAK-BUNDLE-RETURN", "LOWERING-STRONG-REASSESSMENT", "LOWERING-LOCAL-COORDINATION"],
+      "tasks": ["R09", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Offline export and stale-aware return import preserve identities, failures, candidates, omissions, and unresolved choices.", "Simulated weak evidence is labeled and no credential crosses the bundle boundary."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V09",
+      "requirement": "One bounded algorithmic service supports agents and clients with truthful completeness and structured errors.",
+      "fact_ids": ["ALGORITHM-AND-JUDGMENT-BOUNDARY", "RUST-STORAGE-BOUNDED-QUERIES", "RUST-STORAGE-ALGORITHMIC-NAVIGATION", "CANVAS-DATA-ACCESS"],
+      "tasks": ["R04", "R13", "R17"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Bounded lookup, dependency, frontier, why, packet, and resume queries expose revision, scope, completeness, and continuation.", "No query calls a model for deterministic navigation."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V10",
+      "requirement": "Independent work proceeds concurrently while one fenced controller serializes semantic admission.",
+      "fact_ids": ["AGENT-CONCURRENT-EXECUTION", "RUST-STORAGE-CONTROLLER-FENCE", "PARALLEL-EXECUTION", "RECOVERY-AND-RESOURCES"],
+      "tasks": ["R01", "R04", "R11", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Two independent jobs progress while one waits.", "Write or resource conflicts and stale controller epochs are refused.", "Review capacity limits outstanding candidates."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V11",
+      "requirement": "Owner-selected native subagents are the default transport through a durable AgentHost bridge.",
+      "fact_ids": ["AGENT-HOST-BRIDGE", "AGENT-INTENT-IS-NOT-LAUNCH", "ACTUAL-RUNNER", "RUNTIME-CAPABILITY-TRUTH"],
+      "tasks": ["R01", "R11", "R12", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["DispatchIntent, actual native invocation, ExternalJobHandle, receipt, collection, and safe stop are distinguished.", "Unavailable native support never silently falls back to a launcher or subprocess."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V12",
+      "requirement": "Packets and agent messages have exact lineage, compact typed states, idempotency, and repair behavior.",
+      "fact_ids": ["AGENT-PACKET-LINEAGE", "AGENT-PACKET-CONTRACT", "AGENT-ATTEMPT-LINEAGE", "AGENT-MESSAGE-ENVELOPE", "AGENT-MESSAGE-STATES", "AGENT-CANDIDATE-RESULT", "AGENT-LIVENESS-AND-CHECKPOINT"],
+      "tasks": ["R03", "R08", "R11", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Rerender, supersession, retry, malformed response repair, and duplicate delivery preserve useful work and causal lineage.", "Heartbeat, checkpoint, transport completion, verification, acceptance, and safe state remain distinct."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V13",
+      "requirement": "Compaction, crash, quota, process, and account loss recover from durable state without duplicating effects.",
+      "fact_ids": ["RECOVERY", "RETRY-AND-CONTINUATION", "RUST-STORAGE-DURABLE-RESUME", "RUST-STORAGE-UNKNOWN-EFFECT-RECOVERY", "RUNTIME-COMPACTION-RESUME"],
+      "tasks": ["R04", "R11", "R12", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Crash between dispatch intent and receipt produces reconciliation rather than duplicate launch.", "Resume reconstructs relevant decisions, holds, attempts, sources, and next action without hidden reasoning."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V14",
+      "requirement": "GOAL.md and scoped worker goals are deterministic reinforcement with actual, manual, and unavailable application states.",
+      "fact_ids": ["AGENT-GOAL-PROJECTION", "AGENT-GOAL-CAPABILITY-DISCOVERY", "AGENT-GOAL-APPLICATION"],
+      "tasks": ["R12", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Capability cache invalidates on effective environment change.", "Manual Owner-only application emits one exact instruction.", "Unsupported goal capability does not claim application or weaken packet enforcement."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V15",
+      "requirement": "Dreamer exploration stays detached; grill state persists; exact live promotion or removal preserves authority and obligations.",
+      "fact_ids": ["DREAMER-INTENT-MODES", "DREAMER-GRILL", "DREAMER-NONEXECUTABLE", "DREAMER-EXACT-APPLICATION", "DREAMER-COMBINED-OWNER-DECISION", "DREAMER-REMOVAL-CONSERVATION"],
+      "tasks": ["R10", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Hypothetical edits leave live revision, frontier, approvals, and holds unchanged.", "Stale promotion reconciles concurrent change.", "Goal removal preserves obligation, evidence, debt, consumer, and external-effect dispositions."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V16",
+      "requirement": "Adaptation, nonmonotonic uncertainty, value, incremental economics, scoped holds, and whole-campaign stops form one loop.",
+      "fact_ids": ["FEEDBACK-LOOP", "FOG-RECOMPUTATION", "LOWERING-ADAPTIVE-ECONOMICS", "DEFAULT-THRESHOLD", "COST-FORECAST", "AFFECTED-HOLD", "NO-HYPOTHETICAL-HOLD", "OWNER-STOP-PRECEDENCE"],
+      "tasks": ["R06", "R07", "R10", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Exactly four hours remains automatic when otherwise eligible; above four requires exact Owner decision.", "Cumulative forecasts prevent split allowances.", "Affected hold permits proved-independent work while general stop drains the whole campaign."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V17",
+      "requirement": "One supported service boundary enforces authority, transitions, holds, stage duties, evidence, effects, and closure.",
+      "fact_ids": ["SERVICE-ENFORCEMENT", "RUNTIME-ENFORCEMENT", "RUNTIME-SERVICE-ENFORCEMENT", "CAMPAIGN-COMPLETION-BLOCKERS", "ECONOMICS-COMPLETION-BLOCKER", "RUNTIME-COMPLETION-PREDICATE"],
+      "tasks": ["R01", "R05", "R07", "R11", "R13", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Direct close and scheduler share one blocker result including pending selected economics.", "Unsupported raw mutation cannot become accepted state.", "No OS-isolation claim exceeds the actual boundary."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V18",
+      "requirement": "Production is Rust with transactional canonical history, typed reducers, mandatory indexes, cold-trust modes, and measured scale.",
+      "fact_ids": ["RUST-STORAGE-PRODUCTION-LANGUAGE", "RUST-STORAGE-MODULE-BOUNDARIES", "RUST-STORAGE-ONE-TRANSACTION", "RUST-STORAGE-TYPED-REDUCERS", "RUST-STORAGE-MANDATORY-INDEXES", "RUST-STORAGE-TRUSTED-LOCAL-BOUNDARY", "RUST-STORAGE-PERFORMANCE-EVIDENCE"],
+      "tasks": ["R01", "R03", "R04", "R15", "R17", "R18"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["One transaction commits LogicalEvent, receipt, Revision and Sequence, and required index mutations.", "Cold trusted reopen and distrustful derivation have explicit verified boundaries.", "Installed commands have no production Python dependency."],
+      "final_disposition": "accept_and_publish_by_R19"
+    },
+    {
+      "vision": "V19",
+      "requirement": "The installed package works in an ordinary VibeVM project without source-checkout, provider, account, or platform assumptions.",
+      "fact_ids": ["RUST-STORAGE-DISTRIBUTABLE-SURFACE", "RUST-STORAGE-GENERIC-PROJECT", "RUNTIME-GENERIC-PROJECT", "PORTABLE-RUNTIME"],
+      "tasks": ["R03", "R13", "R15", "R16", "R18"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Clean install and operation in a separate small VibeVM project uses only shipped sources and declared dependencies.", "Offline and container adapters do not require GitHub or host-repository paths."],
+      "final_disposition": "accept_and_publish_by_R19"
+    },
+    {
+      "vision": "V20",
+      "requirement": "Every material state and diagnostic needed by agents and the future canvas has a versioned truthful machine view.",
+      "fact_ids": ["TOTAL-OBSERVABILITY-DENOMINATOR", "RUST-STORAGE-TOTAL-OBSERVABILITY", "RUNTIME-TOTAL-OBSERVABILITY", "AGENT-PROTOCOL-OBSERVABILITY"],
+      "tasks": ["R04", "R13", "R17", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Machine queries expose strategy, lowering, debt, fog, proof, packets, omissions, runtime, economics, holds, stops, and reasons.", "Viewer reads perform no semantic model call and cursor gaps remain explicit."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V21",
+      "requirement": "Verification is selected by affected guarantees and evidence applicability; full panels remain exceptional.",
+      "fact_ids": ["VERIFICATION-ECONOMY", "AGENT-FOCUSED-VERIFICATION", "EVIDENCE-APPLICABILITY", "DEPENDENT-INVALIDATION", "RUST-STORAGE-PERFORMANCE-EVIDENCE"],
+      "tasks": ["R08", "R16", "R17", "R18"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Scoped checks include material negative, recovery, invariant, and consumer cases.", "Applicable receipts are reused; changed inputs invalidate only affected proof.", "Final gate is package-scoped rather than a blanket VibeVM run."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "vision": "V22",
+      "requirement": "Legacy behavior migrates losslessly into an explicit Rust epoch; known defects and prototype candidates are not blessed.",
+      "fact_ids": ["PRESERVE-AND-EXTEND", "RUST-STORAGE-EXPLICIT-EPOCH", "RUST-STORAGE-LOSSLESS-LEGACY-IMPORT", "RUST-STORAGE-NEXT-INERT", "MIGRATION-AND-RELEASE", "RUNTIME-PROMOTION-BOUNDARY"],
+      "tasks": ["R14", "R15", "R16", "R18"],
+      "implementation_state": "mixed_prototype_evidence_and_planned_rust",
+      "evidence_needs": ["Legacy corpus verifies exact codec, hash, newline, CAS, corrupt-tail, replay, and snapshot behavior.", "New epoch distinguishes corrected closure behavior.", "Temporary campaign facts and evidence are promoted before cleanup."],
+      "final_disposition": "accept_and_publish_by_R19"
+    },
+    {
+      "vision": "V23",
+      "requirement": "The eight permanent specifications form one authority-preserving contract and actual registries remain capability truth.",
+      "fact_ids": ["METHOD-SOURCE-REFERENCES", "ADAPTIVE-SPECIALIZED-RELATIONS", "DATA-RUST-STORAGE-REFERENCE", "CHANGE-ECONOMICS-REFERENCES", "RUNTIME-LOWERING-PROTOCOL", "AGENT-PROTOCOL-REFERENCES", "LOWERING-DREAMER-REFERENCES", "RUST-STORAGE-REFERENCES"],
+      "tasks": ["R02", "R15", "R18"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Spec links resolve and requirement map contains every fact ID.", "Installed capability registry never promotes planned text to implemented behavior."],
+      "final_disposition": "accept_and_publish_by_R19"
+    },
+    {
+      "vision": "V24",
+      "requirement": "The accepted Rust campaign proceeds to publication, then stops; NEXT and local Qwen inference remain prohibited.",
+      "fact_ids": ["RUST-STORAGE-NEXT-INERT", "AGENT-LOCAL-INFERENCE-PROHIBITION", "RUNTIME-NO-LOCAL-INFERENCE", "MIGRATION-AND-RELEASE"],
+      "tasks": ["R00", "R16", "R18", "R19"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Campaign evidence shows zero NEXT dispatch and zero installed-local-Qwen invocation.", "Published source-only payload is verified, then the ZAP campaign stops at R19."],
+      "final_disposition": "accept_and_publish_by_R19"
+    }
+  ],
+  "fact_groups": [
+    {
+      "source": "ZAP-METHODOLOGY.xml",
+      "fact_ids": ["METHOD-STATUS", "METHOD-FOUNDATION", "METHOD-CAPABILITY-BOUNDARY", "AUTHORING-LANGUAGE", "DURABLE-CONTINUITY-BOUNDARY", "LINKED-PLAN-REPRESENTATIONS", "OWNER-DRAFT", "OWNER-CHOICE-PRESENTATION", "CHARTER-CONTENTS", "CHARTER-AUTHORITY", "CHARTER-ACTIVATION", "LEGACY-AUTHORITY", "CHARTER-AMENDMENT", "OWNER-STOP-LAW", "RULE-EVALUATION", "SEMANTIC-ASSESSMENT", "UNKNOWN-CONDITION", "WHOLE-CAMPAIGN-STOP", "STICKY-PAUSE", "RESUME-AND-RULES", "APPROACH-IDENTITY", "OWNER-STOP-EXAMPLES", "RULE-TIMING", "WAIT-VERSUS-PAUSE", "CORE-OBJECTS", "ORTHOGONAL-AXES", "UNKNOWN-REGIONS", "KNOWLEDGE-STATE", "FACT-EVIDENCE-DISTINCTION", "DECISION-RECORD", "PROMOTE-FACTS", "ALGORITHM-AND-JUDGMENT-BOUNDARY", "RECURSIVE-LOOP", "LOWERING-CONTRACT", "LOWERING-CONSERVATION", "LOWERING-BOUNDARY", "LOWERING-SPECIALIZED-CONTRACT", "MATURITY-ROUTES", "STAGE-EXITS", "FORMAL-DEFERRALS", "DEFERRAL-EXPOSURE", "PROVISIONAL-INTEGRATION", "PRODUCTION-PATH-PROBE", "GLOBAL-PROTOTYPE-STATE", "WORKER-REFINEMENT", "PARALLEL-EXECUTION", "VERIFICATION-ECONOMY", "CENTRAL-ACCEPTANCE", "RECOVERY", "RETRY-AND-CONTINUATION", "DOCUMENTATION-AND-CHANGE", "CAMPAIGN-CLOSURE", "CAMPAIGN-COMPLETION-BLOCKERS", "METHOD-SOURCE-REFERENCES", "METHOD-RESEARCH-PROVENANCE"],
+      "tasks": ["R02", "R05", "R06", "R07", "R08", "R10", "R11", "R16", "R18"],
+      "implementation_state": "mixed_prototype_evidence_and_planned_rust",
+      "evidence_needs": ["Charter, stop, obligation, stage, acceptance, recovery, and completion scenarios are exercised through supported Rust routes.", "No requirement is closed by task count, worker assertion, or deleted scope."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "source": "ZAP-ADAPTIVE-CYCLE.xml",
+      "fact_ids": ["INTENT-AND-HYPOTHESES", "ADMISSIBLE-OUTCOMES", "VALUE-AND-AUTHORITY", "FEEDBACK-LOOP", "REVIEW-TRIGGERS", "FOG-RECOMPUTATION", "VALUE-REASSESSMENT", "FEASIBILITY-AND-INFORMATION", "REVIEW-OUTCOMES", "BOUNDED-RECONSIDERATION", "CONTEXT-CHANGE-NON-SEMANTIC", "LOSSLESS-REVISION", "PLAN-RECONCILIATION", "LIVE-WORK-RECONCILIATION", "EVIDENCE-APPLICABILITY", "REVISED-DEFERRALS", "DORMANT-ALTERNATIVES-NONWORK", "MEANINGFUL-COMPLETION", "REVIEW-RECORD", "MODEL-AND-KERNEL", "ATOMIC-REVIEW", "PROTOTYPE-BOUNDARY", "ADAPTIVE-SPECIALIZED-RELATIONS", "CASE-NEW-FOG", "CASE-REVISED-OUTCOME", "CASE-BETTER-OPPORTUNITY", "CASE-NO-SELF-SUCCESS", "CASE-STOP-SURVIVES-PIVOT"],
+      "tasks": ["R02", "R05", "R06", "R07", "R08", "R10", "R11", "R16"],
+      "implementation_state": "mixed_prototype_evidence_and_planned_rust",
+      "evidence_needs": ["Adaptive reviews preserve changed and unchanged grounds, nonmonotonic fog, evidence applicability, live-job reconciliation, and explicit authority.", "Context replacement and dormant alternatives create no semantic revision."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "source": "ZAP-DATA-AND-VIEWER.xml",
+      "fact_ids": ["DATA-STATUS", "SUPPORTED-SUBSET", "PROTOTYPE-OPERATIONS", "RUST-MVP-DATA-SURFACE", "STORAGE-OWNERSHIP", "IMMUTABLE-BASE", "PROTOTYPE-FILES", "LOSSLESS-IMPORT", "PILOT-DENOMINATOR", "IMPORT-AUTHORITY", "GRAPH-IDENTITY", "GRAPH-RELATIONS", "NORMATIVE-AND-MEASURED", "SOURCE-HANDLES", "KNOWLEDGE-AND-SCOPE", "DEPENDENT-INVALIDATION", "LOWERING-DATA", "EXECUTION-LINEAGE-DATA", "DETACHED-BRANCH-DATA", "ADAPTIVE-REVIEW-INPUTS", "ADAPTIVE-REVIEW-ASSESSMENT", "ADAPTIVE-REVIEW-TRANSITION", "ADAPTIVE-VIEW", "ADAPTIVE-WIRE-STATUS", "COMMAND-PRECONDITIONS", "IDEMPOTENT-COMMAND", "APPEND-LOG", "PROTOTYPE-EVENTS", "LOG-RECOVERY", "DETERMINISTIC-REPLAY", "SNAPSHOT-PROVENANCE", "SEMANTIC-EVENTS", "TRUSTED-CONTROL-BOUNDARY", "OWNER-COMMAND-PROJECTION", "STOP-OBSERVABILITY", "RULE-UNKNOWN", "PROTOTYPE-STOP-FIXTURES", "FUTURE-RESUME-CONTROL", "LOGICAL-AND-PHYSICAL-STATE", "RESOURCE-WAIT", "PROJECT-LOCAL-SPLIT", "CANVAS-EXPERIENCE", "LARGE-GRAPH-NAVIGATION", "IN-CANVAS-NODE-DETAIL", "CLICKABLE-ENTITY-DETAIL", "CANVAS-DATA-ACCESS", "STRATEGY-MAP-METAPHOR", "HEROES-ART-DIRECTION", "ORTHOGONAL-VISUAL-CHANNELS", "KNOWLEDGE-VISUAL-DISTINCTIONS", "VIEWER-SCOPE", "SNAPSHOT-AND-CURSOR", "STREAM-RECOVERY", "PLANNED-EVENT-FAMILIES", "VIEWER-EXPLANATIONS", "TOTAL-OBSERVABILITY-DENOMINATOR", "READER-PREREQUISITES", "MACHINE-ACTIONS", "VIEWER-ACCEPTANCE", "DATA-METHOD-REFERENCE", "DATA-RUST-STORAGE-REFERENCE"],
+      "tasks": ["R02", "R04", "R05", "R06", "R07", "R08", "R09", "R10", "R11", "R12", "R13", "R14", "R16", "R17"],
+      "implementation_state": "mixed_prototype_evidence_and_planned_rust",
+      "evidence_needs": ["Every represented subject round-trips with stable identity and truthful authority, applicability, state, cursor, and missing-data distinctions.", "Snapshot plus tail and bounded graph views agree with canonical state."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "source": "ZAP-CHANGE-ECONOMICS.xml",
+      "fact_ids": ["CHANGE-ASSESSMENT-LAW", "SEMANTIC-CHANGE-BOUNDARY", "SEMANTIC-LOWERING-ECONOMICS", "BASELINE-NON-REDUNDANCY", "SCOPED-CAUSAL-BASIS", "HISTORICAL-COMPATIBILITY", "ATTRIBUTABLE-COST", "TIME-DIMENSIONS", "CONSEQUENCE-CATEGORIES", "BOUNDED-FOG-COST", "ATTRIBUTION-CHECK", "COST-FORECAST", "NECESSITY-CLASS", "QUALITATIVE-UTILITY", "DEFAULT-COST-BANDS", "ALTERNATIVES-AND-NO-OP", "BALANCED-DECISION", "NO-SUNK-COST-BIAS", "DEFAULT-THRESHOLD", "UNKNOWN-POLICY", "DECISION-CHOICES", "COMBINED-OWNER-DECISION", "EXACT-ENVELOPE", "AUTOMATIC-BELOW-THRESHOLD", "AFFECTED-HOLD", "NO-HYPOTHETICAL-HOLD", "UNKNOWN-IMPACT-HOLD", "SAFE-DRAIN", "OWNER-STOP-PRECEDENCE", "HOLD-RESOLUTION", "SERVICE-ENFORCEMENT", "RUNTIME-ENFORCEMENT", "ECONOMICS-OBSERVABILITY", "ECONOMICS-COMPLETION-BLOCKER", "IMPLEMENTATION-SPLIT", "CHANGE-ECONOMICS-ACCEPTANCE", "CHANGE-ECONOMICS-REFERENCES"],
+      "tasks": ["R02", "R05", "R06", "R07", "R10", "R11", "R13", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Typed proposal, baseline, alternatives, estimates, forecasts, exact decisions, holds, drains, partial envelopes, staleness, and closure execute through one Rust admission path.", "Threshold, unknown, independent-work, no-hypothetical-hold, and Owner-stop precedence cases are independently verified."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "source": "ZAP-RUNTIME.xml",
+      "fact_ids": ["PORTABLE-RUNTIME", "PRESERVE-AND-EXTEND", "MODULE-BOUNDARIES", "RUNTIME-GENERIC-PROJECT", "TRUSTED-CONTROL", "CONTROL-BINDING", "RUNTIME-SERVICE-ENFORCEMENT", "RUNTIME-COMPLETION-PREDICATE", "ADAPTIVE-DOMAIN", "FACTS-AND-PROOF", "RUNTIME-LOWERING-PROTOCOL", "ACTUAL-RUNNER", "RECOVERY-AND-RESOURCES", "RUNTIME-COMPACTION-RESUME", "RUNTIME-NO-LOCAL-INFERENCE", "BACKEND-CONSISTENCY", "RUNTIME-CAPABILITY-TRUTH", "RUNTIME-TOTAL-OBSERVABILITY", "MIGRATION-AND-RELEASE", "RUNTIME-PROMOTION-BOUNDARY"],
+      "tasks": ["R01", "R02", "R03", "R04", "R05", "R06", "R07", "R08", "R09", "R10", "R11", "R12", "R13", "R14", "R15", "R16", "R17", "R18", "R19"],
+      "implementation_state": "mixed_prototype_evidence_and_planned_rust",
+      "evidence_needs": ["End-to-end Rust paths prove trusted control, native execution, recovery, shared closure, backend consistency, migration, generic installation, and truthful capabilities.", "No production path invokes Python, NEXT, or local Qwen."],
+      "final_disposition": "accept_and_publish_by_R19"
+    },
+    {
+      "source": "ZAP-AGENT-PROTOCOL.xml",
+      "fact_ids": ["AGENT-ROLE-AUTHORITY-SEPARATION", "AGENT-ROLE-RESPONSIBILITIES", "AGENT-DEFAULT-PROFILES", "AGENT-WEAK-ROLE-COMPOSITION", "AGENT-PRODUCER-ACCEPTOR-SEPARATION", "AGENT-TOKEN-FIRST", "AGENT-PROGRESSIVE-DISCLOSURE", "AGENT-PACKET-SOURCE-CLOSURE", "AGENT-TYPED-ABSTRACTION", "AGENT-ALGORITHMIC-FIRST", "AGENT-PACKET-LINEAGE", "AGENT-PACKET-CONTRACT", "AGENT-ATTEMPT-LINEAGE", "AGENT-MESSAGE-ENVELOPE", "AGENT-MESSAGE-STATES", "AGENT-CANDIDATE-RESULT", "AGENT-LIVENESS-AND-CHECKPOINT", "AGENT-HOST-BRIDGE", "AGENT-INTENT-IS-NOT-LAUNCH", "AGENT-CONCURRENT-EXECUTION", "AGENT-GOAL-PROJECTION", "AGENT-GOAL-CAPABILITY-DISCOVERY", "AGENT-GOAL-APPLICATION", "AGENT-FOCUSED-VERIFICATION", "AGENT-LOCAL-INFERENCE-PROHIBITION", "AGENT-PROTOCOL-OBSERVABILITY", "AGENT-PROTOCOL-REFERENCES"],
+      "tasks": ["R02", "R03", "R08", "R11", "R12", "R13", "R15", "R16", "R18"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Packet packing, protocol state, role and authority, host bridge, goals, retries, liveness, and focused verification are exercised through typed Rust interfaces.", "Real and simulated capability evidence remains labeled."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "source": "ZAP-LOWERING-AND-DREAMER.xml",
+      "fact_ids": ["LOWERING-REPRESENTATION-LAYERS", "LOWERING-STRATEGY-SURVIVES", "LOWERING-REQUEST-BASIS", "LOWERING-COVERAGE-CHECK", "LOWERING-OBLIGATION-CONSERVATION", "LOWERING-SEMANTIC-VERSUS-RENDER", "LOWERING-BOUNDED-RECURSION", "LOWERING-SCOPED-INVALIDATION", "LOWERING-STRATEGIC-FORK", "LOWERING-FORK-SELECTION", "LOWERING-DORMANT-OPTION", "LOWERING-WEAK-BUNDLE-EXPORT", "LOWERING-ENCOUNTER-JOURNAL", "LOWERING-WEAK-BUNDLE-RETURN", "LOWERING-STRONG-REASSESSMENT", "LOWERING-LOCAL-COORDINATION", "DREAMER-INTENT-MODES", "DREAMER-GRILL", "DREAMER-NONEXECUTABLE", "DREAMER-EXACT-APPLICATION", "DREAMER-COMBINED-OWNER-DECISION", "DREAMER-REMOVAL-CONSERVATION", "LOWERING-ADAPTIVE-ECONOMICS", "LOWERING-HOLD-SCOPE", "LOWERING-OWNER-STOP-PRECEDENCE", "LOWERING-DREAMER-REFERENCES"],
+      "tasks": ["R02", "R05", "R06", "R07", "R08", "R09", "R10", "R11", "R16"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Checked lowering, stage debt, forks, scoped invalidation, offline bundles, encounter import, Dreamer isolation, grill persistence, promotion, and removal are verified together.", "No detached or dormant subject enters live work or holds."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "source": "ZAP-RUST-STORAGE.xml",
+      "fact_ids": ["RUST-STORAGE-PRODUCTION-LANGUAGE", "RUST-STORAGE-MODULE-BOUNDARIES", "RUST-STORAGE-DISTRIBUTABLE-SURFACE", "RUST-STORAGE-CANONICAL-HISTORY", "RUST-STORAGE-ONE-TRANSACTION", "RUST-STORAGE-TYPED-REDUCERS", "RUST-STORAGE-CONTROLLER-FENCE", "RUST-STORAGE-LARGE-ARTIFACT-PROTOCOL", "RUST-STORAGE-MANDATORY-INDEXES", "RUST-STORAGE-INCREMENTAL-INVALIDATION", "RUST-STORAGE-BOUNDED-QUERIES", "RUST-STORAGE-SNAPSHOT-TAIL", "RUST-STORAGE-ALGORITHMIC-NAVIGATION", "RUST-STORAGE-DURABLE-RESUME", "RUST-STORAGE-UNKNOWN-EFFECT-RECOVERY", "RUST-STORAGE-TRUSTED-LOCAL-BOUNDARY", "RUST-STORAGE-CORRUPTION-REPAIR", "RUST-STORAGE-EXPLICIT-EPOCH", "RUST-STORAGE-LOSSLESS-LEGACY-IMPORT", "RUST-STORAGE-NEXT-INERT", "RUST-STORAGE-GENERIC-PROJECT", "RUST-STORAGE-TOTAL-OBSERVABILITY", "RUST-STORAGE-TRUTHFUL-CAPABILITIES", "RUST-STORAGE-PERFORMANCE-EVIDENCE", "RUST-STORAGE-REFERENCES"],
+      "tasks": ["R01", "R02", "R03", "R04", "R11", "R13", "R14", "R15", "R17", "R18", "R19"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Transactional, index, query, recovery, trust, import, portability, observability, and performance contracts have scoped Rust evidence.", "Legacy byte identity and new epoch behavior remain separately proven."],
+      "final_disposition": "accept_and_publish_by_R19"
+    }
+  ],
+  "legacy_behavior": [
+    {
+      "id": "LEGACY-CODEC-HASH-CAS",
+      "fact_ids": ["IMMUTABLE-BASE", "PROTOTYPE-FILES", "LOSSLESS-IMPORT", "COMMAND-PRECONDITIONS", "IDEMPOTENT-COMMAND", "APPEND-LOG", "LOG-RECOVERY", "DETERMINISTIC-REPLAY", "PRESERVE-AND-EXTEND", "RUST-STORAGE-EXPLICIT-EPOCH", "RUST-STORAGE-LOSSLESS-LEGACY-IMPORT"],
+      "tasks": ["R14", "R16", "R18"],
+      "implementation_state": "accepted_legacy_evidence_rust_import_pending",
+      "accepted_evidence": "R14-PREP bounded legacy corpus, commit 5745c866",
+      "evidence_needs": ["Verify canonical compact sorted ensure-ASCII JSON, reserved tag escaping, ordered mapping pairs, ISO date and time tags, tagged non-finite values, duplicate-member refusal, and bare non-finite refusal.", "Verify base hash includes final LF, command hash excludes LF, journal prefix includes each committed terminator, pending-tail hash covers the exact unterminated fragment, and base_revision requires exact integer type with bool refused.", "Verify byte-for-byte fixture regeneration, committed replay, cold snapshot equality, corrupt-middle refusal, and pending-tail preservation before Rust import acceptance."],
+      "final_disposition": "retain_as_legacy_mapping"
+    },
+    {
+      "id": "LEGACY-AUTHORITY-AND-NEXT",
+      "fact_ids": ["LEGACY-AUTHORITY", "IMPORT-AUTHORITY", "PILOT-DENOMINATOR", "RUST-STORAGE-NEXT-INERT", "RUNTIME-NO-LOCAL-INFERENCE", "AGENT-LOCAL-INFERENCE-PROHIBITION"],
+      "tasks": ["R05", "R14", "R16", "R19"],
+      "implementation_state": "mixed_prototype_evidence_and_planned_rust",
+      "evidence_needs": ["Import preserves every Owner constraint and classifies authority without activation.", "The 425-node and 212-task corpus produces zero NEXT dispatch.", "No installed local Qwen capability ping or inference occurs."],
+      "final_disposition": "remain_prohibited"
+    },
+    {
+      "id": "LEGACY-ECONOMICS-CLOSURE-P1",
+      "fact_ids": ["CAMPAIGN-COMPLETION-BLOCKERS", "ECONOMICS-COMPLETION-BLOCKER", "RUNTIME-COMPLETION-PREDICATE", "CHANGE-ECONOMICS-ACCEPTANCE"],
+      "tasks": ["R07", "R16", "R18"],
+      "implementation_state": "normative_complete_product_unverified",
+      "evidence_needs": ["Direct close and automatic scheduler both refuse a pending selected economics decision, active change hold, unconsumed approved effect, unresolved forecast, and unknown associated external outcome.", "The unaccepted Python candidate is treated as defect evidence and is not ported as accepted behavior."],
+      "final_disposition": "accept_by_R18"
+    },
+    {
+      "id": "LEGACY-PROTOTYPE-CAPABILITY-TRUTH",
+      "fact_ids": ["METHOD-CAPABILITY-BOUNDARY", "SUPPORTED-SUBSET", "PROTOTYPE-OPERATIONS", "PROTOTYPE-EVENTS", "PROTOTYPE-BOUNDARY", "RUNTIME-CAPABILITY-TRUTH", "RUST-STORAGE-TRUTHFUL-CAPABILITIES"],
+      "tasks": ["R03", "R13", "R14", "R15", "R16", "R19"],
+      "implementation_state": "mixed_prototype_evidence_and_planned_rust",
+      "evidence_needs": ["Rust handler, command, query, host, and adapter registries advertise only implemented operations.", "Legacy Python command names, argv runner behavior, fixtures, and planned schema fields do not become Rust capability claims."],
+      "final_disposition": "accept_and_publish_by_R19"
+    }
+  ],
+  "integrity": {
+    "expected_vision_count": 24,
+    "expected_normative_fact_count": 279,
+    "fact_ids_must_be_unique": true,
+    "every_normative_fact_must_appear_in_fact_groups": true,
+    "every_vision_requirement_must_name_tasks_evidence_state_and_disposition": true,
+    "every_task_R00_through_R19_must_be_reachable": true
+  }
+}

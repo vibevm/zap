@@ -1,0 +1,77 @@
+{
+  "schema": "zap-rust-campaign-checkpoint/1",
+  "task": "R02",
+  "attempt": "R02-A01",
+  "updated_at": "2026-09-13T08:27:36.825Z",
+  "state": "candidate",
+  "packet": "packets/R02-specifications.md",
+  "packet_revision": "initial-owner-authorized-rust-mvp-campaign",
+  "api_revision": "R01-foundation-frozen-2026-09-13",
+  "accepted_boundary": "R00 accepted vision and campaign packet",
+  "candidate_boundary": "R02 normative package complete: five retained XMLs reconciled, three permanent XMLs added, V01-V24 and 279-fact denominator complete, report saved, final document checks passed",
+  "files": {
+    "owned": [
+      "flows/zap/ZAP-METHODOLOGY.xml",
+      "flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+      "flows/zap/ZAP-DATA-AND-VIEWER.xml",
+      "flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+      "flows/zap/ZAP-RUNTIME.xml",
+      "flows/zap/ZAP-AGENT-PROTOCOL.xml",
+      "flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+      "flows/zap/ZAP-RUST-STORAGE.xml",
+      "development/zap/rust-campaign/REQUIREMENTS.json",
+      "development/zap/rust-campaign/REPORT-R02.md",
+      "development/zap/rust-campaign/checkpoints/R02.json"
+    ],
+    "changed": [
+      "flows/zap/ZAP-METHODOLOGY.xml",
+      "flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+      "flows/zap/ZAP-DATA-AND-VIEWER.xml",
+      "flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+      "flows/zap/ZAP-RUNTIME.xml",
+      "flows/zap/ZAP-AGENT-PROTOCOL.xml",
+      "flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+      "flows/zap/ZAP-RUST-STORAGE.xml",
+      "development/zap/rust-campaign/REQUIREMENTS.json",
+      "development/zap/rust-campaign/REPORT-R02.md",
+      "development/zap/rust-campaign/checkpoints/R02.json"
+    ]
+  },
+  "checks": [
+    {
+      "check": "Parse eight normative XML documents and verify fact IDs",
+      "status": "passed",
+      "result": "279 facts; all documents parsed; IDs unique; all fact statuses spec/plan"
+    },
+    {
+      "check": "Parse REQUIREMENTS.json and compare complete denominators",
+      "status": "passed",
+      "result": "24 vision sections; 279 of 279 normative facts mapped exactly once; R00 through R19 reachable; no unknown primary facts"
+    },
+    {
+      "check": "ASCII scan of new authored normative documents and requirement map",
+      "status": "passed",
+      "result": "No unintended non-English text or non-ASCII corruption in newly authored files"
+    },
+    {
+      "check": "Final denominator, stable-ID, and document-link validation",
+      "status": "passed",
+      "result": "8 XMLs; 279 unique facts; 279 mapped exactly once; 24 vision sections; 20 task IDs; 0 unknown primary facts; 0 missing relative links; 0 missing ZAP spec links; 0 removed legacy fact IDs"
+    },
+    {
+      "check": "Whitespace validation",
+      "status": "passed",
+      "result": "Tracked diff check and untracked trailing-whitespace scan passed"
+    }
+  ],
+  "live_processes": [],
+  "unresolved_effects": [],
+  "findings": [
+    "R01 froze StoreId, BaseId, Revision, Sequence, EventId, CommandId, RelevantBasis, AgentHost, SemanticProvider, AgentCapabilities, DispatchIntent, ExternalJobHandle, StrategicPlanRevision, LoweringRevision, Packet, WeakBundle, DreamBranch, StoreEpoch zap/2, LegacyEpoch::Zap1, and the shared completion-blocker query as integration vocabulary.",
+    "Existing normative facts already preserve charter authority, lossless obligation revision, proof applicability, scoped economics holds, whole-campaign Owner stop precedence, deterministic replay, and focused verification.",
+    "ZAP-RUNTIME.xml now requires Rust and native user-selected transport; boot/13-flow-zap.xml and legacy public API projections still advertise Python and remain explicit R15 packaging work.",
+    "Existing status comments overstate implementation relative to the newly authorized Rust MVP and must distinguish prototype evidence from Rust completion.",
+    "Root accepted the bounded R14-PREP legacy corpus at commit 5745c866; Rust import remains pending, and the corpus does not bless the economics closure candidate or assign zap/2 IDs."
+  ],
+  "next_action": "Coordinator reviews REPORT-R02.md, the eight normative XMLs, and REQUIREMENTS.json and either records R02 acceptance or returns a concrete specification defect."
+}
