@@ -1,0 +1,55 @@
+schema = 1
+plan_id = "legacy-fixture"
+revision = 4
+root_node = "R"
+current_node = "T"
+recorded_datetime = 1979-05-27T07:00:00Z
+recorded_date = 1979-05-27
+recorded_time = 07:32:00.123456
+negative_zero = -0.0
+positive_infinity = inf
+reserved = { "$zap_type" = "literal", value = "keep" }
+future_plan_field = { nested = ["café", "rocket 🚀"] }
+
+[[mandate]]
+id = "M"
+text = "Preserve every obligation."
+disposition = "owned"
+nodes = ["R", "G", "T"]
+
+[[node]]
+id = "R"
+parent = ""
+title = "Legacy fixture"
+kind = "campaign"
+state = "planned"
+order = 0
+depends_on = []
+mandates = ["M"]
+acceptance = ["The fixture remains lossless."]
+evidence = []
+
+[[node]]
+id = "G"
+parent = "R"
+title = "Fixture group"
+kind = "group"
+state = "planned"
+order = 1
+depends_on = []
+mandates = ["M"]
+acceptance = ["The task is represented."]
+evidence = []
+
+[[node]]
+id = "T"
+parent = "G"
+title = "Café 🚀"
+kind = "atom"
+state = "planned"
+order = 2
+depends_on = []
+mandates = ["M"]
+acceptance = ["Classification and evidence replay."]
+evidence = []
+future_node_field = { retain = [2, 1] }

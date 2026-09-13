@@ -1,0 +1,97 @@
+{
+  "schema": "zap-rust-campaign-checkpoint/1",
+  "task": "R14-PREP",
+  "attempt": "R14-PREP-A01",
+  "updated_at": "2026-09-13T08:18:34Z",
+  "state": "candidate",
+  "packet": "packets/R14-legacy-preparation.md",
+  "packet_revision": "initial-owner-authorized-rust-mvp-campaign",
+  "api_revision": "R01-pending",
+  "accepted_boundary": "R00 accepted vision and campaign packet",
+  "candidate_boundary": "R14 preparation report and deterministic legacy corpus are complete candidates: nine data files regenerate byte-for-byte, load_store replay reaches revision 4 from five records, and cold snapshot verification matches the full replay",
+  "files": {
+    "owned": [
+      "legacy-corpus/**",
+      "REPORT-R14-PREP.md",
+      "checkpoints/R14-PREP.json"
+    ],
+    "changed": [
+      "legacy-corpus/generate_legacy_corpus.py",
+      "legacy-corpus/metadata.json",
+      "legacy-corpus/codec-cases.json",
+      "legacy-corpus/hash-domains.json",
+      "legacy-corpus/tiny-campaign/plan.toml",
+      "legacy-corpus/tiny-campaign/tasks/G.json",
+      "legacy-corpus/tiny-campaign/base.json",
+      "legacy-corpus/tiny-campaign/events.jsonl",
+      "legacy-corpus/tiny-campaign/snapshot.json",
+      "legacy-corpus/tiny-campaign/expectations.json",
+      "REPORT-R14-PREP.md",
+      "checkpoints/R14-PREP.json"
+    ]
+  },
+  "generator_sha256": "bfe911fda998cf5d32fa084ed15fadfebafcca3a5c556ee49b5789c685c1d893",
+  "corpus_sha256": {
+    "codec-cases.json": "ea805119c632590439646785ceff8d97aab39e55ec17f45b0dd623d83a0c7e00",
+    "hash-domains.json": "3e6977e5862ab38c15f6f39ea182ffa34f73eb9d6e3a9d10faf0a639508b73b3",
+    "metadata.json": "9b17db546495328a82b054c877bfd219c14fb02800bac6ab90fd8f2d54b106af",
+    "tiny-campaign/base.json": "4fd08b6a090762478aeb760d31e1d159b635cc8bd5d8a524803c33151d7e8bb0",
+    "tiny-campaign/events.jsonl": "f4e834eb7b9560b94f7a03a178d35564e8b830e8fa90ec9585572e05fca2e27f",
+    "tiny-campaign/expectations.json": "b043e21a36b439d91584f58730d4764f82ceea429f10127152f71091d084e678",
+    "tiny-campaign/plan.toml": "f07853a12ef7fb047b2e6057cef80ee55e7574d8857509200d9c8cda1e47bd49",
+    "tiny-campaign/snapshot.json": "af057b5a0a9b9896a7beb57412e97fdb2461baf5d8cd94fdbd2a4e0a42502d62",
+    "tiny-campaign/tasks/G.json": "064e61e7c1ef21366ae732e125788770f3a12a895507963ca40286afd264be7f"
+  },
+  "source_sha256": {
+    "zaplib/common.py": "ac5c9e1ab236f7606c9994212f8a305723e80fece6cc44aa735457c77e372f26",
+    "zaplib/graph.py": "99397728c88561f1592aff567981f94956b8570af2db60abe2c474213a85332d",
+    "zaplib/records.py": "905aa4c601c238fd9133ea63b603b68eca7447e0691eb8b3b9984185b19f6c04",
+    "zaplib/storage.py": "f28cc433019d001ad77b6ec07fd65832ab4e73cd91699eb820028bf4d0f2cc27",
+    "zaplib/snapshots.py": "ade11213f707b503f0e3724acbda65e8b5390b6edb8b6d6ae92e9460c935d16a",
+    "test_foundation.py": "03b5a8916e545c92b4138f24dc2592c674244b67810fa882f05d3d5a7b6cd427",
+    "test_zap_state.py": "eddb1c0628f698dc46b60c8b1fa576d6479cccf26828604e79166cad53292770"
+  },
+  "checks": [
+    {
+      "command": "python -B legacy-corpus/generate_legacy_corpus.py --manifest",
+      "exit": 0,
+      "result": "Renderer completed in memory; orchestration failed before materialization because its JavaScript runtime lacks TextDecoder. No fixture output file was written."
+    },
+    {
+      "command": "python -B legacy-corpus/generate_legacy_corpus.py --manifest",
+      "exit": 0,
+      "result": "Nine fixture files rendered and materialized exactly through apply_patch."
+    },
+    {
+      "command": "python -B legacy-corpus/generate_legacy_corpus.py --check",
+      "exit": 0,
+      "result": "All nine generated files match the current pure reference renderer byte-for-byte."
+    },
+    {
+      "command": "Get-ChildItem legacy-corpus | Get-FileHash SHA256",
+      "exit": 0,
+      "result": "Generator and all nine corpus file hashes recorded in this checkpoint."
+    },
+    {
+      "command": "python -B -c <read-only load_store and load_snapshot_tail probe>",
+      "exit": 0,
+      "result": "Five journal records replayed to revision 4 with no pending tail; cold snapshot revision 4 matched the full replay and had zero tail events."
+    },
+    {
+      "command": "ConvertFrom-Json checkpoints/R14-PREP.json and inspect REPORT-R14-PREP.md",
+      "exit": 0,
+      "result": "Candidate checkpoint parses, owns twelve changed files, has a 5257-byte report, and records zero unresolved effects."
+    }
+  ],
+  "live_processes": [],
+  "unresolved_effects": [],
+  "findings": [
+    "Canonical JSON is ensure_ascii=True, separators without spaces, sorted keys, allow_nan=False over wire-tagged values.",
+    "Mappings containing a literal $zap_type key are wrapped as a tagged mapping whose value preserves Python insertion order as a pair list; outer JSON object keys remain sorted.",
+    "Duplicate JSON members are refused before unwiring with code DUPLICATE.",
+    "Base, command, journal-prefix, pending-tail, projection-state, reducer-identity, and snapshot-file hashes have distinct explicit byte domains.",
+    "The tiny campaign preserves unknown plan/node/task data, while a group-level unknown remains in the raw source capture rather than the task-contract projection.",
+    "Legacy zap/1 byte identities are import evidence only; a corrected Rust epoch requires explicit old-to-new identity mapping after R01 freezes the rule."
+  ],
+  "next_action": "Root reviews and accepts the preparation candidate; R14 implementation consumes these fixtures after R01 freezes the new-epoch ID mapping."
+}

@@ -1,0 +1,43 @@
+{
+  "id": "G",
+  "tasks": [
+    {
+      "id": "T",
+      "title": "Café 🚀",
+      "goal": "Replay exact legacy semantics.",
+      "read_paths": [
+        "input/漢字"
+      ],
+      "write_paths": [
+        "output"
+      ],
+      "steps": [
+        "Record evidence"
+      ],
+      "positive_cases": [
+        "Canonical bytes replay"
+      ],
+      "negative_cases": [
+        "Stale revisions refuse"
+      ],
+      "checks": [
+        "Scoped fixture comparison"
+      ],
+      "acceptance": [
+        "Every digest matches"
+      ],
+      "safe_stop": "Fixture candidate saved",
+      "commit_subject": "test: preserve legacy codec evidence",
+      "notes": [
+        "No activation or execution"
+      ],
+      "future_task_field": {
+        "retain": [
+          2,
+          1
+        ]
+      }
+    }
+  ],
+  "future_group_field": "raw-capture-only"
+}
