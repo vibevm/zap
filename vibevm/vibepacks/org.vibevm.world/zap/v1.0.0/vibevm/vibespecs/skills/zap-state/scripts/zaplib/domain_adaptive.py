@@ -3,19 +3,28 @@ from __future__ import annotations
 
 from typing import Any
 
-from .common import exact, identity, need
+from .common import Refusal, exact, identity, need
 from .domain_graph import _adopt_intent, _adopt_outcome, _disposition_rows
 from .domain_model import (
     active_obligations, boolean, digest, domain_handler, effective_nodes, integer,
-    nonblank_list, optional_identity, owned_obligations, require_action, rows,
+    domain_state, nonblank_list, optional_identity, owned_obligations, require_action, rows,
     strict, text, unique_ids,
 )
 from .domain_proof import accepted_evidence
+from .domain_reuse import (
+    acceptance_for_outcome, apply_preserved_reuse, integration_for_outcome,
+    validate_preserved_candidates, validate_preserved_current,
+)
 
 REVIEW_KINDS = {"keep_route", "reorder", "research", "replace_method", "pivot_outcome", "wait", "owner_proposal"}
 WORK_OPERATIONS = {"retain", "reprioritize", "supersede", "drop", "revalidate"}
 JOB_ACTIONS = {"continue", "finish_compatible", "drain", "preserve_candidate", "revalidate"}
 CLOSURE_CLASSES = {"original", "revised", "partial", "unreachable"}
+
+
+def _builder_policy(state):
+    from .control import active_policy
+    return active_policy(state)
 
 
 def _capture(value):
@@ -89,6 +98,7 @@ def _work_change(row):
 def _transition(value):
     exact(value, {
         "intent_id", "outcome_id", "obligation_dispositions", "ownership_changes", "work_changes", "preserved_evidence_ids",
+        "preserved_stage_acceptance_ids", "preserved_work_acceptance_ids", "preserved_integration_acceptance_ids",
         "job_reconciliation", "tradeoffs", "preserved_benefits",
     })
     optional_identity(value["intent_id"], "transition intent")
@@ -112,6 +122,9 @@ def _transition(value):
         _work_change(row)
     need(len({row["work_id"] for row in changes}) == len(changes), "DUPLICATE", "duplicate review work change")
     unique_ids(value["preserved_evidence_ids"], "preserved evidence")
+    unique_ids(value["preserved_stage_acceptance_ids"], "preserved stages")
+    unique_ids(value["preserved_work_acceptance_ids"], "preserved work acceptances")
+    unique_ids(value["preserved_integration_acceptance_ids"], "preserved integration acceptances")
     jobs = rows(value["job_reconciliation"], "job reconciliation")
     for row in jobs:
         exact(row, {"job_id", "action", "safe_boundary", "reason"})
@@ -120,6 +133,59 @@ def _transition(value):
     need(len({row["job_id"] for row in jobs}) == len(jobs), "DUPLICATE", "duplicate reconciled job")
     nonblank_list(value["tradeoffs"], "transition tradeoffs")
     nonblank_list(value["preserved_benefits"], "preserved benefits", nonempty=True)
+
+
+def build_sparse_review_transition(state: dict[str, Any], request: dict[str, Any]) -> dict[str, Any]:
+    """Expand sparse changed dispositions into the exact auditable review transition."""
+    request = strict("zap-domain/sparse-review-transition/1", {
+        "intent_id", "outcome_id", "changed_dispositions", "ownership_changes", "work_changes",
+        "preserved_evidence_ids", "preserved_stage_acceptance_ids", "preserved_work_acceptance_ids",
+        "preserved_integration_acceptance_ids", "job_reconciliation", "tradeoffs", "preserved_benefits",
+    })(request)
+    optional_identity(request["intent_id"], "transition intent")
+    outcome_id = optional_identity(request["outcome_id"], "transition outcome")
+    need(outcome_id is not None, "DOMAIN_OUTCOME", "sparse outcome transition requires an outcome")
+    changes = _disposition_rows(request["changed_dispositions"])
+    domain = domain_state(state)
+    policy = _builder_policy(state)
+    need(policy is not None and policy["adaptation"]["allow_target_revision"],
+         "DOMAIN_POLICY", "sparse outcome revision is not delegated")
+    outcome = domain["outcome_revisions"].get(outcome_id)
+    need(outcome and outcome["status"] == "proposed" and outcome["previous_outcome_id"] == domain["active_outcome_id"],
+         "DOMAIN_OUTCOME", "sparse transition outcome is not the next proposal")
+    active = active_obligations(domain)
+    changed = {row["obligation_id"]: row for row in changes}
+    need(set(changed) <= active, "REFERENCE", "sparse disposition names a non-current obligation")
+    allowed = set(policy["adaptation"]["allowed_dispositions"])
+    mutable = set(policy["adaptation"]["mutable_obligations"])
+    essential = set(policy["adaptation"]["essential_obligations"])
+    need("retained" in allowed, "DOMAIN_POLICY", "retaining unchanged obligations is not delegated")
+    proposed = {row["id"] for row in outcome["obligations"]}
+    for obligation_id, row in changed.items():
+        need(row["disposition"] in allowed, "DOMAIN_POLICY", "sparse disposition is not delegated")
+        if obligation_id not in mutable or obligation_id in essential:
+            need(row["disposition"] == "retained", "DOMAIN_POLICY",
+                 "immutable or essential sparse obligation must be retained")
+        need(set(row["successor_ids"]) <= proposed, "REFERENCE", "sparse replacement successor missing")
+    dispositions = []
+    for obligation_id in sorted(active):
+        dispositions.append(changed.get(obligation_id, {
+            "obligation_id": obligation_id, "disposition": "retained", "successor_ids": [],
+            "unmet_portion": "", "reason": "Unchanged obligation retained by sparse expansion.",
+        }))
+    transition = {
+        "intent_id": request["intent_id"], "outcome_id": outcome_id,
+        "obligation_dispositions": dispositions, "ownership_changes": request["ownership_changes"],
+        "work_changes": request["work_changes"], "preserved_evidence_ids": request["preserved_evidence_ids"],
+        "preserved_stage_acceptance_ids": request["preserved_stage_acceptance_ids"],
+        "preserved_work_acceptance_ids": request["preserved_work_acceptance_ids"],
+        "preserved_integration_acceptance_ids": request["preserved_integration_acceptance_ids"],
+        "job_reconciliation": request["job_reconciliation"], "tradeoffs": request["tradeoffs"],
+        "preserved_benefits": request["preserved_benefits"],
+    }
+    _transition(transition)
+    validate_preserved_candidates(state, domain, transition, domain["active_outcome_id"], outcome_id)
+    return transition
 
 
 def _review_payload(value: Any) -> dict[str, Any]:
@@ -264,9 +330,11 @@ def _apply_review(state, domain, payload, event_id):
     _check_knowledge(state, review["knowledge"]["after"])
     _check_jobs(state, capture["jobs"])
     transition = review["transition"]
+    from_outcome = capture["outcome_id"]
     need({row["job_id"] for row in transition["job_reconciliation"]} == {row["job_id"] for row in capture["jobs"]},
          "DOMAIN_REVIEW", "every captured job needs reconciliation")
     if review["decision"]["kind"] == "pivot_outcome":
+        validate_preserved_candidates(state, domain, transition, from_outcome, transition["outcome_id"])
         if transition["intent_id"] is not None:
             _adopt_intent(state, domain, transition["intent_id"], event_id, action="adaptive.apply")
         _adopt_outcome(state, domain, transition["outcome_id"], transition["obligation_dispositions"], event_id,
@@ -276,6 +344,10 @@ def _apply_review(state, domain, payload, event_id):
              "DOMAIN_REVIEW", "non-pivot cannot revise intent or dispose obligations")
     _apply_ownership_changes(state, domain, transition["ownership_changes"])
     _apply_work_changes(state, domain, transition["work_changes"])
+    if review["decision"]["kind"] == "pivot_outcome":
+        apply_preserved_reuse(state, domain, review, event_id, from_outcome, domain["active_outcome_id"])
+    else:
+        validate_preserved_current(state, domain, review)
     review["status"] = "applied"; review["applied_event_id"] = event_id
     review["job_effect_status"] = "planned_not_performed_by_reducer"
     domain["last_applied_review_id"] = payload["review_id"]
@@ -321,10 +393,13 @@ def _apply_closure(state, domain, payload, event_id):
     need(payload["active_outcome_id"] == domain["active_outcome_id"], "DOMAIN_STALE", "closure outcome is not active")
     result_by_id = {row["obligation_id"]: row for row in payload["obligation_results"]}
     need(set(result_by_id) == set(domain["obligations"]), "DOMAIN_CLOSURE", "every historical obligation needs an outcome")
-    accepted_obligations = {
-        oid for row in domain["acceptances"].values() if row["outcome_id"] == domain["active_outcome_id"]
-        for oid in row["obligation_ids"]
-    }
+    accepted_obligations = set()
+    for acceptance_id in domain["acceptances"]:
+        try:
+            row, _ = acceptance_for_outcome(state, domain, acceptance_id, domain["active_outcome_id"])
+            accepted_obligations.update(row["obligation_ids"])
+        except Refusal:
+            continue
     for key, obligation in domain["obligations"].items():
         result = result_by_id[key]
         if obligation["status"] == "active":
@@ -350,9 +425,13 @@ def _apply_closure(state, domain, payload, event_id):
     need(all(row["status"] != "open" for row in domain["deferrals"].values()), "DOMAIN_CLOSURE", "open deferral blocks closure")
     need(set(payload["acceptance_ids"]) <= set(domain["acceptances"]), "REFERENCE", "closure acceptance missing")
     need(set(payload["integration_acceptance_ids"]) <= set(domain["integration_acceptances"]), "REFERENCE", "closure integration missing")
+    for acceptance_id in payload["acceptance_ids"]:
+        acceptance_for_outcome(state, domain, acceptance_id, domain["active_outcome_id"])
+    for integration_id in payload["integration_acceptance_ids"]:
+        integration_for_outcome(state, domain, integration_id, domain["active_outcome_id"])
     need(set(payload["promotion_ids"]) <= set(domain["promotions"]), "REFERENCE", "closure promotion missing")
     accepted_evidence(state, domain, payload["final_gate_evidence_ids"],
-                      obligation_ids=active_obligations(domain), require_pass=success)
+                      obligation_ids=active_obligations(domain), require_pass=success, collective=True)
     domain["closure"] = {**payload, "event_id": event_id, "status": "closed"}
 
 

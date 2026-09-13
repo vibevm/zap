@@ -9,6 +9,7 @@ from .domain_model import (
     inherited_dependencies, nonblank_list, owned_obligations, require_action, require_refs, rows, strict,
     text, unique_ids, work_is_accepted,
 )
+from .domain_reuse import evidence_for_outcome, stage_for_outcome, work_acceptance_current
 
 
 def _applicability(state, refs):
@@ -17,6 +18,19 @@ def _applicability(state, refs):
     need(isinstance(result, dict) and result.get("status") in {"applicable", "stale", "unknown"},
          "DOMAIN_EVIDENCE", "invalid source applicability result")
     return result
+
+
+def _source_captures(state, refs, *, require_current=True):
+    sources = state.get("extensions", {}).get("knowledge", {}).get("sources", {})
+    captures = []
+    for source_id in refs:
+        source = sources.get(source_id)
+        need(source is not None and isinstance(source.get("content_sha256"), str),
+             "DOMAIN_EVIDENCE", "accepted evidence source capture is unavailable")
+        need(not require_current or source.get("capture_status") == "current",
+             "DOMAIN_EVIDENCE", "accepted evidence source capture is not current")
+        captures.append({"source_id": source_id, "sha256": source["content_sha256"]})
+    return captures
 
 
 def _applies_to(value):
@@ -74,7 +88,10 @@ def _apply_evidence(state, domain, payload, event_id):
         need(applicability["status"] == "applicable" and not applicability.get("incomplete_closure"),
              "DOMAIN_EVIDENCE", "stale, unknown or incomplete source closure cannot be accepted")
     version = {**payload, "revision": current_revision + 1, "event_id": event_id,
-               "applicability_at_adjudication": applicability}
+               "applicability_at_adjudication": applicability,
+               "source_captures_at_adjudication": _source_captures(
+                   state, payload["source_refs"], require_current=payload["disposition"] == "accepted"
+               )}
     history = [] if current is None else list(current["history"]) + [
         {key: val for key, val in current.items() if key != "history"}
     ]
@@ -82,24 +99,26 @@ def _apply_evidence(state, domain, payload, event_id):
 
 
 def accepted_evidence(state, domain, evidence_ids, *, work_id=None, stage=None,
-                      obligation_ids=frozenset(), require_pass=False):
+                      obligation_ids=frozenset(), require_pass=False, collective=False):
+    covered_obligations = set()
     for key in evidence_ids:
-        row = domain["evidence_adjudications"].get(key)
-        need(row and row["disposition"] == "accepted", "DOMAIN_EVIDENCE", "evidence is not centrally accepted")
+        need(key in domain["evidence_adjudications"], "DOMAIN_EVIDENCE", "evidence is not centrally accepted")
+        row, _ = evidence_for_outcome(state, domain, key, domain["active_outcome_id"])
         if require_pass:
             need(state["evidence"][key]["result"] == "observed_pass",
                  "DOMAIN_EVIDENCE", "positive acceptance requires observed-pass evidence")
         applies = row["applies_to"]
-        need(applies["outcome_id"] == domain["active_outcome_id"],
-             "DOMAIN_EVIDENCE", "evidence applies to another outcome revision")
         if work_id is not None:
             need(work_id in applies["work_ids"], "DOMAIN_EVIDENCE", "evidence does not apply to work")
         if stage is not None:
             need(stage == applies["stage"], "DOMAIN_EVIDENCE", "evidence does not apply to stage")
-        need(set(obligation_ids) <= set(applies["obligation_ids"]), "DOMAIN_EVIDENCE", "evidence does not cover obligations")
-        current = _applicability(state, row["source_refs"])
-        need(current["status"] == "applicable" and not current.get("incomplete_closure"),
-             "DOMAIN_EVIDENCE", "accepted evidence is no longer applicable")
+        covered_obligations.update(applies["obligation_ids"])
+        if not collective:
+            need(set(obligation_ids) <= set(applies["obligation_ids"]),
+                 "DOMAIN_EVIDENCE", "evidence does not cover obligations")
+    if collective:
+        need(set(obligation_ids) <= covered_obligations,
+             "DOMAIN_EVIDENCE", "evidence set does not collectively cover obligations")
 
 
 def _stage_payload(value):
@@ -127,7 +146,8 @@ def _apply_stage(state, domain, payload, event_id):
     need(set(payload["obligation_ids"]) <= owned_obligations(domain, payload["work_id"]),
          "DOMAIN_ACCEPTANCE", "stage obligations are not owned by work")
     accepted_evidence(state, domain, payload["evidence_ids"], work_id=payload["work_id"],
-                      stage=payload["stage"], obligation_ids=payload["obligation_ids"], require_pass=True)
+                      stage=payload["stage"], obligation_ids=payload["obligation_ids"],
+                      require_pass=True, collective=True)
     domain["stages"][key] = {**payload, "event_id": event_id, "status": "accepted"}
 
 
@@ -157,14 +177,13 @@ def _apply_integration(state, domain, payload, event_id):
     legacy = set(payload["legacy_child_ids"])
     need(legacy <= children, "REFERENCE", "legacy child missing")
     for child in children - legacy:
-        need(any(row["work_id"] == child and row["outcome_id"] == domain["active_outcome_id"]
-                 for row in domain["acceptances"].values()),
+        need(work_acceptance_current(state, domain, child, domain["active_outcome_id"], allow_legacy=False),
              "DOMAIN_ACCEPTANCE", "child lacks current central acceptance")
     for child in legacy:
         need(child in domain["legacy_acceptance"], "DOMAIN_ACCEPTANCE", "legacy child assertion missing")
     require_refs(payload["obligation_ids"], active_obligations(domain), "integration obligations", nonempty=True)
     accepted_evidence(state, domain, payload["evidence_ids"], work_id=payload["work_id"],
-                      obligation_ids=payload["obligation_ids"], require_pass=True)
+                      obligation_ids=payload["obligation_ids"], require_pass=True, collective=True)
     domain["integration_acceptances"][key] = {**payload, "event_id": event_id, "status": "accepted",
                                                "legacy_inputs_are_assertions": bool(legacy)}
 
@@ -202,11 +221,11 @@ def _apply_work_accept(state, domain, payload, event_id):
     need(contract_version is not None, "DOMAIN_CONTRACT", "active task contract version missing")
     need(contract_version["schema"] == "zap-task-contract/1", "DOMAIN_CONTRACT", "legacy contract must be explicitly versioned before new acceptance")
     required_stage = contract_version["contract"]["required_stage"]
-    stage = domain["stages"].get(payload["stage_acceptance_id"])
-    need(stage and stage["work_id"] == key and stage["stage"] == required_stage,
+    stage, _ = stage_for_outcome(state, domain, payload["stage_acceptance_id"], domain["active_outcome_id"])
+    need(stage["work_id"] == key and stage["stage"] == required_stage,
          "DOMAIN_ACCEPTANCE", "required achieved stage lacks central acceptance")
     accepted_evidence(state, domain, payload["evidence_ids"], work_id=key,
-                      obligation_ids=obligations, require_pass=True)
+                      obligation_ids=obligations, require_pass=True, collective=True)
     need(all(work_is_accepted(state, domain, dep) for dep in inherited_dependencies(nodes, key)),
          "DOMAIN_ACCEPTANCE", "work prerequisites are not accepted or explicitly resolved")
     children = {node_id for node_id, node in nodes.items() if node.get("parent") == key}

@@ -3,12 +3,13 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-from .domain_adaptive import DOMAIN_ADAPTIVE_HANDLERS
+from .domain_adaptive import DOMAIN_ADAPTIVE_HANDLERS, build_sparse_review_transition
 from .domain_deferrals import DOMAIN_DEFERRAL_HANDLERS
 from .domain_graph import DOMAIN_GRAPH_HANDLERS, intent_fingerprint
 from .domain_model import DOMAIN_SCHEMA, domain_frontier, domain_state
 from .domain_proof import DOMAIN_PROOF_HANDLERS
-from .domain_schemas import DOMAIN_EVENT_SCHEMAS
+from .domain_reuse import current_acceptance_coverage
+from .domain_schemas import DOMAIN_EVENT_SCHEMAS, SPARSE_REVIEW_TRANSITION_SCHEMA
 from .domain_work import DOMAIN_WORK_HANDLERS
 
 
@@ -25,6 +26,12 @@ def _registry():
 
 DOMAIN_HANDLERS = _registry()
 DOMAIN_COMMANDS = ()
+DOMAIN_OPERATIONS = MappingProxyType({
+    "domain.materialize-review-transition": MappingProxyType({
+        "callable": "build_sparse_review_transition", "input_schema": SPARSE_REVIEW_TRANSITION_SCHEMA,
+        "returns": "domain.review-proposed.transition",
+    }),
+})
 DOMAIN_DATA_KINDS = frozenset({
     "domain.intent-proposed", "domain.outcome-proposed", "domain.review-proposed",
 })
@@ -54,6 +61,7 @@ DOMAIN_CAPABILITIES = MappingProxyType({
     "schema": DOMAIN_SCHEMA,
     "version": 1,
     "events": tuple(sorted(DOMAIN_HANDLERS)),
+    "operations": tuple(sorted(DOMAIN_OPERATIONS)),
     "privileged_actions": (
         "outcome.adopt", "adaptive.apply", "task.update", "evidence.adjudicate",
         "work.accept", "stage.accept", "fact.promote", "campaign.close",
@@ -63,6 +71,7 @@ DOMAIN_CAPABILITIES = MappingProxyType({
 
 __all__ = (
     "DOMAIN_ACTION_KINDS", "DOMAIN_CAPABILITIES", "DOMAIN_COMMANDS", "DOMAIN_DATA_KINDS",
-    "DOMAIN_EVENT_SCHEMAS", "DOMAIN_HANDLERS", "DOMAIN_SCHEMA",
-    "domain_frontier", "domain_state", "intent_fingerprint",
+    "DOMAIN_EVENT_SCHEMAS", "DOMAIN_HANDLERS", "DOMAIN_OPERATIONS", "DOMAIN_SCHEMA",
+    "SPARSE_REVIEW_TRANSITION_SCHEMA", "build_sparse_review_transition",
+    "current_acceptance_coverage", "domain_frontier", "domain_state", "intent_fingerprint",
 )

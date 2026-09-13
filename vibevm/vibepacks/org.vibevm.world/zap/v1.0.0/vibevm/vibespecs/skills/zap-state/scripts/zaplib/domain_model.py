@@ -184,6 +184,7 @@ def initial_domain(state: dict[str, Any]) -> dict[str, Any]:
         "reviews": {}, "last_applied_review_id": None,
         "evidence_adjudications": {}, "stages": {}, "deferrals": {},
         "acceptances": {}, "integration_acceptances": {},
+        "reuse_witnesses": {"evidence": {}, "stages": {}, "acceptances": {}, "integrations": {}},
         "promotions": {}, "legacy_acceptance": legacy_acceptance,
         "closure": None,
     }
@@ -245,10 +246,10 @@ def work_is_accepted(state: dict[str, Any], domain: dict[str, Any], work_id: str
     trail = set() if trail is None else set(trail)
     if work_id in trail:
         return False
-    trail.add(work_id)
-    if any(row["work_id"] == work_id and row["outcome_id"] == domain["active_outcome_id"]
-           for row in domain["acceptances"].values()):
+    from .domain_reuse import work_acceptance_current
+    if work_acceptance_current(state, domain, work_id, domain["active_outcome_id"], trail):
         return True
+    trail.add(work_id)
     if nodes[work_id]["state"] == "accepted":
         return work_id in domain["legacy_acceptance"]
     if nodes[work_id]["state"] == "superseded":

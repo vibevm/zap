@@ -204,7 +204,9 @@ class DomainControlIntegration(unittest.TestCase):
                     "feasibility": "feasible", "remaining_cost": "bounded", "risks": [], "unknowns": []}],
                 "chosen": "amended", "decision": {"kind": "pivot_outcome", "rationale": "owner amended intent"},
                 "transition": {"intent_id": "I2", "outcome_id": "O2", "obligation_dispositions": dispositions,
-                    "ownership_changes": [], "work_changes": [], "preserved_evidence_ids": [], "job_reconciliation": [],
+                    "ownership_changes": [], "work_changes": [], "preserved_evidence_ids": [],
+                    "preserved_stage_acceptance_ids": [], "preserved_work_acceptance_ids": [],
+                    "preserved_integration_acceptance_ids": [], "job_reconciliation": [],
                     "tradeoffs": [], "preserved_benefits": ["verified value"]}, "next_trigger": "integration boundary"}
 
         review1 = review("REV1", 1)

@@ -16,7 +16,8 @@ PROJECT_FACT_SCHEMA = "zap-project-fact/1"
 PORTABLE_PROOF_SCHEMA = "zap-portable-proof/1"
 DOMAIN_EVIDENCE_SCHEMA = "zap-domain/evidence-adjudicated/1"
 DOMAIN_EVIDENCE_FIELDS = {"schema", "evidence_id", "expected_revision", "disposition", "applies_to", "source_refs", "method",
-                          "limitations", "revision", "event_id", "applicability_at_adjudication", "history"}
+                          "limitations", "revision", "event_id", "applicability_at_adjudication",
+                          "source_captures_at_adjudication", "history"}
 SOURCE_DESCRIPTOR_FIELDS = {"schema", "id", "source_kind", "root", "path", "content_sha256", "bytes", "applicability_scope"}
 PROMOTION_OPERATIONS = {
     "fact.promote": {"required": ["state", "proposal", "project_root", "authorization", "event_writer"], "optional": [],
@@ -85,11 +86,23 @@ def portable_accepted_proofs(state: dict[str, Any], proof_ids: list[str], bound_
         need(core is not None and core.get("result") in {"observed_pass", "observed_fail"}, "ACCEPTANCE", f"accepted proof lacks a concrete observation: {proof_id}")
         source_refs = strings(row["source_refs"], "accepted proof source refs")
         need(set(source_refs) <= set(bound_source_refs), "PROMOTION", "accepted proof sources are not all bound by the promotion")
+        captured = row["source_captures_at_adjudication"]
+        need(isinstance(captured, list), "ACCEPTANCE", "accepted proof source witness is not a list")
+        by_source = {}
+        for witness in captured:
+            exact(witness, {"source_id", "sha256"})
+            source_id = identity(witness["source_id"])
+            need(source_id not in by_source and isinstance(witness["sha256"], str) and len(witness["sha256"]) == 64
+                 and set(witness["sha256"]) <= set("0123456789abcdef"),
+                 "ACCEPTANCE", "accepted proof source witness is invalid")
+            by_source[source_id] = witness["sha256"]
+        need(set(by_source) == set(source_refs), "ACCEPTANCE", "accepted proof source witness differs from source refs")
         applicability = current_applicability(state, source_refs)
         need(applicability["status"] == "applicable" and not applicability["incomplete_closure"], "APPLICABILITY", f"accepted proof is no longer applicable: {proof_id}")
         source_rows = []
         for source_id in source_refs:
             source = sources[source_id]
+            need(by_source[source_id] == source["content_sha256"], "APPLICABILITY", "accepted proof source witness is no longer current")
             source_rows.append({"id": source_id, "path": source["path"], "content_sha256": source["content_sha256"],
                                 "applicability_scope": copy.deepcopy(state["extensions"]["knowledge"]["applicability"][source_id]["scope"])})
         proofs.append({"schema": PORTABLE_PROOF_SCHEMA, "evidence_id": proof_id,
@@ -97,6 +110,7 @@ def portable_accepted_proofs(state: dict[str, Any], proof_ids: list[str], bound_
                        "adjudication_revision": row["revision"], "adjudication_event_id": row["event_id"],
                        "applies_to": copy.deepcopy(row["applies_to"]), "method": copy.deepcopy(row["method"]),
                        "limitations": copy.deepcopy(row["limitations"]), "sources": source_rows,
+                       "source_captures_at_adjudication": copy.deepcopy(row["source_captures_at_adjudication"]),
                        "applicability_at_adjudication": copy.deepcopy(row["applicability_at_adjudication"]),
                        "current_applicability": applicability})
     return proofs

@@ -103,6 +103,21 @@ TRANSITION = nested({
     })},
     "work_changes": {"type": "array", "items": WORK_CHANGE},
     "preserved_evidence_ids": IDS,
+    "preserved_stage_acceptance_ids": IDS,
+    "preserved_work_acceptance_ids": IDS,
+    "preserved_integration_acceptance_ids": IDS,
+    "job_reconciliation": {"type": "array", "items": JOB_RECONCILIATION},
+    "tradeoffs": TEXTS, "preserved_benefits": TEXTS,
+})
+SPARSE_REVIEW_TRANSITION_SCHEMA = obj("zap-domain/sparse-review-transition/1", {
+    "intent_id": {"oneOf": [ID, {"type": "null"}]}, "outcome_id": ID,
+    "changed_dispositions": {"type": "array", "items": DISPOSITION},
+    "ownership_changes": {"type": "array", "items": nested({
+        "obligation_id": ID, "from_work_id": ID, "assignments": {"type": "array", "items": ASSIGNMENT}, "reason": TEXT,
+    })},
+    "work_changes": {"type": "array", "items": WORK_CHANGE}, "preserved_evidence_ids": IDS,
+    "preserved_stage_acceptance_ids": IDS, "preserved_work_acceptance_ids": IDS,
+    "preserved_integration_acceptance_ids": IDS,
     "job_reconciliation": {"type": "array", "items": JOB_RECONCILIATION},
     "tradeoffs": TEXTS, "preserved_benefits": TEXTS,
 })
@@ -196,4 +211,4 @@ DOMAIN_EVENT_SCHEMAS = MappingProxyType({
     }),
 })
 
-__all__ = ("DOMAIN_EVENT_SCHEMAS",)
+__all__ = ("DOMAIN_EVENT_SCHEMAS", "SPARSE_REVIEW_TRANSITION_SCHEMA")

@@ -7,7 +7,7 @@ import tempfile
 import unittest
 
 from zaplib.common import Refusal, parse
-from zaplib.knowledge_promotion import build_promotion_proposal, promote_fact
+from zaplib.knowledge_promotion import build_promotion_proposal, portable_accepted_proofs, promote_fact
 from zaplib.sources import capture_source
 from zaplib.storage import load_store
 from test_knowledge_support import HANDLERS, append, create_store
@@ -50,8 +50,16 @@ class PromotionTests(unittest.TestCase):
             "method": {"argv": ["python", "-B", "-m", "unittest"], "target": "T", "toolchain": "python-3.11",
                        "environment": "fixture", "subjects": ["source:S"], "cases": ["positive"]},
             "limitations": ["fixture scope"], "revision": state["revision"], "event_id": "adjudication-E",
-            "applicability_at_adjudication": applicability, "history": []}}}
+            "applicability_at_adjudication": applicability,
+            "source_captures_at_adjudication": [{"source_id": "S", "sha256": state["extensions"]["knowledge"]["sources"]["S"]["content_sha256"]}],
+            "history": []}}}
         return state, build_promotion_proposal(state, promotion_id="promotion-1", fact_id="F", source_refs=["S"], target=target)
+
+    def test_portable_proof_refuses_a_changed_adjudication_source_witness(self):
+        state, _proposal = self.proposal()
+        state["extensions"]["domain"]["evidence_adjudications"]["E"]["source_captures_at_adjudication"][0]["sha256"] = "0" * 64
+        with self.assertRaisesRegex(Refusal, "no longer current"):
+            portable_accepted_proofs(state, ["E"], ["S"])
 
     def test_success_writes_bound_artifact_and_preserves_effect_receipt(self):
         state, proposal = self.proposal()
@@ -68,6 +76,7 @@ class PromotionTests(unittest.TestCase):
         self.assertEqual(artifact["accepted_proof_refs"], ["E"])
         self.assertEqual(artifact["portable_proofs"][0]["observation"]["subject"], "source:S")
         self.assertEqual(artifact["portable_proofs"][0]["method"]["argv"], ["python", "-B", "-m", "unittest"])
+        self.assertEqual(artifact["portable_proofs"][0]["source_captures_at_adjudication"][0]["source_id"], "S")
         self.assertEqual(artifact["source_reobservations"][0]["observed"]["status"], "current")
         self.assertEqual(artifact["sources"][0]["content_sha256"], state["extensions"]["knowledge"]["sources"]["S"]["content_sha256"])
         self.assertEqual(effects[0]["kind"], "fact.promotion-effect-recorded")

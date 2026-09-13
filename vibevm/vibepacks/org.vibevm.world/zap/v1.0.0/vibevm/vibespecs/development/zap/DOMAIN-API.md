@@ -27,6 +27,21 @@ filesystem writes, clock reads, network calls, or semantic model calls.
   `zap-domain/intent-proposed/1` payload. It includes schema, identity,
   revision, predecessor, summary, beneficiaries, values, constraints and
   source refs, and excludes later status/event metadata.
+- `build_sparse_review_transition(state, request)`: expands one strict
+  `zap-domain/sparse-review-transition/1` request into the exact full nested
+  transition accepted by `domain.review-proposed`. It reads the active charter
+  adaptation envelope, materializes a sorted retained row for every omitted
+  active obligation, and validates every explicit disposition and reuse
+  candidate. It creates no event and consumes no privilege.
+- `SPARSE_REVIEW_TRANSITION_SCHEMA`: machine-readable exact input descriptor
+  for that helper.
+- `DOMAIN_OPERATIONS`: immutable operation registry. Its
+  `domain.materialize-review-transition` row names the helper, input schema and
+  `domain.review-proposed.transition` return shape.
+- `current_acceptance_coverage(state)`: returns exact current central proof as
+  `zap-domain/acceptance-coverage/1`, with the active outcome, sorted work,
+  obligation, acceptance and integration IDs, plus per-integration obligation
+  coverage. Historical or stale records are omitted.
 
 Reducers call `control.require_action(state, action_class)`. The control
 service authenticates and admits the caller before append; replay checks the
@@ -48,7 +63,10 @@ revision, versioned intents and outcome revisions, active/original pointers,
 first-class obligations, typed ownership, added work and work overlays,
 successors, task-contract histories, adaptive reviews, evidence adjudications,
 accepted stages, deferrals, work/integration acceptances, fact-promotion
-metadata and one terminal closure.
+metadata and one terminal closure. Evidence adjudication records also capture
+the exact `{source_id, sha256}` identities current at adjudication. Selective
+reuse records append-only evidence, stage, work-acceptance and integration
+witnesses; original proof and acceptance rows remain unchanged.
 
 Legacy MUP mandates become sourced active obligations with their stable IDs.
 Every node acceptance criterion becomes
@@ -140,6 +158,15 @@ conditions. Promotion and final gate recheck current applicability. Producer
 PASS, a declared maturity label and imported acceptance cannot create new
 proof.
 
+Stage, work and integration acceptance treat selected evidence as a coverage
+set: every proof must match the claimed work/stage/outcome and pass, and their
+obligation coverage union must include every requested obligation. Campaign
+final-gate evidence uses the same union rule across independently scoped work
+proofs. Omitting any obligation refuses; no individual check must overstate
+that it proves unrelated obligations. Rejected or inapplicable adjudications
+may record a known stale source identity, while only accepted proof requires a
+current capture.
+
 Review captures are exactly
 `{base_sha256, zap_revision, domain_revision, intent_id, outcome_id,
 policy_revision, source_captures, jobs}`. Source captures are
@@ -159,8 +186,9 @@ decision is `{kind, rationale}`.
 
 Review transition is exactly
 `{intent_id, outcome_id, obligation_dispositions, ownership_changes,
-work_changes, preserved_evidence_ids, job_reconciliation, tradeoffs,
-preserved_benefits}`. Ownership change is
+work_changes, preserved_evidence_ids, preserved_stage_acceptance_ids,
+preserved_work_acceptance_ids, preserved_integration_acceptance_ids,
+job_reconciliation, tradeoffs, preserved_benefits}`. Ownership change is
 `{obligation_id, from_work_id, assignments, reason}`. Work change is
 `{work_id, operation, order, successor_ids, reason}`. Job reconciliation is
 `{job_id, action, safe_boundary, reason}`. Application requires unchanged
@@ -168,6 +196,32 @@ domain, policy, intent/outcome and captured jobs. It atomically records a
 keep-route or pivot, obligation and ownership changes, work overlays and the
 complete job reconciliation plan. It marks job effects as planned; runtime
 adapters perform and acknowledge those effects separately.
+
+The four preservation lists are explicit and closed over their proof graph.
+Preserving a work acceptance requires its selected accepted evidence, achieved
+stage and integration acceptances; preserving integration requires every
+non-legacy child acceptance. A transfer witness binds the historical record
+and adjudication event, source content hashes, core evidence hash, obligation
+semantics, work subject, active task-contract version/hash and ownership. The
+new and prior outcome must keep the same required guarantees. Changed source
+content or applicability, a changed contract, revalidation, changed proof
+ownership, a disposed covered obligation, a new obligation owned by that work,
+or an unselected dependency refuses transfer. Later reads revalidate the
+witness against current state. An outcome revision with no selected witnesses
+leaves prior proof historical and unusable for current readiness or closure.
+
+The sparse request is exactly
+`{schema, intent_id, outcome_id, changed_dispositions, ownership_changes,
+work_changes, preserved_evidence_ids, preserved_stage_acceptance_ids,
+preserved_work_acceptance_ids, preserved_integration_acceptance_ids,
+job_reconciliation, tradeoffs, preserved_benefits}`. `schema` is
+`zap-domain/sparse-review-transition/1`. `changed_dispositions` contains only
+the semantic changes chosen by the coordinator. The builder refuses duplicate
+or non-current obligations, dispositions outside the active charter, changes
+to immutable/essential obligations, missing replacement successors and false
+reuse. It fills every other current obligation with a canonical retained row.
+The caller places the returned full transition into an ordinary
+`domain.review-proposed` payload; the sparse request is never journaled.
 
 A closure obligation result is exactly
 `{obligation_id, result, unmet_portion, successor_ids, evidence_ids}`. Result

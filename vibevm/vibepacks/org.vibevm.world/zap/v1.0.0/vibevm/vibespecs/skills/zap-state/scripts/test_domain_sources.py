@@ -12,7 +12,7 @@ from zaplib.common import Refusal
 from zaplib.domain import DOMAIN_HANDLERS, domain_state
 from zaplib.knowledge import KNOWLEDGE_HANDLERS, knowledge_snapshot
 from zaplib.records import CORE_HANDLERS, apply_command, compose_handlers, initial_state
-from zaplib.sources import capture_source, current_applicability
+from zaplib.sources import capture_source, current_applicability, observe_source
 
 HANDLERS = compose_handlers(CORE_HANDLERS, KNOWLEDGE_HANDLERS, DOMAIN_HANDLERS)
 
@@ -26,6 +26,42 @@ def fixture_state():
 
 
 class DomainSourcesIntegration(unittest.TestCase):
+    def test_inapplicable_adjudication_retains_a_stale_source_identity(self):
+        state = fixture_state()
+
+        def apply(kind, payload, event_id):
+            nonlocal state
+            state = apply_command(state, {"event_id": event_id, "base_revision": state["revision"], "kind": kind,
+                "reason": {"summary": "stale evidence classification"}, "payload": payload}, HANDLERS)
+
+        apply("evidence.recorded", {"id": "E", "claim": "Old observation", "subject": "X",
+              "result": "observed_fail", "artifact_refs": ["artifact:old"], "node_refs": ["X"]}, "evidence")
+        with tempfile.TemporaryDirectory(prefix="zap-domain-stale-") as temporary:
+            root = Path(temporary); path = root / "input.txt"; path.write_text("old", encoding="utf-8")
+            descriptor = capture_source(path, root, source_id="S")
+            apply("knowledge.source-recorded", {"source": descriptor}, "source")
+            path.write_text("changed", encoding="utf-8")
+            apply("knowledge.source-observed", observe_source(descriptor), "source-changed")
+        domain = domain_state(state)
+        domain["active_outcome_id"] = "O1"; domain["original_outcome_id"] = "O1"
+        domain["outcome_revisions"]["O1"] = {"outcome_id": "O1", "status": "active", "revision": 1}
+        domain["obligations"]["OWNER"]["current_outcome_ids"] = ["O1"]
+        state["extensions"]["domain"] = domain
+        policy = {"campaign_id": "fixture", "base_sha256": state["base_sha256"], "revision": 1,
+                  "allowed_actions": ["evidence.adjudicate"], "adaptation": {"allow_target_revision": True,
+                  "mutable_obligations": [], "essential_obligations": [], "allowed_dispositions": ["retained"]}}
+        with mock.patch.object(domain_proof, "require_action", return_value=policy):
+            apply("domain.evidence-adjudicated", {"schema": "zap-domain/evidence-adjudicated/1", "evidence_id": "E",
+                "expected_revision": -1, "disposition": "inapplicable", "applies_to": {"outcome_id": "O1",
+                    "obligation_ids": ["OWNER"], "work_ids": ["X"], "stage": "functional", "scope": "old input"},
+                "source_refs": ["S"], "method": {"argv": ["verify"], "target": "X", "toolchain": "fixture",
+                    "environment": "test", "subjects": ["X"], "cases": ["changed input"]},
+                "limitations": ["source changed"]}, "inapplicable")
+        row = domain_state(state)["evidence_adjudications"]["E"]
+        self.assertEqual("stale", row["applicability_at_adjudication"]["status"])
+        self.assertEqual([{"source_id": "S", "sha256": descriptor["content_sha256"]}],
+                         row["source_captures_at_adjudication"])
+
     def test_real_applicability_is_required_by_domain_adjudication(self):
         state = fixture_state()
 
@@ -84,7 +120,9 @@ class DomainSourcesIntegration(unittest.TestCase):
                 "feasibility": "feasible", "remaining_cost": "bounded", "risks": [], "unknowns": ["source freshness"]}],
             "chosen": "keep", "decision": {"kind": "keep_route", "rationale": "verify capture first"},
             "transition": {"intent_id": None, "outcome_id": None, "obligation_dispositions": [],
-                "ownership_changes": [], "work_changes": [], "preserved_evidence_ids": [], "job_reconciliation": [],
+                "ownership_changes": [], "work_changes": [], "preserved_evidence_ids": [],
+                "preserved_stage_acceptance_ids": [], "preserved_work_acceptance_ids": [],
+                "preserved_integration_acceptance_ids": [], "job_reconciliation": [],
                 "tradeoffs": [], "preserved_benefits": ["owner value"]}, "next_trigger": "fresh capture"}
         apply("domain.review-proposed", review, "review")
         with mock.patch.object(domain_adaptive, "require_action", return_value=policy), self.assertRaisesRegex(
@@ -118,7 +156,9 @@ class DomainSourcesIntegration(unittest.TestCase):
                 "decision": {"kind": "reorder", "rationale": "resolve the cheapest decision-changing question first"},
                 "transition": {"intent_id": None, "outcome_id": None, "obligation_dispositions": [],
                     "ownership_changes": [], "work_changes": [{"work_id": "X", "operation": "reprioritize", "order": 5,
-                        "successor_ids": [], "reason": "new information priority"}], "preserved_evidence_ids": ["E"],
+                        "successor_ids": [], "reason": "new information priority"}], "preserved_evidence_ids": [],
+                    "preserved_stage_acceptance_ids": [], "preserved_work_acceptance_ids": [],
+                    "preserved_integration_acceptance_ids": [],
                     "job_reconciliation": [], "tradeoffs": [], "preserved_benefits": ["owner value"]},
                 "next_trigger": "API probe result"}
 

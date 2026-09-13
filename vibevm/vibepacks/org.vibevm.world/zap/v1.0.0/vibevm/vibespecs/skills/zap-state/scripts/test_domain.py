@@ -7,9 +7,14 @@ import unittest
 from unittest import mock
 
 from zaplib.common import Refusal
-from zaplib.domain import DOMAIN_EVENT_SCHEMAS, DOMAIN_HANDLERS, domain_frontier, domain_state, intent_fingerprint
-from zaplib import domain_adaptive, domain_deferrals, domain_graph, domain_proof, domain_work
+from zaplib.domain import (
+    DOMAIN_EVENT_SCHEMAS, DOMAIN_HANDLERS, DOMAIN_OPERATIONS,
+    SPARSE_REVIEW_TRANSITION_SCHEMA, build_sparse_review_transition,
+    current_acceptance_coverage, domain_frontier, domain_state, intent_fingerprint,
+)
+from zaplib import domain_adaptive, domain_deferrals, domain_graph, domain_proof, domain_reuse, domain_work
 from zaplib.knowledge import knowledge_snapshot
+from zaplib.domain_model import work_is_accepted
 from zaplib.records import CORE_HANDLERS, apply_command, compose_handlers, initial_state
 
 HANDLERS = compose_handlers(CORE_HANDLERS, DOMAIN_HANDLERS)
@@ -65,6 +70,15 @@ class DomainTests(unittest.TestCase):
         for module in (domain_graph, domain_work, domain_deferrals, domain_proof, domain_adaptive):
             self.stack.enter_context(mock.patch.object(module, "require_action", side_effect=self.require))
         self.stack.enter_context(mock.patch.object(domain_proof, "_applicability", side_effect=self.applicability))
+        self.stack.enter_context(mock.patch.object(
+            domain_proof, "_source_captures",
+            side_effect=lambda state, refs, **kwargs: [{"source_id": key, "sha256": "b" * 64} for key in refs],
+        ))
+        self.stack.enter_context(mock.patch.object(domain_reuse, "_sources_current", side_effect=self.reuse_sources))
+        self.stack.enter_context(mock.patch.object(domain_reuse, "_captures_current", side_effect=self.reuse_captures))
+        self.stack.enter_context(mock.patch.object(domain_adaptive, "_check_sources", return_value=None))
+        self.stack.enter_context(mock.patch.object(domain_adaptive, "_builder_policy",
+                                                   side_effect=lambda state: self.require(state, "adaptive.apply")))
         self.sources_applicable = True
 
     def require(self, state, action):
@@ -96,6 +110,14 @@ class DomainTests(unittest.TestCase):
                 "applicable": self.sources_applicable, "refs": list(refs),
                 "stale_refs": [] if self.sources_applicable else list(refs), "unknown_refs": [],
                 "incomplete_closure": False}
+
+    def reuse_sources(self, state, refs):
+        if not self.sources_are_applicable:
+            raise Refusal("DOMAIN_EVIDENCE", "accepted evidence is no longer applicable")
+
+    def reuse_captures(self, state, captures):
+        if not self.sources_are_applicable:
+            raise Refusal("DOMAIN_EVIDENCE", "preserved proof source content changed")
 
     @property
     def sources_applicable(self):
@@ -164,6 +186,20 @@ class DomainTests(unittest.TestCase):
             "limitations": [],
         })
 
+    def accept_single_work(self):
+        self.activate(single=True)
+        obligations = self.obligations("X")
+        self.apply("domain.task-contract-replaced", {"schema": "zap-domain/task-contract-replaced/1", "work_id": "X",
+                                                      "expected_version": 0, "contract": self.contract("X")})
+        self.evidence("X", obligations)
+        self.apply("domain.stage-accepted", {"schema": "zap-domain/stage-accepted/1", "stage_acceptance_id": "S1",
+            "work_id": "X", "stage": "functional", "outcome_id": "O1", "evidence_ids": ["E"],
+            "obligation_ids": obligations, "scope": "complete fixture", "summary": "stage accepted"})
+        self.apply("domain.work-accepted", {"schema": "zap-domain/work-accepted/1", "acceptance_id": "A1", "work_id": "X",
+            "outcome_id": "O1", "stage_acceptance_id": "S1", "evidence_ids": ["E"], "obligation_ids": obligations,
+            "integration_acceptance_ids": [], "summary": "complete work accepted"})
+        return obligations
+
     def test_legacy_projection_is_lazy_lossless_and_sourced(self):
         before = copy.deepcopy(self.state)
         domain = domain_state(self.state)
@@ -178,6 +214,8 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(set(DOMAIN_EVENT_SCHEMAS), set(DOMAIN_HANDLERS))
         self.assertTrue(all(not row["additionalProperties"] and "schema" in row["required"]
                             for row in DOMAIN_EVENT_SCHEMAS.values()))
+        self.assertEqual(DOMAIN_OPERATIONS["domain.materialize-review-transition"]["input_schema"],
+                         SPARSE_REVIEW_TRANSITION_SCHEMA)
 
     def test_proposals_are_data_only_but_adoption_requires_policy(self):
         self.denied.add("outcome.adopt")
@@ -311,6 +349,31 @@ class DomainTests(unittest.TestCase):
         self.assertIn("A1", domain_state(self.state)["acceptances"])
         self.assertIn("V", domain_frontier(self.state))
 
+    def test_scoped_checks_collectively_cover_stage_and_work_obligations(self):
+        self.activate(single=True)
+        obligations = self.obligations("X")
+        self.assertGreaterEqual(len(obligations), 2)
+        self.apply("domain.task-contract-replaced", {"schema": "zap-domain/task-contract-replaced/1", "work_id": "X",
+                                                      "expected_version": 0, "contract": self.contract("X")})
+        split = ([obligations[0]], obligations[1:])
+        self.evidence("X", split[0], evidence_id="E1")
+        self.evidence("X", split[1], evidence_id="E2")
+        stage = {"schema": "zap-domain/stage-accepted/1", "stage_acceptance_id": "S1", "work_id": "X",
+            "stage": "functional", "outcome_id": "O1", "evidence_ids": ["E1"],
+            "obligation_ids": obligations, "scope": "complementary checks", "summary": "stage accepted"}
+        with self.assertRaisesRegex(Refusal, "collectively cover"):
+            self.apply("domain.stage-accepted", stage)
+        stage["evidence_ids"] = ["E1", "E2"]
+        self.apply("domain.stage-accepted", stage)
+        acceptance = {"schema": "zap-domain/work-accepted/1", "acceptance_id": "A1", "work_id": "X",
+            "outcome_id": "O1", "stage_acceptance_id": "S1", "evidence_ids": ["E1"],
+            "obligation_ids": obligations, "integration_acceptance_ids": [], "summary": "work accepted"}
+        with self.assertRaisesRegex(Refusal, "collectively cover"):
+            self.apply("domain.work-accepted", acceptance)
+        acceptance["evidence_ids"] = ["E1", "E2"]
+        self.apply("domain.work-accepted", acceptance)
+        self.assertTrue(work_is_accepted(self.state, domain_state(self.state), "X"))
+
     def test_adjudication_rejects_wrong_subject_and_missing_artifact(self):
         self.activate()
         obligations = self.obligations("T")
@@ -347,7 +410,9 @@ class DomainTests(unittest.TestCase):
         domain = domain_state(self.state)
         knowledge = knowledge_snapshot(self.state, [])
         transition = {"intent_id": None, "outcome_id": "O2" if pivot else None, "obligation_dispositions": dispositions or [],
-                      "ownership_changes": [], "work_changes": [], "preserved_evidence_ids": [], "job_reconciliation": [],
+                      "ownership_changes": [], "work_changes": [], "preserved_evidence_ids": [],
+                      "preserved_stage_acceptance_ids": [], "preserved_work_acceptance_ids": [],
+                      "preserved_integration_acceptance_ids": [], "job_reconciliation": [],
                       "tradeoffs": ["bounded change"] if pivot else [], "preserved_benefits": ["owner value"]}
         return {"schema": "zap-domain/review-proposed/1", "review_id": "REV1", "previous_review_id": None,
             "signals": ["new information"], "captures": {"base_sha256": self.state["base_sha256"],
@@ -363,6 +428,131 @@ class DomainTests(unittest.TestCase):
                  "remaining_cost": "lower", "risks": ["switching"], "unknowns": []}],
             "chosen": "pivot" if pivot else "keep", "decision": {"kind": "pivot_outcome" if pivot else "keep_route",
                 "rationale": "best current value"}, "transition": transition, "next_trigger": "next integration boundary"}
+
+    def sparse_request(self, *, changed=None, preserve=True):
+        return {"schema": "zap-domain/sparse-review-transition/1", "intent_id": None, "outcome_id": "O2",
+            "changed_dispositions": changed or [], "ownership_changes": [], "work_changes": [],
+            "preserved_evidence_ids": ["E"] if preserve else [],
+            "preserved_stage_acceptance_ids": ["S1"] if preserve else [],
+            "preserved_work_acceptance_ids": ["A1"] if preserve else [],
+            "preserved_integration_acceptance_ids": [], "job_reconciliation": [], "tradeoffs": [],
+            "preserved_benefits": ["owner value"]}
+
+    def propose_o2(self, *, guarantees=None, obligations=None):
+        self.apply("domain.outcome-proposed", {"schema": "zap-domain/outcome-proposed/1", "outcome_id": "O2",
+            "revision": 2, "previous_outcome_id": "O1", "intent_id": "I1", "summary": "Locally revised result",
+            "benefits": ["owner value"], "guarantees": guarantees or ["verified"], "tradeoffs": ["local adjustment"],
+            "obligations": obligations or []})
+
+    def apply_sparse_pivot(self, request=None):
+        transition = build_sparse_review_transition(self.state, request or self.sparse_request())
+        payload = self.review_payload(pivot=True)
+        payload["transition"] = transition
+        if transition["preserved_evidence_ids"]:
+            payload["captures"]["source_captures"] = [{"source_id": "S", "sha256": "b" * 64}]
+        self.apply("domain.review-proposed", payload)
+        self.apply("domain.review-applied", {"schema": "zap-domain/review-applied/1", "review_id": "REV1",
+                                               "expected_domain_revision": domain_state(self.state)["revision"]})
+
+    def test_sparse_builder_expands_large_denominator_deterministically(self):
+        self.state = make_state(single=True)
+        domain = domain_state(self.state)
+        template = copy.deepcopy(domain["obligations"]["OWNER"])
+        domain["obligations"] = {}
+        for index in range(1292):
+            key = f"O{index:04d}"
+            domain["obligations"][key] = {**copy.deepcopy(template), "id": key, "statement": f"obligation {index}"}
+        domain["active_outcome_id"] = "O1"
+        domain["outcome_revisions"] = {
+            "O1": {"outcome_id": "O1", "status": "active", "revision": 1, "guarantees": ["verified"]},
+            "O2": {"outcome_id": "O2", "status": "proposed", "revision": 2, "previous_outcome_id": "O1",
+                   "guarantees": ["verified"], "obligations": []},
+        }
+        self.state["extensions"]["domain"] = domain
+        changed = [{"obligation_id": "O1291", "disposition": "excluded", "successor_ids": [],
+                    "unmet_portion": "explicitly removed", "reason": "authorized sparse change"}]
+        transition = build_sparse_review_transition(self.state, self.sparse_request(changed=changed, preserve=False))
+        self.assertEqual(1292, len(transition["obligation_dispositions"]))
+        self.assertEqual("O0000", transition["obligation_dispositions"][0]["obligation_id"])
+        self.assertEqual("excluded", transition["obligation_dispositions"][-1]["disposition"])
+        self.assertEqual(1291, sum(row["disposition"] == "retained" for row in transition["obligation_dispositions"]))
+
+    def test_pivot_selectively_reuses_proof_without_rewriting_history(self):
+        obligations = self.accept_single_work()
+        before = copy.deepcopy(domain_state(self.state))
+        self.propose_o2()
+        self.apply_sparse_pivot()
+        domain = domain_state(self.state)
+        self.assertEqual("O1", domain["evidence_adjudications"]["E"]["applies_to"]["outcome_id"])
+        self.assertEqual("O1", domain["stages"]["S1"]["outcome_id"])
+        self.assertEqual("O1", domain["acceptances"]["A1"]["outcome_id"])
+        self.assertEqual(before["evidence_adjudications"]["E"], domain["evidence_adjudications"]["E"])
+        self.assertEqual("O2", domain["reuse_witnesses"]["evidence"]["E"][0]["to_outcome_id"])
+        self.assertEqual("O2", domain["reuse_witnesses"]["stages"]["S1"][0]["to_outcome_id"])
+        self.assertEqual("O2", domain["reuse_witnesses"]["acceptances"]["A1"][0]["to_outcome_id"])
+        self.assertTrue(work_is_accepted(self.state, domain, "X"))
+        coverage = current_acceptance_coverage(self.state)
+        self.assertEqual((["X"], ["A1"]), (coverage["work_ids"], coverage["acceptance_ids"]))
+        self.apply("domain.campaign-closed", {"schema": "zap-domain/campaign-closed/1", "closure_id": "C1",
+            "classification": "revised", "active_outcome_id": "O2", "actual_benefit": "owner value delivered",
+            "obligation_results": [{"obligation_id": key, "result": "accepted", "unmet_portion": "",
+                "successor_ids": [], "evidence_ids": ["E"]} for key in sorted(obligations)],
+            "acceptance_ids": ["A1"], "integration_acceptance_ids": [], "deferral_ids": [],
+            "promotion_ids": [], "final_gate_evidence_ids": ["E"], "summary": "reused proof remains current"})
+        self.assertEqual("closed", domain_state(self.state)["closure"]["status"])
+
+    def test_pivot_without_explicit_reuse_does_not_make_old_acceptance_current(self):
+        obligations = self.accept_single_work()
+        self.propose_o2()
+        self.apply_sparse_pivot(self.sparse_request(preserve=False))
+        domain = domain_state(self.state)
+        self.assertFalse(work_is_accepted(self.state, domain, "X"))
+        self.assertEqual([], current_acceptance_coverage(self.state)["work_ids"])
+        with self.assertRaisesRegex(Refusal, "central work acceptance"):
+            self.apply("domain.campaign-closed", {"schema": "zap-domain/campaign-closed/1", "closure_id": "C1",
+                "classification": "revised", "active_outcome_id": "O2", "actual_benefit": "claimed",
+                "obligation_results": [{"obligation_id": key, "result": "accepted", "unmet_portion": "",
+                    "successor_ids": [], "evidence_ids": ["E"]} for key in sorted(obligations)],
+                "acceptance_ids": ["A1"], "integration_acceptance_ids": [], "deferral_ids": [],
+                "promotion_ids": [], "final_gate_evidence_ids": ["E"], "summary": "must refuse false carryover"})
+
+    def test_sparse_reuse_refuses_changed_guarantee_new_obligation_and_disposition(self):
+        obligations = self.accept_single_work()
+        self.propose_o2(guarantees=["different guarantee"])
+        with self.assertRaisesRegex(Refusal, "guarantee"):
+            build_sparse_review_transition(self.state, self.sparse_request())
+
+        self.state = make_state(single=True)
+        obligations = self.accept_single_work()
+        self.propose_o2(obligations=[{"id": "O2-NEW", "statement": "New uncovered work", "essential": False,
+            "source_refs": ["owner:charter"], "owners": [{"work_id": "X", "role": "implementation"}]}])
+        with self.assertRaisesRegex(Refusal, "new work obligation"):
+            build_sparse_review_transition(self.state, self.sparse_request())
+
+        self.state = make_state(single=True)
+        obligations = self.accept_single_work()
+        self.propose_o2()
+        changed = [{"obligation_id": obligations[0], "disposition": "excluded", "successor_ids": [],
+                    "unmet_portion": "removed", "reason": "authorized local change"}]
+        with self.assertRaisesRegex(Refusal, "obligation was changed"):
+            build_sparse_review_transition(self.state, self.sparse_request(changed=changed))
+
+    def test_sparse_reuse_refuses_changed_contract_and_stale_source(self):
+        self.accept_single_work()
+        revised = self.contract("X")
+        revised["goal"] = "Changed work subject"
+        self.apply("domain.task-contract-replaced", {"schema": "zap-domain/task-contract-replaced/1", "work_id": "X",
+                                                       "expected_version": 1, "contract": revised})
+        self.propose_o2()
+        with self.assertRaisesRegex(Refusal, "revalidation|contract"):
+            build_sparse_review_transition(self.state, self.sparse_request())
+
+        self.state = make_state(single=True)
+        self.accept_single_work()
+        self.propose_o2()
+        self.sources_applicable = False
+        with self.assertRaisesRegex(Refusal, "no longer applicable"):
+            build_sparse_review_transition(self.state, self.sparse_request())
 
     def test_adaptive_pivot_is_atomic_and_cannot_lose_obligations(self):
         self.activate()
