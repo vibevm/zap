@@ -3,7 +3,9 @@
 ##subagent-quiet-clause
 
 Middle gpt-5.6-sol/high; root dispatches after a coherent read-server boundary.
-Read R13-surface.md and reuse its named rules and current APIs. Own API/CLI/app,
+Read R13-surface.md and reuse its named rules and current APIs; also read the
+accepted ../REPAIR-R07-CORE-API.md and ../REPAIR-R08-EXECUTION-API.md for the
+required composed providers and sealed data/packet contracts. Own API/CLI/app,
 coordinate domain/runtime/core changes with their owners. No full boot, model
 or local Qwen call, external launcher, NEXT execution, Git or publication.
 
@@ -13,6 +15,12 @@ Arc<dyn ActionAdmissionProvider> produced by
 zap_domain::economics::ChangeControlAdmissionProvider::new(), and inject it
 through CommitServiceBuilder::action_admission_provider. Compose the actual
 basis, capacity/readiness, affected-job and fixed completion providers.
+Use the accepted R07 state-derived impact/effect-preflight/affected-scope
+providers and the R08 ApplicationPacketResolutionProvider with immutable
+historical replay captures. Required providers are fixed at service startup;
+declaring a route or returning a capability label does not implement it. The
+real runtime claim resolves a stored packet ID and operational IDs; do not
+restore the retired caller-built job, producer or eligibility payload.
 Missing required providers remain explicit unavailable state, never success
 stubs. Both direct close and runtime completion use the same evaluator.
 

@@ -2,7 +2,11 @@
 
 ##subagent-quiet-clause
 
-Middle implementation, gpt-5.6-sol/high. Start only on root dispatch after
+Middle implementation, gpt-5.6-sol/xhigh under the Owner's clarified setting.
+Medium effort is reserved for test executors evaluating ZAP behavior; it does
+not apply to workers developing ZAP code. This overrides older implementation
+effort headers in referenced packets.
+Start only on root dispatch after
 REPAIR-R08-EXECUTION-API.md is accepted. This bounded packet supersedes the
 implementation order in R08-lowering.md; it does not discard its requirements.
 

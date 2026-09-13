@@ -150,9 +150,10 @@ The operation supports materialization and exact binding without a caller mode:
   predecessor is superseded in this transaction, the rows remain `Planned`
   with no active job/candidate, and every semantic/version/contract binding is
   unchanged; and
-- a conflicting, partially matching, active, candidate-bearing or foreign-
-  origin row refuses. The kernel never patches an imported draft until it
-  happens to fit and never steals a Work ID from another current lowering.
+- a conflicting, partially matching, active, unresolved-current-candidate or
+  foreign-origin row refuses unless the R09 amendment below applies. The kernel
+  never patches an imported draft until it happens to fit and never steals a
+  Work ID from another current lowering.
 
 An imported inactive task contract has a separate lawful activation path. The
 kernel never treats `active: false` as executable and never parses legacy check
@@ -180,6 +181,73 @@ remain queryable by the existing record/query paths. Readiness adds the typed
 blocker `ReadinessBlocker::MissingLoweringOrigin { work_id }`, and packet/job
 resolution refuses them. A later authorized lowering can bind an exact draft or
 materialize a replacement through this one atomic operation.
+
+## R09 amendment: causal semantic re-lowering of existing Work IDs
+
+The unchanged-row rule above governs ordinary re-lowering. A return-caused,
+R07-admitted semantic lowering may lawfully change the same Work IDs under the
+exact current predecessor when it carries R09's applied reassessment and exact
+prestate CAS:
+
+```rust
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ReloweringWorkPrecondition {
+    pub work_id: WorkId,
+    pub expected_work_revision: Revision,
+    pub expected_state: WorkState,
+    pub expected_validation_generation: u64,
+    pub expected_contract_id: Option<ContractId>,
+    pub expected_contract_version: Option<Revision>,
+    pub expected_contract_digest: Option<ContractDigest>,
+    pub current_job_id: Option<JobId>,
+    pub current_candidate_id: Option<CandidateId>,
+}
+```
+
+The R09 reassessment sidecar owns the sorted precondition set; the lowering's
+`ReassessmentBinding` hashes and resolves that sidecar. For each changed work,
+the kernel requires the exact predecessor lowering origin and every precondition
+to match current state. The applied `AdaptiveReviewRecord` must contain the
+corresponding `ReviewWorkChange` and, for every current/recent job, an exact
+`JobReconciliationPlan` whose action and observed safe/effect state resolve the
+candidate or live effect.
+
+A resolved semantic update keeps the Work ID, writes a checked-next work
+revision, clears `active_job`, returns the new executable version to `Planned`,
+and increments `validation_generation` exactly once. A changed contract either
+compare-and-replaces the exact active contract at checked-next version or marks
+it inactive and inserts the explicitly bound replacement; its digest is
+recomputed from the canonical new contract. R07 effect simulation, actual
+mutation comparison, relevant after-basis and affected/dependent closure cover
+this entire batch.
+
+Prior `RuntimeJobRecord`, `CandidateResultRecord`,
+`CandidateProvenanceRecord`, evidence, packets and acceptances are never deleted
+or rewritten. The generation/contract/basis change makes old proof inapplicable
+to the new execution version through the existing `CurrentProofSet` rules while
+preserving the historical fact. A current candidate is allowed only when the
+review explicitly preserves it as historical input, requests revalidation, or
+supersedes/drops its old route. A starting/running/unknown effect must first be
+finished compatibly, drained, preserved at a safe boundary, or reconciled with
+affirmative no-effect evidence exactly as the review says.
+
+An unresolved current candidate, missing reconciliation row, unsafe/unknown
+effect, CAS mismatch, out-of-scope semantic change, or origin other than the
+exact predecessor refuses. Historical candidates alone do not block future
+lowering and a provider/model retry does not create a new approach or reset a
+counter.
+
+Amendment acceptance uses a real predecessor lowering, packet, R11 job and
+candidate, then applies an R09 review that explicitly revalidates that work and
+reconciles its terminal effect. The second lowering names the predecessor,
+reuses the same Work ID, supplies exact work/contract/job/candidate CAS, changes
+the affected contract semantics, bumps work revision/contract version/
+validation generation once, and commits through R07 preflight. The old job,
+candidate/provenance and proof remain readable but are not current for the new
+generation. Sibling cases with a stale CAS, foreign origin, missing candidate
+disposition, unresolved running/unknown effect, no generation bump or changed
+out-of-scope row refuse with zero mutation.
 
 ## Authoritative conservation and stage debt
 
@@ -318,11 +386,12 @@ The kernel performs these ordered changes in its one `ChangeSet`:
    current strategy for that outcome and supersede all current lowerings tied
    to that prior strategy. If it is already `Current`, require exact identity;
    `Superseded` refuses.
-3. Insert absent graph rows, bind exact unoriginated drafts, or rebind unchanged
-   rows owned by the exact predecessor being superseded; derive the canonical
-   `LoweredWorkBinding`s and replace every active obligation's owners with the
-   exact coverage roles. Supersede any current predecessor packets for rebound
-   work; a claimed/active/candidate-bearing row cannot be rebound.
+3. Insert absent graph rows, bind exact unoriginated drafts, rebind unchanged
+   predecessor-owned rows, or apply the R09 causal/CAS semantic update above;
+   derive the canonical `LoweredWorkBinding`s and replace every active
+   obligation's owners with the exact coverage roles. Supersede affected
+   predecessor packets. An active or current-candidate row without the exact
+   applied review reconciliation cannot be rebound.
 4. Supersede the prior current lowering for the same strategy/target, require
    `lowering.previous` to name it exactly, and insert the finalized lowering as
    `Current` with those bindings.

@@ -2,11 +2,19 @@
 
 ##subagent-quiet-clause
 
-Middle gpt-5.6-sol/high; start only on root dispatch. Root accepts and performs
+Middle implementation gpt-5.6-sol/xhigh; start only on root dispatch. Root accepts and performs
 Git/publication. Use the workspace/package and exact standing-file paths named
 in R13-surface.md; read that packet and reuse previously read rules. No full
 boot, private stewardship, local Qwen, external launcher, NEXT execution,
 blanket mutations or full host test panel. No production Python.
+
+Owner's clarified trial: native agents acting as test executors of the ZAP
+protocol use gpt-5.6-sol/medium. Agents developing ZAP and its test infrastructure
+use gpt-5.6-sol/xhigh. Record the actual model/effort observed for each native
+probe, not only requested settings. Give the test executor only its real
+product-generated packet; do not silently add coordinator reasoning or repair
+missing instructions so a stronger model conceals a protocol defect. Keep the
+usual acceptance gates and classify any unsupported setting truthfully.
 
 Read ../PLAN.md, ../RUST-API.md, ../API-AMENDMENTS.md, ../REQUIREMENTS.json,
 the accepted R04/R06/R07/R08/R09/R10/R11/R12/R13/R14/R15 reports and remaining
@@ -69,3 +77,10 @@ most five minutes during active work. Use actual clock, structured JSON,
 parse-before-atomic-replacement and previous-valid backup. Produce REPORT-R16.md
 and the complete evidence ledger, with concrete unresolved findings dispatched
 to their owner and retained on the campaign graph. Root determines acceptance.
+
+Observed native-harness fixture to retain: during this development run an
+explicitly interrupted collaboration agent still occupied a harness slot;
+spawning another agent returned thread-limit reached until the interrupted
+agent returned a final handoff. Treat execution interruption and release of
+host capacity as distinct observations. Do not assume every harness behaves
+identically or that a terminal-looking state proves the slot has been released.

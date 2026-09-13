@@ -15,15 +15,27 @@ design). Uncommitted Python economics code is unaccepted reference work. Its
 completion-ready/direct-close omission is recorded in ../REVIEW-CE-INTEGRATION.md.
 Never silently accept, discard, or mix it with Rust commits.
 
-Current frontier: R07 shared core/control implementation, R14 full legacy
-migration, and the bounded R09 bundle/return architecture repair. Active
-Middle workers are zap_r07_recovery and zap_r13_history_recovery; Senior
-zap_repair_core_api owns the narrow R09 contract. Root accepted
+Current frontier: R07 shared core/control implementation, R08 executable
+lowering/packet implementation, R14 bounded recovery repairs and R17 measured
+representation repair. Active coding workers are zap_r07_recovery and
+zap_r08_execution (actual native Sol/xhigh). R14 worker delivered
+REPORT-R14-FINAL.md and has no new coding task. Check the actual native tree
+before dispatch: terminal completion and capacity release can lag, and an
+unexpected pending_init state must be reconciled without restarting effects.
+Senior zap_repair_core_api completed the accepted R09/lifecycle design; the
+next assigned architecture task is packets/R17-representation-design.md.
+Root accepted
 REPAIR-R08-EXECUTION-API.md with SHA256
 7928422d8d160679ecbaa96badfac8de7d27cafcba63e1528d0b33a2c9417e32;
-packets/R08-executable-repair.md is ready for the first available Middle.
-A fresh Middle spawn failed the native thread limit even after the Senior
-completed; reuse existing role-compatible workers rather than external runners.
+The current R08/R09 documents are accepted with the overriding
+REVIEW-R08-R09-AMENDMENT.md (latest accepted SHA256
+cd9cc9d58ca13fe2db7e38810e59523a17ec9c8db81138ad049f27723902d2a2).
+It provides ordinary-review causation, actual post-review CAS and one
+lowering-owned generation increment. R07's accepted narrow amendments are
+AMENDMENT-R07-EFFECT-IDENTITY.md and REPAIR-R07-CORE-API-AMENDMENT.md.
+A replacement spawn initially failed after Senior completion; a later spawn
+after completion settled succeeded. A terminal-looking agent may still briefly
+occupy native capacity. Do not use external runners as a workaround.
 The pre-ROOT-0044 workers ended with confirmed usage-limit
 errors. The Owner said continue after fresh availability returned; no reset was
 redeemed by root. New workers use exact quiet packets and verified disk state.
@@ -32,7 +44,15 @@ Accepted: R00 plan, R01 architecture with recorded API amendments, R02 all279
 normative facts, R03 generic Rust foundation, R04 bounded durable storage kernel,
 repaired R05 registered domain foundation, R06 repaired knowledge/adaptive/proof,
 R11 bounded durable runtime, R13A corrected read server, R13D real history/diff,
-and R14-PREP bounded legacy corpus. These are scoped acceptances; full product
+and R14-PREP bounded legacy corpus. Actual inactive R14 destination now exists
+at C:/Users/olegc/.vibe/zap/migrations/next-rust-20260913T1959462179878Z, with
+revision1 and a receipt for425/212/64/1292. Root read it; terminal operation and
+bounded query/reopen succeeded, with unchanged source hashes. Process8696
+ended. Do not repeat the huge actual import/audit. R14 remains a candidate for
+the receipt/staging fixes and meaningful tests in packets/R14-recovery-finish.md.
+See
+PERFORMANCE-OBSERVATIONS.md for measured peak memory/storage cost requiring
+repair before the full product gate. These are scoped acceptances; full product
 composition and the remaining campaign are unfinished.
 
 Current Git head at this checkpoint:84094110 (reviewed boundaries and resumed
@@ -102,8 +122,18 @@ R15 portable package, R16/R17 integrated and scale evidence, R18 production gate
 R19 publication/install proof and stop. Existing NEXT remains inactive.
 Current exact worker state is in campaign.json and the task checkpoints; latest
 root recovery record is referenced by campaign.json.last_checkpoint.
-Roles: Senior gpt-5.6-sol/ultra for architecture/review, no production coding;
-Middle gpt-5.6-sol/high for implementation; Junior gpt-5.6-luna/high when useful.
+Owner clarified the effort split: use gpt-5.6-sol/medium for test executors used
+to evaluate ZAP behavior, and gpt-5.6-sol/xhigh for workers developing ZAP code.
+The earlier blanket medium implementation setting was a root interpretation
+error and is superseded. Existing in-flight workers retain their configured
+effort until a new configured launch; native followup has no effort override.
+Do not claim an effort change without an actual matching launch. Review and
+acceptance requirements are unchanged. Tests should expose protocol omissions,
+not rely on a stronger executor silently repairing them. This is the current
+development/test harness assignment, not an unrequested change to shipped
+ZAP users' role/model defaults.
+Standing architecture role remains Senior gpt-5.6-sol/ultra, no production
+coding; Junior gpt-5.6-luna/high when useful.
 Use native collaboration. No external launcher or local inference fallback.
 
 Checkpoint every coherent edit unit and before/after long commands, aiming at
