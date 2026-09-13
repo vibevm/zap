@@ -13,7 +13,7 @@ from .control_model import (
     _nullable_identity, _sync_active_pause, _sync_execution_mode,
     _validate_charter_against_state, active_policy, pause_applies,
 )
-from .control_policy import _affected_active_jobs, assess_action, validate_action, validate_assessment
+from .control_policy import _affected_active_jobs, _runtime_job_bindings, assess_action, validate_action, validate_assessment
 
 def _draft_charter(state: State, payload: dict[str, Any], event_id: str) -> None:
     control = _control_mut(state)
@@ -86,6 +86,7 @@ def _new_pause(
     scope_id: str | None,
     charter_revision: int,
     drain_targets: list[str],
+    drain_bindings: dict[str, dict[str, Any]],
     evaluated: dict[str, Any],
     event_id: str,
 ) -> dict[str, Any]:
@@ -99,7 +100,7 @@ def _new_pause(
         "charter_revision": charter_revision,
         "created_event_id": event_id,
         "evaluated": copy.deepcopy(evaluated),
-        "delivery": {"required": copy.deepcopy(drain_targets), "acknowledgements": {}, "state": "complete" if complete else "pending"},
+        "delivery": {"required": copy.deepcopy(drain_targets), "bindings": copy.deepcopy(drain_bindings), "acknowledgements": {}, "state": "complete" if complete else "pending"},
         "actual_safe_state": {"required": copy.deepcopy(drain_targets), "acknowledgements": {}, "state": "reached" if complete else "unknown"},
         "resume": None,
     }
@@ -123,6 +124,7 @@ def _action_assessed(state: State, payload: dict[str, Any], event_id: str) -> No
             report["scope_id"],
             report["charter_revision"],
             payload["assessment"]["drain_targets"],
+            _runtime_job_bindings(state, payload["assessment"]["drain_targets"]),
             {
                 "assessment_id": assessment_id,
                 "policy_result": report["policy_result"],
@@ -164,7 +166,8 @@ def _owner_stop(state: State, payload: dict[str, Any], event_id: str) -> None:
     need(payload["pause_id"] not in control["pauses"], "DUPLICATE", "pause id already exists")
     pause = _new_pause(
         payload["pause_id"], "owner", "campaign", None, policy["revision"],
-        payload["drain_targets"], {"policy_result": "owner_stop", "reason": payload["reason"]}, event_id,
+        payload["drain_targets"], _runtime_job_bindings(state, payload["drain_targets"]),
+        {"policy_result": "owner_stop", "reason": payload["reason"]}, event_id,
     )
     control["pauses"][payload["pause_id"]] = pause
     _sync_active_pause(control)
@@ -173,7 +176,7 @@ def _owner_stop(state: State, payload: dict[str, Any], event_id: str) -> None:
 
 def _delivery_payload(value: Any) -> dict[str, Any]:
     exact(value, {"pause_id", "pause_sha256", "subject_id", "state", "receipt_sha256"})
-    need(value["state"] in {"delivered", "unreachable"}, "PAUSE", "invalid stop-delivery state")
+    need(value["state"] in {"delivered", "unreachable", "already_terminal"}, "PAUSE", "invalid stop-delivery state")
     return {
         "pause_id": identity(value["pause_id"]),
         "pause_sha256": _hash(value["pause_sha256"], "pause hash"),
@@ -207,8 +210,35 @@ def _delivery_ack(state: State, payload: dict[str, Any], event_id: str) -> None:
     control = _control_mut(state)
     pause = _active_pause(control, payload["pause_id"], payload["pause_sha256"])
     need(payload["subject_id"] in pause["delivery"]["required"], "PAUSE", "delivery subject was not captured for this pause")
-    pause["delivery"]["acknowledgements"][payload["subject_id"]] = {"state": payload["state"], "receipt_sha256": payload["receipt_sha256"], "event_id": event_id}
-    pause["delivery"]["state"] = "complete" if all(pause["delivery"]["acknowledgements"].get(key, {}).get("state") == "delivered" for key in pause["delivery"]["required"]) else "pending"
+    acknowledgement = {"state": payload["state"], "receipt_sha256": payload["receipt_sha256"], "event_id": event_id}
+    if payload["state"] == "already_terminal":
+        binding = pause["delivery"]["bindings"].get(payload["subject_id"])
+        job = state.get("extensions", {}).get("runtime", {}).get("jobs", {}).get(payload["subject_id"])
+        need(isinstance(binding, dict) and isinstance(job, dict), "PAUSE", "captured runtime binding is unavailable")
+        transport = job.get("transport") if isinstance(job.get("transport"), dict) else None
+        descriptor_sha256 = job.get("descriptor_sha256")
+        need(
+            binding.get("attempt_id") is not None
+            and binding["attempt_id"] == job.get("attempt_id")
+            and isinstance(descriptor_sha256, str)
+            and transport is not None
+            and transport.get("accepted") is True
+            and transport.get("descriptor_sha256") == descriptor_sha256
+            and binding.get("descriptor_sha256") in {None, descriptor_sha256},
+            "PAUSE",
+            "terminal runtime attempt/descriptor differs from captured drain binding",
+        )
+        result = job.get("result") if isinstance(job.get("result"), dict) else None
+        terminal_state = result.get("state") if result else job.get("state")
+        observed_hash = job.get("result_sha256") if result else job.get("last_status_sha256")
+        need(terminal_state in {"succeeded", "failed"}, "PAUSE", "already-terminal delivery applies only to a natural terminal result")
+        need(result is not None and result.get("descriptor_sha256") == descriptor_sha256, "PAUSE", "terminal result descriptor differs from trusted submission")
+        need(observed_hash == payload["receipt_sha256"], "PAUSE", "terminal transport observation hash differs")
+        acknowledgement["signal_delivered"] = False
+        acknowledgement["terminal_binding"] = {"attempt_id": binding["attempt_id"], "descriptor_sha256": descriptor_sha256}
+    pause["delivery"]["acknowledgements"][payload["subject_id"]] = acknowledgement
+    complete_states = {"delivered", "already_terminal"}
+    pause["delivery"]["state"] = "complete" if all(pause["delivery"]["acknowledgements"].get(key, {}).get("state") in complete_states for key in pause["delivery"]["required"]) else "pending"
     _rehash_pause(pause)
 
 

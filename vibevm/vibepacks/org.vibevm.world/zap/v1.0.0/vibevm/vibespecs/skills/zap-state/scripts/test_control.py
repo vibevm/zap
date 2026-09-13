@@ -278,6 +278,73 @@ class AssessmentTests(unittest.TestCase):
 
 
 class PauseAndApproachTests(unittest.TestCase):
+    def test_natural_terminal_receipt_satisfies_delivery_but_not_safe_state(self):
+        state = activate(base_state())
+        descriptor = "c" * 64
+        state["extensions"]["runtime"] = {"jobs": {
+            "job-1": {
+                "job_id": "job-1", "attempt_id": "attempt-1",
+                "descriptor_sha256": descriptor, "state": "running",
+                "transport": {"accepted": True, "descriptor_sha256": descriptor},
+            },
+        }}
+        state = apply_command(state, command(state, "control.owner-stop-requested", {
+            "pause_id": "pause-natural", "campaign_id": "campaign-1", "base_sha256": H64,
+            "charter_revision": 1, "reason": "drain", "drain_targets": ["job-1"],
+        }, "pause-natural"), HANDLERS)
+        receipt = {"job_id": "job-1", "descriptor_sha256": descriptor, "state": "succeeded", "ready": True}
+        receipt_hash = sha(packed(receipt))
+        state["extensions"]["runtime"]["jobs"]["job-1"].update({
+            "state": "result_ready", "result": receipt, "result_sha256": receipt_hash,
+        })
+        pause = control_state(state)["pauses"]["pause-natural"]
+        with self.assertRaisesRegex(Refusal, "observation hash"):
+            apply_command(state, command(state, "control.pause-delivery-acknowledged", {
+                "pause_id": "pause-natural", "pause_sha256": pause["pause_sha256"],
+                "subject_id": "job-1", "state": "already_terminal",
+                "receipt_sha256": "d" * 64,
+            }, "natural-wrong"), HANDLERS)
+        state = apply_command(state, command(state, "control.pause-delivery-acknowledged", {
+            "pause_id": "pause-natural", "pause_sha256": pause["pause_sha256"],
+            "subject_id": "job-1", "state": "already_terminal",
+            "receipt_sha256": receipt_hash,
+        }, "natural-ack"), HANDLERS)
+        pause = control_state(state)["pauses"]["pause-natural"]
+        self.assertEqual(pause["delivery"]["state"], "complete")
+        self.assertFalse(pause["delivery"]["acknowledgements"]["job-1"]["signal_delivered"])
+        self.assertEqual(pause["actual_safe_state"]["state"], "unknown")
+        with self.assertRaisesRegex(Refusal, "safe state"):
+            apply_command(state, command(state, "control.pause-resumed", {
+                "pause_id": "pause-natural", "pause_sha256": pause["pause_sha256"],
+                "decision": "resume too early",
+            }, "natural-early-resume"), HANDLERS)
+
+    def test_interrupted_result_cannot_claim_natural_terminal_delivery(self):
+        state = activate(base_state())
+        descriptor = "c" * 64
+        state["extensions"]["runtime"] = {"jobs": {
+            "job-1": {
+                "job_id": "job-1", "attempt_id": "attempt-1",
+                "descriptor_sha256": descriptor, "state": "running",
+                "transport": {"accepted": True, "descriptor_sha256": descriptor},
+            },
+        }}
+        state = apply_command(state, command(state, "control.owner-stop-requested", {
+            "pause_id": "pause-interrupted", "campaign_id": "campaign-1", "base_sha256": H64,
+            "charter_revision": 1, "reason": "drain", "drain_targets": ["job-1"],
+        }, "pause-interrupted"), HANDLERS)
+        receipt = {"job_id": "job-1", "descriptor_sha256": descriptor, "state": "interrupted", "ready": True}
+        state["extensions"]["runtime"]["jobs"]["job-1"].update({
+            "state": "result_ready", "result": receipt, "result_sha256": sha(packed(receipt)),
+        })
+        pause = control_state(state)["pauses"]["pause-interrupted"]
+        with self.assertRaisesRegex(Refusal, "natural terminal"):
+            apply_command(state, command(state, "control.pause-delivery-acknowledged", {
+                "pause_id": "pause-interrupted", "pause_sha256": pause["pause_sha256"],
+                "subject_id": "job-1", "state": "already_terminal",
+                "receipt_sha256": sha(packed(receipt)),
+            }, "interrupted-ack"), HANDLERS)
+
     def test_semantic_approach_outcome_requires_known_problem_and_usable_evidence(self):
         state = activate(base_state())
         state["evidence"]["bad"] = {"result": "inconclusive"}

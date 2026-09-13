@@ -175,6 +175,23 @@ def _affected_active_jobs(state: State, scope: str, scope_id: str | None) -> lis
     return sorted(set(affected))
 
 
+def _runtime_job_bindings(state: State, job_ids: list[str]) -> dict[str, dict[str, Any]]:
+    runtime = state.get("extensions", {}).get("runtime", {})
+    jobs = runtime.get("jobs", {}) if isinstance(runtime, dict) else {}
+    need(isinstance(jobs, dict), "RUNTIME_STATE", "runtime jobs must be a mapping for drain binding")
+    bindings = {}
+    for job_id in job_ids:
+        row = jobs.get(job_id)
+        if not isinstance(row, dict):
+            bindings[job_id] = {"attempt_id": None, "descriptor_sha256": None}
+            continue
+        bindings[job_id] = {
+            "attempt_id": row.get("attempt_id"),
+            "descriptor_sha256": row.get("descriptor_sha256"),
+        }
+    return bindings
+
+
 def _source_capture_preconditions(state: State, captures: list[dict[str, str]]) -> tuple[bool, list[dict[str, Any]]]:
     if not captures:
         return True, []

@@ -55,7 +55,7 @@ CONTROL_EVENT_SCHEMAS: Mapping[str, Mapping[str, Any]] = MappingProxyType({
     }, "owner"),
     "control.pause-delivery-acknowledged": _event_schema({
         "pause_id": _ID_FIELD, "pause_sha256": _HASH_FIELD, "subject_id": _ID_FIELD,
-        "state": {"enum": ["delivered", "unreachable"]}, "receipt_sha256": _HASH_FIELD,
+        "state": {"enum": ["delivered", "unreachable", "already_terminal"]}, "receipt_sha256": _HASH_FIELD,
     }, "coordinator"),
     "control.pause-safe-state-acknowledged": _event_schema({
         "pause_id": _ID_FIELD, "pause_sha256": _HASH_FIELD, "run_id": _ID_FIELD,

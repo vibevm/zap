@@ -263,6 +263,14 @@ Resume requires the exact active pause ID and pause hash, completed delivery and
 safe-state acknowledgements, and a new owner event. Repeating a resume or using
 an exception twice is refused.
 
+A delivery acknowledgement may use `already_terminal` only when the pause
+captured that run's exact attempt/transport descriptor and a trusted runtime
+observation already records the same natural `succeeded` or `failed` receipt
+hash. It satisfies the delivery obligation while recording
+`signal_delivered=false`. It never establishes the separate task safe
+boundary. `stopped` and `interrupted` cannot masquerade as natural terminal
+delivery.
+
 ## Application service and trust boundary
 
 `ApplicationService(store, handlers, trust, host_principal=None, *,
