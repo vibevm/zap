@@ -21,6 +21,9 @@ use zap_wire::{
     Revision, StoreEpoch, StoreId, ZapError,
 };
 
+#[path = "support/information_seed.rs"]
+pub mod information_seed;
+
 struct EmptyAffectedJobs;
 
 impl AffectedJobProvider for EmptyAffectedJobs {
@@ -93,6 +96,7 @@ impl TrustBootstrapSource for TestBootstrap {
                 EventKind::parse("economics.change-admission-prepared")?,
                 EventKind::parse("economics.change-assessment-adjudicated")?,
                 EventKind::parse("planning.packet-rendered")?,
+                EventKind::parse(information_seed::InformationApplicabilitySeed::KIND)?,
             ]),
         })?;
         self.internal
@@ -125,6 +129,10 @@ impl TrustBootstrapSource for TestBootstrap {
                 EventKind::parse("domain.outcome-proposed")?,
                 EventKind::parse("domain.review-proposed")?,
                 EventKind::parse("economics.change-assessment-proposed")?,
+                EventKind::parse("information.opportunity-proposed")?,
+                EventKind::parse("information.selection-proposed")?,
+                EventKind::parse("milestone.plan-proposed")?,
+                EventKind::parse("milestone.refinement-proposed")?,
                 EventKind::parse("planning.strategy-proposed")?,
             ]),
         })?;
@@ -149,8 +157,17 @@ impl Harness {
     pub fn create(path: &std::path::Path) -> Result<Self, Box<dyn std::error::Error>> {
         let identity = identity()?;
         let records = zap_domain::record_set()?;
-        let cells = zap_domain::cell_set()?;
-        let routes = zap_domain::route_set()?;
+        let cells = zap_core::CellSet::compose([
+            zap_domain::cell_set()?,
+            zap_core::CellSet::single(information_seed::InformationApplicabilitySeedCell)?,
+        ])?;
+        let routes = zap_core::RouteRegistry::compose([
+            zap_domain::route_set()?,
+            zap_core::RouteRegistry::single(
+                EventKind::parse(information_seed::InformationApplicabilitySeed::KIND)?,
+                zap_wire::RouteClass::ServiceInternal,
+            ),
+        ])?;
         let store = RedbStore::create(path, identity.clone())?
             .with_records(records.clone(), QueryEpoch::new(1)?);
         store.rebuild_indexes_v2(

@@ -85,7 +85,9 @@ pub(super) fn derive(
     let exact_initial_missing = request.allows_missing_initial_work()
         && missing_work == request.direct_work_ids()
         && no_lowering_records(state)?;
-    if !missing_work.is_empty() && !exact_initial_missing {
+    let planned_milestone_missing =
+        super::allows_preexecution_milestone_missing(state, &subjects, &missing_work)?;
+    if !missing_work.is_empty() && !exact_initial_missing && !planned_milestone_missing {
         return Err(super::scope_error("affected scope names missing work"));
     }
 

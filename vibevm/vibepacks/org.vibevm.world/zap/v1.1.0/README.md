@@ -154,6 +154,9 @@ states. Data construction remains separate from trusted admission.
 | Transactions, history and artifacts | [Store](vibevm/vibespecs/flows/zap/ZAP-RUST-STORE-GUIDE.md) |
 | Frozen codecs and migration input | [Legacy](vibevm/vibespecs/flows/zap/ZAP-RUST-LEGACY-GUIDE.md) |
 | Strategic overview, object cards, typed relations and descriptive assessments | [Strategic map](vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP-GUIDE.md) |
+| Durable intermediate results and historical/current achievement | [Milestones](vibevm/vibespecs/flows/zap/ZAP-MILESTONES-GUIDE.md) |
+| Adopted milestone plans and selective work refinement | [Milestone planning](vibevm/vibespecs/flows/zap/ZAP-MILESTONE-PLANNING-GUIDE.md) |
+| Information opportunities, decision value and research reuse | [Information](vibevm/vibespecs/flows/zap/ZAP-INFORMATION-GUIDE.md) |
 
 ## Strategic map data
 
@@ -172,6 +175,16 @@ from a resource-feasible schedule.
 The [strategic map contract](vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP.xml)
 defines the source, continuation, descriptive-data and authority boundaries.
 Visual layout, towns, terrain, icons and animation are future client concerns.
+
+The [milestone contract](vibevm/vibespecs/flows/zap/ZAP-MILESTONES.xml) adds
+durable intermediate result boundaries over ordinary Work. Milestones retain
+identity and witnessed achievement across decomposition changes; current proof
+validity is distinct from historical achievement. An adopted milestone plan
+conserves required obligations and distant horizons, while its refinement records
+justify new work at the actual lowering boundary. Information opportunities are
+selected for their effect on a decision and use ordinary admitted research work.
+Typed transformations expose conservation and proof consequences before applying
+a changed map. These APIs leave graphical rendering to a later client.
 
 ## Scope
 

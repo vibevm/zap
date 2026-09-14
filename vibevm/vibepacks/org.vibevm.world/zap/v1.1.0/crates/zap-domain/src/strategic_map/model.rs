@@ -1,8 +1,10 @@
 use serde::{Deserialize, Serialize};
 use specmark::spec;
 use zap_wire::{
-    BaseId, BoundedText, ContractId, EvidenceId, ObligationId, OutcomeId, PayloadDigest,
-    QueryEpoch, ResourceId, Revision, SourceId, StoreId, StrategicRevisionId, SubjectRef, WorkId,
+    BaseId, BoundedText, ContractId, EvidenceId, ForkId, InformationOpportunityId,
+    MilestoneAchievementId, MilestoneId, MilestoneRevisionId, ObligationId, OutcomeId,
+    PayloadDigest, QueryEpoch, ResourceId, Revision, SourceId, StoreId, StrategicRevisionId,
+    SubjectRef, WorkId,
 };
 
 use crate::knowledge::{KnowledgeEdgeId, RegionId};
@@ -22,6 +24,12 @@ pub enum MapObjectRef {
     Viewer(ViewerNodeId),
     Strategy(StrategicRevisionId),
     Resource(ResourceId),
+    Milestone(MilestoneId),
+    InformationOpportunity(InformationOpportunityId),
+    StrategicFork {
+        strategy_id: StrategicRevisionId,
+        fork_id: ForkId,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
@@ -41,6 +49,9 @@ pub enum MapSemanticType {
     Decision,
     CandidateReview,
     ExecutionResource,
+    Milestone,
+    InformationOpportunity,
+    StrategicFork,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
@@ -67,6 +78,8 @@ pub enum MapTextSource {
     ObligationRecord,
     KnowledgeRecord,
     ReferenceIdentity,
+    MilestoneRecord,
+    InformationOpportunityRecord,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -112,6 +125,14 @@ pub enum MapAcceptanceView {
     OutcomeState {
         status: LifecycleStatus,
     },
+    MilestoneState {
+        lifecycle: crate::milestones::MilestoneLifecycle,
+        latest_achievement_id: Option<MilestoneAchievementId>,
+    },
+    InformationOpportunityState {
+        freshness: crate::information::OpportunityFreshness,
+        selected_work_id: Option<WorkId>,
+    },
     NotApplicable {
         reason: BoundedText<4096>,
     },
@@ -143,6 +164,11 @@ pub enum MapRelationshipKind {
     SourceReference,
     EvidenceReference,
     Alternative,
+    ContributesTo,
+    MilestonePreparationPrerequisite,
+    MilestoneAchievementPrerequisite,
+    DecisionSupport,
+    SelectedInformationWork,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
@@ -191,6 +217,15 @@ pub enum MapRelationshipSource {
         evidence_id: EvidenceId,
         revision: Revision,
     },
+    MilestoneRevision {
+        milestone_id: MilestoneId,
+        revision_id: MilestoneRevisionId,
+        revision: Revision,
+    },
+    InformationOpportunity {
+        opportunity_id: InformationOpportunityId,
+        revision: Revision,
+    },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -220,6 +255,7 @@ pub enum MapRelationshipGap {
     UnassessedSourceScope,
     RecordRelationsNotProjected { semantic_type: MapSemanticType },
     UnrepresentableSubject { subject: SubjectRef },
+    UnsupportedInformationDecisionBasis,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -282,7 +318,28 @@ pub struct SemanticCard {
     pub assessment_state: MapAssessmentState,
     pub assessment: Option<MapAssessmentView>,
     pub observation_revision: Revision,
-    pub underlying: Option<ViewerDetail>,
+    pub underlying: Option<MapUnderlyingDetail>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+#[spec(documents = "spec://org.vibevm.world/zap/flows/zap/ZAP-STRATEGIC-MAP-GUIDE#semantic-cards")]
+pub enum MapUnderlyingDetail {
+    Viewer {
+        detail: Box<ViewerDetail>,
+    },
+    Milestone {
+        head: crate::milestones::MilestoneRecord,
+        current_revision: Box<crate::milestones::MilestoneRevisionRecord>,
+    },
+    InformationOpportunity {
+        opportunity: Box<crate::information::InformationOpportunityRecord>,
+        selection: Option<Box<crate::information::InformationSelectionRecord>>,
+    },
+    StrategicFork {
+        strategy_id: StrategicRevisionId,
+        fork_id: ForkId,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]

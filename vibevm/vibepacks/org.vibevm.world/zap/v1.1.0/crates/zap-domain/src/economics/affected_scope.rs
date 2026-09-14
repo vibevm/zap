@@ -2,28 +2,31 @@ specmark::scope!("spec://org.vibevm.world/zap/flows/zap/ZAP-CHANGE-ECONOMICS#SER
 
 mod indexed;
 
-#[cfg(test)]
-use std::collections::{BTreeMap, BTreeSet};
+#[cfg(any(test, debug_assertions))]
+use std::collections::BTreeMap;
+use std::collections::BTreeSet;
+use std::ops::Bound;
 
 use specmark::spec;
-#[cfg(test)]
+#[cfg(any(test, debug_assertions))]
 use zap_core::AffectedScopeCompleteness;
 use zap_core::{
     AffectedScopeProvider, AffectedScopeRequest, AffectedScopeView, DerivedAffectedScope,
-    IndependenceRequest, IndependenceView, StateReader, StateReaderExt,
+    IndependenceRequest, IndependenceView, KeyRange, PageLimit, StateReader, StateReaderExt,
+    StoredRecord,
 };
-use zap_wire::ZapError;
-#[cfg(test)]
-use zap_wire::{CanonicalOutput, CodecEpoch, RelevantBasisDigest, SubjectRef};
+#[cfg(any(test, debug_assertions))]
+use zap_wire::{CanonicalOutput, CodecEpoch, RelevantBasisDigest};
+use zap_wire::{SubjectRef, ZapError};
 
-#[cfg(test)]
-use crate::control::{ObligationRecord, TaskContractRecord, WorkRecord};
+use crate::control::WorkRecord;
+#[cfg(any(test, debug_assertions))]
+use crate::control::{ObligationRecord, TaskContractRecord};
 use crate::economics::ChangeHoldRecord;
-#[cfg(test)]
+#[cfg(any(test, debug_assertions))]
 use crate::knowledge::{ClosureStatus, KnowledgeClosureRecord, KnowledgeDependencyRecord};
-#[cfg(test)]
 use crate::lowering::LoweringRecord;
-#[cfg(test)]
+#[cfg(any(test, debug_assertions))]
 use crate::seams::scan_all;
 
 #[spec(
@@ -31,10 +34,10 @@ use crate::seams::scan_all;
 )]
 pub struct DomainAffectedScopeProvider;
 
-#[cfg(test)]
+#[cfg(any(test, debug_assertions))]
 pub(crate) struct FullScanAffectedScopeProvider;
 
-#[cfg(test)]
+#[cfg(any(test, debug_assertions))]
 impl AffectedScopeProvider for FullScanAffectedScopeProvider {
     fn derive(
         &self,
@@ -91,7 +94,9 @@ impl AffectedScopeProvider for FullScanAffectedScopeProvider {
         let exact_initial_missing = request.allows_missing_initial_work()
             && missing_work == request.direct_work_ids()
             && scan_all::<LoweringRecord>(state)?.is_empty();
-        if !missing_work.is_empty() && !exact_initial_missing {
+        let planned_milestone_missing =
+            allows_preexecution_milestone_missing(state, &subjects, &missing_work)?;
+        if !missing_work.is_empty() && !exact_initial_missing && !planned_milestone_missing {
             return Err(scope_error("affected scope names missing work"));
         }
 
@@ -293,7 +298,17 @@ impl AffectedScopeProvider for DomainAffectedScopeProvider {
         state: &dyn StateReader,
         request: &AffectedScopeRequest,
     ) -> Result<DerivedAffectedScope, ZapError> {
-        indexed::derive(state, request)
+        let indexed = indexed::derive(state, request)?;
+        #[cfg(debug_assertions)]
+        if preexecution_milestone_request(state, request)? {
+            let reference = FullScanAffectedScopeProvider.derive(state, request)?;
+            if indexed != reference {
+                return Err(scope_error(
+                    "indexed affected scope differs from its full-scan oracle",
+                ));
+            }
+        }
+        Ok(indexed)
     }
 
     fn assess_independence(
@@ -339,6 +354,98 @@ impl AffectedScopeProvider for DomainAffectedScopeProvider {
             unknown,
         )
     }
+}
+
+fn preexecution_milestone_request(
+    state: &dyn StateReader,
+    request: &AffectedScopeRequest,
+) -> Result<bool, ZapError> {
+    let mut adopted = false;
+    for subject in request.roots() {
+        if let SubjectRef::Outcome(id) = subject
+            && state
+                .get_typed::<crate::milestone_planning::MilestonePlanStateRecord>(id)?
+                .is_some()
+        {
+            adopted = true;
+            break;
+        }
+    }
+    Ok(adopted && !has_any::<WorkRecord>(state)? && !has_any::<LoweringRecord>(state)?)
+}
+
+fn allows_preexecution_milestone_missing(
+    state: &dyn StateReader,
+    subjects: &BTreeSet<SubjectRef>,
+    missing_work: &[zap_wire::WorkId],
+) -> Result<bool, ZapError> {
+    if missing_work.is_empty() {
+        return Ok(false);
+    }
+    let states = subjects
+        .iter()
+        .filter_map(|subject| match subject {
+            SubjectRef::Outcome(id) => {
+                Some(state.get_typed::<crate::milestone_planning::MilestonePlanStateRecord>(id))
+            }
+            _ => None,
+        })
+        .collect::<Result<Vec<_>, ZapError>>()?
+        .into_iter()
+        .flatten()
+        .collect::<Vec<_>>();
+    if states.len() != 1 {
+        return Ok(false);
+    }
+    let plan = state
+        .get_typed::<crate::milestone_planning::MilestonePlanProposalRecord>(
+            &states[0].adopted_plan,
+        )?
+        .ok_or_else(|| scope_error("adopted milestone plan is missing"))?;
+    let strategy = state
+        .get_typed::<crate::lowering::StrategicPlanRecord>(&plan.strategic_revision_id)?
+        .ok_or_else(|| scope_error("adopted milestone strategy is missing"))?;
+    if plan.key != states[0].adopted_plan
+        || plan.key.outcome_id != states[0].outcome_id
+        || plan.semantic_fingerprint != states[0].adopted_fingerprint
+        || crate::milestone_planning::milestone_plan_fingerprint(&plan)?
+            != plan.semantic_fingerprint
+        || strategy.outcome_id != states[0].outcome_id
+        || strategy.revision != plan.strategic_record_revision
+        || strategy.semantic_digest != plan.strategic_semantic_digest
+        || strategy.strategic_revision_id != plan.strategic_revision_id
+        || strategy.state == crate::lowering::PlanningRevisionState::Superseded
+        || has_any::<WorkRecord>(state)?
+        || has_any::<LoweringRecord>(state)?
+    {
+        return Ok(false);
+    }
+    let mut allowed = strategy
+        .nodes
+        .into_iter()
+        .map(|node| node.work_id)
+        .collect::<BTreeSet<_>>();
+    for subject in subjects {
+        if let SubjectRef::Obligation(id) = subject
+            && let Some(obligation) = state.get_typed::<crate::control::ObligationRecord>(id)?
+        {
+            allowed.extend(obligation.owners.into_iter().map(|owner| owner.work_id));
+        }
+    }
+    Ok(missing_work.iter().all(|id| allowed.contains(id)))
+}
+
+fn has_any<R: StoredRecord>(state: &dyn StateReader) -> Result<bool, ZapError> {
+    Ok(!state
+        .scan_typed::<R>(
+            KeyRange {
+                start: Bound::Unbounded,
+                end: Bound::Unbounded,
+            },
+            PageLimit::within(1, 1)?,
+        )?
+        .items
+        .is_empty())
 }
 
 pub(super) fn scope_error(message: &'static str) -> ZapError {

@@ -3,12 +3,22 @@ use std::process::Command;
 
 use tempfile::tempdir;
 use zap_api::{MachineRequest, MachineResponse, QueryInput};
+use zap_domain::information::{
+    InformationOpportunityQueryInput, InformationOpportunityQueryResult,
+};
+use zap_domain::milestone_planning::{
+    MilestonePlanView, MilestonePlanViewInput, MilestonePlanViewStatus,
+};
+use zap_domain::milestones::{MilestoneReadInput, MilestoneView};
 use zap_domain::strategic_map::{
     MapObjectInput, MapObjectRef, MapObjectResult, MapOverviewFilter, MapOverviewInput,
     MapOverviewResult,
 };
 use zap_domain::viewer_queries::ViewerNodeId;
-use zap_wire::{CanonicalDecode, CanonicalEncode, CanonicalPayload, CodecEpoch, QueryId, Revision};
+use zap_wire::{
+    CanonicalDecode, CanonicalEncode, CanonicalPayload, CodecEpoch, DecisionId, MilestoneId,
+    OutcomeId, QueryId, Revision,
+};
 
 #[path = "../../zap-app/tests/strategic_map_service/seed.rs"]
 mod seed;
@@ -19,6 +29,7 @@ fn compiled_cli_reads_registered_strategic_map_queries() -> Result<(), Box<dyn s
     let store_path = root.path().join("strategic-map-cli.redb");
     let seed = seed::SeedHarness::create(&store_path)?;
     let diamond = seed.seed_diamond()?;
+    seed.seed_map_objects(&diamond, Revision::new(1))?;
     drop(seed);
     let overview = run_query::<MapOverviewResult, _>(
         root.path(),
@@ -42,7 +53,46 @@ fn compiled_cli_reads_registered_strategic_map_queries() -> Result<(), Box<dyn s
         })
         .collect::<BTreeSet<_>>();
     assert_eq!(ids, diamond.work_ids.iter().cloned().collect());
-    assert_eq!(overview.through_revision, Revision::new(1));
+    assert_eq!(overview.through_revision, Revision::new(2));
+    let milestone = run_query::<MilestoneView, _>(
+        root.path(),
+        &store_path,
+        "milestone",
+        "zap.milestone.read",
+        &MilestoneReadInput {
+            milestone_id: MilestoneId::parse("milestone.map.result")?,
+            evaluate_current_achievement: false,
+        },
+    )?;
+    assert_eq!(
+        milestone.current_revision.definition.name.as_str(),
+        "Verified map result"
+    );
+    let information = run_query::<InformationOpportunityQueryResult, _>(
+        root.path(),
+        &store_path,
+        "information",
+        "zap.information.opportunities.v1",
+        &InformationOpportunityQueryInput {
+            decision_id: DecisionId::parse("decision.map.cli")?,
+            cursor: None,
+            limit: 1,
+            operation_budget: 4,
+        },
+    )?;
+    assert!(information.recommendations.is_empty());
+    let planning = run_query::<MilestonePlanView, _>(
+        root.path(),
+        &store_path,
+        "planning",
+        "zap.milestone.plan",
+        &MilestonePlanViewInput {
+            outcome_id: OutcomeId::parse("outcome.map")?,
+            plan_key: None,
+            maximum_milestones: 8,
+        },
+    )?;
+    assert_eq!(planning.status, MilestonePlanViewStatus::NoAdoptedPlan);
     let target = overview
         .cards
         .iter()
@@ -55,7 +105,7 @@ fn compiled_cli_reads_registered_strategic_map_queries() -> Result<(), Box<dyn s
         .ok_or("CLI assessment source fingerprint missing")?;
 
     let mutator = seed::SeedHarness::open(&store_path)?;
-    mutator.rename_target(&diamond.target_id, Revision::new(1))?;
+    mutator.rename_target(&diamond.target_id, Revision::new(2))?;
     drop(mutator);
     let object = run_query::<MapObjectResult, _>(
         root.path(),
@@ -70,7 +120,7 @@ fn compiled_cli_reads_registered_strategic_map_queries() -> Result<(), Box<dyn s
             operation_budget: 64,
         },
     )?;
-    assert_eq!(object.through_revision, Revision::new(2));
+    assert_eq!(object.through_revision, Revision::new(3));
     assert_ne!(
         object.card.assessment_source_fingerprint,
         Some(before_fingerprint)

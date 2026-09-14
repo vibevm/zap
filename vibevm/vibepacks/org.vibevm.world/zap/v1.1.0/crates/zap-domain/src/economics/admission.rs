@@ -488,6 +488,25 @@ fn candidate_request(
     {
         return AffectedScopeRequest::initial_lowering_root(target.clone());
     }
+    if request.impact.class == zap_core::ActionImpactClass::InitialBaseline
+        && matches!(
+            request.impact_request.rule(),
+            zap_core::ActionImpactRule::InitialMilestonePlanOrSemantic { .. }
+        )
+    {
+        let mut absent_work = request.impact_request.work_ids().to_vec();
+        for subject in request.impact_request.subjects() {
+            if let SubjectRef::Obligation(id) = subject
+                && let Some(obligation) = state.get_typed::<crate::control::ObligationRecord>(id)?
+            {
+                absent_work.extend(obligation.owners.into_iter().map(|owner| owner.work_id));
+            }
+        }
+        return AffectedScopeRequest::initial_milestone_plan(
+            request.impact_request.subjects().to_vec(),
+            absent_work,
+        );
+    }
     let mut roots = request.impact_request.subjects().to_vec();
     let mut work = request.impact_request.work_ids().to_vec();
     if request.impact.class == zap_core::ActionImpactClass::SemanticChange {

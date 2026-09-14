@@ -22,7 +22,7 @@
     "conform_baseline_total": 0,
     "conform_baseline_by_rule": {},
     "files_over_budget": 0,
-    "files_in_danger_band": 28,
+    "files_in_danger_band": 30,
     "deviation_debt": 0,
     "pub_doctest_promotion_candidates": [],
     "pub_doctest_drain_backlog": [],
@@ -30,6 +30,10 @@
       {
         "file": "crates/zap-store/src/engine.rs",
         "lines": 598
+      },
+      {
+        "file": "crates/zap-domain/src/lowering/transitions.rs",
+        "lines": 597
       },
       {
         "file": "crates/zap-domain/src/lowering/transitions/validation.rs",
@@ -52,8 +56,8 @@
         "lines": 594
       },
       {
-        "file": "crates/zap-domain/src/strategic_map/cards.rs",
-        "lines": 592
+        "file": "crates/zap-domain/src/milestones/transform_validation.rs",
+        "lines": 594
       },
       {
         "file": "crates/zap-core/src/commit/service.rs",
@@ -68,12 +72,12 @@
         "lines": 589
       },
       {
-        "file": "crates/zap-domain/src/lowering/transitions.rs",
+        "file": "crates/zap-runtime/src/spawn_recovery.rs",
         "lines": 589
       },
       {
-        "file": "crates/zap-runtime/src/spawn_recovery.rs",
-        "lines": 589
+        "file": "crates/zap-core/src/execution_views/affected_scope.rs",
+        "lines": 588
       },
       {
         "file": "crates/zap-core/src/effects.rs",
@@ -84,12 +88,20 @@
         "lines": 583
       },
       {
+        "file": "crates/zap-domain/src/economics/admission.rs",
+        "lines": 582
+      },
+      {
         "file": "crates/zap-domain/src/lowering/offline/model.rs",
         "lines": 581
       },
       {
         "file": "crates/zap-app/src/runtime_service/read_port.rs",
         "lines": 580
+      },
+      {
+        "file": "crates/zap-domain/src/information/queries.rs",
+        "lines": 578
       },
       {
         "file": "crates/zap-core/src/trust.rs",
@@ -108,16 +120,12 @@
         "lines": 566
       },
       {
-        "file": "crates/zap-core/src/execution_views/affected_scope.rs",
+        "file": "crates/zap-domain/src/strategic_map/cards.rs",
         "lines": 566
       },
       {
         "file": "crates/zap-api/src/commands.rs",
         "lines": 565
-      },
-      {
-        "file": "crates/zap-domain/src/economics/admission.rs",
-        "lines": 563
       },
       {
         "file": "crates/zap-domain/src/knowledge/basis_helpers.rs",
@@ -233,7 +241,7 @@
         },
         {
           "file": "crates/zap-core/src/execution_views/affected_scope.rs",
-          "lines": 566
+          "lines": 588
         },
         {
           "file": "crates/zap-core/src/trust.rs",
@@ -246,8 +254,8 @@
       "crate": "zap-domain",
       "gated": true,
       "pub_doctest_gated": true,
-      "pub_types": 476,
-      "typed_doctested": 476,
+      "pub_types": 572,
+      "typed_doctested": 572,
       "typed_gap": 0,
       "error_enums": 0,
       "error_enums_missing_req": [],
@@ -267,7 +275,11 @@
         },
         {
           "file": "crates/zap-domain/src/economics/admission.rs",
-          "lines": 563
+          "lines": 582
+        },
+        {
+          "file": "crates/zap-domain/src/information/queries.rs",
+          "lines": 578
         },
         {
           "file": "crates/zap-domain/src/intent/cells.rs",
@@ -303,7 +315,11 @@
         },
         {
           "file": "crates/zap-domain/src/lowering/transitions.rs",
-          "lines": 589
+          "lines": 597
+        },
+        {
+          "file": "crates/zap-domain/src/milestones/transform_validation.rs",
+          "lines": 594
         },
         {
           "file": "crates/zap-domain/src/owner_control/cells.rs",
@@ -311,7 +327,7 @@
         },
         {
           "file": "crates/zap-domain/src/strategic_map/cards.rs",
-          "lines": 592
+          "lines": 566
         },
         {
           "file": "crates/zap-domain/src/viewer_queries/indexed.rs",

@@ -132,6 +132,9 @@ pub(super) fn validate_action_impact(
         ) | (
             crate::ActionImpactRule::InitialLoweringOrSemantic { .. },
             crate::ActionImpactClass::InitialBaseline | crate::ActionImpactClass::SemanticChange,
+        ) | (
+            crate::ActionImpactRule::InitialMilestonePlanOrSemantic { .. },
+            crate::ActionImpactClass::InitialBaseline | crate::ActionImpactClass::SemanticChange,
         )
     );
     let expected = crate::ActionImpactView::new(

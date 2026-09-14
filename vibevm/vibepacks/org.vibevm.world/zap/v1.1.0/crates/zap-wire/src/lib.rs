@@ -40,11 +40,12 @@ pub use identifiers::{
     ChangeBaselineId, ChangeId, CharterId, ClosureId, CommandId, CompletionProviderId, ConditionId,
     ContractId, ControllerId, CostForecastId, CredentialId, DecisionId, DeferralId, DispatchId,
     DreamId, EffectId, EncounterId, EventId, EvidenceId, FactId, ForkId, GoalId, HarnessId, HoldId,
-    IntegrationAcceptanceId, IntentId, JobId, LegacyId, LoweringId, MessageId, ObligationId,
-    ObservationRef, OperationId, OutcomeId, PacketId, PauseId, PolicyId, PrincipalId, ProblemId,
-    PromotionId, QueryId, ReconciliationRequestId, ResourceId, ReviewId, RiskId, SemanticRequestId,
-    SourceId, StageAcceptanceId, StopRuleId, StoreId, StrategicRevisionId, TransactionId,
-    VerificationId, WaitId, WorkAcceptanceId, WorkId,
+    InformationOpportunityId, InformationSelectionId, IntegrationAcceptanceId, IntentId, JobId,
+    LegacyId, LoweringId, MessageId, MilestoneAchievementId, MilestoneId, MilestoneRevisionId,
+    ObligationId, ObservationRef, OperationId, OutcomeId, PacketId, PauseId, PolicyId, PrincipalId,
+    ProblemId, PromotionId, QueryId, ReconciliationRequestId, ResourceId, ReviewId, RiskId,
+    SemanticRequestId, SourceId, StageAcceptanceId, StopRuleId, StoreId, StrategicRevisionId,
+    TransactionId, VerificationId, WaitId, WorkAcceptanceId, WorkId,
 };
 pub use route::{ActionClass, ControlClass, EventKind, RouteClass};
 pub use subject::SubjectRef;

@@ -34,6 +34,16 @@ result's continuation; an empty filtered page can still have more memberships.
 Distinguish canonical text, optional descriptive assessments, missing data and
 stale data. A card's reported Work state is not a runtime readiness decision.
 
+For canonical intermediate results, use the registered milestone, planning and
+information queries described in the [milestone guide](../../flows/zap/ZAP-MILESTONES-GUIDE.md),
+[planning guide](../../flows/zap/ZAP-MILESTONE-PLANNING-GUIDE.md) and
+[information guide](../../flows/zap/ZAP-INFORMATION-GUIDE.md). Inspect the adopted
+plan separately from proposals; read the focus, required obligations and distant
+horizons before recommending more work. Historical achievement remains visible
+when current evidence needs revalidation. A recommendation with unknown benefit,
+cost or applicability is not a positive selection verdict. Respect each query's
+actual read/proof-cost disclosure as well as its output limit.
+
 Keep remaining effort, elapsed time, passive wait, structural complexity,
 executor-relative difficulty and uncertainty separate. Do not fill missing
 estimates with zero or parse cost prose into numeric distance. Descriptive

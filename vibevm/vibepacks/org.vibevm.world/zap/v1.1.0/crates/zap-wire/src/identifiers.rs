@@ -157,6 +157,11 @@ declare_ids!(
     CostForecastId,
     ProblemId,
     ActionExceptionId,
+    MilestoneId,
+    MilestoneRevisionId,
+    MilestoneAchievementId,
+    InformationOpportunityId,
+    InformationSelectionId,
 );
 
 /// An exact legacy identity retained as migration evidence.

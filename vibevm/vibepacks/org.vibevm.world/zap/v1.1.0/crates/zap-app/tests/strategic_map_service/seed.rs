@@ -9,9 +9,11 @@ use zap_core::{
     TrustBootstrapSource, TrustRegistrar, ValidatedCommand,
 };
 use zap_domain::control::{TaskContractRecord, WorkRecord};
+use zap_domain::knowledge::{RegionRecord, SourceApplicabilityRecord, SourceRecord};
 use zap_domain::lowering::{
     PlanningRevisionState, StrategicNode, StrategicPlanRecord, strategy_digest,
 };
+use zap_domain::milestones::{MilestoneRecord, MilestoneRevisionRecord};
 use zap_domain::seams::{
     DeliveryRoute, DomainMutation, MaturityStage, TaskContract, WorkKind, WorkState, WorkType,
 };
@@ -19,9 +21,10 @@ use zap_store::RedbStore;
 use zap_wire::{
     BaseId, BasisBinding, BoundedText, CampaignId, CanonicalCommandFrame, CanonicalPayload,
     CodecEpoch, CommandHeader, CommandHeaderInput, CommandId, CommandReason, CommandReasonInput,
-    ContractDigest, ContractId, EventId, EventKind, IntentId, ObligationId, OperationId, OutcomeId,
-    PrincipalId, ProtocolEpoch, QueryEpoch, ReducerEpoch, RelevantBasisDigest, Revision,
-    RouteClass, StoreEpoch, StoreId, StrategicRevisionId, WorkId, ZapError,
+    ContractDigest, ContractId, EventId, EventKind, IntentId, ObligationId, ObservationRef,
+    OperationId, OutcomeId, PrincipalId, ProtocolEpoch, QueryEpoch, ReducerEpoch,
+    RelevantBasisDigest, Revision, RouteClass, StoreEpoch, StoreId, StrategicRevisionId, WorkId,
+    ZapError,
 };
 
 const SEED_KIND: &str = "test.strategic-map-source-mutated";
@@ -39,6 +42,13 @@ enum SeedMutation {
     RenameWork {
         work_id: WorkId,
         title: BoundedText<4096>,
+    },
+    SeedMapObjects {
+        source: Box<SourceRecord>,
+        applicability: Box<SourceApplicabilityRecord>,
+        region: Box<RegionRecord>,
+        milestone: MilestoneRecord,
+        milestone_revision: Box<MilestoneRevisionRecord>,
     },
 }
 
@@ -69,6 +79,11 @@ impl TransitionCell for SeedCell {
             StrategicPlanRecord::FAMILY,
             WorkRecord::FAMILY,
             TaskContractRecord::FAMILY,
+            SourceRecord::FAMILY,
+            SourceApplicabilityRecord::FAMILY,
+            RegionRecord::FAMILY,
+            MilestoneRecord::FAMILY,
+            MilestoneRevisionRecord::FAMILY,
         ]
         .into_iter()
         .map(RecordFamily::parse)
@@ -116,6 +131,19 @@ impl TransitionCell for SeedCell {
                 work.revision = command.header().expected_revision().checked_next()?;
                 changes.replace(expected, work)?;
             }
+            SeedMutation::SeedMapObjects {
+                source,
+                applicability,
+                region,
+                milestone,
+                milestone_revision,
+            } => {
+                changes.insert(source.as_ref().clone())?;
+                changes.insert(applicability.as_ref().clone())?;
+                changes.insert(region.as_ref().clone())?;
+                changes.insert(milestone.clone())?;
+                changes.insert(milestone_revision.as_ref().clone())?;
+            }
         }
         Ok(DomainMutation {
             revision: command.header().expected_revision().checked_next()?,
@@ -150,6 +178,7 @@ pub struct SeedHarness {
 
 pub struct DiamondFixture {
     pub strategy_id: StrategicRevisionId,
+    pub strategy_semantic_digest: zap_wire::PayloadDigest,
     pub work_ids: Vec<WorkId>,
     pub target_id: WorkId,
 }
@@ -236,6 +265,25 @@ impl SeedHarness {
         )
     }
 
+    pub fn seed_map_objects(
+        &self,
+        fixture: &DiamondFixture,
+        expected_revision: Revision,
+    ) -> Result<CommitReceipt, ZapError> {
+        let (source, applicability, region, milestone, milestone_revision) = map_objects(fixture)?;
+        self.execute(
+            &SeedMutation::SeedMapObjects {
+                source: Box::new(source),
+                applicability: Box::new(applicability),
+                region: Box::new(region),
+                milestone,
+                milestone_revision: Box::new(milestone_revision),
+            },
+            expected_revision,
+            "command.map.seed-objects",
+        )
+    }
+
     fn execute(
         &self,
         payload: &SeedMutation,
@@ -318,6 +366,7 @@ fn diamond() -> Result<
     let contracts = vec![contract(&target_id)?];
     let fixture = DiamondFixture {
         strategy_id,
+        strategy_semantic_digest: strategy.semantic_digest,
         work_ids,
         target_id,
     };
@@ -378,6 +427,106 @@ fn contract(work_id: &WorkId) -> Result<TaskContractRecord, ZapError> {
             obligation_ids: Vec::new(),
         },
     })
+}
+
+fn map_objects(
+    fixture: &DiamondFixture,
+) -> Result<
+    (
+        SourceRecord,
+        SourceApplicabilityRecord,
+        RegionRecord,
+        MilestoneRecord,
+        MilestoneRevisionRecord,
+    ),
+    ZapError,
+> {
+    use zap_domain::knowledge::{
+        ClosureStatus, RegionId, RegionRelevance, RegionState, SourceApplicabilityStatus,
+        SourceCaptureStatus, SourceKind, SourceScope, SourceVersion,
+    };
+    use zap_domain::milestones::{
+        MilestoneContribution, MilestoneDefinition, MilestoneLifecycle,
+        milestone_proof_fingerprint, milestone_semantic_fingerprint,
+    };
+    let source_id = zap_wire::SourceId::parse("source.map.information")?;
+    let source_digest = zap_wire::SourceDigest::hash(b"map information source");
+    let source = SourceRecord {
+        source_id: source_id.clone(),
+        source_kind: SourceKind::File,
+        locator: BoundedText::parse("docs/map-information.md")?,
+        current: SourceVersion {
+            digest: source_digest,
+            byte_len: 22,
+            observation: ObservationRef::parse("observation.map.information")?,
+        },
+        versions: Vec::new(),
+        scope: SourceScope::Project,
+        capture_status: SourceCaptureStatus::Current,
+        revision: Revision::new(1),
+    };
+    let applicability = SourceApplicabilityRecord {
+        source_id,
+        source_digest,
+        status: SourceApplicabilityStatus::Applicable,
+        scope: SourceScope::Project,
+        evidence_refs: Vec::new(),
+        closure_status: ClosureStatus::Complete,
+        basis: RelevantBasisDigest::hash(b"map information applicability"),
+        revision: Revision::new(1),
+    };
+    let region = RegionRecord {
+        region_id: RegionId::parse("region.map.information")?,
+        question: BoundedText::parse("Which map information route is useful?")?,
+        subject_refs: Vec::new(),
+        work_refs: Vec::new(),
+        state: RegionState::Bounded,
+        relevance: RegionRelevance::Relevant,
+        parents: Vec::new(),
+        children: Vec::new(),
+        evidence_refs: Vec::new(),
+        revision: Revision::new(1),
+    };
+    let milestone_id = zap_wire::MilestoneId::parse("milestone.map.result")?;
+    let revision_id = zap_wire::MilestoneRevisionId::parse("milestone-revision.map.result.1")?;
+    let definition = MilestoneDefinition {
+        strategic_revision_id: fixture.strategy_id.clone(),
+        strategic_record_revision: Revision::new(1),
+        strategic_semantic_digest: fixture.strategy_semantic_digest,
+        outcome_id: OutcomeId::parse("outcome.map")?,
+        outcome_revision: Revision::new(1),
+        name: BoundedText::parse("Verified map result")?,
+        purpose: BoundedText::parse("Give clients an observable outcome boundary")?,
+        result_criterion: BoundedText::parse("The diamond target is integrated")?,
+        consumers: vec![zap_wire::SubjectRef::Outcome(OutcomeId::parse(
+            "outcome.map",
+        )?)],
+        required_obligation_ids: vec![ObligationId::parse("obligation.map.3")?],
+        contributions: vec![MilestoneContribution::Work {
+            work_id: fixture.target_id.clone(),
+        }],
+        dependencies: Vec::new(),
+        lifecycle: MilestoneLifecycle::Active,
+        retirement_reason: None,
+    };
+    let semantic_fingerprint = milestone_semantic_fingerprint(&milestone_id, &definition)?;
+    let proof_fingerprint = milestone_proof_fingerprint(&milestone_id, &definition)?;
+    let milestone_revision = MilestoneRevisionRecord {
+        revision_id: revision_id.clone(),
+        milestone_id: milestone_id.clone(),
+        previous_revision_id: None,
+        definition,
+        semantic_fingerprint,
+        proof_fingerprint,
+        revision: Revision::new(1),
+    };
+    let milestone = MilestoneRecord {
+        milestone_id,
+        current_revision_id: revision_id,
+        latest_achievement_id: None,
+        revision: Revision::new(1),
+    };
+    Ok((source, applicability, region, milestone, milestone_revision))
 }
 
 fn frame<P: CommandPayload + Serialize>(

@@ -6,6 +6,10 @@ mod admission_jobs;
 mod admission_scope_reference;
 #[path = "knowledge_service/basis_locality.rs"]
 mod basis_locality;
+#[path = "knowledge_service/milestones_achievement.rs"]
+mod milestones_achievement;
+#[path = "knowledge_service/milestones_transforms.rs"]
+mod milestones_transforms;
 #[path = "knowledge_service/proof.rs"]
 mod proof;
 #[path = "knowledge_service/r17_performance.rs"]

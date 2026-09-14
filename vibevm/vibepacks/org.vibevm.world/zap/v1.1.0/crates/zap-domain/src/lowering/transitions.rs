@@ -233,6 +233,14 @@ pub(crate) fn apply_lowering_kernel(
             "lowering semantic digest does not match its exact contents",
         ));
     }
+    crate::milestone_planning::validate_adopted_lowering(
+        state,
+        &strategy,
+        &outcome,
+        lowering,
+        &payload.graph,
+        current_proofs,
+    )?;
 
     let all_lowerings = scan_all::<LoweringRecord>(state)?;
     let current_origins = current_origins(&all_lowerings);

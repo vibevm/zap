@@ -55,6 +55,28 @@ impl AffectedScopeRequest {
         })
     }
 
+    pub fn initial_milestone_plan(
+        mut roots: Vec<SubjectRef>,
+        mut absent_work_ids: Vec<WorkId>,
+    ) -> Result<Self, ZapError> {
+        roots.sort();
+        roots.dedup();
+        absent_work_ids.sort();
+        absent_work_ids.dedup();
+        if roots.is_empty() {
+            return Err(scope_error(
+                "initial milestone scope requires a typed outcome or obligation root",
+            ));
+        }
+        let request_digest = canonical_digest(&(&roots, &absent_work_ids, true))?;
+        Ok(Self {
+            roots,
+            direct_work_ids: absent_work_ids,
+            allow_missing_initial_work: true,
+            request_digest,
+        })
+    }
+
     pub fn roots(&self) -> &[SubjectRef] {
         &self.roots
     }

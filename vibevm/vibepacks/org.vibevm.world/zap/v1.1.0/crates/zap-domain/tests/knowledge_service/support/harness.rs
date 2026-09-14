@@ -10,18 +10,25 @@ pub(super) struct Harness {
 
 impl Harness {
     pub(super) fn create(path: &std::path::Path) -> Result<Self, Box<dyn std::error::Error>> {
-        Self::create_with_index_readiness(path, true)
+        Self::create_with_options(path, true, false)
+    }
+
+    pub(super) fn create_for_milestone_achievement(
+        path: &std::path::Path,
+    ) -> Result<Self, Box<dyn std::error::Error>> {
+        Self::create_with_options(path, true, true)
     }
 
     pub(super) fn create_without_indexes(
         path: &std::path::Path,
     ) -> Result<Self, Box<dyn std::error::Error>> {
-        Self::create_with_index_readiness(path, false)
+        Self::create_with_options(path, false, false)
     }
 
-    fn create_with_index_readiness(
+    fn create_with_options(
         path: &std::path::Path,
         initialize_indexes: bool,
+        allow_milestone_accept: bool,
     ) -> Result<Self, Box<dyn std::error::Error>> {
         let identity = identity()?;
         let records = RecordSet::compose([zap_domain::record_set()?, zap_runtime::record_set()?])?;
@@ -52,6 +59,7 @@ impl Harness {
             Box::new(TestBootstrap {
                 identity: identity.clone(),
                 trusted: trusted.clone(),
+                allow_milestone_accept,
             }),
         )
         .cells(cells)

@@ -8,7 +8,7 @@ use zap_core::{
 use zap_wire::{ErrorCode, ErrorDetail, FixSurface, SubjectRef, ZapError};
 
 use crate::control::WorkRecord;
-use crate::economics::ChangeBaselineRecord;
+use crate::economics::{ChangeAdmissionRecord, ChangeBaselineRecord, ChangeHoldRecord};
 use crate::intent::{CharterRecord, IntentRecord, OutcomeRecord};
 use crate::lowering::{LoweringRecord, PlanningRevisionState, StrategicPlanRecord};
 use crate::seams::{LifecycleStatus, WorkState, scan_all};
@@ -48,6 +48,27 @@ impl ActionImpactProvider for DomainActionImpactProvider {
                     ActionImpactClass::SemanticChange
                 }
             }
+            ActionImpactRule::InitialMilestonePlanOrSemantic {
+                strategy_id,
+                outcome_id,
+            } => {
+                let virgin =
+                    scan_all::<crate::milestone_planning::MilestonePlanStateRecord>(state)?
+                        .is_empty()
+                        && scan_all::<LoweringRecord>(state)?.is_empty()
+                        && scan_all::<WorkRecord>(state)?.is_empty()
+                        && scan_all::<ChangeAdmissionRecord>(state)?.is_empty()
+                        && scan_all::<ChangeHoldRecord>(state)?.is_empty()
+                        && scan_all::<crate::dreamer::DreamApplicationRecord>(state)?.is_empty()
+                        && scan_all::<crate::acceptance::CandidateReviewRecord>(state)?.is_empty()
+                        && scan_all::<crate::lowering::ReturnImportRecord>(state)?.is_empty();
+                if virgin {
+                    validate_initial_milestone_plan(state, request, strategy_id, outcome_id)?;
+                    ActionImpactClass::InitialBaseline
+                } else {
+                    ActionImpactClass::SemanticChange
+                }
+            }
         };
         let relevant_basis = context.relevant_basis.map(|basis| basis.digest);
         if class == ActionImpactClass::SemanticChange && relevant_basis.is_none() {
@@ -66,6 +87,74 @@ impl ActionImpactProvider for DomainActionImpactProvider {
             relevant_basis,
         )
     }
+}
+
+fn validate_initial_milestone_plan(
+    state: &dyn StateReader,
+    request: &ActionImpactRequest,
+    strategy_id: &zap_wire::StrategicRevisionId,
+    outcome_id: &zap_wire::OutcomeId,
+) -> Result<(), ZapError> {
+    if request
+        .subjects()
+        .binary_search(&SubjectRef::Outcome(outcome_id.clone()))
+        .is_err()
+    {
+        return Err(impact_error(
+            "initial milestone planning omits its exact outcome root",
+        ));
+    }
+    let strategy = state
+        .get_typed::<StrategicPlanRecord>(strategy_id)?
+        .ok_or_else(|| impact_error("initial milestone planning strategy is missing"))?;
+    let intent = state
+        .get_typed::<IntentRecord>(&strategy.intent_id)?
+        .ok_or_else(|| impact_error("initial milestone planning intent is missing"))?;
+    let outcome = state
+        .get_typed::<OutcomeRecord>(outcome_id)?
+        .ok_or_else(|| impact_error("initial milestone planning outcome is missing"))?;
+    let active_charters = scan_all::<CharterRecord>(state)?
+        .into_iter()
+        .filter(|row| row.status == LifecycleStatus::Active)
+        .collect::<Vec<_>>();
+    if strategy.state != PlanningRevisionState::Candidate
+        || strategy.outcome_id != *outcome_id
+        || intent.status != LifecycleStatus::Active
+        || outcome.status != LifecycleStatus::Active
+        || outcome.intent_id != strategy.intent_id
+        || active_charters.len() != 1
+        || active_charters[0].intent_id != strategy.intent_id
+        || active_charters[0].intent_digest != intent.fingerprint
+        || active_charters[0].expected_outcome_id != *outcome_id
+        || scan_all::<StrategicPlanRecord>(state)?
+            .iter()
+            .any(|row| row.state == PlanningRevisionState::Current && row.outcome_id == *outcome_id)
+    {
+        return Err(impact_error(
+            "initial milestone planning lacks the exact active candidate-strategy baseline",
+        ));
+    }
+    let strategic_work = strategy
+        .nodes
+        .iter()
+        .map(|row| &row.work_id)
+        .collect::<std::collections::BTreeSet<_>>();
+    if request
+        .work_ids()
+        .iter()
+        .any(|id| !strategic_work.contains(id))
+        || request.subjects().iter().any(|subject| match subject {
+            SubjectRef::Outcome(id) => id != outcome_id,
+            SubjectRef::Obligation(id) => strategy.obligation_ids.binary_search(id).is_err(),
+            SubjectRef::Work(id) => !strategic_work.contains(id),
+            _ => true,
+        })
+    {
+        return Err(impact_error(
+            "initial milestone impact contains a foreign obligation, Work, or subject",
+        ));
+    }
+    Ok(())
 }
 
 fn validate_initial_lowering(

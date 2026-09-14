@@ -80,6 +80,15 @@ pub fn record_set() -> Result<RecordSet, ZapError> {
     set.register::<crate::legacy_projection::LegacyNodeMetadataRecord>()?;
     set.register::<crate::legacy_projection::LegacyTaskConstraintRecord>()?;
     set.register::<crate::map_assessment::MapWorkAssessmentRecord>()?;
+    set.register::<crate::information::InformationOpportunityRecord>()?;
+    set.register::<crate::information::InformationSelectionRecord>()?;
+    set.register::<crate::milestones::MilestoneRecord>()?;
+    set.register::<crate::milestones::MilestoneRevisionRecord>()?;
+    set.register::<crate::milestones::MilestoneAchievementRecord>()?;
+    set.register::<crate::milestones::MilestoneTransformRecord>()?;
+    set.register::<crate::milestone_planning::MilestonePlanProposalRecord>()?;
+    set.register::<crate::milestone_planning::MilestonePlanStateRecord>()?;
+    set.register::<crate::milestone_planning::RefinementPlanRecord>()?;
     Ok(set)
 }
 
@@ -144,6 +153,9 @@ pub fn cell_set() -> Result<CellSet, ZapError> {
     sets.extend(crate::lowering::cell_sets()?);
     sets.extend(crate::dreamer::cell_sets()?);
     sets.push(crate::map_assessment::cell_set()?);
+    sets.push(crate::information::cell_set()?);
+    sets.extend(crate::milestones::cell_sets()?);
+    sets.extend(crate::milestone_planning::cell_sets()?);
     CellSet::compose(sets)
 }
 
@@ -179,6 +191,9 @@ pub fn query_set() -> Result<QuerySet, ZapError> {
         crate::dreamer::query_set()?,
         crate::viewer_queries::query_set()?,
         crate::strategic_map::query_set()?,
+        crate::information::query_set()?,
+        crate::milestones::query_set()?,
+        crate::milestone_planning::query_set()?,
         crate::legacy_projection::query_set()?,
     ])
 }

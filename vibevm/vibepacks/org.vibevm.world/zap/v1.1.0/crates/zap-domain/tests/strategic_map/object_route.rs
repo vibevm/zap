@@ -130,7 +130,10 @@ fn exact_work_card_pages_typed_relations_and_keeps_assessment_independent()
     }
     assert!(long_statement.len() > 4_096);
     match fact.card.underlying {
-        Some(zap_domain::viewer_queries::ViewerDetail::Fact(record)) => {
+        Some(zap_domain::strategic_map::MapUnderlyingDetail::Viewer { detail }) => {
+            let zap_domain::viewer_queries::ViewerDetail::Fact(record) = *detail else {
+                return Err("Fact underlying detail changed type".into());
+            };
             assert_eq!(record.statement.as_str(), long_statement);
         }
         _ => return Err("long Fact underlying record was not preserved".into()),

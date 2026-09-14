@@ -11,11 +11,13 @@ use zap_wire::{
     CharterId, ClosureId, CodecEpoch, CommandId, CompletionProviderId, ConditionId, ContractId,
     ControllerId, CostForecastId, CredentialId, DecisionId, DeferralId, DispatchId, DreamId,
     EffectId, EncounterId, ErrorCode, ErrorDetail, EventId, EvidenceId, FactId, FixSurface, ForkId,
-    GoalId, HarnessId, HoldId, IntegrationAcceptanceId, IntentId, JobId, LoweringId, MessageId,
-    ObligationId, ObservationRef, OperationId, OutcomeId, PacketId, PauseId, PolicyId, PrincipalId,
-    ProblemId, PromotionId, QueryId, ReconciliationRequestId, ResourceId, ReviewId, Revision,
-    RiskId, SemanticRequestId, SourceId, StageAcceptanceId, StopRuleId, StoreId,
-    StrategicRevisionId, TransactionId, VerificationId, WaitId, WorkAcceptanceId, WorkId, ZapError,
+    GoalId, HarnessId, HoldId, InformationOpportunityId, InformationSelectionId,
+    IntegrationAcceptanceId, IntentId, JobId, LoweringId, MessageId, MilestoneAchievementId,
+    MilestoneId, MilestoneRevisionId, ObligationId, ObservationRef, OperationId, OutcomeId,
+    PacketId, PauseId, PolicyId, PrincipalId, ProblemId, PromotionId, QueryId,
+    ReconciliationRequestId, ResourceId, ReviewId, Revision, RiskId, SemanticRequestId, SourceId,
+    StageAcceptanceId, StopRuleId, StoreId, StrategicRevisionId, TransactionId, VerificationId,
+    WaitId, WorkAcceptanceId, WorkId, ZapError,
 };
 
 use crate::{EncodedRecordKey, IndexFamily, RecordDescriptor, RecordFamily};
@@ -474,4 +476,9 @@ id_record_keys!(
     ObservationRef,
     MessageId,
     ReconciliationRequestId,
+    MilestoneId,
+    MilestoneRevisionId,
+    MilestoneAchievementId,
+    InformationOpportunityId,
+    InformationSelectionId,
 );

@@ -100,6 +100,7 @@ pub fn viewer_graph_index_families() -> Result<Vec<IndexFamily>, ZapError> {
     .collect::<Result<Vec<_>, _>>()?;
     families.extend(crate::basis_indexes::basis_index_families()?);
     families.extend(crate::admission_indexes::admission_index_families()?);
+    families.extend(crate::information::indexes::index_families()?);
     families.sort();
     families.dedup();
     Ok(families)
@@ -135,6 +136,7 @@ pub fn viewer_index_algorithms() -> Result<Vec<IndexAlgorithm>, ZapError> {
     algorithms.push(work_ready_index()?);
     algorithms.extend(crate::basis_indexes::basis_index_algorithms()?);
     algorithms.extend(crate::admission_indexes::admission_index_algorithms()?);
+    algorithms.extend(crate::information::indexes::index_algorithms()?);
     algorithms.sort();
     Ok(algorithms)
 }
@@ -363,6 +365,9 @@ pub fn viewer_index_families_for_records(
         records,
     )?);
     indexes.extend(crate::admission_indexes::admission_index_families_for_records(records)?);
+    indexes.extend(crate::information::indexes::index_families_for_records(
+        records,
+    )?);
     indexes.sort();
     indexes.dedup();
     Ok(indexes)

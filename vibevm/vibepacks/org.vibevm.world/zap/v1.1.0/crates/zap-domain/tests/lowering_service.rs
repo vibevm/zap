@@ -1,5 +1,9 @@
 #[path = "lowering_service/fixtures.rs"]
 pub mod fixtures;
+#[path = "lowering_service/milestone_planning.rs"]
+mod milestone_planning;
+#[path = "lowering_service/milestones_core.rs"]
+mod milestones_core;
 #[path = "lowering_service/support.rs"]
 mod support;
 

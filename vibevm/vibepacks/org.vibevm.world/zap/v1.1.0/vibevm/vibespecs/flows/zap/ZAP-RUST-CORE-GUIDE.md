@@ -1,6 +1,6 @@
 # Rust core usage guide {#root}
 
-`guide r1`
+`guide r2`
 
 This non-normative guide describes acquisition and use of the [zap_core public API](../../../../crates/zap-core/src/lib.rs). Its catalogs cover all 313 locally declared or macro-emitted public types and traits, from registries and trusted service construction through agent capabilities, executable work, packet claims, candidate results and continuation views.
 
@@ -374,7 +374,7 @@ Consume the resulting basis with its request and observed state. Closure knowled
 
 ## Classify action impact against the same state {#action-impact}
 
-`guide r1`
+`guide r2`
 
 Use [ActionImpactRequest::new](../../../../crates/zap-core/src/admission/impact.rs) to bind the registered classification rule to its work/subject scope. `PayloadActionImpact` obtains that request from a typed payload, and `ActionImpactProvider::classify` evaluates it with the supplied state and action context.
 
@@ -389,6 +389,16 @@ Use [ActionImpactRequest::new](../../../../crates/zap-core/src/admission/impact.
 | `ActionImpactProvider` | Configured classifier over the supplied immutable state. |
 
 `ActionImpactView::new` constructs the bound classification result. Progress, proof, initial baseline and semantic change retain distinct meanings; selecting a label in data does not bypass the configured admission provider.
+
+`InitialMilestonePlanOrSemantic` is the narrow bootstrap rule for canonical
+milestone definition and first plan adoption. The domain classifier returns
+`InitialBaseline` only for an exact active candidate strategy and outcome when
+there is no adopted milestone plan, lowering, materialized Work, pending change
+admission, hold, or known execution record. Further milestone creation or plan
+adoption is a semantic change even when no Work has launched yet. Its affected
+scope may name absent strategic Work and absent obligation owners only during
+that verified initial state; ordinary affected-scope requests still reject
+missing Work.
 
 ## Evaluate needs and enforce admission around product changes {#action-admission}
 

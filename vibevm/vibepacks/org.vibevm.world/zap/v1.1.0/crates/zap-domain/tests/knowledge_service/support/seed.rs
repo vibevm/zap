@@ -26,6 +26,12 @@ pub(super) struct SeedState {
     pub(super) jobs: Vec<WorkExecutionObservationRecord>,
     pub(super) job_replacements: Vec<WorkExecutionObservationRecord>,
     pub(super) releases: Vec<WorkRevalidationReleaseInput>,
+    pub(super) strategies: Vec<StrategicPlanRecord>,
+    pub(super) milestones: Vec<MilestoneRecord>,
+    pub(super) milestone_replacements: Vec<MilestoneRecord>,
+    pub(super) milestone_revisions: Vec<MilestoneRevisionRecord>,
+    pub(super) milestone_plans: Vec<MilestonePlanProposalRecord>,
+    pub(super) milestone_plan_states: Vec<MilestonePlanStateRecord>,
 }
 
 impl CanonicalEncode for SeedState {
@@ -71,6 +77,11 @@ impl TransitionCell for SeedStateCell {
             RecordFamily::parse(CandidateReviewRecord::FAMILY)?,
             RecordFamily::parse(WorkExecutionObservationRecord::FAMILY)?,
             RecordFamily::parse(WorkRevalidationReleaseRecord::FAMILY)?,
+            RecordFamily::parse(StrategicPlanRecord::FAMILY)?,
+            RecordFamily::parse(MilestoneRecord::FAMILY)?,
+            RecordFamily::parse(MilestoneRevisionRecord::FAMILY)?,
+            RecordFamily::parse(MilestonePlanProposalRecord::FAMILY)?,
+            RecordFamily::parse(MilestonePlanStateRecord::FAMILY)?,
         ];
         affected_records.sort();
         CellDescriptor::new(CellDescriptorInput {
@@ -180,6 +191,27 @@ impl TransitionCell for SeedStateCell {
                 .get_typed::<WorkExecutionObservationRecord>(&row.job_id)?
                 .ok_or_else(test_error)?;
             changes.replace(current.revision, row.clone())?;
+        }
+        for row in &command.payload().strategies {
+            changes.insert(row.clone())?;
+        }
+        for row in &command.payload().milestones {
+            changes.insert(row.clone())?;
+        }
+        for row in &command.payload().milestone_replacements {
+            let current = state
+                .get_typed::<MilestoneRecord>(&row.milestone_id)?
+                .ok_or_else(test_error)?;
+            changes.replace(current.revision, row.clone())?;
+        }
+        for row in &command.payload().milestone_revisions {
+            changes.insert(row.clone())?;
+        }
+        for row in &command.payload().milestone_plans {
+            changes.insert(row.clone())?;
+        }
+        for row in &command.payload().milestone_plan_states {
+            changes.insert(row.clone())?;
         }
         for row in &command.payload().releases {
             changes.insert(WorkRevalidationReleaseRecord::new(row.clone())?)?;

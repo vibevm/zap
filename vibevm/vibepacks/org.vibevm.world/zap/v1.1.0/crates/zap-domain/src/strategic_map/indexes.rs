@@ -44,6 +44,18 @@ pub(super) fn missing_relationship_objects(
         let missing = match &object {
             MapObjectRef::Strategy(id) => id != &strategy.strategic_revision_id,
             MapObjectRef::Resource(_) => false,
+            MapObjectRef::Milestone(id) => snapshot
+                .get_typed::<crate::milestones::MilestoneRecord>(id)?
+                .is_none(),
+            MapObjectRef::InformationOpportunity(id) => snapshot
+                .get_typed::<crate::information::InformationOpportunityRecord>(id)?
+                .is_none(),
+            MapObjectRef::StrategicFork {
+                strategy_id,
+                fork_id,
+            } => snapshot
+                .get_typed::<crate::lowering::StrategicPlanRecord>(strategy_id)?
+                .is_none_or(|strategy| strategy.forks.iter().all(|row| &row.fork_id != fork_id)),
             MapObjectRef::Viewer(id) => {
                 crate::viewer_queries::load_current_node(snapshot, id)?.is_none()
             }

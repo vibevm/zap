@@ -12,10 +12,13 @@ use crate::seams::WorkKind;
 use crate::viewer_queries::{ViewerDetail, ViewerNode, ViewerNodeId};
 
 use super::common::{map_error, object_missing};
+
+mod canonical;
 use super::model::*;
 use super::relationships::{
     contract_relationship_gaps, detail_relationship_gaps, detail_relationships, landmark,
-    normalize_relationships, relation, strategic_relationships, work_ref, work_relationships,
+    normalize_relationships, object_from_subject, relation, strategic_relationships, work_ref,
+    work_relationships,
 };
 
 pub(super) fn overview_card(
@@ -52,7 +55,13 @@ pub(super) fn exact_card(
             strategy_card(snapshot, strategy)
         }
         MapObjectRef::Strategy(_) => Err(object_missing()),
-        MapObjectRef::Resource(id) => resource_card(snapshot, id),
+        MapObjectRef::Resource(id) => canonical::resource_card(snapshot, id),
+        MapObjectRef::Milestone(id) => canonical::milestone_card(snapshot, id),
+        MapObjectRef::InformationOpportunity(id) => canonical::information_card(snapshot, id),
+        MapObjectRef::StrategicFork {
+            strategy_id,
+            fork_id,
+        } => canonical::strategic_fork_card(snapshot, strategy_id, fork_id),
         MapObjectRef::Viewer(ViewerNodeId::Work(id)) => {
             let strategic = strategy.nodes.iter().find(|node| &node.work_id == id);
             let source = load_work_assessment_source(snapshot, id, index_budget)?;
@@ -140,45 +149,6 @@ fn strategy_card(
         relationships,
         relationship_gaps: Vec::new(),
         relationships_complete: true,
-        assessment_source_fingerprint: None,
-        assessment_state: MapAssessmentState::NotApplicable,
-        assessment: None,
-        observation_revision: snapshot.revision(),
-        underlying: None,
-    })
-}
-
-fn resource_card(
-    snapshot: &dyn QuerySnapshot,
-    id: &zap_wire::ResourceId,
-) -> Result<SemanticCard, ZapError> {
-    Ok(SemanticCard {
-        object: MapObjectRef::Resource(id.clone()),
-        semantic_type: MapSemanticType::ExecutionResource,
-        canonical_name: text(id.as_str())?,
-        description: missing("resource description is not materialized"),
-        purpose: missing("resource purpose is not materialized"),
-        expected_result: missing("resource capacity and availability are unknown"),
-        source_state: MapSourceState::ReferenceOnly {
-            reason: text("resource is a typed contract reference without a resource record")?,
-        },
-        acceptance: MapAcceptanceView::NotApplicable {
-            reason: text("execution resources have no work acceptance state")?,
-        },
-        reasons: vec![text(
-            "a resource reference does not establish capacity, availability, or occupancy",
-        )?],
-        blockers: MapBlockerView::NotApplicable {
-            reason: text("execution resources do not have Work readiness blockers")?,
-        },
-        sources: Vec::new(),
-        evidence: Vec::new(),
-        work_kind: None,
-        work_type: None,
-        landmark: None,
-        relationships: Vec::new(),
-        relationship_gaps: vec![MapRelationshipGap::ResourceReverseIndexUnavailable],
-        relationships_complete: false,
         assessment_source_fingerprint: None,
         assessment_state: MapAssessmentState::NotApplicable,
         assessment: None,
@@ -338,7 +308,9 @@ fn build_work_card(
         },
         assessment: None,
         observation_revision: snapshot.revision(),
-        underlying: Some(ViewerDetail::Work(work.clone())),
+        underlying: Some(MapUnderlyingDetail::Viewer {
+            detail: Box::new(ViewerDetail::Work(work.clone())),
+        }),
     })
 }
 
@@ -374,7 +346,9 @@ fn viewer_card(snapshot: &dyn QuerySnapshot, node: ViewerNode) -> Result<Semanti
         assessment_state: MapAssessmentState::NotApplicable,
         assessment: None,
         observation_revision: snapshot.revision(),
-        underlying: Some(node.detail),
+        underlying: Some(MapUnderlyingDetail::Viewer {
+            detail: Box::new(node.detail),
+        }),
     })
 }
 

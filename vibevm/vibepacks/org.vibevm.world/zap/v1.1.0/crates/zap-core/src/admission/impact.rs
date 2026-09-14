@@ -1,7 +1,7 @@
 use serde::{Deserialize, Deserializer, Serialize};
 use specmark::spec;
 use zap_wire::{
-    ActionClass, ActionImpactDigest, CanonicalOutput, CodecEpoch, EventId, EventKind,
+    ActionClass, ActionImpactDigest, CanonicalOutput, CodecEpoch, EventId, EventKind, OutcomeId,
     PayloadDigest, RelevantBasisDigest, Revision, StrategicRevisionId, SubjectRef, WorkId,
     ZapError,
 };
@@ -22,6 +22,10 @@ pub enum ActionImpactRule {
     InitialLoweringOrSemantic {
         strategy_id: StrategicRevisionId,
         target: WorkId,
+    },
+    InitialMilestonePlanOrSemantic {
+        strategy_id: StrategicRevisionId,
+        outcome_id: OutcomeId,
     },
     Progress,
     Proof,

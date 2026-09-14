@@ -24,6 +24,9 @@ use zap_domain::knowledge::{
     KnowledgeDependencyRecord, RegionRecord, SemanticAssessmentRecord, SourceApplicabilityRecord,
     SourceRecord,
 };
+use zap_domain::lowering::StrategicPlanRecord;
+use zap_domain::milestone_planning::{MilestonePlanProposalRecord, MilestonePlanStateRecord};
+use zap_domain::milestones::{MilestoneRecord, MilestoneRevisionRecord};
 use zap_domain::seams::DomainMutation;
 use zap_domain::seams::{
     CharterDutyAuthority, CompletionDutyPolicy, LifecycleStatus, ObligationDisposition,
@@ -55,6 +58,7 @@ impl SecretVerifier for ExactSecret {
 struct TestBootstrap {
     pub(super) identity: zap_core::StoreIdentity,
     pub(super) trusted: Arc<Mutex<Option<TrustedHostHandle>>>,
+    pub(super) allow_milestone_accept: bool,
 }
 
 impl TrustBootstrapSource for TestBootstrap {
@@ -70,18 +74,22 @@ impl TrustBootstrapSource for TestBootstrap {
             )?,
             AuthorizationRef::parse("authorization-owner-domain-test")?,
         )?;
+        let mut actions = BTreeSet::from([
+            ActionClass::parse("evidence.adjudicate")?,
+            ActionClass::parse("adaptive.apply")?,
+            ActionClass::parse("plan.lower")?,
+            ActionClass::parse("stage.accept")?,
+        ]);
+        if self.allow_milestone_accept {
+            actions.insert(ActionClass::parse("work.accept")?);
+        }
         registrar.bind_coordinator(
             CredentialId::parse("coordinator-domain-test")?,
             self.identity.campaign_id.clone(),
             Box::new(ExactSecret),
             CoordinatorScope::new(
                 self.identity.campaign_id.clone(),
-                BTreeSet::from([
-                    ActionClass::parse("evidence.adjudicate")?,
-                    ActionClass::parse("adaptive.apply")?,
-                    ActionClass::parse("plan.lower")?,
-                    ActionClass::parse("stage.accept")?,
-                ]),
+                actions,
                 ControllerEpoch::new(1)?,
             )?,
             AuthorizationRef::parse("authorization-coordinator-domain-test")?,
