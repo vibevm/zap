@@ -53,6 +53,13 @@ not mean repeatedly rerunning tests or making semantically mixed commits.
 
 ## Work graph and acceptance
 
+Owner validation update, 2026-09-14: AMENDMENT-FINAL-VALIDATION.md supersedes
+the mandatory live-LLM campaign check. Reuse accepted algorithm evidence and
+primarily prove refactor/transfer correctness algorithmically. R16's nonempty
+runtime-to-acceptance-to-close route uses a labeled deterministic driver;
+changed recovery/navigation boundaries retain scoped oracles. No new live
+model run or ceremonial large-data/full-test panel is required.
+
 | ID | Result and exit evidence | Dependencies | Ownership / vision |
 | --- | --- | --- | --- |
 | R00 | Approved vision, durable plan/packets/resume; prototype candidate preserved separately | none | coordinator / all |

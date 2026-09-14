@@ -1,5 +1,11 @@
 # R18: production discipline and installable package gate
 
+Owner override, 2026-09-14: apply ../AMENDMENT-FINAL-VALIDATION.md. Final checks
+primarily prove refactor correctness and reuse accepted algorithm receipts.
+The mandatory fresh live-LLM two-worker receipt is replaced by labeled
+deterministic runtime/nonempty-closure and changed-boundary evidence. Actual
+installation, discipline and implementation obligations remain in force.
+
 ##subagent-quiet-clause
 
 Middle gpt-5.6-sol/high for assigned mechanical repairs; root coordinates and
