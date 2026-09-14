@@ -1,0 +1,661 @@
+{
+  "schema": "zap-sm05-artifact-audit/1",
+  "status": "artifact_integrity_spec_targets_and_relative_links_verified",
+  "checked_utc": "2026-09-14T15:15:33Z",
+  "artifact": {
+    "manifest_path": "C:/Users/olegc/.vibe/zap/development/map-1.1-registry-20260914T1458560928356Z/ZAP-PAYLOAD-MANIFEST.json",
+    "manifest_file_sha256": "280FC79BDF8F7B37AA4BA0D58D6E40F4F3D2031B58B5A9BFD8CFA675388E118D",
+    "payload_root": "C:\\Users\\olegc\\.vibe\\zap\\development\\map-1.1-registry-20260914T1458560928356Z\\org.vibevm.world\\zap\\v1.1.0",
+    "package": "flow:org.vibevm.world/zap@=1.1.0",
+    "version": "1.1.0",
+    "generated_at_utc": "2026-09-14T15:10:18.7163215Z",
+    "file_count": 535,
+    "total_bytes": 6560722,
+    "payload_manifest_sha256": "20174b25ada907db49852ba59f4d75b256b9d5e1c9892a7dd85e2551633a3144"
+  },
+  "file_verification": {
+    "manifest_rows": 535,
+    "actual_files": 535,
+    "exact_complete_pathset": true,
+    "all_lengths_and_sha256_match": true,
+    "calculated_payload_manifest_sha256": "20174b25ada907db49852ba59f4d75b256b9d5e1c9892a7dd85e2551633a3144",
+    "expected_payload_manifest_sha256": "20174b25ada907db49852ba59f4d75b256b9d5e1c9892a7dd85e2551633a3144",
+    "digest_matches": true,
+    "invalid_paths": [],
+    "duplicate_paths": [],
+    "missing_files": [],
+    "unexpected_files": [],
+    "path_absences": [],
+    "length_or_hash_mismatches": [],
+    "reparse_entries": []
+  },
+  "forbidden_filename_path_verification": {
+    "target_segment_checked_at_every_depth": true,
+    "checked_categories": [
+      "target at any depth",
+      "development/checkpoints and prototype scripts/examples",
+      "Python and __pycache__",
+      "generated boot STATIC/INDEX/lock and agent folders",
+      "nested vibedeps",
+      "private/runtime paths and token/trust filenames",
+      "root harness projections and vibe.lock",
+      "known compiled-output extensions"
+    ],
+    "matched_paths": [],
+    "manifest_ignore_rules": 27,
+    "artifact_ignore_matches_manifest": true,
+    "source_ignore_sha256": "1A014E0D42D67B4F0D7401448733BC608A7649A0D7E52BD26392A1E22380F178",
+    "source_and_artifact_ignore_bytes_match": true
+  },
+  "specmap_file_targets": {
+    "specmap_sha256": "E62C993604FF6DCDBBDB6663AC30B7DAC7D791099834DE65AE0A76D19D5625FF",
+    "spec_unit_count": 643,
+    "unique_file_targets": 23,
+    "all_targets_are_manifest_and_actual_members": true,
+    "invalid_or_unavailable_targets": [],
+    "targets": [
+      {
+        "file": "vibevm/vibespecs/boot/13-flow-zap.xml",
+        "spec_units": 6
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+        "spec_units": 34
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-AGENT-PROTOCOL.xml",
+        "spec_units": 35
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+        "spec_units": 45
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml",
+        "spec_units": 71
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+        "spec_units": 34
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml",
+        "spec_units": 64
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-MIGRATION-CHANGE-RECORD.xml",
+        "spec_units": 11
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
+        "spec_units": 27
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-APP-GUIDE.md",
+        "spec_units": 15
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-CORE-GUIDE.md",
+        "spec_units": 47
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
+        "spec_units": 68
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+        "spec_units": 6
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-LEGACY-GUIDE.md",
+        "spec_units": 8
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
+        "spec_units": 11
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-RUNTIME-GUIDE.md",
+        "spec_units": 16
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORAGE.xml",
+        "spec_units": 33
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORE-GUIDE.md",
+        "spec_units": 12
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP-GUIDE.md",
+        "spec_units": 13
+      },
+      {
+        "file": "vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP.xml",
+        "spec_units": 21
+      },
+      {
+        "file": "vibevm/vibespecs/research/zap/ANCILLARY-REVIEW.xml",
+        "spec_units": 22
+      },
+      {
+        "file": "vibevm/vibespecs/research/zap/IDEA-MAP.xml",
+        "spec_units": 33
+      },
+      {
+        "file": "vibevm/vibespecs/research/zap/PILOT-REPORT.xml",
+        "spec_units": 11
+      }
+    ],
+    "scope": "File-target membership only; no specmap execution or semantic acceptance was performed."
+  },
+  "relative_links": {
+    "documents": 30,
+    "hyperlinks": 522,
+    "relative_hyperlinks": 468,
+    "distinct_relative_target_files": 264,
+    "http_hyperlinks": 54,
+    "http_distinct_targets": 50,
+    "reused_byte_identical_documents": 22,
+    "freshly_read_documents": 8,
+    "missing_or_out_of_payload_targets": [],
+    "unparsed_destinations": [],
+    "fragment_checks": [
+      {
+        "source": "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+        "line": 114,
+        "target": "ZAP-RUST-APP-GUIDE.md#internal-boundaries",
+        "explicit_anchor_found": true
+      }
+    ],
+    "external_network_verification": false,
+    "historical_literal_paths_treated_as_links": false,
+    "method": "Reused 22 previously parsed documents only when their complete content hashes matched current artifact members; read 8 changed/new documents. Parsed inline/image/reference-definition and XML/HTML href/src destinations, resolved relative paths, and verified membership in both the 535-row manifest and the exact actual pathset. The one fragment is present in its byte-verified document.",
+    "document_identities": [
+      {
+        "path": "README.md",
+        "sha256": "4f38ea13fa94e52f1e7bbb63c15be8ee951b65effb3ff0ee65e9b464ec7182ed",
+        "reused_identical_bytes": false,
+        "relative_links": 22,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/boot/13-flow-zap.xml",
+        "sha256": "42452f68c967e914cae7e7de0461322057ca05ab8c1f812b5635270f53731cfc",
+        "reused_identical_bytes": false,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+        "sha256": "2bcd85a50ae44dd3b78cd6846e7e02136847bc732f4f34f6b2f8e1d308dd0f1e",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-AGENT-PROTOCOL.xml",
+        "sha256": "26596f67371a9dc555f4437773c8f2bdf8268a634ac4a9f8a42c764fa59be9d2",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-BACKEND-API.md",
+        "sha256": "48a866331b6057eb7c9ee7b4649b54603d86d3603162d5bb495084e6047db2c2",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+        "sha256": "78036dbcc2545771ee07577f16e0ac05f6145d7383c6e002627061ac93959a6f",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-CLI.md",
+        "sha256": "bd0e18de56108067c6ab7fecb5e08876250d94c1aa091abaea587f5004367251",
+        "reused_identical_bytes": true,
+        "relative_links": 3,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml",
+        "sha256": "18fbe45bea72cf3919f2daa6f8402b1b26a609b32e645ee257dcf3eefa391034",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+        "sha256": "e7cd769b2b22573e613e6244e89796bea9480ef79dd9031f724d148b97c4548a",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml",
+        "sha256": "68ffb2f0ed63bef769614d8ab5b593375c279f7ca68f56f550068d84a5728ae7",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-MIGRATION-CHANGE-RECORD.xml",
+        "sha256": "9d051df09f66ee0769237388dffad79bcf1949d558af7ece09106d3e2c169432",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
+        "sha256": "2bb2c7ad55852d8c9ed8640d9d1b7911f3289058ecac1d4713da36a3f5dd80c9",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-APP-GUIDE.md",
+        "sha256": "f016bd23e3e402f5d772384a40ec73032654e0a278d4ab6056985d3fe449992d",
+        "reused_identical_bytes": true,
+        "relative_links": 46,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-CORE-GUIDE.md",
+        "sha256": "1d98a9e87f00462d16fe9d31bb2cd6805978615386737ee3ab53b8b3205b855a",
+        "reused_identical_bytes": true,
+        "relative_links": 91,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
+        "sha256": "acb7667268c7f946c53020696af3e133c4764f4635546d07b59adb46882969a6",
+        "reused_identical_bytes": false,
+        "relative_links": 157,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+        "sha256": "500304e8f61b9089762d234925ef133d4f34a1e06c9452f318607b35cbe5a783",
+        "reused_identical_bytes": false,
+        "relative_links": 11,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-LEGACY-GUIDE.md",
+        "sha256": "ac252dc7a7b672c6bff73f2570900774c62d837bbd0b4ddb5615cdd54757011a",
+        "reused_identical_bytes": true,
+        "relative_links": 23,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
+        "sha256": "1e5594a07c0a67cbbe99b52b6db12cca412dea70100b5cc22b9f527dd756265a",
+        "reused_identical_bytes": true,
+        "relative_links": 29,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-RUNTIME-GUIDE.md",
+        "sha256": "c0ee415035991395578632af692539174661d97a09c6cdb59b9f20be67c8cc2b",
+        "reused_identical_bytes": true,
+        "relative_links": 54,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORAGE.xml",
+        "sha256": "c50fde4330caa5faf47e49b383003cea4f145515cb6cf76b3f52b7cc265e1549",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORE-GUIDE.md",
+        "sha256": "b794a12b5168dfb5468d66e11e50df19003bacf3a82b58ad3b5c80548517eb4b",
+        "reused_identical_bytes": true,
+        "relative_links": 22,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP-GUIDE.md",
+        "sha256": "80877f9d18061e32e504190958f71edafc8762b66c1d97ee4af8e820df1d9f1a",
+        "reused_identical_bytes": false,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP.xml",
+        "sha256": "0e15bc023d3a2cf1cef9de6c81ea311feeeb19aaeb7d7dfabeeafdfa920baaa0",
+        "reused_identical_bytes": false,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/ANCILLARY-REVIEW.xml",
+        "sha256": "dbb4aa38655c02ff5ce28ed3ff983026b4ae0f522ac5c5e7406f25471b91c67c",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/IDEA-MAP.xml",
+        "sha256": "abefb4ca1d1ec9956dbae76241901622c5332a722e64f03c1ee59c957fe4be3b",
+        "reused_identical_bytes": true,
+        "relative_links": 1,
+        "external_links": 51
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/PILOT-REPORT.xml",
+        "sha256": "dd9da869539bba87cfe94d3605bf81e496ccee50f82e9abce56edf9a964e3257",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/ZAP-RUST-MVP-VISION-2026-09-13.md",
+        "sha256": "3eb5ca89b79f13164fe7215c95df780a4a5ed40e06a3b249c59556c2e1a6004d",
+        "reused_identical_bytes": true,
+        "relative_links": 3,
+        "external_links": 3
+      },
+      {
+        "path": "vibevm/vibespecs/skills/zap-draft/SKILL.md",
+        "sha256": "1eb2dcf3277020daed4c7f2b06b11a00b8f69d4bbdb9cbcf92f9ab7d82a86e7f",
+        "reused_identical_bytes": false,
+        "relative_links": 5,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/skills/zap-run/SKILL.md",
+        "sha256": "497a83b6148fbb119750ad8d2af149048413e5e6d1dce5871d018665a831bb11",
+        "reused_identical_bytes": true,
+        "relative_links": 0,
+        "external_links": 0
+      },
+      {
+        "path": "vibevm/vibespecs/skills/zap-state/SKILL.md",
+        "sha256": "37f1e467f61a7833dc8dd86283595d308f3f0bc4232ba5127776fcd13d21b16b",
+        "reused_identical_bytes": false,
+        "relative_links": 1,
+        "external_links": 0
+      }
+    ],
+    "target_files": [
+      "LICENSE.md",
+      "README.md",
+      "crates/vendor/PROVENANCE.md",
+      "crates/zap-api/src/commands.rs",
+      "crates/zap-api/src/lib.rs",
+      "crates/zap-api/src/registration.rs",
+      "crates/zap-api/src/surface.rs",
+      "crates/zap-app/src/composition.rs",
+      "crates/zap-app/src/cross_domain/bundle.rs",
+      "crates/zap-app/src/cross_domain/cells.rs",
+      "crates/zap-app/src/cross_domain/returns.rs",
+      "crates/zap-app/src/legacy_import/service.rs",
+      "crates/zap-app/src/lib.rs",
+      "crates/zap-app/src/material_adapters/bundle.rs",
+      "crates/zap-app/src/material_adapters/config.rs",
+      "crates/zap-app/src/material_adapters/mod.rs",
+      "crates/zap-app/src/material_adapters/paths.rs",
+      "crates/zap-app/src/material_adapters/vibe_query.rs",
+      "crates/zap-app/src/material_adapters/workspace.rs",
+      "crates/zap-app/src/packet_capture.rs",
+      "crates/zap-app/src/packet_resolution.rs",
+      "crates/zap-app/src/runtime_service/application.rs",
+      "crates/zap-app/src/runtime_service/archive.rs",
+      "crates/zap-app/src/runtime_service/config.rs",
+      "crates/zap-app/src/runtime_service/eligibility.rs",
+      "crates/zap-app/src/runtime_service/factory.rs",
+      "crates/zap-app/src/runtime_service/lease.rs",
+      "crates/zap-app/src/runtime_service/read_port.rs",
+      "crates/zap-app/src/runtime_service/runtime.rs",
+      "crates/zap-app/src/runtime_service/trust.rs",
+      "crates/zap-app/src/server.rs",
+      "crates/zap-app/tests/application_server.rs",
+      "crates/zap-app/tests/deterministic_campaign_completion.rs",
+      "crates/zap-app/tests/legacy_activation.rs",
+      "crates/zap-app/tests/legacy_import.rs",
+      "crates/zap-app/tests/material_adapters.rs",
+      "crates/zap-app/tests/packet_resolution_service.rs",
+      "crates/zap-app/tests/read_server.rs",
+      "crates/zap-cli/tests/binary_server.rs",
+      "crates/zap-core/src/admission/impact.rs",
+      "crates/zap-core/src/admission/protocol.rs",
+      "crates/zap-core/src/agent/capabilities.rs",
+      "crates/zap-core/src/agent/dispatch.rs",
+      "crates/zap-core/src/agent/goals.rs",
+      "crates/zap-core/src/agent/host.rs",
+      "crates/zap-core/src/agent/profiles.rs",
+      "crates/zap-core/src/agent/revalidation.rs",
+      "crates/zap-core/src/artifact.rs",
+      "crates/zap-core/src/authority.rs",
+      "crates/zap-core/src/basis/mod.rs",
+      "crates/zap-core/src/candidate.rs",
+      "crates/zap-core/src/change.rs",
+      "crates/zap-core/src/commit.rs",
+      "crates/zap-core/src/commit/builder.rs",
+      "crates/zap-core/src/commit/index_plan.rs",
+      "crates/zap-core/src/commit/logical.rs",
+      "crates/zap-core/src/commit/service.rs",
+      "crates/zap-core/src/completion.rs",
+      "crates/zap-core/src/descriptor.rs",
+      "crates/zap-core/src/effects.rs",
+      "crates/zap-core/src/effects/draft.rs",
+      "crates/zap-core/src/effects/tests.rs",
+      "crates/zap-core/src/execution_views/affected_scope.rs",
+      "crates/zap-core/src/execution_views/eligibility.rs",
+      "crates/zap-core/src/execution_views/job.rs",
+      "crates/zap-core/src/execution_views/packet.rs",
+      "crates/zap-core/src/execution_views/packet/candidate.rs",
+      "crates/zap-core/src/execution_views/packet/providers.rs",
+      "crates/zap-core/src/execution_views/resume.rs",
+      "crates/zap-core/src/execution_views/work.rs",
+      "crates/zap-core/src/identity.rs",
+      "crates/zap-core/src/index_scan.rs",
+      "crates/zap-core/src/lib.rs",
+      "crates/zap-core/src/names.rs",
+      "crates/zap-core/src/page.rs",
+      "crates/zap-core/src/query.rs",
+      "crates/zap-core/src/record.rs",
+      "crates/zap-core/src/registry.rs",
+      "crates/zap-core/src/state.rs",
+      "crates/zap-core/src/transition/cell.rs",
+      "crates/zap-core/src/transition/payload.rs",
+      "crates/zap-core/src/transition/tests.rs",
+      "crates/zap-core/src/traversal.rs",
+      "crates/zap-core/src/trust.rs",
+      "crates/zap-core/src/trust/authority.rs",
+      "crates/zap-core/src/trust/tests.rs",
+      "crates/zap-domain/src/acceptance/cells.rs",
+      "crates/zap-domain/src/acceptance/mod.rs",
+      "crates/zap-domain/src/acceptance/transitions.rs",
+      "crates/zap-domain/src/acceptance/validation.rs",
+      "crates/zap-domain/src/control/mod.rs",
+      "crates/zap-domain/src/control/payloads.rs",
+      "crates/zap-domain/src/control/records.rs",
+      "crates/zap-domain/src/control/transitions.rs",
+      "crates/zap-domain/src/control/validation.rs",
+      "crates/zap-domain/src/dreamer/mod.rs",
+      "crates/zap-domain/src/dreamer/model.rs",
+      "crates/zap-domain/src/dreamer/payloads.rs",
+      "crates/zap-domain/src/dreamer/projection.rs",
+      "crates/zap-domain/src/dreamer/queries.rs",
+      "crates/zap-domain/src/dreamer/records.rs",
+      "crates/zap-domain/src/economics/admission.rs",
+      "crates/zap-domain/src/economics/admission_cells.rs",
+      "crates/zap-domain/src/economics/admission_v1.rs",
+      "crates/zap-domain/src/economics/affected_scope.rs",
+      "crates/zap-domain/src/economics/assessment_cells.rs",
+      "crates/zap-domain/src/economics/cells.rs",
+      "crates/zap-domain/src/economics/completion.rs",
+      "crates/zap-domain/src/economics/decision.rs",
+      "crates/zap-domain/src/economics/forecast_cells.rs",
+      "crates/zap-domain/src/economics/holds.rs",
+      "crates/zap-domain/src/economics/impact.rs",
+      "crates/zap-domain/src/economics/mod.rs",
+      "crates/zap-domain/src/economics/model.rs",
+      "crates/zap-domain/src/economics/preflight.rs",
+      "crates/zap-domain/src/economics/records.rs",
+      "crates/zap-domain/src/intent/cells.rs",
+      "crates/zap-domain/src/intent/mod.rs",
+      "crates/zap-domain/src/intent/payloads.rs",
+      "crates/zap-domain/src/intent/records.rs",
+      "crates/zap-domain/src/intent/transitions.rs",
+      "crates/zap-domain/src/knowledge/basis.rs",
+      "crates/zap-domain/src/knowledge/identifiers.rs",
+      "crates/zap-domain/src/knowledge/mod.rs",
+      "crates/zap-domain/src/knowledge/payloads.rs",
+      "crates/zap-domain/src/knowledge/proof.rs",
+      "crates/zap-domain/src/knowledge/queries.rs",
+      "crates/zap-domain/src/knowledge/region_transitions.rs",
+      "crates/zap-domain/src/knowledge/review_transitions.rs",
+      "crates/zap-domain/src/knowledge/transitions.rs",
+      "crates/zap-domain/src/legacy_projection/mod.rs",
+      "crates/zap-domain/src/legacy_projection/model.rs",
+      "crates/zap-domain/src/legacy_projection/query.rs",
+      "crates/zap-domain/src/lib.rs",
+      "crates/zap-domain/src/lowering/cells.rs",
+      "crates/zap-domain/src/lowering/mod.rs",
+      "crates/zap-domain/src/lowering/model.rs",
+      "crates/zap-domain/src/lowering/offline/cells.rs",
+      "crates/zap-domain/src/lowering/offline/journal.rs",
+      "crates/zap-domain/src/lowering/offline/model.rs",
+      "crates/zap-domain/src/lowering/offline/payloads.rs",
+      "crates/zap-domain/src/lowering/offline/records.rs",
+      "crates/zap-domain/src/lowering/offline/validation.rs",
+      "crates/zap-domain/src/lowering/packets.rs",
+      "crates/zap-domain/src/lowering/packets/current.rs",
+      "crates/zap-domain/src/lowering/packets/derive.rs",
+      "crates/zap-domain/src/lowering/queries.rs",
+      "crates/zap-domain/src/lowering/records.rs",
+      "crates/zap-domain/src/lowering/transitions.rs",
+      "crates/zap-domain/src/map_assessment/mod.rs",
+      "crates/zap-domain/src/owner_control/cells.rs",
+      "crates/zap-domain/src/owner_control/completion.rs",
+      "crates/zap-domain/src/owner_control/mod.rs",
+      "crates/zap-domain/src/owner_control/records.rs",
+      "crates/zap-domain/src/owner_control/rules.rs",
+      "crates/zap-domain/src/queries.rs",
+      "crates/zap-domain/src/registration.rs",
+      "crates/zap-domain/src/seams/mod.rs",
+      "crates/zap-domain/src/seams/model.rs",
+      "crates/zap-domain/src/seams/proof.rs",
+      "crates/zap-domain/src/strategic_map/mod.rs",
+      "crates/zap-domain/src/viewer_queries/mod.rs",
+      "crates/zap-domain/src/viewer_queries/model.rs",
+      "crates/zap-domain/src/viewer_queries/traversal.rs",
+      "crates/zap-domain/tests/domain_contracts.rs",
+      "crates/zap-domain/tests/dreamer_service.rs",
+      "crates/zap-domain/tests/economics_service.rs",
+      "crates/zap-domain/tests/knowledge_service.rs",
+      "crates/zap-domain/tests/lowering_offline.rs",
+      "crates/zap-domain/tests/lowering_service.rs",
+      "crates/zap-domain/tests/map_assessment.rs",
+      "crates/zap-legacy/src/codec.rs",
+      "crates/zap-legacy/src/import.rs",
+      "crates/zap-legacy/src/journal.rs",
+      "crates/zap-legacy/src/lib.rs",
+      "crates/zap-legacy/src/mapping.rs",
+      "crates/zap-legacy/src/records.rs",
+      "crates/zap-legacy/src/registration.rs",
+      "crates/zap-legacy/src/replay.rs",
+      "crates/zap-legacy/src/snapshot.rs",
+      "crates/zap-legacy/src/source.rs",
+      "crates/zap-legacy/src/types.rs",
+      "crates/zap-legacy/tests/actual_source.rs",
+      "crates/zap-legacy/tests/import_service.rs",
+      "crates/zap-legacy/tests/legacy_corpus.rs",
+      "crates/zap-runtime/src/capability_cache.rs",
+      "crates/zap-runtime/src/capability_goal.rs",
+      "crates/zap-runtime/src/claims.rs",
+      "crates/zap-runtime/src/coordinator.rs",
+      "crates/zap-runtime/src/driver.rs",
+      "crates/zap-runtime/src/goals.rs",
+      "crates/zap-runtime/src/job_ingress.rs",
+      "crates/zap-runtime/src/lib.rs",
+      "crates/zap-runtime/src/liveness.rs",
+      "crates/zap-runtime/src/native_bridge.rs",
+      "crates/zap-runtime/src/protocol.rs",
+      "crates/zap-runtime/src/reconciliation.rs",
+      "crates/zap-runtime/src/records.rs",
+      "crates/zap-runtime/src/records/goals.rs",
+      "crates/zap-runtime/src/records/observations.rs",
+      "crates/zap-runtime/src/records/recovery.rs",
+      "crates/zap-runtime/src/registration.rs",
+      "crates/zap-runtime/src/registration/affected_jobs.rs",
+      "crates/zap-runtime/src/repair.rs",
+      "crates/zap-runtime/src/retry.rs",
+      "crates/zap-runtime/src/runtime_updates.rs",
+      "crates/zap-runtime/src/runtime_updates/observations.rs",
+      "crates/zap-runtime/src/runtime_updates/retry.rs",
+      "crates/zap-runtime/src/runtime_updates/verification.rs",
+      "crates/zap-runtime/src/scheduler.rs",
+      "crates/zap-runtime/src/spawn_recovery.rs",
+      "crates/zap-runtime/src/spawn_recovery/release.rs",
+      "crates/zap-runtime/src/state.rs",
+      "crates/zap-runtime/src/stop_ingress.rs",
+      "crates/zap-runtime/src/transitions.rs",
+      "crates/zap-runtime/src/transitions/authorization.rs",
+      "crates/zap-runtime/src/transitions/job_claim.rs",
+      "crates/zap-runtime/src/transitions/receipt.rs",
+      "crates/zap-runtime/tests/runtime_contracts.rs",
+      "crates/zap-runtime/tests/runtime_persistence.rs",
+      "crates/zap-runtime/tests/runtime_persistence/candidate_test.rs",
+      "crates/zap-runtime/tests/runtime_persistence/native_retry_test.rs",
+      "crates/zap-runtime/tests/runtime_persistence/recovery_test.rs",
+      "crates/zap-store/src/artifact.rs",
+      "crates/zap-store/src/engine.rs",
+      "crates/zap-store/src/engine/indexes.rs",
+      "crates/zap-store/src/engine/indexes/rebuild.rs",
+      "crates/zap-store/src/engine/rebuild.rs",
+      "crates/zap-store/src/engine/store.rs",
+      "crates/zap-store/src/engine/tests.rs",
+      "crates/zap-store/src/engine/tests/a2.rs",
+      "crates/zap-store/src/engine/tests/service_commit.rs",
+      "crates/zap-store/src/engine/transaction.rs",
+      "crates/zap-store/src/engine/traversal.rs",
+      "crates/zap-store/src/history.rs",
+      "crates/zap-store/src/history/physical.rs",
+      "crates/zap-store/src/lib.rs",
+      "crates/zap-store/src/physical.rs",
+      "crates/zap-store/src/registration.rs",
+      "crates/zap-wire/src/epochs.rs",
+      "crates/zap-wire/src/error.rs",
+      "vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-AGENT-PROTOCOL.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-BACKEND-API.md",
+      "vibevm/vibespecs/flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-CLI.md",
+      "vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-APP-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-CORE-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-LEGACY-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-RUNTIME-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-STORAGE.xml",
+      "vibevm/vibespecs/flows/zap/ZAP-RUST-STORE-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP-GUIDE.md",
+      "vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP.xml",
+      "vibevm/vibespecs/skills/zap-draft/SKILL.md",
+      "vibevm/vibespecs/skills/zap-run/SKILL.md",
+      "vibevm/vibespecs/skills/zap-state/SKILL.md"
+    ]
+  },
+  "blocking_findings": [],
+  "scope_limits": [
+    "No source or artifact mutation; no probes/receipts inside payload.",
+    "No Rust/tests/specmap execution, Git or publication operation.",
+    "No independent installed-slot, cold-build or runtime/effectiveness claim.",
+    "Artifact reading completed before root's registry rename; receipt written afterward from cached verified data."
+  ],
+  "root_retains_acceptance_and_publication": true
+}

@@ -1,0 +1,2703 @@
+{
+  "schema": "zap-strategic-map-pilot-source/1",
+  "kind": "DevelopmentCampaignSourceFixture",
+  "input_path_base": "Package-family directory containing v1.0.0 and v1.1.0",
+  "input_path_base_relative_to_fixture": "../../../../../..",
+  "purpose": "Read-only source fixture and labelled overview for SM04; later product projection evidence remains separate.",
+  "source_snapshot": {
+    "kind": "DevelopmentCampaignFileSnapshot",
+    "file": "v1.0.0/vibevm/vibespecs/development/zap/rust-campaign/campaign.json",
+    "sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9",
+    "campaign_schema": "zap-rust-development-campaign/1",
+    "campaign_id": "ZAP-RUST-MVP-2026-09-13",
+    "campaign_revision": 211,
+    "campaign_state": "complete_waiting_for_owner_discussion",
+    "publication_state": "published_verified",
+    "coverage": "All 21 top-level task IDs/outcome labels/states and their depends_on/acceptance_depends_on arrays, not every execution slice or receipt.",
+    "basis_qualification": "This binds a developer-orchestration file snapshot. It is not StoreIdentity, a live QuerySnapshot, Runtime WorkRecord data, a RelevantBasis proof or an authority grant.",
+    "preserved_source_order": [
+      "R00",
+      "R01",
+      "R02",
+      "R03",
+      "R04",
+      "R05",
+      "R06",
+      "R07",
+      "R08",
+      "R09",
+      "R10",
+      "R11",
+      "R12",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "R18",
+      "R19",
+      "R01-FOUNDATION"
+    ],
+    "captured_utc": "2026-09-14T14:14:11Z"
+  },
+  "inputs": [
+    {
+      "key": "type_and_pilot_inventory",
+      "file": "v1.0.0/vibevm/vibespecs/development/zap/rust-campaign/STRATEGIC-MAP-TYPE-AND-PILOT-INVENTORY.md",
+      "sha256": "798f60d9c62929a6f5b09d5f5111ca84a883256c285ff4e0658383506d9e963d",
+      "qualification": "Earlier revision 210 inventory; its 21 IDs/dependency kinds/group memberships revalidated against the captured revision 211 source."
+    },
+    {
+      "key": "strategic_map_contract",
+      "file": "v1.1.0/vibevm/vibespecs/flows/zap/ZAP-STRATEGIC-MAP.xml",
+      "sha256": "0e15bc023d3a2cf1cef9de6c81ea311feeeb19aaeb7d7dfabeeafdfa920baaa0",
+      "facts": [
+        "MAP-PILOT",
+        "MAP-RELATIONSHIPS",
+        "MAP-CARDS",
+        "MAP-ASSESSMENT-DIMENSIONS",
+        "MAP-ROUTE"
+      ]
+    },
+    {
+      "key": "approved_design",
+      "file": "v1.1.0/vibevm/vibespecs/development/zap/strategic-map/APPROVED-DESIGN-INPUT.md",
+      "sha256": "5a13a4280f964f24bfd0fcc0d5635c3776af0e674f99a3200afebb9fec299ab7",
+      "qualification": "Preserved design discussion supplies the agreed six-group descriptions; no new requirements are created by editorial fixture summaries."
+    }
+  ],
+  "edge_kind_definitions": {
+    "depends_on": {
+      "source_field": "depends_on",
+      "meaning": "Captured development start/planning prerequisite",
+      "direction": "from prerequisite to dependent",
+      "canonical_Work_depends_on_reinterpretation": false
+    },
+    "acceptance_depends_on": {
+      "source_field": "acceptance_depends_on",
+      "meaning": "Captured additional acceptance prerequisite",
+      "direction": "from prerequisite to dependent",
+      "does_not_create_a_start_barrier": true
+    }
+  },
+  "edge_identity": "The fixture-local edge id includes exact source field/kind and both original endpoints; it is not a newly registered runtime relation identity.",
+  "tasks": [
+    {
+      "id": "R00",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/0",
+      "outcome_label": "Approved plan and recovery checkpoints",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Approved plan and recovery checkpoints",
+        "purpose": "Deliver the stored development outcome: Approved plan and recovery checkpoints",
+        "result": "Approved plan and recovery checkpoints",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/0/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/0/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/0/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G1",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R01",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/1",
+      "outcome_label": "Rust integration API and storage ADR",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Rust integration API and storage ADR",
+        "purpose": "Deliver the stored development outcome: Rust integration API and storage ADR",
+        "result": "Rust integration API and storage ADR",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/1/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/1/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/1/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R00"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G1",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R02",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/2",
+      "outcome_label": "Normative requirements and complete denominator",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Normative requirements and complete denominator",
+        "purpose": "Deliver the stored development outcome: Normative requirements and complete denominator",
+        "result": "Normative requirements and complete denominator",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/2/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/2/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/2/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R00"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G1",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R03",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/3",
+      "outcome_label": "Portable Cargo workspace and typed core",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Portable Cargo workspace and typed core",
+        "purpose": "Deliver the stored development outcome: Portable Cargo workspace and typed core",
+        "result": "Portable Cargo workspace and typed core",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/3/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/3/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/3/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R01-FOUNDATION"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G1",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R04",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/4",
+      "outcome_label": "Transactional store and indexed queries",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Transactional store and indexed queries",
+        "purpose": "Deliver the stored development outcome: Transactional store and indexed queries",
+        "result": "Transactional store and indexed queries",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/4/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/4/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/4/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R03"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G1",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R05",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/5",
+      "outcome_label": "Domain authority obligations and completion",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Domain authority obligations and completion",
+        "purpose": "Deliver the stored development outcome: Domain authority obligations and completion",
+        "result": "Domain authority obligations and completion",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/5/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/5/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/5/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R01-FOUNDATION",
+        "R02"
+      ],
+      "acceptance_depends_on": [
+        "R03"
+      ],
+      "acceptance_dependency_field_present": true,
+      "derived_group_id": "G2",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R06",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/6",
+      "outcome_label": "Knowledge evidence and adaptive changes",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Knowledge evidence and adaptive changes",
+        "purpose": "Deliver the stored development outcome: Knowledge evidence and adaptive changes",
+        "result": "Knowledge evidence and adaptive changes",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/6/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/6/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/6/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R01",
+        "R05"
+      ],
+      "acceptance_depends_on": [
+        "R04"
+      ],
+      "acceptance_dependency_field_present": true,
+      "derived_group_id": "G2",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R07",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/7",
+      "outcome_label": "Economics forecasts holds and closure",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Economics forecasts holds and closure",
+        "purpose": "Deliver the stored development outcome: Economics forecasts holds and closure",
+        "result": "Economics forecasts holds and closure",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/7/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/7/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/7/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R04",
+        "R05"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G2",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R08",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/8",
+      "outcome_label": "Lowering roles packets and verification selection",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Lowering roles packets and verification selection",
+        "purpose": "Deliver the stored development outcome: Lowering roles packets and verification selection",
+        "result": "Lowering roles packets and verification selection",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/8/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/8/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/8/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R05",
+        "R06"
+      ],
+      "acceptance_depends_on": [
+        "R07"
+      ],
+      "acceptance_dependency_field_present": true,
+      "derived_group_id": "G3",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R09",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/9",
+      "outcome_label": "Weak execution roundtrip and encounters",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Weak execution roundtrip and encounters",
+        "purpose": "Deliver the stored development outcome: Weak execution roundtrip and encounters",
+        "result": "Weak execution roundtrip and encounters",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/9/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/9/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/9/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R04",
+        "R08"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G3",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R10",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/10",
+      "outcome_label": "Dreamer overlays grill and live adoption",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Dreamer overlays grill and live adoption",
+        "purpose": "Deliver the stored development outcome: Dreamer overlays grill and live adoption",
+        "result": "Dreamer overlays grill and live adoption",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/10/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/10/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/10/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R06",
+        "R07",
+        "R08"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G4",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R11",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/11",
+      "outcome_label": "Concurrent native host runtime and recovery",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Concurrent native host runtime and recovery",
+        "purpose": "Deliver the stored development outcome: Concurrent native host runtime and recovery",
+        "result": "Concurrent native host runtime and recovery",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/11/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/11/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/11/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R01",
+        "R02"
+      ],
+      "acceptance_depends_on": [
+        "R03",
+        "R04",
+        "R05"
+      ],
+      "acceptance_dependency_field_present": true,
+      "derived_group_id": "G3",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R12",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/12",
+      "outcome_label": "Capabilities role profiles resume and goals",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Capabilities role profiles resume and goals",
+        "purpose": "Deliver the stored development outcome: Capabilities role profiles resume and goals",
+        "result": "Capabilities role profiles resume and goals",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/12/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/12/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/12/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R01",
+        "R02"
+      ],
+      "acceptance_depends_on": [
+        "R08",
+        "R11"
+      ],
+      "acceptance_dependency_field_present": true,
+      "derived_group_id": "G3",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R13",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/13",
+      "outcome_label": "CLI backend observability and typed queries",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "CLI backend observability and typed queries",
+        "purpose": "Deliver the stored development outcome: CLI backend observability and typed queries",
+        "result": "CLI backend observability and typed queries",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/13/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/13/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/13/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R04",
+        "R05",
+        "R11"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G5",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R14",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/14",
+      "outcome_label": "Lossless legacy and actual NEXT migration",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Lossless legacy and actual NEXT migration",
+        "purpose": "Deliver the stored development outcome: Lossless legacy and actual NEXT migration",
+        "result": "Lossless legacy and actual NEXT migration",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/14/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/14/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/14/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R04",
+        "R05"
+      ],
+      "acceptance_depends_on": [
+        "R06"
+      ],
+      "acceptance_dependency_field_present": true,
+      "derived_group_id": "G4",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      },
+      "qualification": "The stored NEXT migration label refers to historical inactive import. This fixture grants no NEXT execution or activation."
+    },
+    {
+      "id": "R15",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/15",
+      "outcome_label": "Installed package skills and production documentation",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Installed package skills and production documentation",
+        "purpose": "Deliver the stored development outcome: Installed package skills and production documentation",
+        "result": "Installed package skills and production documentation",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/15/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/15/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/15/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R02",
+        "R03",
+        "R08",
+        "R11",
+        "R12",
+        "R13"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G5",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R16",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/16",
+      "outcome_label": "Integrated behavior acceptance",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Integrated behavior acceptance",
+        "purpose": "Deliver the stored development outcome: Integrated behavior acceptance",
+        "result": "Integrated behavior acceptance",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/16/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/16/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/16/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G6",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R17",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/17",
+      "outcome_label": "Measured graph and history scalability",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Measured graph and history scalability",
+        "purpose": "Deliver the stored development outcome: Measured graph and history scalability",
+        "result": "Measured graph and history scalability",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/17/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/17/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/17/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R04",
+        "R06",
+        "R13"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G6",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R18",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/18",
+      "outcome_label": "Production discipline and final package gate",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Production discipline and final package gate",
+        "purpose": "Deliver the stored development outcome: Production discipline and final package gate",
+        "result": "Production discipline and final package gate",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/18/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/18/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/18/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R16",
+        "R17"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G6",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R19",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/19",
+      "outcome_label": "Publication installed proof and completion",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Publication installed proof and completion",
+        "purpose": "Deliver the stored development outcome: Publication installed proof and completion",
+        "result": "Publication installed proof and completion",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/19/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/19/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/19/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R18"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G6",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "R01-FOUNDATION",
+      "object_kind": "DevelopmentCampaignTask",
+      "source_pointer": "/tasks/20",
+      "outcome_label": "Corrected foundation API sections1-7 and ownership accepted",
+      "source_state": "accepted_for_rust_mvp",
+      "human_fields": {
+        "name": "Corrected foundation API sections1-7 and ownership accepted",
+        "purpose": "Deliver the stored development outcome: Corrected foundation API sections1-7 and ownership accepted",
+        "result": "Corrected foundation API sections1-7 and ownership accepted",
+        "description": {
+          "state": "Unavailable",
+          "reason": "No separate description is included in the selected source fields."
+        },
+        "provenance": {
+          "name": {
+            "kind": "VerbatimSourceField",
+            "source_pointer": "/tasks/20/outcome"
+          },
+          "purpose": {
+            "kind": "EditorialSummary",
+            "source_pointer": "/tasks/20/outcome",
+            "adds_requirement": false
+          },
+          "result": {
+            "kind": "VerbatimOutcomeLabel",
+            "source_pointer": "/tasks/20/outcome",
+            "runtime_result_or_acceptance_receipt": false
+          }
+        }
+      },
+      "depends_on": [
+        "R00"
+      ],
+      "acceptance_depends_on": [],
+      "acceptance_dependency_field_present": false,
+      "derived_group_id": "G1",
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "depends_on:R00->R01",
+      "kind": "depends_on",
+      "from": "R00",
+      "to": "R01",
+      "source_pointer": "/tasks/1/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R00->R02",
+      "kind": "depends_on",
+      "from": "R00",
+      "to": "R02",
+      "source_pointer": "/tasks/2/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R01-FOUNDATION->R03",
+      "kind": "depends_on",
+      "from": "R01-FOUNDATION",
+      "to": "R03",
+      "source_pointer": "/tasks/3/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R03->R04",
+      "kind": "depends_on",
+      "from": "R03",
+      "to": "R04",
+      "source_pointer": "/tasks/4/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R01-FOUNDATION->R05",
+      "kind": "depends_on",
+      "from": "R01-FOUNDATION",
+      "to": "R05",
+      "source_pointer": "/tasks/5/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R02->R05",
+      "kind": "depends_on",
+      "from": "R02",
+      "to": "R05",
+      "source_pointer": "/tasks/5/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R03->R05",
+      "kind": "acceptance_depends_on",
+      "from": "R03",
+      "to": "R05",
+      "source_pointer": "/tasks/5/acceptance_depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R01->R06",
+      "kind": "depends_on",
+      "from": "R01",
+      "to": "R06",
+      "source_pointer": "/tasks/6/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R05->R06",
+      "kind": "depends_on",
+      "from": "R05",
+      "to": "R06",
+      "source_pointer": "/tasks/6/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R04->R06",
+      "kind": "acceptance_depends_on",
+      "from": "R04",
+      "to": "R06",
+      "source_pointer": "/tasks/6/acceptance_depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R04->R07",
+      "kind": "depends_on",
+      "from": "R04",
+      "to": "R07",
+      "source_pointer": "/tasks/7/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R05->R07",
+      "kind": "depends_on",
+      "from": "R05",
+      "to": "R07",
+      "source_pointer": "/tasks/7/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R05->R08",
+      "kind": "depends_on",
+      "from": "R05",
+      "to": "R08",
+      "source_pointer": "/tasks/8/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R06->R08",
+      "kind": "depends_on",
+      "from": "R06",
+      "to": "R08",
+      "source_pointer": "/tasks/8/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R07->R08",
+      "kind": "acceptance_depends_on",
+      "from": "R07",
+      "to": "R08",
+      "source_pointer": "/tasks/8/acceptance_depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R04->R09",
+      "kind": "depends_on",
+      "from": "R04",
+      "to": "R09",
+      "source_pointer": "/tasks/9/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R08->R09",
+      "kind": "depends_on",
+      "from": "R08",
+      "to": "R09",
+      "source_pointer": "/tasks/9/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R06->R10",
+      "kind": "depends_on",
+      "from": "R06",
+      "to": "R10",
+      "source_pointer": "/tasks/10/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R07->R10",
+      "kind": "depends_on",
+      "from": "R07",
+      "to": "R10",
+      "source_pointer": "/tasks/10/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R08->R10",
+      "kind": "depends_on",
+      "from": "R08",
+      "to": "R10",
+      "source_pointer": "/tasks/10/depends_on/2",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R01->R11",
+      "kind": "depends_on",
+      "from": "R01",
+      "to": "R11",
+      "source_pointer": "/tasks/11/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R02->R11",
+      "kind": "depends_on",
+      "from": "R02",
+      "to": "R11",
+      "source_pointer": "/tasks/11/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R03->R11",
+      "kind": "acceptance_depends_on",
+      "from": "R03",
+      "to": "R11",
+      "source_pointer": "/tasks/11/acceptance_depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R04->R11",
+      "kind": "acceptance_depends_on",
+      "from": "R04",
+      "to": "R11",
+      "source_pointer": "/tasks/11/acceptance_depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R05->R11",
+      "kind": "acceptance_depends_on",
+      "from": "R05",
+      "to": "R11",
+      "source_pointer": "/tasks/11/acceptance_depends_on/2",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R01->R12",
+      "kind": "depends_on",
+      "from": "R01",
+      "to": "R12",
+      "source_pointer": "/tasks/12/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R02->R12",
+      "kind": "depends_on",
+      "from": "R02",
+      "to": "R12",
+      "source_pointer": "/tasks/12/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R08->R12",
+      "kind": "acceptance_depends_on",
+      "from": "R08",
+      "to": "R12",
+      "source_pointer": "/tasks/12/acceptance_depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R11->R12",
+      "kind": "acceptance_depends_on",
+      "from": "R11",
+      "to": "R12",
+      "source_pointer": "/tasks/12/acceptance_depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R04->R13",
+      "kind": "depends_on",
+      "from": "R04",
+      "to": "R13",
+      "source_pointer": "/tasks/13/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R05->R13",
+      "kind": "depends_on",
+      "from": "R05",
+      "to": "R13",
+      "source_pointer": "/tasks/13/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R11->R13",
+      "kind": "depends_on",
+      "from": "R11",
+      "to": "R13",
+      "source_pointer": "/tasks/13/depends_on/2",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R04->R14",
+      "kind": "depends_on",
+      "from": "R04",
+      "to": "R14",
+      "source_pointer": "/tasks/14/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R05->R14",
+      "kind": "depends_on",
+      "from": "R05",
+      "to": "R14",
+      "source_pointer": "/tasks/14/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "acceptance_depends_on:R06->R14",
+      "kind": "acceptance_depends_on",
+      "from": "R06",
+      "to": "R14",
+      "source_pointer": "/tasks/14/acceptance_depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R02->R15",
+      "kind": "depends_on",
+      "from": "R02",
+      "to": "R15",
+      "source_pointer": "/tasks/15/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R03->R15",
+      "kind": "depends_on",
+      "from": "R03",
+      "to": "R15",
+      "source_pointer": "/tasks/15/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R08->R15",
+      "kind": "depends_on",
+      "from": "R08",
+      "to": "R15",
+      "source_pointer": "/tasks/15/depends_on/2",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R11->R15",
+      "kind": "depends_on",
+      "from": "R11",
+      "to": "R15",
+      "source_pointer": "/tasks/15/depends_on/3",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R12->R15",
+      "kind": "depends_on",
+      "from": "R12",
+      "to": "R15",
+      "source_pointer": "/tasks/15/depends_on/4",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R13->R15",
+      "kind": "depends_on",
+      "from": "R13",
+      "to": "R15",
+      "source_pointer": "/tasks/15/depends_on/5",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R06->R16",
+      "kind": "depends_on",
+      "from": "R06",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R07->R16",
+      "kind": "depends_on",
+      "from": "R07",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R08->R16",
+      "kind": "depends_on",
+      "from": "R08",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/2",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R09->R16",
+      "kind": "depends_on",
+      "from": "R09",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/3",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R10->R16",
+      "kind": "depends_on",
+      "from": "R10",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/4",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R11->R16",
+      "kind": "depends_on",
+      "from": "R11",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/5",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R12->R16",
+      "kind": "depends_on",
+      "from": "R12",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/6",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R13->R16",
+      "kind": "depends_on",
+      "from": "R13",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/7",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R14->R16",
+      "kind": "depends_on",
+      "from": "R14",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/8",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R15->R16",
+      "kind": "depends_on",
+      "from": "R15",
+      "to": "R16",
+      "source_pointer": "/tasks/16/depends_on/9",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R04->R17",
+      "kind": "depends_on",
+      "from": "R04",
+      "to": "R17",
+      "source_pointer": "/tasks/17/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R06->R17",
+      "kind": "depends_on",
+      "from": "R06",
+      "to": "R17",
+      "source_pointer": "/tasks/17/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R13->R17",
+      "kind": "depends_on",
+      "from": "R13",
+      "to": "R17",
+      "source_pointer": "/tasks/17/depends_on/2",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R16->R18",
+      "kind": "depends_on",
+      "from": "R16",
+      "to": "R18",
+      "source_pointer": "/tasks/18/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R17->R18",
+      "kind": "depends_on",
+      "from": "R17",
+      "to": "R18",
+      "source_pointer": "/tasks/18/depends_on/1",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R18->R19",
+      "kind": "depends_on",
+      "from": "R18",
+      "to": "R19",
+      "source_pointer": "/tasks/19/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    },
+    {
+      "id": "depends_on:R00->R01-FOUNDATION",
+      "kind": "depends_on",
+      "from": "R00",
+      "to": "R01-FOUNDATION",
+      "source_pointer": "/tasks/20/depends_on/0",
+      "identity_scope": "captured_source_relation",
+      "source_snapshot_sha256": "327ad2b3e09f5e8134ad06c589e65c45adffda3daf6beb4c41900b4f391ad4d9"
+    }
+  ],
+  "derived_groups": [
+    {
+      "id": "G1",
+      "object_kind": "DerivedLabelledGroup",
+      "human_fields": {
+        "name": "Typed foundation",
+        "purpose": "The declared Rust contracts and transactional substrate can support the product",
+        "result": "The declared Rust contracts and transactional substrate can support the product",
+        "provenance": {
+          "name": "Agreed derived label from the inventory and approved design input",
+          "purpose": "Editorial group summary, not a new requirement",
+          "result": "Editorial outcome overview, not a new completion predicate"
+        }
+      },
+      "members": [
+        "R00",
+        "R01-FOUNDATION",
+        "R01",
+        "R02",
+        "R03",
+        "R04"
+      ],
+      "membership_source": {
+        "input": "type_and_pilot_inventory",
+        "group": "G1"
+      },
+      "summary_source": {
+        "input": "approved_design",
+        "group_name": "Typed foundation"
+      },
+      "identity_scope": "Local derived label in this fixture; not a WorkId or MilestoneId",
+      "creates_authority": false,
+      "creates_execution_barrier": false,
+      "creates_acceptance_state": false,
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "G2",
+      "object_kind": "DerivedLabelledGroup",
+      "human_fields": {
+        "name": "Governed campaign",
+        "purpose": "Obligations, evidence, economics and Owner controls have enforced semantics",
+        "result": "Obligations, evidence, economics and Owner controls have enforced semantics",
+        "provenance": {
+          "name": "Agreed derived label from the inventory and approved design input",
+          "purpose": "Editorial group summary, not a new requirement",
+          "result": "Editorial outcome overview, not a new completion predicate"
+        }
+      },
+      "members": [
+        "R05",
+        "R06",
+        "R07"
+      ],
+      "membership_source": {
+        "input": "type_and_pilot_inventory",
+        "group": "G2"
+      },
+      "summary_source": {
+        "input": "approved_design",
+        "group_name": "Governed campaign"
+      },
+      "identity_scope": "Local derived label in this fixture; not a WorkId or MilestoneId",
+      "creates_authority": false,
+      "creates_execution_barrier": false,
+      "creates_acceptance_state": false,
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "G3",
+      "object_kind": "DerivedLabelledGroup",
+      "human_fields": {
+        "name": "Durable execution",
+        "purpose": "Lowered work can pass through bounded offline/native protocols and recovery",
+        "result": "Lowered work can pass through bounded offline/native protocols and recovery",
+        "provenance": {
+          "name": "Agreed derived label from the inventory and approved design input",
+          "purpose": "Editorial group summary, not a new requirement",
+          "result": "Editorial outcome overview, not a new completion predicate"
+        }
+      },
+      "members": [
+        "R08",
+        "R09",
+        "R11",
+        "R12"
+      ],
+      "membership_source": {
+        "input": "type_and_pilot_inventory",
+        "group": "G3"
+      },
+      "summary_source": {
+        "input": "approved_design",
+        "group_name": "Durable execution"
+      },
+      "identity_scope": "Local derived label in this fixture; not a WorkId or MilestoneId",
+      "creates_authority": false,
+      "creates_execution_barrier": false,
+      "creates_acceptance_state": false,
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "G4",
+      "object_kind": "DerivedLabelledGroup",
+      "human_fields": {
+        "name": "Safe adaptation and migration",
+        "purpose": "Exploration, promotion/removal and inactive migration preserve commitments",
+        "result": "Exploration, promotion/removal and inactive migration preserve commitments",
+        "provenance": {
+          "name": "Agreed derived label from the inventory and approved design input",
+          "purpose": "Editorial group summary, not a new requirement",
+          "result": "Editorial outcome overview, not a new completion predicate"
+        }
+      },
+      "members": [
+        "R10",
+        "R14"
+      ],
+      "membership_source": {
+        "input": "type_and_pilot_inventory",
+        "group": "G4"
+      },
+      "summary_source": {
+        "input": "approved_design",
+        "group_name": "Safe adaptation and migration"
+      },
+      "identity_scope": "Local derived label in this fixture; not a WorkId or MilestoneId",
+      "creates_authority": false,
+      "creates_execution_barrier": false,
+      "creates_acceptance_state": false,
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "G5",
+      "object_kind": "DerivedLabelledGroup",
+      "human_fields": {
+        "name": "Operable service",
+        "purpose": "Clients can inspect and operate the packaged service through declared interfaces",
+        "result": "Clients can inspect and operate the packaged service through declared interfaces",
+        "provenance": {
+          "name": "Agreed derived label from the inventory and approved design input",
+          "purpose": "Editorial group summary, not a new requirement",
+          "result": "Editorial outcome overview, not a new completion predicate"
+        }
+      },
+      "members": [
+        "R13",
+        "R15"
+      ],
+      "membership_source": {
+        "input": "type_and_pilot_inventory",
+        "group": "G5"
+      },
+      "summary_source": {
+        "input": "approved_design",
+        "group_name": "Operable service"
+      },
+      "identity_scope": "Local derived label in this fixture; not a WorkId or MilestoneId",
+      "creates_authority": false,
+      "creates_execution_barrier": false,
+      "creates_acceptance_state": false,
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    },
+    {
+      "id": "G6",
+      "object_kind": "DerivedLabelledGroup",
+      "human_fields": {
+        "name": "Verified release",
+        "purpose": "Current requirements, scale, discipline, installation and publication have evidence",
+        "result": "Current requirements, scale, discipline, installation and publication have evidence",
+        "provenance": {
+          "name": "Agreed derived label from the inventory and approved design input",
+          "purpose": "Editorial group summary, not a new requirement",
+          "result": "Editorial outcome overview, not a new completion predicate"
+        }
+      },
+      "members": [
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "membership_source": {
+        "input": "type_and_pilot_inventory",
+        "group": "G6"
+      },
+      "summary_source": {
+        "input": "approved_design",
+        "group_name": "Verified release"
+      },
+      "identity_scope": "Local derived label in this fixture; not a WorkId or MilestoneId",
+      "creates_authority": false,
+      "creates_execution_barrier": false,
+      "creates_acceptance_state": false,
+      "assessments": {
+        "remaining_agent_effort": {
+          "state": "Unassessed",
+          "unit": "agent_hours",
+          "reason": "The captured development task data supplies no comparable remaining agent effort assessment; no zero or grade is inferred."
+        },
+        "elapsed_duration": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable elapsed duration assessment; no zero or grade is inferred."
+        },
+        "passive_wait": {
+          "state": "Unassessed",
+          "unit": "hours",
+          "reason": "The captured development task data supplies no comparable passive wait assessment; no zero or grade is inferred."
+        },
+        "structural_complexity": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable structural complexity assessment; no zero or grade is inferred."
+        },
+        "executor_relative_difficulty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable executor-relative difficulty assessment; no zero or grade is inferred."
+        },
+        "uncertainty": {
+          "state": "Unassessed",
+          "reason": "The captured development task data supplies no comparable uncertainty assessment; no zero or grade is inferred."
+        }
+      }
+    }
+  ],
+  "derived_group_relationships": [
+    {
+      "from_group": "G1",
+      "to_group": "G2",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R01-FOUNDATION->R05",
+        "depends_on:R02->R05",
+        "depends_on:R01->R06",
+        "depends_on:R04->R07"
+      ],
+      "acceptance_depends_on_edge_ids": [
+        "acceptance_depends_on:R03->R05",
+        "acceptance_depends_on:R04->R06"
+      ]
+    },
+    {
+      "from_group": "G1",
+      "to_group": "G3",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R04->R09",
+        "depends_on:R01->R11",
+        "depends_on:R02->R11",
+        "depends_on:R01->R12",
+        "depends_on:R02->R12"
+      ],
+      "acceptance_depends_on_edge_ids": [
+        "acceptance_depends_on:R03->R11",
+        "acceptance_depends_on:R04->R11"
+      ]
+    },
+    {
+      "from_group": "G1",
+      "to_group": "G4",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R04->R14"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G1",
+      "to_group": "G5",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R04->R13",
+        "depends_on:R02->R15",
+        "depends_on:R03->R15"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G1",
+      "to_group": "G6",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R04->R17"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G2",
+      "to_group": "G3",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R05->R08",
+        "depends_on:R06->R08"
+      ],
+      "acceptance_depends_on_edge_ids": [
+        "acceptance_depends_on:R07->R08",
+        "acceptance_depends_on:R05->R11"
+      ]
+    },
+    {
+      "from_group": "G2",
+      "to_group": "G4",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R06->R10",
+        "depends_on:R07->R10",
+        "depends_on:R05->R14"
+      ],
+      "acceptance_depends_on_edge_ids": [
+        "acceptance_depends_on:R06->R14"
+      ]
+    },
+    {
+      "from_group": "G2",
+      "to_group": "G5",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R05->R13"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G2",
+      "to_group": "G6",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R06->R16",
+        "depends_on:R07->R16",
+        "depends_on:R06->R17"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G3",
+      "to_group": "G4",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R08->R10"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G3",
+      "to_group": "G5",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R11->R13",
+        "depends_on:R08->R15",
+        "depends_on:R11->R15",
+        "depends_on:R12->R15"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G3",
+      "to_group": "G6",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R08->R16",
+        "depends_on:R09->R16",
+        "depends_on:R11->R16",
+        "depends_on:R12->R16"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G4",
+      "to_group": "G6",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R10->R16",
+        "depends_on:R14->R16"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    },
+    {
+      "from_group": "G5",
+      "to_group": "G6",
+      "meaning": "Summary of the listed source relations only; no whole-group barrier",
+      "depends_on_edge_ids": [
+        "depends_on:R13->R16",
+        "depends_on:R15->R16",
+        "depends_on:R13->R17"
+      ],
+      "acceptance_depends_on_edge_ids": []
+    }
+  ],
+  "early_entry_examples": [
+    {
+      "task_ids": [
+        "R05"
+      ],
+      "start_requires": [
+        "R01-FOUNDATION",
+        "R02"
+      ],
+      "acceptance_additionally_requires": [
+        "R03"
+      ],
+      "qualification": "No whole G1 barrier; early start does not waive the R03 acceptance dependency."
+    },
+    {
+      "task_ids": [
+        "R11"
+      ],
+      "start_requires": [
+        "R01",
+        "R02"
+      ],
+      "acceptance_additionally_requires": [
+        "R03",
+        "R04",
+        "R05"
+      ],
+      "qualification": "Can prepare before G2 completes; acceptance retains all three additional prerequisites."
+    },
+    {
+      "task_ids": [
+        "R12"
+      ],
+      "start_requires": [
+        "R01",
+        "R02"
+      ],
+      "acceptance_additionally_requires": [
+        "R08",
+        "R11"
+      ],
+      "qualification": "Start/planning can overlap R11; acceptance cannot ignore R08/R11."
+    },
+    {
+      "task_ids": [
+        "R14"
+      ],
+      "start_requires": [
+        "R04",
+        "R05"
+      ],
+      "acceptance_additionally_requires": [
+        "R06"
+      ],
+      "qualification": "Independent of R10; original inactive-import meaning is preserved."
+    },
+    {
+      "task_ids": [
+        "R13"
+      ],
+      "start_requires": [
+        "R04",
+        "R05",
+        "R11"
+      ],
+      "acceptance_additionally_requires": [],
+      "qualification": "No additional array in this source; declared dependencies and their proof duties remain."
+    },
+    {
+      "task_ids": [
+        "R17"
+      ],
+      "start_requires": [
+        "R04",
+        "R06",
+        "R13"
+      ],
+      "acceptance_additionally_requires": [],
+      "qualification": "Can begin before R16/R15; no completion or successful scale result is inferred from starting."
+    }
+  ],
+  "scope_limits": [
+    "Source-only fixture, not a canonical runtime WorkRecord/store or live strategy.",
+    "No source-plan write, import, migration, NEXT execution, new authority or group completion predicate.",
+    "Descriptions/purpose expansions are explicitly editorial summaries; canonical source outcomes stay verbatim.",
+    "Missing effort/time ranges, complexity/difficulty grades and uncertainty are Unassessed; none becomes zero, low or a computed route distance.",
+    "No terrain/color/icon/layout collection, model calls, runtime/effectiveness tests or cost-prose parsing.",
+    "Groups do not duplicate shared work or replace either dependency kind."
+  ],
+  "validation": {
+    "task_count": 21,
+    "unique_task_ids": 21,
+    "depends_on_edges": 49,
+    "acceptance_depends_on_edges": 9,
+    "acceptance_task_count": 6,
+    "typed_edge_count": 58,
+    "unique_typed_edge_ids": 58,
+    "overlapping_endpoint_pairs_between_kinds": 0,
+    "unique_endpoint_pairs_ignoring_kind": 58,
+    "missing_endpoints": [],
+    "groups": 6,
+    "total_group_memberships": 21,
+    "unique_group_members": 21,
+    "unassigned_task_ids": [],
+    "planning_internal_edges": 12,
+    "planning_cross_group_edges": 37,
+    "acceptance_internal_edges": 2,
+    "acceptance_cross_group_edges": 7,
+    "distinct_cross_group_pairs": 14,
+    "union_relation_acyclic": true,
+    "R01_and_R01_FOUNDATION_distinct": true,
+    "all_missing_assessments_unassessed": true,
+    "validation_scope": "Mechanical source-fixture integrity only; not a runtime or planning-effectiveness test.",
+    "inputs_unchanged_before_write": true
+  },
+  "created_utc": "2026-09-14T14:14:11Z"
+}

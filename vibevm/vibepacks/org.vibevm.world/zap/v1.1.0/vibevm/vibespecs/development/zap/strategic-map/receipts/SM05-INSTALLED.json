@@ -1,0 +1,95 @@
+{
+  "schema": "zap-strategic-map-installed-receipt/1",
+  "verified_utc": "2026-09-14T15:20:55.0789966Z",
+  "installed_slot": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0",
+  "cargo_lock": {
+    "bytes": 15194,
+    "sha256": "4320a1fcb84b91fb1ef9af97878428a40987e4a8ccb3d6022c926340a2e54f2b"
+  },
+  "slot_record": {
+    "bytes": 74835,
+    "sha256": "df11146f0eba3441678680ed574c7494c8b4eb5d485cb3c3e5332190e8689792"
+  },
+  "environment": {
+    "cargo_target_dir": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/target",
+    "release": true,
+    "locked": true,
+    "offline": true,
+    "zap_r16_native_probe_dir": "unset"
+  },
+  "targets": [
+    {
+      "package": "zap-cli",
+      "test": "strategic_map",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "sources": [
+        {
+          "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/crates/zap-cli/tests/strategic_map.rs",
+          "bytes": 4020,
+          "sha256": "bb9f9987665e1edac20c2e25338b4c46f25fc5e2f946033a33c9197e7a535b0e"
+        },
+        {
+          "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/crates/zap-app/tests/strategic_map_service/seed.rs",
+          "bytes": 15108,
+          "sha256": "1ecbcb6990b71104a86cebad27ca8d050d1c653603d20dff7331b6f82610ba1f"
+        }
+      ],
+      "binary": {
+        "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/target/release/deps/strategic_map-b092b836e8f60e6e.exe",
+        "bytes": 12176384,
+        "sha256": "547623fd05909b895e0dc28c6db927b35490fe4dfcefb6a705aeb3b3eee51621"
+      },
+      "log": {
+        "path": "C:/Users/olegc/.vibe/zap/development/vibevm-next/strategic-map/SM05-INSTALLED-20260914T151859Z-zap-cli-strategic_map.log",
+        "sha256": "e5825adbe964ead67efaf84bf354750fcf8575053a141c1be36a9f1a10b6d50c"
+      }
+    },
+    {
+      "package": "zap-app",
+      "test": "strategic_map_service",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "sources": [
+        {
+          "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/crates/zap-app/tests/strategic_map_service.rs",
+          "bytes": 168,
+          "sha256": "e1bebe1abd7cc8d924b2a9cebe8d34da445a8de1d8ce7ecc558389ae23d24116"
+        },
+        {
+          "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/crates/zap-app/tests/strategic_map_service/seed.rs",
+          "bytes": 15108,
+          "sha256": "1ecbcb6990b71104a86cebad27ca8d050d1c653603d20dff7331b6f82610ba1f"
+        },
+        {
+          "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/crates/zap-app/tests/strategic_map_service/support.rs",
+          "bytes": 10698,
+          "sha256": "e026ca4ca22f205d3e2bdb573dc3ce69cab5d5a5991689268c0b0b6d99ad1d66"
+        },
+        {
+          "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/crates/zap-app/tests/strategic_map_service/journey.rs",
+          "bytes": 12413,
+          "sha256": "e966f8d239f42aeaa8d66413dc83c3e0a8acdf16415b7b1ac7c66e93dc8e6008"
+        }
+      ],
+      "binary": {
+        "path": "C:/Users/olegc/.vibe/zap/development/map-1.1-consumer-20260914T1458560928356Z/vibevm/vibedeps/org.vibevm.world.zap/1.1.0/target/release/deps/strategic_map_service-43d9f2f4daa1ced3.exe",
+        "bytes": 29911040,
+        "sha256": "561fa3b8d884fc416d688bc76444e9c99a351034ccfd8eb2e52199ccdb5ce54b"
+      },
+      "log": {
+        "path": "C:/Users/olegc/.vibe/zap/development/vibevm-next/strategic-map/SM05-INSTALLED-20260914T152005Z-zap-app-strategic_map_service.log",
+        "sha256": "3753067b88e39b5c713570776457a77f87692663b40d7b0183fe8ae1f5a0edb8"
+      }
+    }
+  ],
+  "totals": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "installed_source_modified": false,
+  "package_source_modified": false
+}

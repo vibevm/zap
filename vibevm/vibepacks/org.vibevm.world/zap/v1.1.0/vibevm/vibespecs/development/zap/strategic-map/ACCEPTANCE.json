@@ -1,0 +1,144 @@
+{
+  "schema": "zap-map-acceptance/1",
+  "version": "1.1.0",
+  "status": "complete",
+  "facts": [
+    {
+      "id": "MAP-PROJECTION",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-IDENTITY",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-BOUNDS",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-CARDS",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-RELATIONSHIPS",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-RESOURCES",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-WORK-ASSESSMENT",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM03.md",
+        "REPORT-SM03.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-ASSESSMENT-BASIS",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM03.md",
+        "REPORT-SM03.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-ASSESSMENT-DIMENSIONS",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM03.md",
+        "REPORT-SM03.md"
+      ]
+    },
+    {
+      "id": "MAP-EFFORT-SCOPE",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-ROUTE",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-VISUAL-INDEPENDENCE",
+      "status": "accepted_bounded",
+      "evidence": [
+        "RESULT.md",
+        "REVIEW-SM02-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-PUBLIC-SURFACE",
+      "status": "accepted_bounded",
+      "evidence": [
+        "REVIEW-SM02-SM04.md",
+        "REPORT-SM02.md",
+        "REPORT-SM04.md"
+      ]
+    },
+    {
+      "id": "MAP-PILOT",
+      "status": "accepted_bounded",
+      "evidence": [
+        "PILOT-SOURCE.md",
+        "pilot-source.json"
+      ]
+    },
+    {
+      "id": "MAP-COMPATIBILITY",
+      "status": "accepted_bounded",
+      "evidence": [
+        "RESULT.md",
+        "SOURCE-MANIFEST.json"
+      ]
+    }
+  ],
+  "final_gates": [
+    "REPORT-SM05-CARGO.md",
+    "SM05-ARTIFACT-AUDIT.json",
+    "REPORT-SM05-INSTALLED.md"
+  ],
+  "scope": "Projection and descriptive assessments; limits in RESULT.md; no new milestone authority/frontend/automatic estimate-driven dispatch."
+}

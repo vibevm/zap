@@ -1,0 +1,88 @@
+{
+  "schema": "zap-strategic-map-sm05-cargo-receipt/1",
+  "run_id": "SM05-FINAL-20260914T150405Z",
+  "completed_at_utc": "2026-09-14T15:06:06.7255644Z",
+  "package_root": "C:/Users/olegc/git/v/vibevm-next/vibevm/vibepacks/org.vibevm.world/zap/v1.1.0",
+  "source_state": "root-declared frozen after SM02, SM03, and SM04",
+  "domain_test": {
+    "command": "run-cargo.ps1 cargo test -p zap-domain --offline --no-fail-fast",
+    "exit": 0,
+    "status": "passed_complete_selected_denominator",
+    "result_groups": 15,
+    "passed": 79,
+    "failed": 0,
+    "ignored": 1,
+    "doctest_target_executed": true,
+    "doctests_passed": 0,
+    "ignored_tests": [
+      {
+        "test": "r17_performance::measured_registered_queries_on_mixed_graph",
+        "reason": "R17 controlled performance measurement; requires explicit output directory"
+      }
+    ],
+    "environment": {
+      "ZAP_R16_NATIVE_PROBE_DIR_set": false,
+      "external_native_probe_evidence": false,
+      "live_collaboration_evidence": false
+    },
+    "targets": [
+      { "target": "zap-domain lib", "passed": 7, "failed": 0, "ignored": 0 },
+      { "target": "domain_contracts", "passed": 8, "failed": 0, "ignored": 0 },
+      { "target": "dreamer_service", "passed": 4, "failed": 0, "ignored": 0 },
+      { "target": "economics_contracts", "passed": 5, "failed": 0, "ignored": 0 },
+      { "target": "economics_service", "passed": 12, "failed": 0, "ignored": 0 },
+      { "target": "knowledge_contracts", "passed": 7, "failed": 0, "ignored": 0 },
+      { "target": "knowledge_service", "passed": 17, "failed": 0, "ignored": 1 },
+      { "target": "lowering_contracts", "passed": 5, "failed": 0, "ignored": 0 },
+      { "target": "lowering_offline", "passed": 1, "failed": 0, "ignored": 0 },
+      { "target": "lowering_semantic_service", "passed": 1, "failed": 0, "ignored": 0 },
+      { "target": "lowering_service", "passed": 1, "failed": 0, "ignored": 0 },
+      { "target": "map_assessment", "passed": 4, "failed": 0, "ignored": 0 },
+      { "target": "r07_review_repair", "passed": 2, "failed": 0, "ignored": 0 },
+      { "target": "strategic_map", "passed": 5, "failed": 0, "ignored": 0 },
+      { "target": "zap-domain doctests", "passed": 0, "failed": 0, "ignored": 0 }
+    ]
+  },
+  "clippy": {
+    "command": "run-cargo.ps1 cargo clippy -p zap-domain -p zap-app -p zap-cli --all-targets --offline -- -D warnings",
+    "exit": 0,
+    "status": "passed"
+  },
+  "format": {
+    "command": "run-cargo.ps1 cargo fmt -p zap-domain -p zap-app -p zap-cli -- --check",
+    "exit": 0,
+    "status": "passed",
+    "stdout_bytes": 0
+  },
+  "logs": [
+    {
+      "kind": "domain_test",
+      "path": "C:/Users/olegc/.vibe/zap/development/vibevm-next/strategic-map/SM05-FINAL-20260914T150405Z-domain-test.log",
+      "bytes": 10663,
+      "sha256": "8a92749d7743d567a2688dfc05f5f5f17627bd8dd38d2c26e8503146268c0a9d"
+    },
+    {
+      "kind": "clippy",
+      "path": "C:/Users/olegc/.vibe/zap/development/vibevm-next/strategic-map/SM05-FINAL-20260914T150405Z-clippy.log",
+      "bytes": 452,
+      "sha256": "7465332233e5750679bba632a8833f02f21bbe423e7330b1def9a489fc979e0f"
+    },
+    {
+      "kind": "format",
+      "path": "C:/Users/olegc/.vibe/zap/development/vibevm-next/strategic-map/SM05-FINAL-20260914T150405Z-fmt.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "executor_actions": [
+    "ran one complete no-fail-fast zap-domain test selection",
+    "ran one strict all-target clippy selection for zap-domain, zap-app, and zap-cli",
+    "ran one format check for zap-domain, zap-app, and zap-cli",
+    "performed no source repair or package publication action"
+  ],
+  "source_changes": [
+    "vibevm/vibespecs/development/zap/strategic-map/REPORT-SM05-CARGO.md",
+    "vibevm/vibespecs/development/zap/strategic-map/SM05-CARGO-receipt.json"
+  ],
+  "release_status": "final selected Cargo gate passed; root retains specmap, assembly, installation, and publication"
+}
