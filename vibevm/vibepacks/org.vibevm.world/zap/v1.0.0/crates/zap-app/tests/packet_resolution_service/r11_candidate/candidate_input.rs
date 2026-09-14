@@ -1,0 +1,15 @@
+pub(super) struct RecordCandidateInput<'a> {
+    pub(super) service: &'a CommitService<RedbStore>,
+    pub(super) store: &'a RedbStore,
+    pub(super) identity: &'a StoreIdentity,
+    pub(super) artifact_store: &'a ArtifactStore,
+    pub(super) packet_artifact_store: &'a ArtifactStore,
+    pub(super) capture_root: &'a std::path::Path,
+    pub(super) capabilities: &'a AgentCapabilities,
+    pub(super) observation: &'a ObservationRef,
+    pub(super) trusted: &'a TrustedHostHandle,
+    pub(super) internal: &'a InternalProtocolHandle,
+    pub(super) job_id: &'a JobId,
+    pub(super) probe_claim: &'a RuntimeJobClaimRecord,
+    pub(super) second_probe: Option<(&'a JobId, &'a RuntimeJobClaimRecord)>,
+}

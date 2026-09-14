@@ -1,61 +1,56 @@
 ---
 name: zap-state
-description: Import or migrate a ZAP campaign store, inspect/query its graph and history, capture sources, create snapshots, and use the authenticated control/backend surface.
+description: Inspect, query, prepare and reconcile an isolated ZAP campaign through its typed Rust command surface.
 ---
 
-# ZAP state and queries
+# ZAP state
 
-Use Python 3.11 or later and this skill's `scripts/zap.py`. The older
-`scripts/zap_state.py` remains a compatible entrypoint. All successful
-responses and command errors are JSON. See
-[the data design](../../flows/zap/ZAP-DATA-AND-VIEWER.xml) for semantics and
-[the command contract](../../examples/zap/command-contract.json) for exact JSON
-fields and routes; `capabilities` reports the exact composed handler/schema
-registries. `--help` describes the CLI. Use `python -B` to avoid bytecode.
-
-Import a captured shared seed or an explicitly selected personal plan into a
-**new** local directory. Keep personal captures outside the repository. Never
-overwrite the active MUP context or infer authorization from an imported field.
+Use the package-declared Rust binary through the current project's Vibe lock:
 
 ```text
-python -B scripts/zap_state.py import-mup --plan PLAN --tasks-dir TASKS --out NEW_STORE
-python -B scripts/zap_state.py inspect --store STORE
-python -B scripts/zap_state.py events --store STORE --after 0
-python -B scripts/zap_state.py record --store STORE --command COMMAND.json
-python -B scripts/zap_state.py evaluate-stop --store STORE --input INPUT.json
-python -B scripts/zap.py capabilities --store STORE
-python -B scripts/zap.py overview --store STORE --limit 100
-python -B scripts/zap.py detail --store STORE --kind node --id NODE
-python -B scripts/zap.py trust-bootstrap --store STORE --trust-dir PRIVATE_TRUST
+vibe bin build zap --assume-yes --offline
+vibe bin exec zap -- capabilities
+vibe bin exec zap -- STORE.redb REQUEST.json
+vibe bin exec zap -- serve READ-CONFIG.json
 ```
 
-`inspect` is the complete committed projection. Overview, subgraph, search and
-detail are bounded graph/client projections. Read the current revision before
-preparing a command. A command names `event_id`, `base_revision`, `kind`,
-`reason: {summary, evidence_refs}` and `payload`. Keep the same identity and exact
-content when retrying an uncertain record. A stale revision requires rereading
-and reconsidering the proposal, not an automatic overwrite. Preserve corrupt or
-partial logs as evidence; owner-authenticated repair handles only an exact
-uncommitted final fragment and quarantines every original byte.
+The build flag is explicit consent to compile installed package code. First run
+`vibe bin list --offline` when binary availability is uncertain.
+`capabilities` is a safe process probe and may expose only the default read
+surface. Query a configured application service's `/v1/capabilities` endpoint
+for the exact live registry. Do not infer support from a desired profile or a
+Vibe version string.
 
-Ordinary `record` goes through the agent-data route and cannot invoke control,
-actions or trusted observations. Owner/coordinator commands use protected trust
-configuration and credential files outside the store. Never put token values in
-JSON, argv, environment, packets or the journal. Readers have a separate
-campaign-bound credential and cannot mutate state.
+The one-shot form accepts a strict `MachineRequest` JSON object. Useful read
+kinds include `capabilities`, `snapshot`, `events`, and `query`. Responses bind
+the store identity, revision, cursor, completeness, and continuation where
+applicable. A stale page or event cursor is an explicit conflict or gap.
+Opening a view performs no semantic judgment or model call.
 
-Stop evaluation takes an input object with `rules` set to the
-[example fixture](../../examples/zap/stop-rules.json) and `assessment` containing
-`phase` (`before_action` or `after_action`) and the semantic inputs. Missing truth
-values remain unknown. The result is a simulation on an unapproved example;
-`action_admitted` remains false. Two failed approaches count only for the same
-problem; provider failures and retries do not create new architectural approaches.
+Use the protected application service for `prepare_effect_bundle`,
+`prepare_effect_comparison`, `prepare_projected_record`, and `reconcile`.
+Preparation is read-only: it derives registered basis, affected scope,
+sequential projected state, item digests, and preflight evidence from one
+captured store boundary. Preserve the returned immutable payload and item
+digests through assessment and approval. Never guess a before or after basis,
+recanonicalize an approved payload, or treat preparation as admission.
 
-Use `capture-source` for guarded byte capture into the private content-addressed
-store; a task `read_path` is never a content endpoint. Snapshots bind the exact
-base, reducer and committed prefix.
+Dreamer exploration uses the same read-only preparation boundary. Keep a
+hypothetical branch, grill questions and answers, declared uncertainty,
+structural burden, and projected consequences detached. Promote or remove it
+only through the returned comparison and ordinary economics, Owner, pause,
+affected-job, and effect gates. A detached branch does not become work or hold
+scope merely because it exists.
 
-Return the actual base/revision/cursor, source identity, stored reason and
-limitations. The package implements the runtime and backend, while the
-Heroes-style interactive canvas itself remains future work. Installation,
-import and migration never activate or start NEXT.
+Read current state before proposing a mutation. Exact retry uses the identical
+command identity and bytes. If the revision or relevant basis changed, reread
+and reconsider instead of overwriting. Unknown effects use the reconciliation
+request with the original command ID and digest.
+
+Keep stores, reader credentials, service files, packets, archives, source
+captures, and workspace roots outside the installed package slot. Credentials
+belong in protected files and never in request JSON, argv, packets, events, or
+logs. Installation and import do not activate a campaign or start work.
+
+For semantics, read the package's `ZAP-RUNTIME.xml`, `ZAP-RUST-STORAGE.xml`,
+`ZAP-DATA-AND-VIEWER.xml`, and `ZAP-CHANGE-ECONOMICS.xml` permanent contracts.

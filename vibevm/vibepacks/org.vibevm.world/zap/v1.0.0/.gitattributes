@@ -1,0 +1,2 @@
+* text=auto eol=lf
+/crates/zap-legacy/tests/fixtures/** -text

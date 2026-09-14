@@ -7,12 +7,14 @@ and installed local Qwen inference remain prohibited. The text below records
 the accepted design; unevaluated technical candidates still need evidence.
 Existing Python code is a prototype and behavioral reference, not the proposed
 production runtime. Earlier descriptions of Python as the production runtime
-are superseded by the Owner's language requirement and await coordinated spec
-revision after design review.
+were superseded by the Owner's Rust language requirement. This dated vision
+retains the design rationale; the current package README and permanent
+contracts describe the implementation boundary.
 
-The original Owner input is preserved byte-for-byte in
-[OWNER-VISION-INPUT-2026-09-13.txt](OWNER-VISION-INPUT-2026-09-13.txt), SHA-256
+The original Owner input is preserved byte-for-byte in the development checkout
+as `OWNER-VISION-INPUT-2026-09-13.txt`, SHA-256
 `D4FFF19705F6742B84C74CB6F875BDBD0A9E2603AB393D271BB8BECF990B951F`.
+This source-only provenance file is excluded from the installed package.
 It is imported Russian source data; ZAP-authored specifications and this vision
 are English. This is a cohesive architecture proposal, not a new executable
 campaign or a claim that the described features already exist.
@@ -531,10 +533,11 @@ pending selected changes and Owner decisions, incomplete admitted effects,
 holds, and unresolved external outcomes. An empty ready queue is not success.
 Dormant alternatives and hypothetical branches do not block unrelated closure.
 
-The existing Python economics candidate has an open P1: completion readiness
-and direct campaign close can overlook economics holds. Preserve it as a Rust
-acceptance requirement, not behavior to port. See
-[REVIEW-CE-INTEGRATION.md](../../development/zap/REVIEW-CE-INTEGRATION.md).
+At the time of this vision, the Python economics candidate had an open P1:
+completion readiness and direct campaign close could overlook economics holds.
+Preserve it as a Rust acceptance requirement, not behavior to port. The
+historical review remains in the development checkout as
+`../../development/zap/REVIEW-CE-INTEGRATION.md`, outside the installed package.
 
 ## V18. Production Rust and storage architecture
 
@@ -768,13 +771,22 @@ the Owner to choose a database or solve an implementation detail now. A future
 material decision outside the agreed intent or cost policy is presented as a
 concrete choice with consequences.
 
-## V24. Current disposition
+## V24. Implementation commission and consumer navigation
 
 This vision and the exact Owner source are saved. The Owner accepted the complete
-vision and instructed implementation with frequent durable checkpoints. The
-execution plan is ../../development/zap/rust-campaign/PLAN.md; its campaign.json,
-RESUME.md, packets and checkpoints carry actual progress. ZAP implementation and
-scoped verification are active, and the earlier publication authorization
-continues. NEXT product execution and installed local Qwen inference remain
-prohibited. Stop after the accepted implementation/publication boundary and
-await further Owner improvements.
+vision and instructed implementation with frequent durable checkpoints.
+Historical developer-only commission records remain in the development checkout:
+`../../development/zap/rust-campaign/PLAN.md`, with `campaign.json`, `RESUME.md`,
+`packets` and `checkpoints` alongside it. They are excluded from the installed
+package and preserve the implementation commission's history.
+
+The commission authorizes ZAP implementation and scoped verification, and the
+earlier publication authorization continues. NEXT product execution and
+installed local Qwen inference remain prohibited. Stop after the accepted
+implementation/publication boundary and await further Owner improvements.
+
+Installed consumers can read the [package README](../../../../README.md),
+[runtime contract](../../flows/zap/ZAP-RUNTIME.xml), and
+[storage contract](../../flows/zap/ZAP-RUST-STORAGE.xml) for the supported
+operation and persistence boundaries. The saved commission records do not claim
+that publication or the complete runtime has been accepted.

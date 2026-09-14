@@ -1,0 +1,60 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/zap-api",
+    "crates/zap-app",
+    "crates/zap-cli",
+    "crates/zap-core",
+    "crates/zap-domain",
+    "crates/zap-legacy",
+    "crates/zap-runtime",
+    "crates/zap-store",
+    "crates/zap-wire",
+    "crates/vendor/core-ai-native-specmark",
+    "crates/vendor/core-ai-native-specmark-grammar",
+]
+exclude = ["vibevm/vibedeps", "vibevm/vibepacks"]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2024"
+rust-version = "1.93"
+authors = ["Oleg Chirukhin"]
+license-file = "LICENSE.md"
+publish = false
+repository = "https://gitverse.ru/vibevm/vibevm"
+homepage = "https://gitverse.ru/vibevm/vibevm"
+
+[workspace.dependencies]
+base64 = "=0.22.1"
+bytes = "1.10.1"
+http-body-util = "0.1.3"
+hyper = { version = "1.7.0", features = ["http1", "server"] }
+hyper-util = { version = "0.1.17", features = ["tokio"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = { version = "1.0.145", features = ["arbitrary_precision", "float_roundtrip"] }
+serde-value = "0.7.0"
+sha2 = "0.10.9"
+redb = "=4.2.0"
+tempfile = "=3.23.0"
+tokio = { version = "1.47.1", features = ["io-util", "net", "rt-multi-thread", "sync", "time"] }
+syn = { version = "2", features = ["full", "visit"] }
+quote = "1"
+proc-macro2 = { version = "1", features = ["span-locations"] }
+specmark = { package = "core-ai-native-specmark", path = "crates/vendor/core-ai-native-specmark" }
+specmark-grammar = { package = "core-ai-native-specmark-grammar", path = "crates/vendor/core-ai-native-specmark-grammar" }
+zap-api = { path = "crates/zap-api" }
+zap-app = { path = "crates/zap-app" }
+zap-core = { path = "crates/zap-core" }
+zap-domain = { path = "crates/zap-domain" }
+zap-legacy = { path = "crates/zap-legacy" }
+zap-runtime = { path = "crates/zap-runtime" }
+zap-store = { path = "crates/zap-store" }
+zap-wire = { path = "crates/zap-wire" }
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"

@@ -1,124 +1,128 @@
 # ZAP backend API
 
-The package exposes an authenticated Python standard-library HTTP backend for
-independent clients. It is the data/runtime backend for a future serious
-interactive strategy-map canvas; it does not contain the canvas application.
+The Rust application service exposes a strict authenticated HTTP/1.1 machine
+interface for agents and independent clients. It is a backend for a future
+strategy-map canvas; no UI is included.
 
-The server binds `127.0.0.1:8765` by default. Any non-loopback address requires
-`--allow-nonlocal`. Browser origins are exact configured strings. There is no
-wildcard CORS mode. Every request authenticates before campaign data is
-disclosed with:
+The server accepts a configured loopback address only. Every request authenticates
+before campaign data is disclosed:
 
 ```text
-X-ZAP-Credential-ID: reader-credential
-Authorization: Bearer <opaque credential>
+X-ZAP-Credential-ID: <configured credential id>
+Authorization: Bearer <opaque credential bytes>
 ```
 
-Reader credentials are campaign/base bound and cannot mutate. Owner and
-coordinator credentials remain independently scoped. Credential values never
-enter commands, events, packets, worker argv/environment or API responses.
+Reader, Owner, coordinator, data and trusted-observation channels are distinct.
+A credential ID or actor label in JSON creates no authority. Credential values
+never enter events, packets, snapshots, responses or archives.
 
 ## Read routes
 
-- `GET /v1/capabilities` — composed handlers, descriptors, routes and roles.
-- `GET /v1/snapshot` — one committed projection and cursor.
-- `GET /v1/events?after=N` — committed event tail.
-- `GET /v1/stream` — one finite SSE tail batch; `Last-Event-ID` resumes at an exact revision.
-- `GET /v1/follow` — live SSE subscription until the configured bounded wait;
-  disconnect and reconnect use the last delivered event revision.
-- `GET /v1/graph/overview` — paginated summaries, counts and semantic visual
-  dimensions; `entity_kinds` selects nodes, edges, regions, jobs, decisions or
-  other registered entity families (the compatibility default is `node`).
-- `GET /v1/graph/subgraph?id=ID&depth=N` — bounded neighborhood and typed edges.
-- `GET /v1/search?q=TEXT` — paginated search over addressable entities.
-- `GET /v1/assessments?id=ID` — pending/completed trusted assessment request,
-  action/policy/source bindings, transport receipt hash and observed scalar
-  values; omit `id` to list requests known to the running adapter.
-- `GET /v1/entities/<kind>/<id>` — complete selected-element inspector.
-- `GET /v1/content/source/<id>?sha256=...` and
-  `/v1/content/artifact/<handle>?sha256=...` — captured bytes by registered
-  handle and exact hash.
+The following bodyless GET routes require the reader credential:
 
-Every result carries base identity, revision and cursor. Page cursors bind base,
-revision, query/filters and offset. Foreign base, future event cursor,
-changed-revision page cursor and cursor reuse for another query are explicit
-conflicts or gaps.
+- `GET /v1/capabilities`
+- `GET /v1/snapshot`
+- `GET /v1/events?after=N`
+- `GET /v1/stream`
 
-Capabilities also carry the actual backend operation descriptors, entity-kind
-registry, command authority routes and page/content limits. Each event declares
-its dialect/version: knowledge payloads are exact nested JSON Schema draft
-2020-12; remaining `zap-payload-descriptor/1` maps and backend
-`zap-operation-descriptor/1` maps are machine-readable constraints without a
-claim that they are standards-complete JSON Schema.
+`/v1/events` returns a bounded committed page. `/v1/stream` returns the current
+bounded page as server-sent events and then closes; reconnect using the returned
+cursor. Snapshot, event and query responses bind store identity and revision.
+Foreign, stale or future cursors produce a typed conflict/gap rather than an
+incomplete success.
 
-Every entity detail response carries explicit content, provenance, history,
-staleness and unavailable-field metadata. Node detail returns the available contract/history, goal/steps,
-criteria/checks, sources, evidence, obligations, typed edges, regions,
-classification and work overlay. Edge and region IDs are independently
-inspectable. Omission by pagination/filtering is page metadata; it is not called
-unexamined. Knowledge states `unexamined`, `bounded`, `evidenced` and
-`invalidated` remain semantic data. Explicit irrelevance/exclusion is separate.
+The server also accepts strict POST requests whose complete `MachineRequest`
+body must match the route:
 
-The backend provides renderer-independent visual dimensions: knowledge,
-work type, maturity, execution, structure, edge relation and visibility. It
-supplies no authoritative color, geometry or camera. The future Heroes 3-style
-bright illustrated map may use color, geometry, fog, icons, paths and in-canvas
-panels without turning presentation state into campaign truth.
+- `POST /v1/query`
+- `POST /v1/events`
+- `POST /v1/stream`
 
-Content endpoints never accept filesystem paths. An imported task `read_path`
-is not a read capability. Actual capture stores immutable content-addressed
-blobs privately. Historical hashes remain readable when the live source
-changes; live reobservation reports drift instead of displaying changed bytes
-as the captured version.
+Query IDs and their availability come from `/v1/capabilities`. Results carry
+bounded completeness and continuation data defined by the selected registered
+query. Opening a view performs no model call or semantic mutation.
 
-Raw provider transcripts/prompts, worker packets, absolute source roots,
-credentials and raw transport output are removed from public snapshots/events.
-A validated coordinator response keeps a bounded public decision projection:
-request binding, disposition, selected work, concise rationale, command reasons,
-affected IDs and source/evidence provenance. It omits full command payloads and
-marks provider material redacted, so the viewer can explain why work was
-selected or applied without exposing private effect inputs. Transport output
-requires a separately registered private handle and hash.
+## Protected and service routes
 
-Completed action assessments also remain in the ordinary control event/history
-projection. The assessment query makes a still-pending provider operation
-visible without exposing its private observation path/content or transport
-stdout. A process restart reconstructs an exact request when the same prepared
-action is retried; no ephemeral tick message is treated as authority.
+- `POST /v1/command` — authenticated Owner/coordinator command route.
+- `POST /v1/control` — authenticated control command route.
+- `POST /v1/agent` — configured data-channel proposal route.
+- `POST /v1/observation` — configured trusted-observation route.
+- `POST /v1/runtime/step` — one coordinator iteration.
+- `POST /v1/runtime/run` — an explicit bounded number of iterations.
+- `POST /v1/runtime/inspect` — read-only durable job/runtime inspection.
+- `POST /v1/native` — pending-intent and exact prepare-launch, deterministic
+  bridge restoration, atomic known-refusal/unknown/started observation,
+  bounded retry release, and recovered job-observation/candidate collection.
+- `POST /v1/prepare/bundle` — read-only strict effect bundle preparation.
+- `POST /v1/prepare/comparison` — read-only alternatives/comparison preparation.
+- `POST /v1/prepare/projected-record` — one record from the same prepared final
+  overlay used by the effect kernel.
+- `POST /v1/archive/publish` — trusted publication of a configured no-clobber
+  portable bundle archive.
+- `POST /v1/archive/verify` — read-only archive and manifest verification.
+- `POST /v1/archive/entry` — read one bounded typed entry from verified archive
+  bytes without the live campaign store.
+- `POST /v1/reconcile` — inspect a protected command's exact durable outcome.
 
-## Command routes
+`POST /v1/prepare/projected-record` can inspect one known registered current record
+without applying an effect. Send `PreparationRead::Current`, an empty-prefix/empty-effect
+draft with an explicit empty-root Completion basis, NotApplicable policy and capacity,
+and a selector containing the record family plus canonical key bytes. The service
+derives the real basis and reads the selector on one immutable snapshot. The selector
+is independent of the basis roots; Completion basis work can be global and bounded, so
+this is not a constant-cost whole-store read. Present data is the complete typed
+canonical record value with its observed revision. Missing data is `None`, but an absent
+unknown family also does not establish registration. Keys must be 1–4096 bytes. The
+backend method adds no product/effect/admission write and no revision; configured HTTP
+request/response caps remain separate transport limits.
 
-- `POST /v1/review-transition/materialize` — authenticated pure sparse-to-full
-  review transition builder; reader credentials may use it and it appends
-  nothing.
-- `POST /v1/agent` — exact data-only command.
-- `POST /v1/control` — authenticated owner/coordinator control.
-- `POST /v1/observation` — registered trusted runtime/effect receipt during draft or pause.
-- `POST /v1/action` — exact command/action/assessment through admission.
-- `POST /v1/tick` — one configured coordinator iteration; the credential
-  principal must exactly match the configured runtime host principal.
+Reader credentials authorize query, preparation, runtime inspection, archive
+verification/entry reads and reconciliation. Mutation, runtime progression,
+native launch preparation and archive publication use their configured protected
+channels. The server never trusts a client-selected role.
 
-Unknown fields are refused. Agent JSON cannot establish owner/coordinator
-identity. Reader credentials cannot use POST routes. Source capture descriptors
-are refused on the generic observation route: the `capture-source` adapter must
-first read guarded bytes and store the immutable blob.
+Every native recovery target includes exact JobId/DispatchId. Spawn observations
+add a stable observation CommandId, consumed authorization revision and
+observation time. One registered transition persists outcome, capacity,
+history, reconciliation, job/auth state and wait at one revision. Unknown never
+relaunches; a known refusal retries only after the due wait, a separately
+observed available slot and all current gates. Terminal state is not slot
+capacity. Restoration and result collection reuse the persisted handle and
+create no new launch ticket.
 
-HTTP request JSON uses the same strict parser as files: duplicate members,
-NaN/Infinity and invalid UTF-8 refuse. The default 2 MiB request-body capacity
-is an operator setting, exposed by capabilities and configurable with
-`--max-body-bytes` (`0` means unlimited); it is not a campaign or plan limit.
-`--max-follow-seconds` bounds one live subscription and is also reported.
+A protected command that finishes before the configured submission timeout
+returns its committed or rejected result. If the timeout expires while work may
+still be active, the response is `Unknown { command_id, command_digest }` and
+the task retains the service instance. The client reconciles that identity;
+absence is not reported while an in-flight submission is known.
 
-## Continuity and damaged tails
+## Consistency and limits
 
-Snapshot and event-tail reads use the same committed boundary. A client reading
-snapshot cursor N and then events after N cannot lose a committed event. SSE
-uses the same integer cursor. `/stream` deliberately closes after the current
-batch; `/follow` polls committed replay until its operator-bounded deadline or
-client disconnect and emits a final cursor marker on a normal close.
+Bodies use closed typed JSON. Duplicate members, malformed framing, invalid
+UTF-8, unsupported method/route pairs, mismatched route/request kinds, oversized
+bodies and duplicate `Content-Length` refuse. GET requests accept no body.
+Connection, request, response, page, runtime-step and timeout limits are explicit
+configuration; a limit response does not weaken campaign semantics.
 
-An incomplete final journal fragment remains visible to an authorized reader as
-`pending_tail` while the last committed state stays readable. Mutation and
-automatic coordination refuse until explicit owner-authenticated repair.
-Newline-terminated middle corruption refuses; it never becomes a removable
-tail.
+Capabilities derive from actual schema, cell, route, query, native-host and
+adapter registrations. Desired profiles are separate. Unsupported operations
+remain listed or refuse; a specification or packet never advertises itself as
+runtime support.
+
+Snapshot and tail share a committed boundary. Exact retry and cold reopen use
+the same registered reducers and preflight rules. Endpoint and lease records are
+create-new, instance-bound and removed only by the owning service or exact stale
+recovery. Store corruption, pending external effects and stale business basis
+remain explicit; transport restart does not decide them.
+
+Packet material, workspaces and archives use configured filesystem roots,
+relative paths, size bounds, digests and reparse-point checks. The `ZAPBNDL2`
+archive contains canonical typed `ZAPENTRY2` bodies and no authority credential.
+Historical export uses immutable claim-time evidence rather than silently
+recapturing changed current files.
+
+Public snapshots and responses omit credentials and raw private transport
+material. The backend supplies typed state and provenance for a future viewer,
+not authoritative color, geometry, camera state or acceptance inferred from
+presentation.

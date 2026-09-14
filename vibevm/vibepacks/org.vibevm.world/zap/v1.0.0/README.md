@@ -1,229 +1,178 @@
 # ZAP
 
-ZAP is a methodology and runtime for long campaigns. The Owner and coordinator
-agree on required benefit, essential constraints, and the boundary of
-autonomy. As work proceeds, the coordinator revises knowledge, priorities,
-feasibility, and the expected outcome within authorized tradeoffs. The plan is
-a current hypothesis about a valuable route; the initial task list is not an
-end in itself.
+ZAP is a Rust runtime and methodology for adaptive campaigns. It keeps intent,
+obligations, uncertainty, decisions, lowering, agent packets, execution,
+evidence, holds, and recovery in one typed durable history. The coordinator can
+revise a route inside an Owner-defined envelope while exact authority and
+economics gates control every live semantic effect.
 
-`flow:org.vibevm.world/zap:1.0.0` contains research, the methodology, an
-executable kernel, a trusted control service, an automatic coordinator, and a
-data backend. It is separate from `multi-user-planning`. Installing or
-importing it does not activate a campaign, and NEXT remains on its existing
-protocol until a separate Owner decision and explicit migration.
+Installing ZAP adds its specifications, three agent skills, and the `zap`
+binary declaration to a VibeVM project. Installation does not create or select
+a campaign, activate a charter, start a service, invoke a model, or migrate an
+existing plan.
 
-## Research basis
+## Install and build
 
-The [idea map](vibevm/vibespecs/research/zap/IDEA-MAP.xml) contains 21 ideas
-and 36 relations, including the Owner-requested adaptive review cycle. A
-[JSON projection](vibevm/vibespecs/research/zap/idea-map.json) and
-[source inventory](vibevm/vibespecs/research/zap/source-inventory.json) record
-all 37 skills, read depth, and source hashes. The main review covers Wayfinder,
-the Grill family, research, prototyping, domain modeling, TDD, implementation,
-review, and task design. The
-[ancillary review](vibevm/vibespecs/research/zap/ANCILLARY-REVIEW.xml) covers
-12 additional writing, teaching, setup, hook, fixture, and handoff skills.
+The package is `flow:org.vibevm.world/zap` version `1.0.0` under UPL-1.0. A
+consumer needs a Vibe executable that actually supports `build` and `bin`, a
+Rust toolchain, and the declared Rust AI Native dependency available through
+its registry or materialized dependency cache. Check command support directly;
+the Vibe display version alone is insufficient.
 
-| Research idea | ZAP application |
+From an ordinary VibeVM project:
+
+```text
+vibe build --help
+vibe bin --help
+vibe install flow:org.vibevm.world/zap@=1.0.0 --offline
+vibe bin build zap --assume-yes --offline
+vibe bin list --offline
+vibe bin exec zap -- capabilities
+```
+
+Supply the registry required by the project when the package is not already in
+its configured registry. An offline build succeeds only when ZAP and every
+declared dependency are available locally. `--assume-yes` is the explicit
+consumer consent to compile package code and proc macros. Vibe compiles the
+binary from the installed package slot; build output is outside the package source identity.
+No production command needs Python, GitHub, an external database service, or a
+VibeVM source checkout.
+
+`zap capabilities` is a safe process-level probe. It reports the default
+read-only machine surface. The capabilities returned by a configured running
+application service are richer and derive from that service's actual command,
+query, host, and adapter registrations.
+
+## Native command surface
+
+Run installed commands through Vibe so binary resolution stays bound to the
+consumer lockfile:
+
+```text
+vibe bin exec zap -- capabilities
+vibe bin exec zap -- STORE.redb REQUEST.json
+vibe bin exec zap -- serve READ-CONFIG.json
+vibe bin exec zap -- serve-runtime APPLICATION-CONFIG.json
+vibe bin exec zap -- recover-service-lease APPLICATION-CONFIG.json
+vibe bin exec zap -- archive-publish APPLICATION-CONFIG.json REQUEST.json
+vibe bin exec zap -- archive-verify APPLICATION-CONFIG.json REQUEST.json
+vibe bin exec zap -- archive-entry APPLICATION-CONFIG.json REQUEST.json
+vibe bin exec zap -- import-legacy LEGACY-IMPORT-CONFIG.json
+```
+
+`zap STORE.redb REQUEST.json` opens an existing store and executes one typed
+read request. `serve` exposes the authenticated loopback read service.
+`serve-runtime` opens the protected application service and automatic
+coordinator from an explicit configuration. `recover-service-lease` performs
+the bounded stale-lease recovery check for that same configuration.
+`import-legacy` imports an explicitly configured legacy archive into a new Rust
+store and does not activate it.
+
+The three archive commands publish a configured no-clobber portable bundle,
+verify its exact manifest, or read one bounded typed entry from archive bytes
+without a live campaign store. Publication uses the configured trusted channel;
+verification and entry reads grant no authority.
+
+The application service provides authenticated JSON endpoints for
+capabilities, snapshots, event tails and streams, bounded queries, protected
+commands, control, trusted observations, runtime steps and inspection, native
+driver coordination, effect preparation, projected-record reads, and unknown
+effect reconciliation. The server accepts loopback addresses only. Credentials,
+material roots, workspace grants, capacity, native capabilities, worker
+profiles, and archive limits come from protected configuration. Unknown fields
+and unregistered operations are refused.
+
+The binary does not call a native harness by itself. A cooperating host reads a
+durable dispatch intent through the native-driver route, launches the exact
+packet with its own capability, and returns the typed receipt. Dispatch intent,
+external handle, transport completion, candidate verification, admission, and
+acceptance remain separate durable states. Unsupported host capabilities do not
+fall back to a subprocess or model provider.
+
+## Campaign behavior
+
+The [methodology](vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml) defines intent,
+the Owner charter, work types, stages, facts, verification, parallelism, stops,
+and completion. The
+[adaptive cycle](vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml) recomputes
+fog, value, remaining cost, and feasibility after material observations.
+
+Lowering preserves every obligation and verification disposition while mapping
+an outcome revision to executable work. Packet rendering is a pure capability
+projection over that checked lowering. A packet records exact source material,
+omissions, workspace grants, checks, lineage, and role; a generated goal is
+reinforcement and never authority.
+
+Dreamer branches are detached projections. Questions, answers, bounded
+uncertainty, structural burden, and projected consequences remain saved without
+changing live work, holds, or approvals. Promotion and removal use the normal
+prepared-effect comparison, economics, Owner, pause, affected-job, and retry
+gates. A charter-expanding dream requires the exact combined Owner decision.
+
+Semantic alternatives are prepared read-only against one captured state.
+Preparation derives basis, affected scope, sequential projected state, and
+preflight evidence without consuming approval or writing. A selected change is
+applied only through its immutable prepared envelope. At four attributable
+hours or less it may be automatic when every other condition permits; above the
+configured threshold, unknown material impact, charter expansion, pauses, and
+stops retain their explicit decision paths.
+
+## Operation and recovery
+
+Use [zap-draft](vibevm/vibespecs/skills/zap-draft/SKILL.md) to prepare or revise
+a campaign without activation, [zap-state](vibevm/vibespecs/skills/zap-state/SKILL.md)
+for bounded inspection and preparation, and
+[zap-run](vibevm/vibespecs/skills/zap-run/SKILL.md) for an explicitly configured
+service and cooperating native driver.
+
+Every mutation binds the store identity, revision, payload, relevant basis,
+affected scope, policy, authority, and registered effect contract. Retrying the
+same exact command is idempotent. A stale command requires rereading and a new
+decision. Unknown external effects reconcile by exact command identity and
+receipt; they are never silently relaunched. Snapshots and event cursors bind a
+committed boundary. Cold reopen restores persisted state; a replay-based audit
+separately checks projections against the registered semantics.
+
+Source and workspace adapters accept only explicitly configured roots. Packet
+material is captured and verified by digest. Portable returned bundles use a
+bounded archive format and contain no authority credential. Credentials,
+private stores, service leases, endpoint files, logs, packets, and captured
+artifacts stay outside the package payload.
+
+## Rust integration guides
+
+These guides describe actual constructors, acquisition paths and returned
+states. Data construction remains separate from trusted admission.
+
+| Integration surface | Guide |
 | --- | --- |
-| Fog of war | Unknown regions, precise questions, evidenced facts, and authorized exclusions are distinct. Refine what the next valuable result needs. |
-| Questions form dependencies | Resolve prerequisites first. The Owner chooses intent and tradeoffs; the coordinator investigates available facts. |
-| Work needs different methods | Evidence, decision, change, verification, and integration are separate from maturity and authority. |
-| A small experiment can beat a long argument | A prototype answers a named question, and its conclusion can remain useful even when its code is discarded. |
-| A concise map sits above detailed records | Overview derives from one graph; decisions retain alternatives, rationale, sources, and consequences. |
-| Decisions may need revision | Changed premises identify conclusions and checks to revisit without deleting history. |
+| Typed storage, authority and execution contracts | [Core](vibevm/vibespecs/flows/zap/ZAP-RUST-CORE-GUIDE.md) |
+| Campaign, proof, economics and planning operations | [Domain](vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md) |
+| Machine requests and responses | [Machine API](vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md) |
+| Service, transport and material adapters | [Application](vibevm/vibespecs/flows/zap/ZAP-RUST-APP-GUIDE.md) |
+| Scheduling, dispatch and recovery | [Runtime](vibevm/vibespecs/flows/zap/ZAP-RUST-RUNTIME-GUIDE.md) |
+| Transactions, history and artifacts | [Store](vibevm/vibespecs/flows/zap/ZAP-RUST-STORE-GUIDE.md) |
+| Frozen codecs and migration input | [Legacy](vibevm/vibespecs/flows/zap/ZAP-RUST-LEGACY-GUIDE.md) |
 
-ZAP does not adopt one-task-per-session, mandatory Owner waiting for every
-question, fixed context size, maximum parallelism at any cost, or the full test
-panel on every commit.
+## Scope
 
-These are project judgments about applicability, not comparative measurements
-of effectiveness. The sources were read, so this is not described as a formal
-clean-room process. GitHub links provide research provenance; the methodology
-and runtime do not depend on GitHub, an external tracker, or its API.
+The [implementation and evidence notes](vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md)
+describe verified mechanisms, migration limits, external-host evidence and
+process boundaries.
 
-## Method
+ZAP ships the Rust service and machine interface. A future strategy-map canvas
+and IDE client are separate consumers. The historical Python prototype remains
+research evidence in the source repository and is excluded from the normal
+package payload and execution path. Local Qwen inference is not invoked or
+probed by installation, build, or these commands.
 
-```mermaid
-flowchart TD
-    O[Intent and admissible tradeoffs] --> R[Current expected outcome]
-    F[New observations and facts] --> G[Recompute fog of war]
-    G --> V[Reassess value, cost, and feasibility]
-    R --> V
-    V --> D[Keep or revise outcome and route]
-    D --> R
-    D --> L[Reconcile plan, evidence, and live work]
-    L --> S[Evaluate stop conditions]
-    O --> S
-    S --> W[Valuable action and verification]
-    W --> F
-    D --> E[Event journal]
-    L --> E
-    W --> E
-    E --> UI[Deterministic projections and future viewer]
-```
+Permanent contracts:
 
-The same cycle applies to a campaign, workstream, or complex task. Fog may
-expand: one answer can reveal more questions, a fact can lose applicability,
-or formerly valuable work can become unnecessary. A material discovery starts
-the [adaptive cycle](vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml). A
-reasoned keep-route decision is also valid; small steps do not require global
-replanning.
-
-If the original variant is unattainable or a better opportunity appears, the
-coordinator may select a nearby valuable outcome inside authorized tradeoffs.
-For example, when one manual step is allowed and an external service lacks an
-API, the remaining setup may be automated. The result reports both benefit and
-the remaining limitation; it does not claim full automation.
-
-Lowering preserves obligations of the current outcome revision. An authorized
-outcome change gives every old obligation an explicit disposition and reason.
-Direct execution remains normal; prototype, functional MVP, and productization
-are selected as needed. Formal deferrals have an explicit closure location.
-Route, declared maturity, proven result, and acceptance are distinct data.
-
-The coordinator makes semantic assessments, such as whether migration affects
-user data. The kernel evaluates rules over stored assessments. Unknown means
-evidence is required; the machine does not claim to understand and prove an
-arbitrary sentence by itself.
-
-Two Owner examples are implemented: stop before a public-format change when
-user-data migration is affected, and present options after two failed
-architectural approaches to one problem. A triggered rule pauses the whole
-campaign by default: no new work starts, and active work reaches a declared
-safe boundary. Provider failure is not a new architectural approach, and a
-session or account change does not reset history.
-
-Agent-editable notes and plans grant no authority. The control service binds an
-Owner action to the exact campaign, base, charter revision, command content,
-and pause. Trust is configured outside the campaign store; a self-authored
-`owner` field is insufficient.
-
-## Implemented and verifiable
-
-- Lossless MUP import preserving source bytes, unknown fields, mandates, nodes,
-  relations, and task contracts.
-- Append-only journal, deterministic replay without a model, CAS conflicts,
-  idempotent retry, corruption detection, and explicit partial-tail repair.
-- Sourced candidate facts, decisions, approaches, annotations, recursive DAG
-  lowering, and explicit parent-acceptance coverage.
-- Versioned Owner charter, scoped sticky pauses, truthful safe drain, exact
-  resume, one-shot exceptions, and approach counters.
-- Complete outcome, obligation, ownership, work, evidence, stage, deferral,
-  acceptance, adaptive-review, and fact-promotion domain graph.
-- Trusted source capture, content-addressed private blobs, snapshots, migration,
-  and promotion into permanent project facts.
-- Persistent automatic coordinator with literal-argv subprocess transport,
-  observed receipts, waits, recovery, independent verification, selective
-  evidence reuse, and durable adaptive job reconciliation.
-- Authenticated localhost JSON/SSE backend with large-graph pagination, search,
-  subgraphs, explanations, and complete entity inspection.
-
-[zap-state](vibevm/vibespecs/skills/zap-state/SKILL.md) and
-[zap-run](vibevm/vibespecs/skills/zap-run/SKILL.md) describe the CLI and runtime.
-The [machine command contract](vibevm/vibespecs/examples/zap/command-contract.json)
-publishes implemented JSON fields, enums, constraints, responses, registries,
-and routes. ZAP requires Python 3.11+ and uses only the standard library. The
-original `import-mup`, `inspect`, `events`, `record`, and `evaluate-stop`
-commands remain. `--help` lists the complete surface and `capabilities` reports
-actual registries. Example rules are `example_unapproved`; simulation never
-authorizes an action. Structural validation does not prove semantic lowering
-completeness or the truth of a recorded fact.
-
-The interactive canvas, Qwik/Three.js UI, and IDE plugin remain separate work.
-The backend already exposes the required details and semantic distinctions, so
-a future viewer need not infer them from prose. Installation, import, and
-migration do not activate or execute work.
-
-## Quick start
-
-```text
-python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py init \
-  --plan PLAN.toml --tasks-dir TASKS --out STORE
-python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py trust-bootstrap \
-  --store STORE --trust-dir PRIVATE_TRUST
-python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py capabilities \
-  --store STORE
-python -B vibevm/vibespecs/skills/zap-state/scripts/zap.py overview \
-  --store STORE --limit 100
-```
-
-`charter-prepare` validates a full charter and writes exact draft and activation
-command files. The draft uses the data route; activation uses an Owner
-credential and exact hash. Profiles with verification use `--artifact-store`:
-a successful output is captured before explicit applicability and closure
-assessment. `tick` runs one coordinator pass, `run` runs the continuing loop,
-and `serve` starts the backend. Tokens remain in protected files outside STORE
-and never enter JSON, argv, environment, or worker packets. See
-`vibevm/vibespecs/examples/zap/runtime-profile.json`,
-[ZAP-CLI](vibevm/vibespecs/flows/zap/ZAP-CLI.md),
-[ZAP-BACKEND-API](vibevm/vibespecs/flows/zap/ZAP-BACKEND-API.md), and
-[ZAP-PYTHON-API](vibevm/vibespecs/flows/zap/ZAP-PYTHON-API.md).
-
-The isolated end-to-end command is:
-
-```text
-python -B -m zaplib.runtime_live_probe --root ISOLATED_DIRECTORY
-```
-
-Without `--execute` it only prepares an isolated activated fixture and creates
-no provider or transport job. An authorized isolated Sol/xhigh proof used one
-worker attempt and one independent verification. Its 15-byte artifact SHA-256
-was `19b32baf08503ceab0fc41f2e4880162cc8528ec040be59e71eed35787de65af`;
-original closure was accepted at revision 79, and semantic restart reused the
-captured artifact and check. No private path, prompt, credential, or transcript
-is part of this public evidence.
-
-## NEXT pilot
-
-The [pilot report](vibevm/vibespecs/research/zap/PILOT-REPORT.xml) and
-[JSON report](vibevm/vibespecs/research/zap/pilot-report.json) record a
-successful import of 425 nodes, 212 task contracts, and 64 mandates. An isolated
-copy recorded 12 events, including synthetic lowering of three subitems and
-stop-rule decisions. Replay matched, source files were preserved, and execution
-authority was absent.
-
-A later read-only exercise over the same current input materialized 1,292
-derived obligations. Exact migration retry was idempotent, source hashes did
-not change, the charter remained inactive, and transport activity was zero.
-The exercise did not move the active NEXT campaign to ZAP.
-
-Run the package-local panel from the package root:
-
-```text
-python -B -m unittest discover -s vibevm/vibespecs/skills/zap-state/scripts -p 'test_*.py'
-```
-
-## Canonical documents
-
-The future viewer is a **strategy map** inspired by Heroes 3 and StarCraft: a
-clear saturated explored region, research frontier, and fog of the unknown.
-Clicking a node, edge, unknown region, job, or decision opens content,
-provenance, and history in a map inspector. Color, shape, outline, icons, and
-text distinguish independent properties. Unknown, stale, excluded, and not-yet
-loaded data remain distinct. Three.js is a rendering candidate; the viewer is
-separate future work. Its art direction is a vivid illustrated map with
-expressive objects, paths, fog, and detailed game-like panels.
-
-- [Methodology](vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml): charter,
-  stops, recursion, stages, facts, verification, parallelism, and recovery.
-- [Adaptive cycle](vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml):
-  reassessing uncertainty, value, and feasibility; revising outcomes; and
-  preserving truthful obligation history.
-- [Data and future viewer](vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml):
-  immutable import, commands, events, replay, and external data interface.
-- [zap-draft](vibevm/vibespecs/skills/zap-draft/SKILL.md): campaign
-  preparation; installing the package does not authorize a start.
-
-Before any future NEXT transition, its active constraints must be mapped into
-the ZAP charter, including the start prohibition, D-022, and external actions.
-The pilot uses the shared seed only in an isolated local copy. Neither the new
-format nor successful import rewrites personal MUP context or removes its
-constraints.
-
-ZAP-authored specifications, public documentation, skills, and examples are
-English. Imported source and legacy payloads remain byte-faithful, and
-intentional Unicode fixtures preserve the data under test.
+- [Runtime](vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml)
+- [Rust storage](vibevm/vibespecs/flows/zap/ZAP-RUST-STORAGE.xml)
+- [Agent protocol](vibevm/vibespecs/flows/zap/ZAP-AGENT-PROTOCOL.xml)
+- [Change economics](vibevm/vibespecs/flows/zap/ZAP-CHANGE-ECONOMICS.xml)
+- [Lowering and Dreamer](vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml)
+- [Data and future viewer](vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml)
 
 License: [UPL-1.0](LICENSE.md).

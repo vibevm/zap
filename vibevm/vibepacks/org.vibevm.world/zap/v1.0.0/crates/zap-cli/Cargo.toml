@@ -1,0 +1,29 @@
+[package]
+name = "zap-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license-file.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "zap"
+path = "src/main.rs"
+
+[dependencies]
+serde_json.workspace = true
+specmark.workspace = true
+zap-api.workspace = true
+zap-app.workspace = true
+zap-wire.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+serde.workspace = true
+tempfile.workspace = true
+zap-core.workspace = true
+zap-domain.workspace = true
+zap-store.workspace = true

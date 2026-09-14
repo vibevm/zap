@@ -1,54 +1,83 @@
 ---
 name: zap-run
-description: Import, configure, explicitly activate, and operate a trusted ZAP campaign, coordinator, and authenticated graph backend.
+description: Operate ZAP's protected Rust service with cooperating native drivers, durable receipts and explicit authority.
 ---
 
 # ZAP runtime
 
-Use this skill for execution, reconciliation, backend serving and trusted
-control. Read [the runtime contract](../../flows/zap/ZAP-RUNTIME.xml), the
-[backend API](../../flows/zap/ZAP-BACKEND-API.md), and the
-[CLI reference](../../flows/zap/ZAP-CLI.md). An embedding host also reads the
-[Python API](../../flows/zap/ZAP-PYTHON-API.md).
-
-Run `python -B scripts/zap-run.py -- <command> ...`. The wrapper resolves the
-package runtime from an explicit `--package-root`, the installed package slot,
-or an unambiguous sibling `zap-state` projection. If several installations are
-visible, pass `--package-root` rather than guessing.
-
-Import and trust bootstrap are separate. Import never activates or runs work:
+Run the installed Rust binary through Vibe:
 
 ```text
-python -B scripts/zap-run.py -- init --plan PLAN --tasks-dir TASKS --out STORE
-python -B scripts/zap-run.py -- trust-bootstrap --store STORE --trust-dir PRIVATE_TRUST
+vibe bin build zap --assume-yes --offline
+vibe bin exec zap -- serve-runtime APPLICATION-CONFIG.json
+vibe bin exec zap -- recover-service-lease APPLICATION-CONFIG.json
+vibe bin exec zap -- archive-publish APPLICATION-CONFIG.json REQUEST.json
+vibe bin exec zap -- archive-verify APPLICATION-CONFIG.json REQUEST.json
+vibe bin exec zap -- archive-entry APPLICATION-CONFIG.json REQUEST.json
+vibe bin exec zap -- import-legacy LEGACY-IMPORT-CONFIG.json
 ```
 
-Prepare a full charter with exact campaign/base, legacy classifications and
-intent fingerprint. Submit its draft through the data route, then activate the
-exact charter hash through the owner credential. Do not put credential values
-in JSON, argv, environment, packets or the campaign journal; CLI flags name
-protected credential files.
+`serve-runtime` is the explicit start boundary. Its strict configuration binds
+one store, store create/open mode, endpoint and lease files, packet capture
+directory, material and workspace adapters, native host capabilities, worker
+profiles, trust channels, capacity, limits, and an authenticated loopback
+server. Keep the configuration and every credential outside worker-writable
+roots. Installation alone starts nothing.
 
-Use `tick` for one reconciliation pass and `run` for the persistent loop.
-Worker and semantic commands come from an explicit runtime profile. Custom
-commands are argv arrays with one whole `{packet_file}` element; task prose is
-never shell evaluated. The ready `codex-sol-xhigh` worker/semantic kinds resolve the
-package bridges and discover `codexrunner` on PATH unless the profile supplies
-an explicit launcher. A profile with verifications also configures a guarded
-artifact root and the CLI private artifact store, so accepted evidence can bind
-captured output bytes. Transport receipts are trusted observations, while dispatch,
-verification, adjudication and acceptance remain privileged actions.
+The application service exposes protected routes for data commands, Owner and
+coordinator control, trusted observations, effect preparation, runtime
+step/run/inspect, native driver work, projected-record reads, and unknown-effect
+reconciliation. Use the endpoint file written by the service instead of
+guessing its selected port. Every request carries the credential ID in the
+authorization scheme expected by the server and the opaque credential in the
+protected authorization header. Do not copy credential bytes into request
+bodies, argv, packets, events, receipts, or logs.
 
-If the active stop policy uses semantic `eq` fields, configure the paired
-trusted JSON-process assessment adapter/transport from the CLI reference.
-Pending, failed or null observations remain unknown and block only the affected
-action; the adapter cannot supply authority or drain targets.
+Run one runtime step when you need a bounded coordinator action. A runtime run
+has an explicit maximum step count. Recheck campaign and scoped pauses, pending
+economics, affected holds, capacity, safe-job state, packet lineage, and exact
+authority before each live action. A successful transport is not accepted
+work; verification, producer/acceptor separation, applicable evidence, and the
+registered product effect still decide admission.
 
-Serve the backend on localhost by default. A nonlocal bind requires the explicit
-flag and exact allowed origins. Readers use a separate campaign-bound read
-credential. The viewer application is not part of this package; the backend
-provides its paginated graph, inspector, content and event-stream data.
+## Cooperating native driver
 
-Never start or migrate the live NEXT campaign merely because this package is
-installed. Use a separately imported store until the owner explicitly selects
-and activates a migration.
+The `zap` binary does not invoke Codex or another harness itself. A cooperating
+host uses the native route to:
+
+1. list bounded pending dispatch intents;
+2. request the exact prepared launch for one dispatch identity;
+3. launch only when its measured capabilities match the packet;
+4. persist the external handle and typed receipt through the protected service;
+5. reconcile an uncertain launch by that same dispatch identity.
+
+Do not silently fall back to a subprocess, launcher, another model, or local
+inference when native support is unavailable. Goal application is similarly
+capability driven: record applied, manual, or unavailable truthfully. A manual
+goal is an instruction for the Owner or host, not a claim that the runtime set
+client state.
+
+Packet source material and workspace effects pass through configured filesystem
+adapters with exact roots, relative paths, digests, operations, size bounds, and
+reparse-point checks. Returned offline bundles use the bounded portable archive
+adapter. They carry lineage and results but no authority credential. Verify an
+archive before importing it and let strong-side reassessment decide whether its
+observations and candidates remain applicable.
+
+Use `archive-publish` with a strict bundle request and the configured trusted
+channel. Use `archive-verify` before transfer or import, and `archive-entry` for
+bounded archive-only inspection. These commands use the production `ZAPBNDL2`
+and typed `ZAPENTRY2` codecs; they never re-create missing live authority.
+
+`recover-service-lease` removes only a provably stale lease for the exact
+configuration. It does not repair store history or infer that an external
+effect failed. After interruption, inspect durable runtime state first, then
+reconcile unknown dispatch or commit effects. Reuse exact receipts on retry.
+
+`import-legacy` is a separate, inert migration operation. It preserves legacy
+bytes and identities under the legacy codec while writing the current Rust
+store epoch. It neither activates a charter nor launches work.
+
+For semantics, read `ZAP-RUNTIME.xml`, `ZAP-AGENT-PROTOCOL.xml`,
+`ZAP-RUST-STORAGE.xml`, and `ZAP-LOWERING-AND-DREAMER.xml` in the installed
+package.

@@ -10,6 +10,14 @@ Read [the methodology](../../flows/zap/ZAP-METHODOLOGY.xml) and
 event schemas or viewer integration also read
 [the data design](../../flows/zap/ZAP-DATA-AND-VIEWER.xml).
 
+Drafts and detached Dreamer branches are durable typed data, not executable
+plans. When the protected Rust application service is available, use its
+read-only `prepare_effect_bundle`, `prepare_effect_comparison`, and
+`prepare_projected_record` requests to derive exact bases, projected records,
+and affected scopes. Preserve returned payloads and item digests unchanged
+through any economics or Owner review. Preparation never consumes approval or
+changes live state.
+
 Start from the owner's current intent and existing decisions. Determine which
 facts can be established from available sources before asking questions. Explain
 material choices in plain language, with options, consequences and a recommendation.
@@ -62,3 +70,8 @@ an exact full charter bound to campaign/base, legacy classifications, intent
 fingerprint and policy revision; never fabricate or infer its receipt. Import experiments belong in a
 fresh local store, with the original plan and its execution holds preserved. Do not
 start NEXT, replace its context, or publish personal state as a side effect of drafting.
+
+Use `vibe bin exec zap -- capabilities` only as a truthful availability probe.
+The binary does not call a native harness or model by itself. Live execution
+belongs to the separately configured `zap-run` service and its cooperating
+driver.

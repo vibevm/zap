@@ -14,6 +14,9 @@ keywords = ["planning", "campaigns", "facts", "observability", "decisions", "rec
 min_vibe_version = "0.1.0"
 requires_kinds = []
 
+[requires]
+packages = { "lang:org.vibevm.ai-native/rust-ai-native-lang" = "=1.0.0" }
+
 # This is an independently selectable successor design, not a second central
 # authority installed on top of multi-user-planning. No upstream skill or
 # tracker service is a runtime dependency. Existing campaigns stay on MUP.
@@ -30,9 +33,14 @@ description = "Draft or revise a ZAP campaign methodology, owner contract and ob
 [[skill]]
 name = "zap-state"
 path = "vibevm/vibespecs/skills/zap-state"
-description = "Import, migrate, inspect, query, repair and operate an isolated ZAP campaign store through its public Python CLI"
+description = "Inspect, query, prepare and reconcile an isolated ZAP campaign through its typed Rust command surface"
 
 [[skill]]
 name = "zap-run"
 path = "vibevm/vibespecs/skills/zap-run"
-description = "Configure trusted ZAP control, run the persistent coordinator, and serve the authenticated graph backend"
+description = "Operate ZAP's protected Rust service with cooperating native drivers, durable receipts and explicit authority"
+
+[[binary]]
+name = "zap"
+crate = "crates/zap-cli"
+description = "Typed ZAP campaign service and machine interface"
