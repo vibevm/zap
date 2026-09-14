@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R09 causal return/review/relowering final proof and candidate CAS consistency",
+    "R10 detached Dreamer implementation",
+    "R17 A2 dual physical schema compatibility and paired measurement"
+  ],
+  "review": "R07 three blockers accepted. R09 candidate uses runtime post-dispatch Dispatch basis, not lowering or packet render basis. Narrow shared sidecar fix authorized; root requested symmetric pre/post candidate CAS handling including stale siblings.",
+  "next": "Accept current candidates on evidence; free next coding slot for R13C real command/runtime composition then R15 portable package. Complete R16-R19 before stopping.",
+  "restrictions": "Code Sol/xhigh; protocol test executors Sol/medium; native workers only. No NEXT execution, local Qwen, reset, external launcher or retried denied cleanup.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0110",
+  "time_utc": "2026-09-14T00:34:15.1456367Z",
+  "previous": "checkpoints/ROOT-0109.json",
+  "head": "6a7d1aed"
+}

@@ -2,12 +2,39 @@
 
 ##subagent-quiet-clause
 
-Middle gpt-5.6-sol/high; root dispatches after a coherent read-server boundary.
+Middle gpt-5.6-sol/xhigh; root dispatches after a coherent read-server boundary.
 Read R13-surface.md and reuse its named rules and current APIs; also read the
 accepted ../REPAIR-R07-CORE-API.md and ../REPAIR-R08-EXECUTION-API.md for the
 required composed providers and sealed data/packet contracts. Own API/CLI/app,
 coordinate domain/runtime/core changes with their owners. No full boot, model
 or local Qwen call, external launcher, NEXT execution, Git or publication.
+
+Current contracts additionally require ../AMENDMENT-R07-EFFECT-IDENTITY.md,
+../REPAIR-R07-CORE-API-AMENDMENT.md, ../REVIEW-R07-REPAIR-ACCEPTANCE.md,
+../REVIEW-R08-R09-AMENDMENT.md, ../REPAIR-R09-RETURN-API.md and the latest
+REPORT-R08-EXECUTION.md / REPORT-R12.md. The attribution XML named indirectly
+by R11 is absent in this checkout; omit that missing file. This packet's no-Git
+restriction remains binding and root retains attribution and commit ownership.
+Use the verified local run-cargo.ps1 wrapper named in ../RESUME.md for every
+Cargo invocation; do not set another target directory.
+
+Expose public prepare_effect_bundle and prepare_effect_comparison as read-only
+operations, including a typed way to inspect the verified prepared prefix when
+a later payload needs a record produced by an earlier effect. Do not accept
+caller-forged prepared mutation sets or turn preparation into authority. R10
+owns Dreamer domain modules; R09 owns offline domain and app cross_domain
+modules until its report. Coordinate app composition edits with those owners.
+R17 A2 adds PhysicalSnapshotManifest and explicit v1/v2 physical projection
+algorithms; expose those identities honestly instead of presenting a v2
+physical digest as the frozen v1 snapshot algorithm. Await root acceptance of
+that source boundary before claiming compatibility.
+
+R15 owns production filesystem material/workspace/archive adapters and their
+safe preparation/capture logic. Compose their typed providers once delivered;
+keep deterministic protocol fixtures clearly labeled while that dependency is
+pending. R13C owns service/transport/CLI integration and startup configuration,
+not R15's private provider implementation. Agree any required factory types
+before either worker changes shared exports.
 
 Finish the original R13 mutation/control/runtime denominator through one actual
 application service. FoundationComposition must retain the real

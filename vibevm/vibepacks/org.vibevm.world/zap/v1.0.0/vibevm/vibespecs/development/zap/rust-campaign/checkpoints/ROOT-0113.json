@@ -1,0 +1,20 @@
+{
+  "active": [
+    "R09 candidate applicability and symmetric CAS fixes",
+    "R10 Dreamer",
+    "R17 A2 single-snapshot fix, portable no-clobber publication, same-fixture measurement"
+  ],
+  "source_capture": {
+    "path": "C:/Users/olegc/.vibe/zap/development/vibevm-next/checkpoints/rust-candidates-20260914T0043186918690Z",
+    "files": 283,
+    "bytes": 2911541,
+    "status": "unaccepted per-file live capture, not globally coherent build"
+  },
+  "review": "R09 happy path passes; source review requests current Work/contract/generation and relevant basis for ApplicableCandidate, plus sealed pre/post candidate set consistency. R17 single-snapshot direction accepted; check-before-rename alone rejected; atomic directory reservation + ready receipt publication protocol authorized as bounded amendment.",
+  "next": "R13C then parallel R15A; full route remains through R19 publication1.0.0.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0113",
+  "time_utc": "2026-09-14T00:46:10.8254468Z",
+  "previous": "checkpoints/ROOT-0112.json",
+  "head": "6a7d1aed"
+}

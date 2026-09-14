@@ -2,13 +2,14 @@
 
 ##subagent-quiet-clause
 
-Middle Rust/package implementation, gpt-5.6-sol/high; root dispatches, accepts
+Middle Rust/package implementation, gpt-5.6-sol/xhigh; root dispatches, accepts
 and publishes. No full boot, credentials, local Qwen, model/launcher calls,
 nested agents, NEXT execution, full host tests or publication from this worker.
 Same workspace/package and exact standing rules as R04-store.md; reuse reads.
 
 Read ../PLAN.md, ../REQUIREMENTS.json scoped R15, current public Rust API and
 ../VIBE-ADAPTER-FINDINGS.md (verified installed query surface and schema drift),
+../VIBE-BUILD-CAPABILITY.md (actual lifecycle/build help and no-provider mode),
 capability output, permanent ZAP-RUNTIME/ZAP-RUST-STORAGE/ZAP-AGENT-PROTOCOL,
 package vibe.toml/.vibeignore/README/boot and the three zap-* skill files;
 host PROP-024-code-bearing-packages.xml and actual installed vibe command help

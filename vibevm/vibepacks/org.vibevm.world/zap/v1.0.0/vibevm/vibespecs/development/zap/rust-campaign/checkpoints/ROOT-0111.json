@@ -1,0 +1,19 @@
+{
+  "active": [
+    "R09 final causal journey",
+    "R10 detached Dreamer",
+    "R17 A2 targeted root review repairs"
+  ],
+  "findings": [
+    "A2 microbenchmark may differ from accepted actual small legacy-import fixture; requested paired measurement of same actual fixture, no425-node rerun.",
+    "A2 logical digest/physical manifest currently use separate read snapshots and may mix concurrent revisions; requested one captured snapshot.",
+    "A2 std::fs::rename publication is not portable no-clobber against concurrent empty destination; requested guarded no-clobber publication."
+  ],
+  "preparation": "R13C packet refreshed with actual R07 comparison/prefix and R09 contracts; latest RESUME frontier updated. R13C next available coding slot, R15 after/sibling.",
+  "effects": "No NEXT, publication, reset or denied cleanup retry. Preserve all candidate code.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0111",
+  "time_utc": "2026-09-14T00:37:39.3339534Z",
+  "previous": "checkpoints/ROOT-0110.json",
+  "head": "6a7d1aed"
+}

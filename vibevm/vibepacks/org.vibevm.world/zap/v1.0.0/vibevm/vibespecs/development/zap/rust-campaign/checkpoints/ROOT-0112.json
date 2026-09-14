@@ -1,0 +1,19 @@
+{
+  "active": [
+    "R09 final report and candidate stale-sibling reconciliation",
+    "R10 Dreamer implementation",
+    "R17 A2 same-fixture and snapshot/publication repairs"
+  ],
+  "R09": "Worker reports actual contradiction -> ReturnReassessment -> economics -> ReviewApplied -> same-ID LoweringApplied -> consumed sidecars and preserved history -> cold replay green1/1. Root acceptance waits symmetric candidate-set review.",
+  "next_packets": [
+    "R13C-command-runtime.md refreshed",
+    "R15A-material-adapters.md saved: production immutable material/workspace/archive, parallel with R13C after explicit slot assignment",
+    "R15-package.md updated xhigh"
+  ],
+  "remaining": "R09/R10 completion, R13C, R15A/package, R16 native probes and279 evidence, R17 scale, R18 discipline, R19 publication. No interim completion claim.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0112",
+  "time_utc": "2026-09-14T00:41:45.6031481Z",
+  "previous": "checkpoints/ROOT-0111.json",
+  "head": "6a7d1aed"
+}

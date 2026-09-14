@@ -22,14 +22,15 @@ design). Uncommitted Python economics code is unaccepted reference work. Its
 completion-ready/direct-close omission is recorded in ../REVIEW-CE-INTEGRATION.md.
 Never silently accept, discard, or mix it with Rust commits.
 
-Latest frontier override (see campaign.json and ROOT-0102): R07's independent
-final review found three blockers in REVIEW-R07-FINAL.md, now assigned through
-packets/R07-final-review-repair.md to zap_r07_finish (Sol/xhigh). R08 is a green
-bounded candidate in REPORT-R08-EXECUTION.md; the same zap_r08_finish worker
-now implements R09 via packets/R09-implementation.md. zap_r14_finish completed
-the accepted bounded receipt/path recovery and now owns the actual tiny-import
-activation test. All three are coding workers at xhigh. Protocol model test
-executors use medium; none has been launched for final R16 yet.
+Latest frontier override (see campaign.json and ROOT-0110): R07's three
+independent review blockers are accepted in REVIEW-R07-REPAIR-ACCEPTANCE.md.
+zap_r07_finish now implements R10 Dreamer. R08 is a green bounded candidate;
+zap_r08_finish implements R09's real candidate/return/review/relowering journey.
+Its current repair makes candidate CAS handling bind the actual post-dispatch
+execution basis, distinct from packet render and lowering bases. The tiny
+import activation is accepted in REVIEW-R08-R14-ACTIVATION.md. zap_r14_finish
+now implements R17 A2 compact physical storage. All three code at Sol/xhigh;
+native protocol test executors use medium. No final R16 probe has launched.
 
 R07's pending comparison amendment separates ChangeAssessment comparison
 request/digest from local effect bases, derives union read inputs on one
@@ -42,8 +43,9 @@ economics hold.
 R17 P0/A1 is root accepted in REVIEW-R17-P0-A1.md: exact encoder/projection
 bytes preserved, measured isolated memory reductions. Combined fixture replay
 still peaks around1.37GB; full-operation before/after gain is unmeasured.
-Record/history values are75.07% of table values. A2 packet is saved but not yet
-started; B remains unselected. Full R17 and publication are unfinished.
+Record/history values are75.07% of table values. A2 is active with dual-schema
+compatibility and small paired measurements; B remains unselected. Full R17
+and publication are unfinished.
 
 Use verified C:/Users/olegc/.vibe/zap/development/vibevm-next/run-cargo.ps1 with
 -CargoArgs @(...), explicit package workdir. It fixes next-rust and prevents
