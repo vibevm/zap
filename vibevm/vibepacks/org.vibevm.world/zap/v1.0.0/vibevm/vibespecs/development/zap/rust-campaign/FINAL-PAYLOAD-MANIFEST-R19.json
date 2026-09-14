@@ -1,0 +1,2546 @@
+{
+  "schema": "zap-publication-source-manifest/1",
+  "package": "flow:org.vibevm.world/zap@1.0.0",
+  "repo": "https://github.com/vibespecs/org.vibevm.world.zap.git",
+  "tag": "v1.0.0",
+  "commit": "12e9e5b1b39ccbbd79a5ab484be943201b6aaf20",
+  "file_count": 507,
+  "payload_manifest_sha256": "d426892fc6d5980061e5b06aa5576bc6fe39bc9325811707183c360ed0029fe5",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 62,
+      "sha256": "f84a2b729616d9cf1e81bf5c205b779b613921ec5a6b2bddc76ae7eea1f9a884"
+    },
+    {
+      "path": ".vibeignore",
+      "bytes": 635,
+      "sha256": "1a014e0d42d67b4f0d7401448733bc608a7649a0d7e52bd26392a1e22380f178"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 15194,
+      "sha256": "936d1cb6355a054e05129fe26c974d62df26a8f754f74dfbe4ac62f3609453d8"
+    },
+    {
+      "path": "Cargo.toml",
+      "bytes": 1970,
+      "sha256": "1162860157f03ff7b898154f07854723aac2bd6e2e8688365e0dd264729125de"
+    },
+    {
+      "path": "conform-baseline.json",
+      "bytes": 27,
+      "sha256": "3b72f8a0c61a3350b8b7c51601342263a36071b327f3395671f497834c34ca7f"
+    },
+    {
+      "path": "conform.toml",
+      "bytes": 964,
+      "sha256": "88db9828687a9b47394030abe1ca83f974ad7ebc4d502764639d1de35a72cc52"
+    },
+    {
+      "path": "crates/vendor/core-ai-native-specmark-grammar/Cargo.toml",
+      "bytes": 494,
+      "sha256": "d13d5bc78493be32a8990b2a1fc8f6f83e8fb2e2c2a99494255675c3b55f2e05"
+    },
+    {
+      "path": "crates/vendor/core-ai-native-specmark-grammar/src/lib.rs",
+      "bytes": 19497,
+      "sha256": "7ec35f63d71ebd7b4981f4dd9c6ea47ce75767f8493014a3d4c89adddc328c01"
+    },
+    {
+      "path": "crates/vendor/core-ai-native-specmark-grammar/src/lib/tests.rs",
+      "bytes": 10068,
+      "sha256": "9407fbc9b6d73e941cc163febfb2b4b805a0e9e47fec0cae6f832d8e489c70f1"
+    },
+    {
+      "path": "crates/vendor/core-ai-native-specmark/Cargo.toml",
+      "bytes": 504,
+      "sha256": "17444834b7122cca8ef8dcb0102b343b02817c4ace716d6084c84460fa7b3b17"
+    },
+    {
+      "path": "crates/vendor/core-ai-native-specmark/src/lib.rs",
+      "bytes": 5504,
+      "sha256": "b3b47781e0cc6c119603ffbc28f22449a9a3fa1bf01e80c6bdb1b454b36d91cb"
+    },
+    {
+      "path": "crates/vendor/core-ai-native-specmark/tests/usage.rs",
+      "bytes": 2613,
+      "sha256": "52598f168e29028d748f632371dafdbff9e6aa1f6a1086cf42dcd9c6ba374359"
+    },
+    {
+      "path": "crates/vendor/PROVENANCE.md",
+      "bytes": 1636,
+      "sha256": "4bdd23e07bbd6ffb2f55f3de8ff2fecffcc6619c200ecb03b1782ee1d24ff517"
+    },
+    {
+      "path": "crates/zap-api/Cargo.toml",
+      "bytes": 387,
+      "sha256": "c00ec25b3a4701c092b1a907e8f72d082c2ef406f5e9780d07ba60bec5477dc3"
+    },
+    {
+      "path": "crates/zap-api/src/commands.rs",
+      "bytes": 19056,
+      "sha256": "219884dbe1db21783d1bc81380c0a104fe7166f502036bcd7bc067ff643542a4"
+    },
+    {
+      "path": "crates/zap-api/src/lib.rs",
+      "bytes": 275,
+      "sha256": "3bfc5bebde9eb87ecadfb10b40178ce9ef0e4e5f9e76f3d5bcb2a993141e1cda"
+    },
+    {
+      "path": "crates/zap-api/src/registration.rs",
+      "bytes": 358,
+      "sha256": "d26acb4051595c99251aaebd1f9b62a7f759cfe8377537b416cc16f793e97741"
+    },
+    {
+      "path": "crates/zap-api/src/surface.rs",
+      "bytes": 17191,
+      "sha256": "3f45ccd57091f7247178c55161f6767531409cd5071d617c962e8d34d617d0a8"
+    },
+    {
+      "path": "crates/zap-app/Cargo.toml",
+      "bytes": 745,
+      "sha256": "016f90ee3fddf9a14e331df732a2b47639a97ca97c5dc710753218bcc7383666"
+    },
+    {
+      "path": "crates/zap-app/src/composition.rs",
+      "bytes": 12098,
+      "sha256": "546a45134578b683a0f75fd7321051da7a7ea46ea2cd6ca01daec70192a881bf"
+    },
+    {
+      "path": "crates/zap-app/src/cross_domain/bundle.rs",
+      "bytes": 15232,
+      "sha256": "096682cb3553a7dc278f15a3f5f8f16576e5eb248f11cea198204049f204e7b6"
+    },
+    {
+      "path": "crates/zap-app/src/cross_domain/bundle/derive.rs",
+      "bytes": 17484,
+      "sha256": "31e1a81c2577a14d2ecec8cac5b2a7bfc9b31ae836ff4cefd84190aa0eb75b37"
+    },
+    {
+      "path": "crates/zap-app/src/cross_domain/bundle/helpers.rs",
+      "bytes": 6948,
+      "sha256": "ce0054def631da1cf07765e5d1de2763af16bab891c31eb13f691df1443da43f"
+    },
+    {
+      "path": "crates/zap-app/src/cross_domain/bundle/materials.rs",
+      "bytes": 10766,
+      "sha256": "d3597ca7a1d813fcb98c4ef451eb4304b9da7a0f30ba62b7af97fa7482920afc"
+    },
+    {
+      "path": "crates/zap-app/src/cross_domain/cells.rs",
+      "bytes": 10040,
+      "sha256": "1e80871545898dba6cd2f439e71560afe413f6f685c45f89d3d16165ce7c6d62"
+    },
+    {
+      "path": "crates/zap-app/src/cross_domain/mod.rs",
+      "bytes": 516,
+      "sha256": "b6752e04b95eff0f44ebf0b9a7e0a85c0427afc289b4363ea584d17a8c0a29ce"
+    },
+    {
+      "path": "crates/zap-app/src/cross_domain/returns.rs",
+      "bytes": 17702,
+      "sha256": "2e01c999c16f87e9361c4d4109f8a5251b7f0a27e0cb077d573cb37a3ee78674"
+    },
+    {
+      "path": "crates/zap-app/src/legacy_import/mod.rs",
+      "bytes": 8951,
+      "sha256": "89cfdc78a447e568949fa245d83dbac606cc162a60ca6bc97ce247446d0aeab5"
+    },
+    {
+      "path": "crates/zap-app/src/legacy_import/service.rs",
+      "bytes": 18216,
+      "sha256": "5bc853622e9bb31d5057fb5ad43d1ddf9be780f40c380cdb780bea7198e372c4"
+    },
+    {
+      "path": "crates/zap-app/src/legacy_import/service/recovery.rs",
+      "bytes": 10841,
+      "sha256": "11e70bcb38a15dbeddbcab833dbebea116af190c9c8f3a82c5a2ba05e025d70c"
+    },
+    {
+      "path": "crates/zap-app/src/legacy_import/service/representation_probe.rs",
+      "bytes": 10894,
+      "sha256": "c2dc6d0288c1f33332cde2e658d7afae3272025a693ecb60292afad92c39c3b7"
+    },
+    {
+      "path": "crates/zap-app/src/legacy_import/translate.rs",
+      "bytes": 17613,
+      "sha256": "92b1a906ca502ce81e2c0d7e4b13b398ef0424e61a955bd1cf4b9f65f00c31d9"
+    },
+    {
+      "path": "crates/zap-app/src/legacy_import/translate/support.rs",
+      "bytes": 5506,
+      "sha256": "461dd06deb8a365c32119bb7fb3ed9e252fcc3ddf5e20a39b1fb1a4f758fa1ca"
+    },
+    {
+      "path": "crates/zap-app/src/lib.rs",
+      "bytes": 1526,
+      "sha256": "e24b72639326c04ba4823c5494e85a002416a3957c0539d5e39372a2ac7fefe3"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/bounded_process.rs",
+      "bytes": 7853,
+      "sha256": "adb61be995d4b26359b2e65021c7d0bc9f61f4aa79b8533614b973870641b4ac"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/bundle.rs",
+      "bytes": 16184,
+      "sha256": "ab2ba5d4592e9ed5331ccd479a22c03c71df8861cd30762b0415af18b8d91fb6"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/bundle/codec.rs",
+      "bytes": 6452,
+      "sha256": "26c47968c5e54dd5467d1a14db1b1a1f038371a40f8d0750d4bfc21fedb7a91c"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/bundle/semantic.rs",
+      "bytes": 19470,
+      "sha256": "1a6e6c238880b68848592dd4a9646f6ce042586ac0e8f3eab438fc5f2cdd8e84"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/config.rs",
+      "bytes": 5063,
+      "sha256": "db2dc52c98585e5a5fa852933112f04db9e5f47a21faddf27481981cee82b289"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/material.rs",
+      "bytes": 7868,
+      "sha256": "115e0477cd1d4bd2f9e8a993f5f0a1c4a26bc7fc02e8c61300f12be990bbd971"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/mod.rs",
+      "bytes": 4979,
+      "sha256": "a381a7ccd3698ef30e1c883252e572e3055cd9a5af40f1c824bffdb75868b249"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/paths.rs",
+      "bytes": 11511,
+      "sha256": "2f9232d2a7dbeb5f931e2b15eac7336888930c27cdd58635a1a684d1728ee733"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/repository.rs",
+      "bytes": 3857,
+      "sha256": "9be7bc0bf0843048c0252909272676b086f0891b9888df8c8b498c2a858f021c"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/vibe_query.rs",
+      "bytes": 4609,
+      "sha256": "8d75149ba8cf7d216ae17ed8fc8be6f698f4b7049affd8bc3cf7308745ab5bfc"
+    },
+    {
+      "path": "crates/zap-app/src/material_adapters/workspace.rs",
+      "bytes": 9979,
+      "sha256": "f9d414080551cac750de5ff1b042551f13db22c0ceaa6182ed71fddc410b8f24"
+    },
+    {
+      "path": "crates/zap-app/src/packet_capture.rs",
+      "bytes": 8161,
+      "sha256": "3ec18c49cccfafc75cefffe708e83438ad8f87bea36df4a88e720afaafdb7e7d"
+    },
+    {
+      "path": "crates/zap-app/src/packet_resolution.rs",
+      "bytes": 19242,
+      "sha256": "a941c2d669e7e44306e5153abb455db252e444fc58daa7e66a989bca2dbb3320"
+    },
+    {
+      "path": "crates/zap-app/src/packet_resolution/helpers.rs",
+      "bytes": 9615,
+      "sha256": "d5d88fa71f1f5ac0d126694d7915da26408ce72ed2c342e6d0d22b23f35922bf"
+    },
+    {
+      "path": "crates/zap-app/src/packet_resolution/materials.rs",
+      "bytes": 8842,
+      "sha256": "d6a9d8f7329387aee1773b41997507b9693f101de119cd16486faa2310def4fa"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/accessors.rs",
+      "bytes": 1817,
+      "sha256": "5ec496574b6fecfa91a04574d2da23e7fb2aeebc5d93cfabb867df868e5e4f20"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/application.rs",
+      "bytes": 21834,
+      "sha256": "ac0a6adf69964aa5f335298a7d35ef821306a119b6109420d598549f502e4ff4"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/archive.rs",
+      "bytes": 9383,
+      "sha256": "5c055d136d661a96671e868dbef996130acbd00ef7467e350bdfdef2ab736ea7"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/config.rs",
+      "bytes": 7840,
+      "sha256": "7cb10613b703817d570e8d568fc08e7fe8dff98a7cf2016c19fa3317f3ab1885"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/eligibility.rs",
+      "bytes": 3480,
+      "sha256": "2f22f541899a9c8846a57eebbff5ec2c2ade1159318115edde7d8627112ff174"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/factory.rs",
+      "bytes": 7896,
+      "sha256": "0fe816805844cfef56c908c1382dc20e85bbc2c80f22d54892b57354b1bb229c"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/lease.rs",
+      "bytes": 17312,
+      "sha256": "fd5d14fcf5ea02365f30f86b4871068b714cac19b35b902d2feac0e5923473b6"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/mod.rs",
+      "bytes": 447,
+      "sha256": "d57ff45ea9f0c937e5868b30cf394a08b337212e19e3e416ca6344b339dd9ac5"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/native_recovery.rs",
+      "bytes": 13915,
+      "sha256": "5953579f5392a1b00227c3a56b964ea8a4cb2064c16112406eff2c839a5429f6"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/query_maintenance.rs",
+      "bytes": 10866,
+      "sha256": "0c9d0dd29befaed7e729ecb6b999e08abe4e6da433bdb913269f68201f8bd507"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/read_port.rs",
+      "bytes": 22116,
+      "sha256": "615cf63ea16ccbd1add325e6357449657a30c9798c2b4b695991d77b2bbb319c"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/runtime.rs",
+      "bytes": 13878,
+      "sha256": "6e839ab3043e6ce84cea41030abb454e6539a748ba62d2e19e3b366da8bc6536"
+    },
+    {
+      "path": "crates/zap-app/src/runtime_service/trust.rs",
+      "bytes": 7957,
+      "sha256": "0aa940df35e62b1fce63dd40b890bd4f63e78d1ff8058b180d842c1508f66ab5"
+    },
+    {
+      "path": "crates/zap-app/src/server.rs",
+      "bytes": 16042,
+      "sha256": "768c781a8a1a6a0cb81af6d398b5cb7225d027cf7f3f5447e384a58c9765a980"
+    },
+    {
+      "path": "crates/zap-app/src/server/dispatch.rs",
+      "bytes": 18348,
+      "sha256": "b09ab5c37b88f2ce130375afe5fe3afb7ffbf8e7983f0001d431325d749cb489"
+    },
+    {
+      "path": "crates/zap-app/src/server/dispatch/routing.rs",
+      "bytes": 3010,
+      "sha256": "e33cbb4ed161dcc45ab021746b52c5fb3e994fb2d1a158bc483054a6c8cf2769"
+    },
+    {
+      "path": "crates/zap-app/src/server/dispatch/tests.rs",
+      "bytes": 1523,
+      "sha256": "4d29ca89efdde3beda438752b5f70d612c144e4b8dbb141712c3258456651626"
+    },
+    {
+      "path": "crates/zap-app/src/server/response.rs",
+      "bytes": 3266,
+      "sha256": "2155fe1bfd3356280a8b9cdf14163080aa22ceff06c81539fb5b6fd1320bb20b"
+    },
+    {
+      "path": "crates/zap-app/tests/application_server.rs",
+      "bytes": 12048,
+      "sha256": "395f8b00cf13afe2d19aebe63543450230ed068b115e26e28f908be0ce45b3dc"
+    },
+    {
+      "path": "crates/zap-app/tests/application_server/completion.rs",
+      "bytes": 12789,
+      "sha256": "eca9df15efed7c28faa440a17bab50fed8ba4ae5e137c0bf4ee0d8769efac911"
+    },
+    {
+      "path": "crates/zap-app/tests/application_server/projected_record.rs",
+      "bytes": 7750,
+      "sha256": "4bf366951d73cf4319f9a82a2414ea620cd7bd9e8e877e5c68b19d3c2bde038f"
+    },
+    {
+      "path": "crates/zap-app/tests/application_server/protected_routes.rs",
+      "bytes": 15198,
+      "sha256": "3d2798ad02ed38504105b5119980206e167fd4de2e5e88d93616f1fce532d88d"
+    },
+    {
+      "path": "crates/zap-app/tests/application_server/runtime_start_guard.rs",
+      "bytes": 9682,
+      "sha256": "efdce752be5fc4db3d19885406bd8dda76713f4b93c49b75e7a7812674f049b1"
+    },
+    {
+      "path": "crates/zap-app/tests/deterministic_campaign_completion.rs",
+      "bytes": 257,
+      "sha256": "652ffffb3e30a1bf429b2655742f3edd9e40588477c70cafed647174cb6cc7fa"
+    },
+    {
+      "path": "crates/zap-app/tests/legacy_activation.rs",
+      "bytes": 5180,
+      "sha256": "318228a582611973ab73c1aef8c1183bb0dc965396557cb9e06e3513de4fce85"
+    },
+    {
+      "path": "crates/zap-app/tests/legacy_activation/journey.rs",
+      "bytes": 19310,
+      "sha256": "7a01a9be471b7ce8044de5b426f30b5289235e0477e7d262f51ba8f4ca930acd"
+    },
+    {
+      "path": "crates/zap-app/tests/legacy_activation/support.rs",
+      "bytes": 11894,
+      "sha256": "14ba08ad107a6a7ce2a2d1dc4b41350d37e91f02913b2589e0963a02d451da9a"
+    },
+    {
+      "path": "crates/zap-app/tests/legacy_import.rs",
+      "bytes": 12270,
+      "sha256": "be17962a8b736dabbef54ddf8cb15332b39cf80e870da1a13207e209f2196064"
+    },
+    {
+      "path": "crates/zap-app/tests/material_adapters.rs",
+      "bytes": 13828,
+      "sha256": "09495d14c7c1d2173373200065948a94ab223eaa16a00ab2f85dd5e144b9e3a5"
+    },
+    {
+      "path": "crates/zap-app/tests/native_campaign_probe.rs",
+      "bytes": 744,
+      "sha256": "aaee6a05e0e1b018ee38aebe249ce1bca0eec142f811275279ae5385127da321"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service.rs",
+      "bytes": 23464,
+      "sha256": "15d91f664ad6b6bf664ab7ab27d082f5044078ee5ab564661c3d2def55946400"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/app_support.rs",
+      "bytes": 9625,
+      "sha256": "338ea2313a34d5cd1561753fd856f7d167c6be29e07da0b400b40610c9ad883b"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/bundle_fixture.rs",
+      "bytes": 5393,
+      "sha256": "399d7952f06e5452f69cd9c81d75b6117c60d119f770a6a918792f7371c7d937"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/completion_probe.rs",
+      "bytes": 14900,
+      "sha256": "8e9f5f9ecc2ae41b36a7a1f49c0987de24cac13c44c9e16fdcd9d0061d6de489"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/postlude.rs",
+      "bytes": 5890,
+      "sha256": "3c47af69ea26672bc22b2eaa4beac7846a7375379ddd45175b1ace791e36887f"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/r11_candidate.rs",
+      "bytes": 21443,
+      "sha256": "a2f1fb028ea63d4a5fd08f506340a5ed0f20974a43d94b37832958f2240461be"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/r11_candidate/candidate_input.rs",
+      "bytes": 705,
+      "sha256": "3524fbc1fef814181608bb2bccd9e6331ac4bec5603c52bf80210b18df7de9ec"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/r11_candidate/probe.rs",
+      "bytes": 16604,
+      "sha256": "f72b2980cddf559cd8947f285b905d66eda42c1e53d252d3c834c59b5cadefd9"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/r11_candidate/read_port.rs",
+      "bytes": 2400,
+      "sha256": "5eab8b20c897c128ba2c61857dbc57232e50439f7710f639801181048ce36f5d"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/reassessment.rs",
+      "bytes": 14979,
+      "sha256": "b28fe1db868ffaeefb38ae4d4dfdc84252f0d3b9cbcaecc20fe8ebd4db320426"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/relowering.rs",
+      "bytes": 20360,
+      "sha256": "54639aa949d04085d0da3f9d9907aa3f49353a88f0e0dd1e50d7ed39bb0eab78"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/return_fixture.rs",
+      "bytes": 6988,
+      "sha256": "2817be1a64354e9a0a0c1260b283b308187b947b26f4032c83e2bb1e8c21fd2a"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/setup.rs",
+      "bytes": 9197,
+      "sha256": "4072ab85c525e87c85b77f435b29461e7e53e2cd467caac3cf56a8dba296f9e0"
+    },
+    {
+      "path": "crates/zap-app/tests/packet_resolution_service/single_job_journey.rs",
+      "bytes": 17239,
+      "sha256": "68f7e760ee2780f61b85b76f83992e6e773f894b724f7b39c7e389d8d4e65f6c"
+    },
+    {
+      "path": "crates/zap-app/tests/read_server.rs",
+      "bytes": 17013,
+      "sha256": "a6144afd9f477cee015aba6405044fb068488de286280979c3be54a54c11c201"
+    },
+    {
+      "path": "crates/zap-app/tests/read_surface.rs",
+      "bytes": 1537,
+      "sha256": "1a0d9572733ad3854e5fe21c4b6ca3d73c542fdbf65becf906a2dbc79d09792d"
+    },
+    {
+      "path": "crates/zap-app/tests/representation_fixture.rs",
+      "bytes": 11631,
+      "sha256": "baa5e238943926833c78b86e35d5e65cfa90056f7f0e59e6f02637b85e5044d8"
+    },
+    {
+      "path": "crates/zap-cli/Cargo.toml",
+      "bytes": 552,
+      "sha256": "00b9888e55451b1e29cbd1763335eab239d270484baa532128d20c6943610f32"
+    },
+    {
+      "path": "crates/zap-cli/src/lib.rs",
+      "bytes": 142,
+      "sha256": "70d4611a665ee2ca84bac427f4f0a9c8557a2a15d91c74bc538f0c9625c51f48"
+    },
+    {
+      "path": "crates/zap-cli/src/main.rs",
+      "bytes": 12347,
+      "sha256": "4292bba527c82d18cd00b08ef110ad8adfad8d46da93369181a23632161bc9fe"
+    },
+    {
+      "path": "crates/zap-cli/tests/binary_server.rs",
+      "bytes": 14223,
+      "sha256": "37074c109d8b2cc0702f3e3246109e4d991f1bf235fdae3368c68a51d685d661"
+    },
+    {
+      "path": "crates/zap-core/Cargo.toml",
+      "bytes": 333,
+      "sha256": "1510b4c5fda04d28c8f4e73bb8f615c81f7d38953eb8df0f438ce1096bb0b79a"
+    },
+    {
+      "path": "crates/zap-core/src/admission/impact.rs",
+      "bytes": 9824,
+      "sha256": "eaee9568688440d3fedd3c87486a43474b57f98639a3a7956d5a2eac396f305e"
+    },
+    {
+      "path": "crates/zap-core/src/admission/mod.rs",
+      "bytes": 217,
+      "sha256": "f39a0b16a679ca2b3968f022ae0bda5959c6b1af9f4bcd0a8d6d12a7543e2145"
+    },
+    {
+      "path": "crates/zap-core/src/admission/protocol.rs",
+      "bytes": 12578,
+      "sha256": "e57118e3b0ad02953472bc360ee17b7f4f25eefcc1c8811e197cf9960ecbf5a3"
+    },
+    {
+      "path": "crates/zap-core/src/agent/capabilities.rs",
+      "bytes": 9286,
+      "sha256": "76b578ff9e1596537aa04cdb2e7d1ba26c52726d376d3b79e92065fa5a17fbbb"
+    },
+    {
+      "path": "crates/zap-core/src/agent/dispatch.rs",
+      "bytes": 14785,
+      "sha256": "26eca05c06136f852d142db76c6e09a5061845debfa1c12a8518664499d42091"
+    },
+    {
+      "path": "crates/zap-core/src/agent/goals.rs",
+      "bytes": 7414,
+      "sha256": "10fae52b00bfd6e16ca320676a655dcabb9a451f46d276844bf22d3004665ad6"
+    },
+    {
+      "path": "crates/zap-core/src/agent/host.rs",
+      "bytes": 1350,
+      "sha256": "c89298fd42ea64e0534f448ddc50153333a84aaf484824060a585580e9205de5"
+    },
+    {
+      "path": "crates/zap-core/src/agent/mod.rs",
+      "bytes": 1181,
+      "sha256": "54b5b7dbb5fda994eda970a6a9c19126dd1943e02e19376a04e2276e2478952d"
+    },
+    {
+      "path": "crates/zap-core/src/agent/profiles.rs",
+      "bytes": 4686,
+      "sha256": "293ae7e90e0dd2b50fddc3a56ca00b046c010357bfa6f5696e2f343cb0676e5a"
+    },
+    {
+      "path": "crates/zap-core/src/agent/revalidation.rs",
+      "bytes": 6244,
+      "sha256": "b8a169df20ab512adea01c6631eaff2bf70e4356e5cb3d79bc3a4d3f3aa167c2"
+    },
+    {
+      "path": "crates/zap-core/src/artifact.rs",
+      "bytes": 2265,
+      "sha256": "54e7077984b4974c420bec62627fb187095728ec8976e8f5e67e5766d6763d90"
+    },
+    {
+      "path": "crates/zap-core/src/authority.rs",
+      "bytes": 7148,
+      "sha256": "2673e7515c790d11661bcfc0e8331d7170778f00f05fa0b5237f958dc1419584"
+    },
+    {
+      "path": "crates/zap-core/src/basis/mod.rs",
+      "bytes": 14136,
+      "sha256": "6c0baaa7c607a4332b4ebc2dba0ff9326305a448a6db5cc2ebe8fdfebd9b6086"
+    },
+    {
+      "path": "crates/zap-core/src/candidate.rs",
+      "bytes": 5255,
+      "sha256": "9c30194c103d8d3b8ec5cfbccbc15a4ff1e71e5496774e5e3a90086eb41a8ee1"
+    },
+    {
+      "path": "crates/zap-core/src/change.rs",
+      "bytes": 14548,
+      "sha256": "6f480fe09ccb5e068257593d042a18813a1a68f29c646e710302490655198b8c"
+    },
+    {
+      "path": "crates/zap-core/src/change/index_overlay.rs",
+      "bytes": 7753,
+      "sha256": "ab2ed84b325bac64c2d2364b36dee274ac4e9060e0676cf99a32b2a9ae7763cf"
+    },
+    {
+      "path": "crates/zap-core/src/change/index_overlay/tests.rs",
+      "bytes": 10445,
+      "sha256": "27110ab6389b43a8247412e2e2181d0c0803f77c02c353ef86a9586dd40277fc"
+    },
+    {
+      "path": "crates/zap-core/src/change/record_overlay.rs",
+      "bytes": 5023,
+      "sha256": "f422a90d624b58e7b6e0cb1f02a3b8d0d6943f00acf51abb8eb91eca764b5797"
+    },
+    {
+      "path": "crates/zap-core/src/change/record_overlay/tests.rs",
+      "bytes": 13920,
+      "sha256": "5ccda183c91656ec7a257c823f87ae774506c0edb337fd4b498bbfb6e9e83a9e"
+    },
+    {
+      "path": "crates/zap-core/src/commit.rs",
+      "bytes": 12312,
+      "sha256": "a61bfa86359e19c272108d97c184bd2a94ec74da47bcdcd4fed6b6aa0e8dafad"
+    },
+    {
+      "path": "crates/zap-core/src/commit/builder.rs",
+      "bytes": 8131,
+      "sha256": "783899d81e77d62be77cc25df4da69c3f6c5ca8c54fd7428d638210e890142a6"
+    },
+    {
+      "path": "crates/zap-core/src/commit/event_replay.rs",
+      "bytes": 4666,
+      "sha256": "37a75fa75e9afe8a59c4f282142af957b685bb5fa4e3e2d85d0574877acc7d1e"
+    },
+    {
+      "path": "crates/zap-core/src/commit/index_plan.rs",
+      "bytes": 4801,
+      "sha256": "03b82c9835a7849f8c8c050b1530e055cdc3e59a6942385e688a565a9d047b31"
+    },
+    {
+      "path": "crates/zap-core/src/commit/logical.rs",
+      "bytes": 12957,
+      "sha256": "e6682d94947c5171ddcdefe6da6c02ba7d408ca50009874193d165ea98130421"
+    },
+    {
+      "path": "crates/zap-core/src/commit/replay.rs",
+      "bytes": 19597,
+      "sha256": "eb32cb8b3c0c1a4ad28c624d19672a82a7cb13429f1c365fdd2b4d8df48bf00c"
+    },
+    {
+      "path": "crates/zap-core/src/commit/service.rs",
+      "bytes": 25670,
+      "sha256": "80f15c9b4ed45e90b84113959de749cea1ffb854dd1fff1dc1162d397affca98"
+    },
+    {
+      "path": "crates/zap-core/src/commit/validation.rs",
+      "bytes": 15105,
+      "sha256": "1657429a24478b287a5a46ecd5a830346e317f61d19ed82afa469841cf02bcd0"
+    },
+    {
+      "path": "crates/zap-core/src/completion.rs",
+      "bytes": 7578,
+      "sha256": "09d72b1d4971c4e003de3dd8df743603e853d58565e1a37e371eba504458a9bb"
+    },
+    {
+      "path": "crates/zap-core/src/descriptor.rs",
+      "bytes": 5431,
+      "sha256": "5cb5b6d8a6a52114260eab66f6fabb498d015af91a01be90b97927b61a708195"
+    },
+    {
+      "path": "crates/zap-core/src/effects.rs",
+      "bytes": 19165,
+      "sha256": "f18887bde84ed1f60447bd1db8741a291b5199f52d2da578f491621f13ac7f0b"
+    },
+    {
+      "path": "crates/zap-core/src/effects/draft.rs",
+      "bytes": 5405,
+      "sha256": "55c7223a4c883cd2fb7658c27763a15d8302df752b90dd566709c283abdc1e73"
+    },
+    {
+      "path": "crates/zap-core/src/effects/tests.rs",
+      "bytes": 2625,
+      "sha256": "e5e169d45bb799522f0c75bc604aa43cab7b018e257ce513d1935f4493b539fa"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/affected_scope.rs",
+      "bytes": 18212,
+      "sha256": "13e943a348a7299125b498727ad53ae481303530618606b5e738989fd6d151c3"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/eligibility.rs",
+      "bytes": 5300,
+      "sha256": "07d9baa5ebe4a3811dc90382c76088dd3cfb4c8026ab6fc353dac98e8dd27c87"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/job.rs",
+      "bytes": 11816,
+      "sha256": "4565b3bef7992426a579eaee9f066c2aec9b40ecbe51394ba7b7d3b63b3f2d07"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/mod.rs",
+      "bytes": 1246,
+      "sha256": "0381aff50a04c3274b7345b61e1f6091d48964bb7ea270302dc4617e49abdc4b"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/packet.rs",
+      "bytes": 19488,
+      "sha256": "9d58ca7307d32298720ba717539235a15ebecdfa178555c78e3540e7a9a60364"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/packet/candidate.rs",
+      "bytes": 7863,
+      "sha256": "fa6a2a8131103e1c9bb339414d844dd66a1958e284d8bfa1821d0bff9696ae17"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/packet/providers.rs",
+      "bytes": 2900,
+      "sha256": "29b2e4e106926d77020b3ca1842cf0be0ec274f7f91103c0c343451bcacd0d15"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/resume.rs",
+      "bytes": 6257,
+      "sha256": "d99ecb74a2824d13c0c077a92102561c82e33fca32db4005a52dba188a2a123d"
+    },
+    {
+      "path": "crates/zap-core/src/execution_views/work.rs",
+      "bytes": 12882,
+      "sha256": "1e48d0bf7ca65d85c3986bd4f5afe4b0d441ff513cdd83e3e77fb68bda82399b"
+    },
+    {
+      "path": "crates/zap-core/src/identity.rs",
+      "bytes": 1275,
+      "sha256": "3e6a1e84ef2a344378a7445375634b0f7f205861be5fc732c63bf0e5a9ae3a42"
+    },
+    {
+      "path": "crates/zap-core/src/index_scan.rs",
+      "bytes": 6559,
+      "sha256": "50bf841a62214ce497fd06ec49eecdaecced76435c5f9afdca4bf2905c081140"
+    },
+    {
+      "path": "crates/zap-core/src/lib.rs",
+      "bytes": 3719,
+      "sha256": "582bb301de77e1f920e227023c8954f04742cd0552001b5f9ad9823478169df4"
+    },
+    {
+      "path": "crates/zap-core/src/names.rs",
+      "bytes": 5666,
+      "sha256": "a45725d5dd38cc61a73cf17a02c403f060732b3ae59b1b5233e8f2f3cee9dc2a"
+    },
+    {
+      "path": "crates/zap-core/src/page.rs",
+      "bytes": 5915,
+      "sha256": "50875bddff237eea968f32c079a90a2ddd2dfd4d35e5900df187aff7a55ee76f"
+    },
+    {
+      "path": "crates/zap-core/src/preflight.rs",
+      "bytes": 14044,
+      "sha256": "b1e4893300e7a95206be08e8202b87f32aa1a428e98ba91604ce5be0abb77212"
+    },
+    {
+      "path": "crates/zap-core/src/preflight/effect_bundle.rs",
+      "bytes": 14513,
+      "sha256": "bfcadd8c98e269134cad952e7c6e17d6d96cebcf44aa54746d93d75de15c6626"
+    },
+    {
+      "path": "crates/zap-core/src/query.rs",
+      "bytes": 5929,
+      "sha256": "cc2fad2fd2131a45802f293fe4d73223718f0827feef0439604c940aeb46530d"
+    },
+    {
+      "path": "crates/zap-core/src/record.rs",
+      "bytes": 14161,
+      "sha256": "d2c890c04918d98c0a7e31ad57494617f0e1ad43f336d916fc5a20804dccfa38"
+    },
+    {
+      "path": "crates/zap-core/src/registry.rs",
+      "bytes": 2352,
+      "sha256": "882eca819beb9042a3a1a450ae9de565acd985329796befae5c69112da0d5546"
+    },
+    {
+      "path": "crates/zap-core/src/state.rs",
+      "bytes": 8049,
+      "sha256": "d07c52b2074e2ec9cf5279328dff35f1649c54b75dccc191ab0b0441fa4d431c"
+    },
+    {
+      "path": "crates/zap-core/src/transition.rs",
+      "bytes": 15988,
+      "sha256": "1f1b0f3902a184e18ff9de8042ec2bb25e44019026a557fd42e1f7854def7ccb"
+    },
+    {
+      "path": "crates/zap-core/src/transition/cell.rs",
+      "bytes": 8724,
+      "sha256": "0cb392afebf3d11f2e38d04f7ec9b689947db3e2aa665cc0a7da4b7bf097ddc4"
+    },
+    {
+      "path": "crates/zap-core/src/transition/erased.rs",
+      "bytes": 11110,
+      "sha256": "c78a33c3640338f468ecb65d556c44766b7100a4602ffa68846218155034801e"
+    },
+    {
+      "path": "crates/zap-core/src/transition/payload.rs",
+      "bytes": 2409,
+      "sha256": "46faac74cefbb09a9d61409e6b015b8666aff127eb1e74f669c009b8d583e704"
+    },
+    {
+      "path": "crates/zap-core/src/transition/tests.rs",
+      "bytes": 9851,
+      "sha256": "cbfc92e5370d36cf63af62dcc810ba85922f083a7d81d4c055221b16eee81283"
+    },
+    {
+      "path": "crates/zap-core/src/traversal.rs",
+      "bytes": 1750,
+      "sha256": "1c87c94846e329162230f8f220e1f641ee093a18492eacbe34a9916f1d13a41c"
+    },
+    {
+      "path": "crates/zap-core/src/trust.rs",
+      "bytes": 17534,
+      "sha256": "d318d9e206d17ce78e8b971018c7178e15d1c7490165dd914a3637eeb6d6a657"
+    },
+    {
+      "path": "crates/zap-core/src/trust/authority.rs",
+      "bytes": 9762,
+      "sha256": "55ef86687b6a2c59c6d311579001f2abff1af4320af050dd472e1191a769c2ca"
+    },
+    {
+      "path": "crates/zap-core/src/trust/tests.rs",
+      "bytes": 4972,
+      "sha256": "3525703730e6e9e6fc4867f67eb6680d947feba4637368b3b2d3b83d2c2cf4a4"
+    },
+    {
+      "path": "crates/zap-domain/Cargo.toml",
+      "bytes": 435,
+      "sha256": "d238ca417284ac09cc3979d4fa3cfeda2454f69f1e5b5cc85fe36aba11a250b4"
+    },
+    {
+      "path": "crates/zap-domain/src/acceptance/applicability.rs",
+      "bytes": 13198,
+      "sha256": "1c98e447ead9d3e528b1659831a064543552f4cd54a900125ae312e4a144eda7"
+    },
+    {
+      "path": "crates/zap-domain/src/acceptance/cells.rs",
+      "bytes": 21599,
+      "sha256": "cf6d8ed29a93fbcd7dc00de7287dcbb7854945d649438b4a356289db389d633b"
+    },
+    {
+      "path": "crates/zap-domain/src/acceptance/mod.rs",
+      "bytes": 454,
+      "sha256": "74d7ccf40299be216385aa6e59ba956614ff212097ec8346fda3e968266d56cd"
+    },
+    {
+      "path": "crates/zap-domain/src/acceptance/payloads.rs",
+      "bytes": 5690,
+      "sha256": "2c4b901a0c715a7b6ecd81fea0060f48d24a72509ee30e18f266258f599f2d91"
+    },
+    {
+      "path": "crates/zap-domain/src/acceptance/records.rs",
+      "bytes": 8048,
+      "sha256": "11783d0484e98e1f20cbc98880e01bd996fe81c42fd2d49b76df40b6e273718b"
+    },
+    {
+      "path": "crates/zap-domain/src/acceptance/transitions.rs",
+      "bytes": 18262,
+      "sha256": "0739f5ec27bca66d9f8037417566e8e165f1072516f496c1d9e9fe703c340ddf"
+    },
+    {
+      "path": "crates/zap-domain/src/acceptance/validation.rs",
+      "bytes": 3823,
+      "sha256": "40ec93edeb22bb15a92a28b44b826a261d6adafadfab19f8db9effabc48ae096"
+    },
+    {
+      "path": "crates/zap-domain/src/admission_indexes.rs",
+      "bytes": 13451,
+      "sha256": "59f125395090198f5a71880b458e11327af44fe4f13e34b0015ceb9e7d7b1069"
+    },
+    {
+      "path": "crates/zap-domain/src/basis_indexes.rs",
+      "bytes": 8722,
+      "sha256": "37a90256f54bfff8d4c29197b516348632501995a731f116fa74de8cc5f4c3bf"
+    },
+    {
+      "path": "crates/zap-domain/src/control/cells.rs",
+      "bytes": 20403,
+      "sha256": "a2f41a740d34fd8feb97b1531ffb03906c8ad3a3580895f9251956935a247491"
+    },
+    {
+      "path": "crates/zap-domain/src/control/cells/effect_helpers.rs",
+      "bytes": 1814,
+      "sha256": "471b449309027d35e62a0afb571199c6a1827d8e307cd97aaf7aebedb2a28242"
+    },
+    {
+      "path": "crates/zap-domain/src/control/cells/registration.rs",
+      "bytes": 5419,
+      "sha256": "8cfebd8fee5e1540ed20b6f30eaa5518ee796e33a54df82f25a1d87b97cecfab"
+    },
+    {
+      "path": "crates/zap-domain/src/control/mod.rs",
+      "bytes": 267,
+      "sha256": "02f1e0b4f2c1cd7dfab15cb84ebee8419232776a25841874af8e208c9c3c8bc8"
+    },
+    {
+      "path": "crates/zap-domain/src/control/payloads.rs",
+      "bytes": 7636,
+      "sha256": "232b6a078bd2f7e4d06a4bad03d458133c0b7654b0b0a7352688e81cce18c2c4"
+    },
+    {
+      "path": "crates/zap-domain/src/control/records.rs",
+      "bytes": 3982,
+      "sha256": "2f879e1eed3ad1568bee087168d0bf51b6941af87f10b2f04e8328f1d674550e"
+    },
+    {
+      "path": "crates/zap-domain/src/control/transitions.rs",
+      "bytes": 10879,
+      "sha256": "342bb73f2416478ca5dd12458bfa37c720a7917b0a6a8c81041cf136b1b3e102"
+    },
+    {
+      "path": "crates/zap-domain/src/control/validation.rs",
+      "bytes": 10880,
+      "sha256": "77518393e293c0d94919549a39db7681546bab65188a65e5c5b4f5c003eb327b"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/cells.rs",
+      "bytes": 6095,
+      "sha256": "b3f327a6b87cdbde19ee5fe834b54973a04789ef3f0fe7d0293a8bcfc6ed5c16"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/cells/application.rs",
+      "bytes": 19571,
+      "sha256": "1822bcdbc9fad8d82a6c257b6bab893b19f4ae56a2afa927eefc45cdff3072c6"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/cells/combined.rs",
+      "bytes": 7995,
+      "sha256": "2f26973a3e0463ca41a764b5c1888490b891a80bddbe911743f07118edee7a4b"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/cells/grill.rs",
+      "bytes": 13491,
+      "sha256": "75bb1db75318a03e736328f15fd5946cf0bb63a4b22e412d8412f72c17733824"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/mod.rs",
+      "bytes": 679,
+      "sha256": "10c36728427bb123cbe5dd4830deb3d58235311258e8cb1dd6ef8c4ee986cb74"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/model.rs",
+      "bytes": 18226,
+      "sha256": "b02a127b17196b9410379efa22dc8d7f167778f14cd64fc735bf9b825bc1aa6a"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/model/removal.rs",
+      "bytes": 4410,
+      "sha256": "dbfebf6d6adc26b6e7ed5e99abbdc85f4df36838a7c0d25a42d5a64b558aaf28"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/payloads.rs",
+      "bytes": 6749,
+      "sha256": "0d77838fdc65ea2786ab71699c6f3c83973220670ba7f30bca26f2308a0b5e73"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/projection.rs",
+      "bytes": 18139,
+      "sha256": "eba2031dad692ba69a95ea2080351a5be9fdf987634812b3e666344ea632dca9"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/projection/scope.rs",
+      "bytes": 18235,
+      "sha256": "daaaf79219214661865e2324957e17d387e5e72416467c601707c48b9aa9ab95"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/queries.rs",
+      "bytes": 2322,
+      "sha256": "0405eb244d9aace87954a76935fa4019ce278305c2d206a5f2005d9bc38d949c"
+    },
+    {
+      "path": "crates/zap-domain/src/dreamer/records.rs",
+      "bytes": 4437,
+      "sha256": "ceeba13416306f4928b3ba0336815ea6176db0e8718fe0985cc3dffefd953a19"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/admission_cells.rs",
+      "bytes": 13629,
+      "sha256": "b3ec086a4478c1c07b851a4b898bfa14b8f9febf4412c1b0a0f753a60ce046e9"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/admission_v1.rs",
+      "bytes": 13748,
+      "sha256": "781c873538398da7a8fd0205befc4e1a1d401e8bfac7b3f3fc9061c1a0c0a6f0"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/admission.rs",
+      "bytes": 22363,
+      "sha256": "ee8f83b249f8f4b68c58bbc22b824c42561cb4311288e0c463350ea1dd2f3fa4"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/admission/pause.rs",
+      "bytes": 1805,
+      "sha256": "d3109a89fd49285526386382508506fd8807b585f13d5bd0ba6e5a0496b96df4"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/affected_scope.rs",
+      "bytes": 12886,
+      "sha256": "df59e2f17048bc1f77cfb06c480af04a5c1f4e5d28e729447ea48f954af65f79"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/affected_scope/indexed.rs",
+      "bytes": 11537,
+      "sha256": "9856dad38a2e1bb2e2f4d6a1fe7b4aa0a60da7881ecdd8c80a0bfa0267538ed8"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/assessment_cells.rs",
+      "bytes": 13310,
+      "sha256": "dd7bc18d6c15ceba2d0db8b8071067a46e4869f315a6109ce850c2d243408470"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/cells.rs",
+      "bytes": 11414,
+      "sha256": "1bc086058f0632951a72b5a20fb2c6f16c05e31b3366ca9cd36bed32bca2c9ee"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/completion.rs",
+      "bytes": 5540,
+      "sha256": "ea8dc12d5325c4347aec578a23a10e3da042ae674b4e5122760181d98fa15f99"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/completion/tests.rs",
+      "bytes": 6827,
+      "sha256": "e0e770258c8c1b542fcf7fd6ee4fd0d8e917ecdd4c06fe97096c96bec6a661e5"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/decision.rs",
+      "bytes": 13909,
+      "sha256": "e04040b170d9d0e7fe221e12e9a977dc8d2ffa2a273fd4d2302c2c135cf56fc4"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/forecast_cells.rs",
+      "bytes": 12478,
+      "sha256": "7ee1ca2721cc407b9acc4bcbeefb584a4c603af8050ac43ed6ccde1d35b0e7d2"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/holds.rs",
+      "bytes": 3907,
+      "sha256": "4ade1386b7d236a87bfe2586e5895395b75a50b6743b554bd43f0a6379591bc9"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/impact.rs",
+      "bytes": 6759,
+      "sha256": "69317fc3322623ab3aebc91428dff55cbf10b30cca8e088dd99f171d3d53ed66"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/mod.rs",
+      "bytes": 1738,
+      "sha256": "128301c2a8f7ef1118cd2d5ee5fa3a5534eb8b5390a1fe262db56ff192812f59"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/model.rs",
+      "bytes": 10513,
+      "sha256": "75a16f240715ce93a542627ef41e944c1d7eb97cfa6bfa9db103c48611559fd9"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/model/cost.rs",
+      "bytes": 9678,
+      "sha256": "3dcb5f47d5c9313ffbd273f58f3cb699ef8d44b2095c597a111cc4e003c38321"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/preflight.rs",
+      "bytes": 9989,
+      "sha256": "5cb76333ebc453b2ebc71b26a730394e499dd4694b48db5fa4b388f6fbae545c"
+    },
+    {
+      "path": "crates/zap-domain/src/economics/records.rs",
+      "bytes": 12979,
+      "sha256": "8e25523830de86fe962fd0b18e803ed6da946c253b81b84914bbe4766334c7f6"
+    },
+    {
+      "path": "crates/zap-domain/src/intent/cells.rs",
+      "bytes": 19341,
+      "sha256": "1bce257c25b4074b5ca166537638f64c091b400bf61ef8b927f41d141a86ac9c"
+    },
+    {
+      "path": "crates/zap-domain/src/intent/mod.rs",
+      "bytes": 146,
+      "sha256": "0f5ff849dcc377805b15aef0c915afba4b8d52c19b586d5490345a8b460505a8"
+    },
+    {
+      "path": "crates/zap-domain/src/intent/payloads.rs",
+      "bytes": 5545,
+      "sha256": "5b2204e46f37c86da2dd1be7ca58782d5efc3a86ae89751a0e89216b61f93d14"
+    },
+    {
+      "path": "crates/zap-domain/src/intent/records.rs",
+      "bytes": 4156,
+      "sha256": "178e31c5184781fd600005105efcec42ea8e3d8c054ee8744b8527fe432a082d"
+    },
+    {
+      "path": "crates/zap-domain/src/intent/transitions.rs",
+      "bytes": 17038,
+      "sha256": "98b58975c559a84fee30df916f08cb2271aa816c8a20be18a2e9e5cbc8adcd32"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/basis_helpers.rs",
+      "bytes": 20019,
+      "sha256": "1dc68f076e875b3beca3cdaec0e4b79aa5d501b4983b2fe61c9d5ea9b84a4195"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/basis_indexed.rs",
+      "bytes": 19293,
+      "sha256": "bb3ba9f5a84f9ec966edc92094b5754be77a4ee2bc3b075fdeefe2c765070cb5"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/basis_indexed/storage.rs",
+      "bytes": 6723,
+      "sha256": "54d99c0a972bff2461e6240ecb9d3d2e1e84f50f543895acc829baa3d2f1c9bb"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/basis.rs",
+      "bytes": 1199,
+      "sha256": "71a4a8980bbee45557f7237092f5a2a46c12250d589f5f3b007f9187b38031d9"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/basis/full_scan_reference.rs",
+      "bytes": 7089,
+      "sha256": "ff7efcab08f2207632a1912192beb683c12a5e3b5bbcd2e9e69500db5173f4a4"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/basis/tests.rs",
+      "bytes": 22416,
+      "sha256": "ba0a4080f7c45c855840d4cc5756e367b88149e02fa27fb7db249b053417829f"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/adaptive_apply.rs",
+      "bytes": 19609,
+      "sha256": "cf8b8987a2705d6694c2c2eb250a7eb663e01adc28654a8b58da11c9d5bec3e8"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/adaptive_apply/validation.rs",
+      "bytes": 5142,
+      "sha256": "9345660cd357e67e94a9f2b924af9feb16e3aa9efbd35c0d542d41e000a8ac92"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/adaptive_scope.rs",
+      "bytes": 7287,
+      "sha256": "b82ec742047a744f25185bd31d987c2a10dba41647c00bff7369dd203f180370"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/graph.rs",
+      "bytes": 21141,
+      "sha256": "64c93134338efb5cb17e82022f3001ca9a4e3a64d0118f89a09663b5eef7ba43"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/mod.rs",
+      "bytes": 1916,
+      "sha256": "bfdee8b49963470b79751cf719a1ae267461bd0d21d5f269c2b4269cd24b41b5"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/region.rs",
+      "bytes": 10902,
+      "sha256": "5911422a0a25df912ae2c1ffd55febfc0a9c10cff72e285ca65a2e0ab1937a00"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/revalidation.rs",
+      "bytes": 4940,
+      "sha256": "39e1bcc56ec606cf137025c222715246b70c80b52747883e51cb1d63feef11bd"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/review.rs",
+      "bytes": 7918,
+      "sha256": "07d7ea8227bce76571413942964722d6070c8d3b9d95f1bd26afb7947bada53e"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/cells/source.rs",
+      "bytes": 10258,
+      "sha256": "2aadcc309665f08b1116dde0829676d077301e9c589c17612cbecb0427c3c5d2"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/identifiers.rs",
+      "bytes": 3746,
+      "sha256": "f54b77b08984854a47b4a054722d4d848f6113d5950807c0f81cfdfd957e4958"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/mod.rs",
+      "bytes": 717,
+      "sha256": "49fdfa37eafb368c1fc12deab0ad6605b850d942619250d733d8e2433e91a36b"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/payloads.rs",
+      "bytes": 12901,
+      "sha256": "2e5370881b05711d072e180b86bd3cf3234b58b6ec9fec44532d10e75333fde4"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/proof.rs",
+      "bytes": 10352,
+      "sha256": "441b05b30d7633fe5d8d171bc3ac473ba85eab8a95f5dfc0deb10e8cde63d019"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/queries.rs",
+      "bytes": 9924,
+      "sha256": "7460c4c7978bf2a86528b734475623ba5dae5f7db30caf351166848f171018d4"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/records.rs",
+      "bytes": 17814,
+      "sha256": "18cd3f0be254031a95b790aa619f0325592ed6f6f123a2f04dae98775f2822ee"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/region_transitions.rs",
+      "bytes": 6829,
+      "sha256": "690b2b774cf88bf62317d34ee308b88a8e1e8b51cc6c3f61b6528e51558b5f5b"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/review_transitions.rs",
+      "bytes": 14624,
+      "sha256": "4464fcd33b4331458aa6ca0c3a39fcc4d258d43a7a78728290f5e5817ac0bb0b"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/transitions.rs",
+      "bytes": 19023,
+      "sha256": "7c5798c2c11a01372e4c5bf35f27d97179f06242797c370dfb7e4a65b1180e39"
+    },
+    {
+      "path": "crates/zap-domain/src/knowledge/verification_basis.rs",
+      "bytes": 3700,
+      "sha256": "25c96ecff85d3b527004d66e5c808ba7238f19117f2e7ac808629a79ee39974d"
+    },
+    {
+      "path": "crates/zap-domain/src/legacy_projection/mod.rs",
+      "bytes": 172,
+      "sha256": "946c925a3b99419db8b980fd9b23c4c99b7e2d1d54b12d4e0fb22b4bd39a7874"
+    },
+    {
+      "path": "crates/zap-domain/src/legacy_projection/model.rs",
+      "bytes": 5332,
+      "sha256": "0783034238bee8bbeb037a53792b0b16f87506792a6be7f162fad9053aa89a8b"
+    },
+    {
+      "path": "crates/zap-domain/src/legacy_projection/query.rs",
+      "bytes": 6946,
+      "sha256": "0dafaadd9d3ef675bed517ba7165a6323cf4a0ee706c8eeec92ba716d92c8456"
+    },
+    {
+      "path": "crates/zap-domain/src/lib.rs",
+      "bytes": 1040,
+      "sha256": "507b139e01196d34b0a58d0f796b6eda64274bbe9fa303b0b74ee694dbe7ea1c"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/cells.rs",
+      "bytes": 11857,
+      "sha256": "84f322796052b74eb76239350efa6fbc8026e6c7a2d4240c63bc617d645f17b7"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/mod.rs",
+      "bytes": 350,
+      "sha256": "18cce05698705269e2f2c012e8c4d01c525a6856319130d993ac69eff508f426"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/model.rs",
+      "bytes": 17717,
+      "sha256": "a040a1a60706c5edba1d0c10c3b0db0a448d8cd9e32bcf77dc8c10b19625f070"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/offline/cells.rs",
+      "bytes": 11721,
+      "sha256": "9e8ffbf8f73ef4e2fc58a55da576f3ff050aa128d7801a1e27894df1f1121fec"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/offline/journal.rs",
+      "bytes": 10177,
+      "sha256": "d1e82d6a6f5020499410b117939d22abd8930fab7c75e08d29abfdbb13cb5c6b"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/offline/mod.rs",
+      "bytes": 278,
+      "sha256": "fa62e85df63cecf472a46bd0949daec9999afba939f6d69e0b803df9ee22471f"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/offline/model.rs",
+      "bytes": 19934,
+      "sha256": "5605570d6402eb1899d62fa974939d4023724e1ff08bea8da2a35ffc5cb16996"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/offline/payloads.rs",
+      "bytes": 3455,
+      "sha256": "ad0a99155fedd39f645ec36cf50f6931efe9c4134c54dacab09b80a65a2eecdb"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/offline/records.rs",
+      "bytes": 5141,
+      "sha256": "1f8d8fef30cac2a72092dea282843c93cffb6cd86398ee2691b93a985b349200"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/offline/validation.rs",
+      "bytes": 5297,
+      "sha256": "0907010a4705ee53019e9cb854ada736dfc88a2d2e7ffb0eceb89266c3f36f20"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/packets.rs",
+      "bytes": 10408,
+      "sha256": "6517515111c821bde2bc852a8e94284d8f59c1efede3ed510f91fad85aba8469"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/packets/current.rs",
+      "bytes": 11208,
+      "sha256": "9bcb9cbe63ba33e0394427f8ca77434c2dfe9f12f5cf6174ea000d4e3804a024"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/packets/derive.rs",
+      "bytes": 15372,
+      "sha256": "610f180ce9f302dc591943bfe8d3555d1f08a94396a7ca35267285ddf58dfb92"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/payloads.rs",
+      "bytes": 2154,
+      "sha256": "7425f2104bb34ca4f60a20359d1d41373cdb937604da5414486baaa66058d014"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/queries.rs",
+      "bytes": 4215,
+      "sha256": "278da865d0e7f18b7e4c2626041ef12178217a945fb7f6f7ba20e92026a725f9"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/records.rs",
+      "bytes": 5942,
+      "sha256": "48fd623170718d0925b45cfbd664423d1be3b358568a84ccadbd176c80d2a989"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/transitions.rs",
+      "bytes": 21043,
+      "sha256": "589aa510c6ffbf4bd57f3605c17901510287b0b6c324f6444da5e068193914b4"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/transitions/materialize.rs",
+      "bytes": 14909,
+      "sha256": "689f9467a875fd6467fe5d6a34e59d9745cc069afdaea52e4d6ae2922f5ae209"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/transitions/review_sidecar.rs",
+      "bytes": 9550,
+      "sha256": "5428a043b67e4245ee03e1b72a5b87639843e4b64bb4f297803152c05bacc028"
+    },
+    {
+      "path": "crates/zap-domain/src/lowering/transitions/validation.rs",
+      "bytes": 22710,
+      "sha256": "3130e9b786e5fbddf2245d8d1acc3117211c65f4de3bcbd3c335ae43775cc78d"
+    },
+    {
+      "path": "crates/zap-domain/src/owner_control/cells.rs",
+      "bytes": 22602,
+      "sha256": "b30d6b41a0f1c3f4c782f01e021978f7b9740236ece1f2cd43df828913d7b3e8"
+    },
+    {
+      "path": "crates/zap-domain/src/owner_control/completion.rs",
+      "bytes": 1346,
+      "sha256": "df143ddaa2d8828feaaca823ddbf96bca46924cc164bbcf9dbef9befd13f9bab"
+    },
+    {
+      "path": "crates/zap-domain/src/owner_control/mod.rs",
+      "bytes": 674,
+      "sha256": "c9f2f080d61d795f47431bda9b2bb477e113b47fbf9432193256c9ff0b1cc84a"
+    },
+    {
+      "path": "crates/zap-domain/src/owner_control/records.rs",
+      "bytes": 6077,
+      "sha256": "5532a73fea753dc2c17c5dcdd73fae36b96e123b95cebbd785367d65e4a824c4"
+    },
+    {
+      "path": "crates/zap-domain/src/owner_control/rules.rs",
+      "bytes": 5412,
+      "sha256": "72d228de3a54017ca67e0ae2fe62475a8eac2b301c376c9d034c0461ac2d7aa5"
+    },
+    {
+      "path": "crates/zap-domain/src/queries.rs",
+      "bytes": 12520,
+      "sha256": "218ea05249da1649f316ead84e5b83591657cd8a0308f4a36cf7bb9316ece580"
+    },
+    {
+      "path": "crates/zap-domain/src/registration.rs",
+      "bytes": 8834,
+      "sha256": "b3c921360dd80da6af12672838b03216a3de33a92b1365677e798a399f91faa9"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/action_impact.rs",
+      "bytes": 664,
+      "sha256": "1a2d036caecc7503a3f852933e525a000fdd96728b9bab0777df148d780cd371"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/canonical.rs",
+      "bytes": 661,
+      "sha256": "68e28944dd51d7ffcd54d972273ff61c51872a247117f5b9af4f6cd0bed4661d"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/cell.rs",
+      "bytes": 1189,
+      "sha256": "bf24884fc6676c8b73ed91d0b4dcb0e4dcb1c322d509c28cecfb29bcbb4071a8"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/error.rs",
+      "bytes": 1112,
+      "sha256": "ce2cc1fe549083c13b5879f6c430bcecec11c4d4ce26b523d317c1920a2e3db0"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/mod.rs",
+      "bytes": 435,
+      "sha256": "72f73828d368a4a20465387378c6c73a0f4582dd4cf02c3a175589b597b2e175"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/model.rs",
+      "bytes": 12495,
+      "sha256": "3f1764804df423e60091859f498eb7f9abab51f23e5ced994e71328bf855468c"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/proof.rs",
+      "bytes": 4517,
+      "sha256": "e5311bc413a67174d47ab125c6625fd7b81ada751d871ebfa695e9698eff2a7e"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/schema.rs",
+      "bytes": 350,
+      "sha256": "7786bf954c6c2a686a2b4692883f07f9785c6bfb00a5d128589374dfe4590c2c"
+    },
+    {
+      "path": "crates/zap-domain/src/seams/storage.rs",
+      "bytes": 3988,
+      "sha256": "7b2d4c8be3f0281b750b18c7b27474630b12065f468c5329992b9ed50ac81a5f"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_indexes.rs",
+      "bytes": 13541,
+      "sha256": "50cd86c3fcda5810f90fcd7a7eb1a9a9cf7eedf0bcd2c3e1d470e39fae623329"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_indexes/runtime.rs",
+      "bytes": 4729,
+      "sha256": "2f1a71bee4daa38d4fc1fe1a1d7478a06bc90ff59deef4fcebeea8ab46a285cc"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/adapters.rs",
+      "bytes": 1883,
+      "sha256": "22d4d9075a109237538b99730fb1d7da2bc2e276936a132f2660c6d515c9852c"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/frontier.rs",
+      "bytes": 5408,
+      "sha256": "4e7c81f506f284c036de6db711af7629ba76b886129d6b17b0830cf8db63d253"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/history.rs",
+      "bytes": 10704,
+      "sha256": "8e506cb9a310f8092e0f2a36dae11ca16865f1e3db070f7facdb43f3a14a4f87"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/indexed.rs",
+      "bytes": 18921,
+      "sha256": "679e87f86c3dd225d832dcd182f860d90ef246dc881989c88cd90a7f00867035"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/indexed/client_affected.rs",
+      "bytes": 5199,
+      "sha256": "5ade0afa1312423c501193fd0215ce9248f7645edfdddc98ff6ae63d513fd674"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/mod.rs",
+      "bytes": 20123,
+      "sha256": "64811be84c9d9b62d5be46aa08f94f22de98b69f3432562f52062084764fa70e"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/model.rs",
+      "bytes": 11296,
+      "sha256": "dea35b49d8b86d23d9906d7a3a944b1d2e818b7c200746236a81707bc77fa3e7"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/search.rs",
+      "bytes": 5515,
+      "sha256": "28a15e100ed722a9d72be37f74e38e8e5a6209959a697b6b26c84ca352262e73"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/tests.rs",
+      "bytes": 2460,
+      "sha256": "be628d3e41622b49efd132d39b150572663386e5481796a14ef56cf5f04d95c0"
+    },
+    {
+      "path": "crates/zap-domain/src/viewer_queries/traversal.rs",
+      "bytes": 6440,
+      "sha256": "b9ebb2268116a1935bd3b687d8cb5a9dc4f5bbccc7530acc58c14a205963a066"
+    },
+    {
+      "path": "crates/zap-domain/tests/domain_contracts.rs",
+      "bytes": 9582,
+      "sha256": "599ec75e16d0e388e251bb862884bbe80174b63e509e40557060780fc209e1f9"
+    },
+    {
+      "path": "crates/zap-domain/tests/dreamer_service.rs",
+      "bytes": 15769,
+      "sha256": "1c469ed4555f109e3d4a61502a332fa535c0986a6389f8489b7a8b5fba4422b5"
+    },
+    {
+      "path": "crates/zap-domain/tests/dreamer_service/combined.rs",
+      "bytes": 17574,
+      "sha256": "b36495d7945c928e05696bf09c3d8d16cad734138296589e7fc2c102e6d6b29c"
+    },
+    {
+      "path": "crates/zap-domain/tests/dreamer_service/live.rs",
+      "bytes": 18539,
+      "sha256": "347e926c5c497fd0c66a5ad71acf887ca74e41c13919cbdefdb2abacfbaf5064"
+    },
+    {
+      "path": "crates/zap-domain/tests/dreamer_service/removal_fixture.rs",
+      "bytes": 9901,
+      "sha256": "87582517b50df381532f86a937896d90f6fb013e517f344ea614a30bffca1714"
+    },
+    {
+      "path": "crates/zap-domain/tests/dreamer_service/removal.rs",
+      "bytes": 18037,
+      "sha256": "310f4c54794245b5a05f4d4ff8ba0519705b35bcb4aef770aed0942ec4fd4259"
+    },
+    {
+      "path": "crates/zap-domain/tests/dreamer_service/support.rs",
+      "bytes": 22188,
+      "sha256": "4716cb6f4315bb87213b5c267ea6213874c715a15294b56807a11e4f933674e4"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_contracts.rs",
+      "bytes": 10647,
+      "sha256": "437768c74bf9acb5d84fa5fe408c4d42135572bfc4b77b7307dbf52c8fee3559"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_contracts/scenarios.rs",
+      "bytes": 16373,
+      "sha256": "7a881883018fa81a9cfade9a74f5230901fef8c871baad7b2102a36b02ad9af1"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service.rs",
+      "bytes": 2352,
+      "sha256": "72a217e7724a8d2aa38616ad98002d5598699d542de275ee09e85cb4af245266"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/automatic_prefix.rs",
+      "bytes": 19557,
+      "sha256": "5ed8ced74e5c1433b52e322035e23251a0ec9c9497602a5c4b9057c7091f3224"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/business_basis.rs",
+      "bytes": 10395,
+      "sha256": "3ee549f7bbd4e2bc86ea6e60e568c948e031276e2cf60e0dc2cc592f77647f83"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/exception_consumption.rs",
+      "bytes": 14455,
+      "sha256": "5366a86e09dac6221ecb7dd685510ffb9e7bca23c637383f4c0efcde6b9aeaf0"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/fixtures.rs",
+      "bytes": 11762,
+      "sha256": "be8df5ff0f919e12fac4c3d66c85d164f4aec78a2372480d25d3a7f880f03e3e"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/forecast_history.rs",
+      "bytes": 18457,
+      "sha256": "9eb5daf70013b288e4514cbd9b81c3b11a6e8d01c04fdce902bf0816ce24c756"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/independent_progress.rs",
+      "bytes": 6009,
+      "sha256": "21ef7fb56f3feed44f6b78ef382f5f0799fc5de70f12fd34f573129e61cba1f0"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/indexed_admission.rs",
+      "bytes": 5102,
+      "sha256": "94a49cc1469171e28bb0418f57081ee4ec7f2b206df5d8040e608fe559c34181"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/owner_decision_tail.rs",
+      "bytes": 16568,
+      "sha256": "59bfec4f86d63890f69f7e4e5c008b552f06d7964347a2b354f16e1fa4f95113"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/owner_decision.rs",
+      "bytes": 14191,
+      "sha256": "758621c454e99c05ccbc278875b7df7a5698ff3705c07d47c5f3458deefb0f6f"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/pause_scope.rs",
+      "bytes": 10935,
+      "sha256": "89c7de74bdc27d828cd64144870e39cc24df64e8dbd2421fe90f8b1a688c7264"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/providers.rs",
+      "bytes": 11514,
+      "sha256": "cc209299b14d2e247954c6125c56b11e9912af74a974a551a532a10f5a201103"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/reducer_failure.rs",
+      "bytes": 10240,
+      "sha256": "4e0610b58fe072eb330c378a9e3c115afbdf42e30b6a807a5537dd1f5dd9638b"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/rejection_release.rs",
+      "bytes": 7876,
+      "sha256": "79dca362f4739af7887521b651fd1c011f5b20b14d7f88e0e18d476516ffeba5"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/review_sidecar.rs",
+      "bytes": 18165,
+      "sha256": "42a3143abf6273b61c1a9fe77a215759fe2e7363681ddf8b924a02997cd18205"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/scan_guards.rs",
+      "bytes": 9219,
+      "sha256": "9141075e7b44292897e3721b32083d327b75d6354df7c42715bf47cb48fc48a2"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/seed_and_product.rs",
+      "bytes": 10211,
+      "sha256": "98f801a2fe51b278dcc6480879ac09ebb9663b15e8a2e8a2ec83a54a0450de7d"
+    },
+    {
+      "path": "crates/zap-domain/tests/economics_service/whole_transaction.rs",
+      "bytes": 5057,
+      "sha256": "1586ffe1a9e90842df9b2aaeb80f0730c8c34a5f14fb6bfbafa99d2399b196f4"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_contracts.rs",
+      "bytes": 16870,
+      "sha256": "b10d62e1895dbc60ca3b701f3813801fd6fe5befc7015e75767407a897893de1"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service.rs",
+      "bytes": 798,
+      "sha256": "d004915bc2caabbdcef1abc1f38b2d6e0dea3792ebb02bf21c8a130b250dd970"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/adaptive.rs",
+      "bytes": 13836,
+      "sha256": "7bdcfdd7758016be86206ef6c30f911945b9bfff016db5abe0495412f3b57902"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/admission_jobs.rs",
+      "bytes": 6377,
+      "sha256": "36a2ed3c0f627b6d5093cf49171f3efa9d387bf7142be05fe1ead8225931338e"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/admission_scope_reference.rs",
+      "bytes": 8906,
+      "sha256": "930910c00bc7e74891553599a13dac80f031eccc3da6d2922459c543eaffe483"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/basis_locality.rs",
+      "bytes": 18126,
+      "sha256": "bf1278cf0f7f3607c2974c32f398861f37546c13fa8bf4808b4f038d1326111a"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/proof.rs",
+      "bytes": 14030,
+      "sha256": "2dd4716415b8dc3597a3ad0e766edc0ac04ae57e3b8dc07e9b2dc9df2be1cfab"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/proof/scenario.rs",
+      "bytes": 17623,
+      "sha256": "0a2a4f1f15abaa34f7d006d39dfd45e6befc746fdf1fcec8e6a0508e008bdcfd"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/r17_performance.rs",
+      "bytes": 16127,
+      "sha256": "2be201060deec4b0f8c163755e53456a3f4e30acdb2887cf9d38d0dec03bb0b0"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/r17_performance/dataset.rs",
+      "bytes": 8574,
+      "sha256": "8ba7db1ce7bb17ab7a1743cbcae53f452361ca23bea8b335188d2d5be6f5f305"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/region_query.rs",
+      "bytes": 7664,
+      "sha256": "d697409a15925f9b3f119a7f7ac9cc80a999ca15724e8e03586baf97b98f69b4"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/revalidation.rs",
+      "bytes": 8146,
+      "sha256": "368ecd49d618aad753bc4bae546a131a3e09f145bbaa9d8c2e21461f682916dc"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/source_graph.rs",
+      "bytes": 12006,
+      "sha256": "c044d7325df66835906509a83134d5754a8df6897264da2a1d90eed9daed8f89"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/support.rs",
+      "bytes": 9881,
+      "sha256": "4c46ba725afbbb91d5f75bec374402dea9059d817a9a4d85d5edc4e5d67d177a"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/support/admission.rs",
+      "bytes": 3645,
+      "sha256": "ac42b84df8fbb6a5915749d89191ac4350b16df42e29c906a06c03aa1cc88730"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/support/harness.rs",
+      "bytes": 8530,
+      "sha256": "0da20ee0b4ac6d645b5a9f304c1839e4ea035b9c429f9e37577d3fe863a71816"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/support/seed.rs",
+      "bytes": 7874,
+      "sha256": "bf8f36fe1adba2a09a80786e43735a4df8f053c27f9c01391e826fd7f5618aee"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/viewer_queries.rs",
+      "bytes": 6869,
+      "sha256": "412b4e176b35ec5bba8e09ceafa250f9122859d68065bf95a57adebb6c3eed4d"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/viewer_queries/scenarios.rs",
+      "bytes": 16631,
+      "sha256": "ca226c6e2533a49b2d2e690e717f8db2377a29e5440e00422bab72521315e597"
+    },
+    {
+      "path": "crates/zap-domain/tests/knowledge_service/viewer_query_sessions.rs",
+      "bytes": 12778,
+      "sha256": "9fbae24438131295ff4cddd19aa2e053866ae38bf6c348045005c8230cc4354f"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_contracts.rs",
+      "bytes": 12340,
+      "sha256": "fd2835b9d3033e498183bf671b59712edc883dd09ea6ac21d731f528542f0576"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_offline.rs",
+      "bytes": 7428,
+      "sha256": "88eb732ea43d24c1cc086c00762b2d900d5d2b868348fefacda6880f81b23c46"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_semantic_service.rs",
+      "bytes": 17852,
+      "sha256": "44d4d4e226baa2e7cced0d6badfa7798330f228994e404be460f1715234245b1"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_semantic_service/economics.rs",
+      "bytes": 7769,
+      "sha256": "6477c153f18a95b7871b252707f803eb0ed092bbbdb4a4530b3216ec6971b2d5"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_semantic_service/review.rs",
+      "bytes": 10325,
+      "sha256": "310f55f167c5df696f87e494bc4cda981daaf424d5ada43bc89e086f439a4ec6"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_service.rs",
+      "bytes": 9087,
+      "sha256": "5f27afde3f58b4248799eb0ccbd14ecb754f0c11cf256e1b290c3382d0b94996"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_service/fixtures.rs",
+      "bytes": 19344,
+      "sha256": "cfc61db42f2fd97c8cd07fcbc949dd6b6dc2bbd49921726485f6af5dcab36b61"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_service/fixtures/contracts.rs",
+      "bytes": 8652,
+      "sha256": "e36f14b30412298aee726d33c029fbdbb06accc35fe92638fbbdb0965fb4a146"
+    },
+    {
+      "path": "crates/zap-domain/tests/lowering_service/support.rs",
+      "bytes": 13388,
+      "sha256": "e1fdaa2df55eefc0a87f394463dbecc27bfdbe6b721fdb92285779f14ad4ffa4"
+    },
+    {
+      "path": "crates/zap-domain/tests/r07_review_repair.rs",
+      "bytes": 18822,
+      "sha256": "2c1025b75456012bad2da3e4acdd59dcee41a16374dc84dff763261371c1c859"
+    },
+    {
+      "path": "crates/zap-domain/tests/r07_review_repair/scenarios.rs",
+      "bytes": 16368,
+      "sha256": "bada7cd9953df0685d3d862837f2c84a1dacf0cfdce2fb4d8a09939d1112935c"
+    },
+    {
+      "path": "crates/zap-legacy/Cargo.toml",
+      "bytes": 508,
+      "sha256": "6fa5c8ff6ca2a8d7fe8f44d201a9e56bf05565fa14fdfa712d4ffbb12f69ab44"
+    },
+    {
+      "path": "crates/zap-legacy/src/codec.rs",
+      "bytes": 14124,
+      "sha256": "44d46e3977aca397c94edc5facd05de821b8e89ba869523508160f49d38a7a56"
+    },
+    {
+      "path": "crates/zap-legacy/src/import.rs",
+      "bytes": 10516,
+      "sha256": "3fc2e7ed557fa88cf2960509a1220b4d13aa5c2be7dbbf0175fa7e4323bc50b9"
+    },
+    {
+      "path": "crates/zap-legacy/src/journal.rs",
+      "bytes": 9483,
+      "sha256": "cf9696d59a6cc2789acfb01275dc402e7f4bb82add9df3df079f0e760a2c0ca0"
+    },
+    {
+      "path": "crates/zap-legacy/src/lib.rs",
+      "bytes": 1076,
+      "sha256": "294e998f4ebe688287e0d3a56f77c3f0ba8cffd00adb7795d33ebd0e05eb4467"
+    },
+    {
+      "path": "crates/zap-legacy/src/mapping.rs",
+      "bytes": 6280,
+      "sha256": "dc31df828d24a2c435e6190236d1551ed05ed0f1d954e49e1e89c38bd2777d37"
+    },
+    {
+      "path": "crates/zap-legacy/src/records.rs",
+      "bytes": 8629,
+      "sha256": "c8b17663e7a7dbf98c557ba83f93a14a8fda9442551a27f120d87eca1fb57658"
+    },
+    {
+      "path": "crates/zap-legacy/src/registration.rs",
+      "bytes": 956,
+      "sha256": "ddef20bbbd8acece2b2e56febfa126971fd9381ad6350d84219bedfc11cf6fc5"
+    },
+    {
+      "path": "crates/zap-legacy/src/replay.rs",
+      "bytes": 13753,
+      "sha256": "99f68da3976eaae6c07026409f19408a0f371faaa384f9edb15c36223ae01646"
+    },
+    {
+      "path": "crates/zap-legacy/src/snapshot.rs",
+      "bytes": 4442,
+      "sha256": "5e43acdc59651b7035545fae6e97ba1f078a7f5d8d3e7640a757708307bee3c1"
+    },
+    {
+      "path": "crates/zap-legacy/src/source.rs",
+      "bytes": 6422,
+      "sha256": "f3a9d2e5b488d1693134145bb7aab47004f507c812729ec44f7b9e19dc050f6d"
+    },
+    {
+      "path": "crates/zap-legacy/src/types.rs",
+      "bytes": 3500,
+      "sha256": "98894990ac4386877f9b78093d05170e7ab4c5745894b4a459c126f2e73bf3fb"
+    },
+    {
+      "path": "crates/zap-legacy/tests/actual_source.rs",
+      "bytes": 1189,
+      "sha256": "d17f2716f5853a06ed5b9af4d1cc2280223cf6552b4f79ea8517ba7f1585d89f"
+    },
+    {
+      "path": "crates/zap-legacy/tests/fixtures/codec-cases.json",
+      "bytes": 7057,
+      "sha256": "ea805119c632590439646785ceff8d97aab39e55ec17f45b0dd623d83a0c7e00"
+    },
+    {
+      "path": "crates/zap-legacy/tests/fixtures/hash-domains.json",
+      "bytes": 2351,
+      "sha256": "3e6977e5862ab38c15f6f39ea182ffa34f73eb9d6e3a9d10faf0a639508b73b3"
+    },
+    {
+      "path": "crates/zap-legacy/tests/fixtures/tiny-campaign/base.json",
+      "bytes": 4662,
+      "sha256": "4fd08b6a090762478aeb760d31e1d159b635cc8bd5d8a524803c33151d7e8bb0"
+    },
+    {
+      "path": "crates/zap-legacy/tests/fixtures/tiny-campaign/events.jsonl",
+      "bytes": 1633,
+      "sha256": "f4e834eb7b9560b94f7a03a178d35564e8b830e8fa90ec9585572e05fca2e27f"
+    },
+    {
+      "path": "crates/zap-legacy/tests/fixtures/tiny-campaign/expectations.json",
+      "bytes": 4167,
+      "sha256": "b043e21a36b439d91584f58730d4764f82ceea429f10127152f71091d084e678"
+    },
+    {
+      "path": "crates/zap-legacy/tests/fixtures/tiny-campaign/snapshot.json",
+      "bytes": 3976,
+      "sha256": "af057b5a0a9b9896a7beb57412e97fdb2461baf5d8cd94fdbd2a4e0a42502d62"
+    },
+    {
+      "path": "crates/zap-legacy/tests/import_service.rs",
+      "bytes": 7778,
+      "sha256": "3a98830ce76e029cc113af1e9b2fabb219fed684b93f2826191b14e4d35fe913"
+    },
+    {
+      "path": "crates/zap-legacy/tests/legacy_corpus.rs",
+      "bytes": 9208,
+      "sha256": "ab93039a26ee483951cfe33a2d8901d06ca8d2695ead9c730770a4f347604189"
+    },
+    {
+      "path": "crates/zap-runtime/Cargo.toml",
+      "bytes": 407,
+      "sha256": "d87f2aa1b14dccc43631ea3325e76237c03521619116546209c4939609e98538"
+    },
+    {
+      "path": "crates/zap-runtime/src/capability_cache.rs",
+      "bytes": 4124,
+      "sha256": "f264c77f87ada8d3a08310f9aa3e6ecdabd70470a135bca160ba4fdbcb3fbb25"
+    },
+    {
+      "path": "crates/zap-runtime/src/capability_goal.rs",
+      "bytes": 15955,
+      "sha256": "300248fc79d105048dd760101303882d7c67a18b2040f73914a9f9a9abc94096"
+    },
+    {
+      "path": "crates/zap-runtime/src/claims.rs",
+      "bytes": 8449,
+      "sha256": "b7003c583dafd1e7c4a314a524616d2da99abd6b892299f4b51a7461df6a7e18"
+    },
+    {
+      "path": "crates/zap-runtime/src/coordinator.rs",
+      "bytes": 14672,
+      "sha256": "b04961b45dba7cdf1bdf7a9fa69d6059fd73d594a0592681e84372ae8c14fb3d"
+    },
+    {
+      "path": "crates/zap-runtime/src/coordinator/frontier.rs",
+      "bytes": 17569,
+      "sha256": "ff2381e4b587c7bad9ec2e8ccaf92e4f5fce15b4c3ee15e3d5fd8f7e3b8db201"
+    },
+    {
+      "path": "crates/zap-runtime/src/driver.rs",
+      "bytes": 13869,
+      "sha256": "d6bffdfbf7db6ee1dc5ef62867584784ffc30554cbe392d30378e2501cba9f95"
+    },
+    {
+      "path": "crates/zap-runtime/src/goals.rs",
+      "bytes": 4557,
+      "sha256": "980ada811715bbce80d4e4010e4b4fe415c2eea771f752ec26747c002bf99366"
+    },
+    {
+      "path": "crates/zap-runtime/src/indexes.rs",
+      "bytes": 13300,
+      "sha256": "ce36a6d44fe58dd2ea97c6d557549414fbc851f5845d90e4b0a8c9eb7e531324"
+    },
+    {
+      "path": "crates/zap-runtime/src/job_ingress.rs",
+      "bytes": 13873,
+      "sha256": "8f344d93e0e3df4979c5797ff1a562ed29324d57c094a7f14d638934f3362436"
+    },
+    {
+      "path": "crates/zap-runtime/src/lib.rs",
+      "bytes": 1141,
+      "sha256": "53997fc016d06d04dac7beefcc76db08bce747dd207b46b03e2042973c593e2f"
+    },
+    {
+      "path": "crates/zap-runtime/src/liveness.rs",
+      "bytes": 3061,
+      "sha256": "5c28ffd00076a4c44d06336350d3db44422111b5d7a2c5e81c7e21f1e313dd5f"
+    },
+    {
+      "path": "crates/zap-runtime/src/native_bridge.rs",
+      "bytes": 20971,
+      "sha256": "6365768fdd6d2534a5e7415ea874287199f23926e3af2fb7905a7d78cb58293e"
+    },
+    {
+      "path": "crates/zap-runtime/src/protocol.rs",
+      "bytes": 6297,
+      "sha256": "f3b921c8e390be3d345dbcb19d4969bb0b881bc3dd258f306a6f6fe51baba891"
+    },
+    {
+      "path": "crates/zap-runtime/src/reconciliation.rs",
+      "bytes": 9729,
+      "sha256": "c09ae88977664bf529ce76b3109e0c7f8bf892549373d275fa383f8140098344"
+    },
+    {
+      "path": "crates/zap-runtime/src/records.rs",
+      "bytes": 9665,
+      "sha256": "fd32ae976d4519084e9040ece902d47a970415bda94c0a44379f53678ab8d90d"
+    },
+    {
+      "path": "crates/zap-runtime/src/records/goals.rs",
+      "bytes": 2410,
+      "sha256": "e1d53699e7c519b53f4aa548f7de2fa2608467132a9c0e3144f20c38e992f3e0"
+    },
+    {
+      "path": "crates/zap-runtime/src/records/observations.rs",
+      "bytes": 8448,
+      "sha256": "ca29431d470a0b426e4aba2707596dfbdd5aae86b814a0f290d677dfd85f4d4f"
+    },
+    {
+      "path": "crates/zap-runtime/src/records/recovery.rs",
+      "bytes": 6459,
+      "sha256": "8bb9cb56059f3e27989a9bab616fc65a347da3d9a6b3dc7005a0daf4863dbd79"
+    },
+    {
+      "path": "crates/zap-runtime/src/registration.rs",
+      "bytes": 11645,
+      "sha256": "3f6f399877526054fad3fbb80f0dd19d5fd7d4846276cb4d15618d9a9b7745f4"
+    },
+    {
+      "path": "crates/zap-runtime/src/registration/affected_jobs.rs",
+      "bytes": 6325,
+      "sha256": "9dfec39461ac202b0b005ccf181335711e04660fa53d02107bc4143eb5a81bc9"
+    },
+    {
+      "path": "crates/zap-runtime/src/repair.rs",
+      "bytes": 3716,
+      "sha256": "b5562b205bcfc892cc490e8b9926221a0fd224a40aeb27f3b860e865584b44dd"
+    },
+    {
+      "path": "crates/zap-runtime/src/retry.rs",
+      "bytes": 6624,
+      "sha256": "217adda1a5187a674d98e5cbdd08c0118ae992349bb413d3b812644a14c3bfe0"
+    },
+    {
+      "path": "crates/zap-runtime/src/runtime_updates.rs",
+      "bytes": 7702,
+      "sha256": "a5fb68c9d1382a5a44bdc24e9ed6e6e1143e14214a519db4b2d8172b481e0d8f"
+    },
+    {
+      "path": "crates/zap-runtime/src/runtime_updates/observations.rs",
+      "bytes": 5285,
+      "sha256": "50ce13cc475dfa8698556f9d8a9c60be1fcbbb2daaac0ffe558187b11a4d89f1"
+    },
+    {
+      "path": "crates/zap-runtime/src/runtime_updates/retry.rs",
+      "bytes": 6564,
+      "sha256": "47c8d8de7f7e6017368e3de1f988ed5b9395e994d84ac3dad5f0a754e2d3a036"
+    },
+    {
+      "path": "crates/zap-runtime/src/runtime_updates/verification.rs",
+      "bytes": 4256,
+      "sha256": "ba15cc27261af40b3df16c7159775e046a3b124766cbed300098f9af1524ac07"
+    },
+    {
+      "path": "crates/zap-runtime/src/scheduler.rs",
+      "bytes": 3957,
+      "sha256": "4bb335432906f7f273e5c2e0b9662eb76b85ef9202bcc20b189da8958293dccd"
+    },
+    {
+      "path": "crates/zap-runtime/src/spawn_recovery.rs",
+      "bytes": 22246,
+      "sha256": "e0c55f3131bc3821224a304410f43f7a0ebcf9cbcaf7a17e0dc62293b63d1ed6"
+    },
+    {
+      "path": "crates/zap-runtime/src/spawn_recovery/release.rs",
+      "bytes": 3338,
+      "sha256": "9058801dabe15b5418601ef67635e4fa03be2d678be3fef657be3810595d900b"
+    },
+    {
+      "path": "crates/zap-runtime/src/state.rs",
+      "bytes": 2847,
+      "sha256": "461487479c0b728fd3a2f396934e8bb873317e7c16269d032acf6f86bcbb108c"
+    },
+    {
+      "path": "crates/zap-runtime/src/stop_ingress.rs",
+      "bytes": 17445,
+      "sha256": "c7249b43f8a9d9d18ac0e76beec348359e7b95add2e8974494c04d1df5363d8f"
+    },
+    {
+      "path": "crates/zap-runtime/src/transitions.rs",
+      "bytes": 10052,
+      "sha256": "56479fb8fcba440c19e135ddbb2943b73b62e83c73ff5fac438bfb0d32810016"
+    },
+    {
+      "path": "crates/zap-runtime/src/transitions/authorization.rs",
+      "bytes": 8030,
+      "sha256": "ca96aa9cf2b1288f39139044000043ed80fde2a86f52a28287eeafaaace69a87"
+    },
+    {
+      "path": "crates/zap-runtime/src/transitions/job_claim.rs",
+      "bytes": 5808,
+      "sha256": "54887e5de9f561b9fb6d7aed132e15bcd675adb5994085581264c6e601657230"
+    },
+    {
+      "path": "crates/zap-runtime/src/transitions/receipt.rs",
+      "bytes": 5856,
+      "sha256": "ed114add3235c6f6c771e113eb5e92fbf6132033172140099194447b6fb4a192"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_contracts.rs",
+      "bytes": 21155,
+      "sha256": "d1e953e000f94d079e9a76005ec13ba3eeccdcc1667854dfe6672bfdef39c9b0"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence.rs",
+      "bytes": 4984,
+      "sha256": "d82a9d61444fc468f02070782c4b908492d963183ab1eae81d37b7d635a84776"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence/admission_support.rs",
+      "bytes": 11498,
+      "sha256": "b9d04571608d1a7fc63c505c0c3a69fb4a2cde6ed50d4f778350805a8814e2ee"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence/candidate_test.rs",
+      "bytes": 14687,
+      "sha256": "6375af138fddf055bd750df15f7711a09dafce7c507ff811edda8c8d8408715d"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence/fixture_support.rs",
+      "bytes": 7012,
+      "sha256": "b54a7717e246678351d570dcda387166616fcbec031b8ca23b7ad708d7af7ad5"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence/native_retry_test.rs",
+      "bytes": 18293,
+      "sha256": "8637e6a78f46180f20fba96ea8eedf5733e4f23856f6244f8bc00e176961a793"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence/recovery_test.rs",
+      "bytes": 23786,
+      "sha256": "9d020bc05fb5b372a6e7700921925f8a4b898e75c09ebf5f77a29c8d9d10f428"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence/runtime_scale_support.rs",
+      "bytes": 7718,
+      "sha256": "42553a78fe777dfb5970a1da08c26717da9161478c3aa29c618059a68c1434de"
+    },
+    {
+      "path": "crates/zap-runtime/tests/runtime_persistence/runtime_support.rs",
+      "bytes": 20518,
+      "sha256": "c764d15f2771ca7f691e10490572c30c4dc36bf1b94d4c5c541688ce600c3b27"
+    },
+    {
+      "path": "crates/zap-store/Cargo.toml",
+      "bytes": 430,
+      "sha256": "6b628a5aeeba466eb776de7d8f52457bb722d3bfaf0dc46ca29669330643625c"
+    },
+    {
+      "path": "crates/zap-store/src/artifact.rs",
+      "bytes": 12898,
+      "sha256": "7ab85ede9617576d4c7c56c19ad0c58ea037e5176be2c42c75e960f11f86064e"
+    },
+    {
+      "path": "crates/zap-store/src/engine.rs",
+      "bytes": 21552,
+      "sha256": "fd32377ec8472c34d691087cf4ce80827779d7a952605bf6009a0a8ff3c28a44"
+    },
+    {
+      "path": "crates/zap-store/src/engine/indexes.rs",
+      "bytes": 11335,
+      "sha256": "495c069fdf7ff1e632ab16dae257ddf38257758c267c579cd6d7052c504af038"
+    },
+    {
+      "path": "crates/zap-store/src/engine/indexes/rebuild.rs",
+      "bytes": 4684,
+      "sha256": "75bb8109e415446ddac01fc85b5e2cfacc7a21b427f99f2ce96d743cdcea6683"
+    },
+    {
+      "path": "crates/zap-store/src/engine/metadata.rs",
+      "bytes": 508,
+      "sha256": "75429397129ad3992355c6e86e83cd5139b1ab3ad44b2ddee64b9ce7dcf0c11c"
+    },
+    {
+      "path": "crates/zap-store/src/engine/read.rs",
+      "bytes": 18735,
+      "sha256": "35e52c634ca58271e25e8800cf165d00cde02d7f2b5ee520de4cbce2bfb41193"
+    },
+    {
+      "path": "crates/zap-store/src/engine/read/history_v2.rs",
+      "bytes": 8916,
+      "sha256": "f3dc0c15d2f46b7710b3e501a95958da300a66b040ed5e5811d38223e6702430"
+    },
+    {
+      "path": "crates/zap-store/src/engine/rebuild.rs",
+      "bytes": 12058,
+      "sha256": "7e239a84d9500abc6c71e55dcad194e0ba8ff110bbd159af02ff5105a4208559"
+    },
+    {
+      "path": "crates/zap-store/src/engine/rebuild/claim.rs",
+      "bytes": 4466,
+      "sha256": "71fa9c457b5101db66e6182b5a737d584721f81aad9f8a359321422ec7c9e469"
+    },
+    {
+      "path": "crates/zap-store/src/engine/rebuild/filesystem.rs",
+      "bytes": 13577,
+      "sha256": "d147b2cadf6325e8be2a6d6e9f5ba4459e36eee2bbe938f215518036df655b67"
+    },
+    {
+      "path": "crates/zap-store/src/engine/record_history.rs",
+      "bytes": 11272,
+      "sha256": "980f45d0d31b0f062d311d90b3b24c8b88435464c3b2d48c171a995456cee1d4"
+    },
+    {
+      "path": "crates/zap-store/src/engine/replay.rs",
+      "bytes": 4534,
+      "sha256": "29fc0f647cdb09531604a173d1d6c8d8854d8cc37232353e24f52994b7305dc5"
+    },
+    {
+      "path": "crates/zap-store/src/engine/store.rs",
+      "bytes": 1373,
+      "sha256": "5779a8a4228c7c71ea901e56355b12b6d4f7a0a4b1e03b8a574f294ce33fda7b"
+    },
+    {
+      "path": "crates/zap-store/src/engine/support.rs",
+      "bytes": 2594,
+      "sha256": "dcce16df8c5667d4590266c66341a57aa056ca40f309b9641a2a5129a10f5d87"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests.rs",
+      "bytes": 8745,
+      "sha256": "174037bf2906c8d4f6a948aaf7fcaef11430ba9f8e8e7529252b73e8e2e07cd4"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/a2_measure.rs",
+      "bytes": 13355,
+      "sha256": "873074d9c8f229838824cc90785fc6a2ac50a5b4954c630dde5a470e3ad35b86"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/a2.rs",
+      "bytes": 12355,
+      "sha256": "0e75918b4f8cf6fd6942f11e0ced6ac02c82821f73e020e1085286b93de8e38c"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/admission.rs",
+      "bytes": 9940,
+      "sha256": "c4d596d029ca8648e91a74cc695c3d8831de4e7dca8e4f155836b0eea4398232"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/frames.rs",
+      "bytes": 5424,
+      "sha256": "1f83fba4a698504d7231973ac28a2ab99440ba35efe3409e74abb48e6f9271d2"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/record_pages.rs",
+      "bytes": 4509,
+      "sha256": "4c3a34785692fc2351a70e5d642bac2cce3ce72fba85c836ba3dadbf504d20d4"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/records.rs",
+      "bytes": 10302,
+      "sha256": "43293f4973a9ff23998ea596cea4492939dd7566fc26d4e4d328b8fd0a804344"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/service_admission.rs",
+      "bytes": 8202,
+      "sha256": "c2ae3f1df8ca058a035c1601787851ab25fcff291bd242463a22557e068da0ca"
+    },
+    {
+      "path": "crates/zap-store/src/engine/tests/service_commit.rs",
+      "bytes": 14479,
+      "sha256": "b417421c7800b18316b308e2f28e6777c00acad0a1662deca631372f6d434bcb"
+    },
+    {
+      "path": "crates/zap-store/src/engine/transaction.rs",
+      "bytes": 3384,
+      "sha256": "520c28ea0e3a3996ad6ccfb5ab0ab328559f8dee31e83a878ae23fc1f87fe10d"
+    },
+    {
+      "path": "crates/zap-store/src/engine/traversal.rs",
+      "bytes": 18103,
+      "sha256": "15941c640b6fb9227de4dfe0d97bea933a9286b0655ae9695aa88597dbcf379e"
+    },
+    {
+      "path": "crates/zap-store/src/engine/traversal/storage.rs",
+      "bytes": 9313,
+      "sha256": "03c6b9af19fec1ad2dd91398b280fb3896ebdd504e54ef7b378dda04628b6157"
+    },
+    {
+      "path": "crates/zap-store/src/history.rs",
+      "bytes": 19274,
+      "sha256": "5725165be08da6ff63e917237ef33ae97b864416e3b5eb10ab039601b1be3e71"
+    },
+    {
+      "path": "crates/zap-store/src/history/physical.rs",
+      "bytes": 15883,
+      "sha256": "9e67f81b52226820f517b57ad9f2c3d86b61e0f10e10ee67de6202f3caa21470"
+    },
+    {
+      "path": "crates/zap-store/src/history/projection.rs",
+      "bytes": 4360,
+      "sha256": "d8d32b0818f3c81803b8276ce960d72ad17bcf286b1239d6ddd0c2a39af7860e"
+    },
+    {
+      "path": "crates/zap-store/src/history/tests.rs",
+      "bytes": 2564,
+      "sha256": "0393ee6d92ecc5ac2e6b51c8efdd4647ac469c1e6b5d22fbd09ef2246519add0"
+    },
+    {
+      "path": "crates/zap-store/src/lib.rs",
+      "bytes": 756,
+      "sha256": "ef5d96a054c97cc701229700db0c73b2c70433ecf4b7e0779af8c6df7fa395f0"
+    },
+    {
+      "path": "crates/zap-store/src/physical.rs",
+      "bytes": 17065,
+      "sha256": "eb010bb7182c540918073374e1e2cf605cf47a7296345b14475c3702ed64e831"
+    },
+    {
+      "path": "crates/zap-store/src/registration.rs",
+      "bytes": 362,
+      "sha256": "bc15dbb01a27eeadcf9a0823eebfc7d50a440ac5ffd3926ae2122e7a4c1d3031"
+    },
+    {
+      "path": "crates/zap-store/src/schema.rs",
+      "bytes": 1808,
+      "sha256": "4650412bd372661bb2e07384a2331c21a82c1f13805e1e267aaff6c2b43f33cd"
+    },
+    {
+      "path": "crates/zap-wire/Cargo.toml",
+      "bytes": 358,
+      "sha256": "da0f7eb2f0f49c677afaed18fedb70aa43776ddbeb198f67b17dd27591fc18d4"
+    },
+    {
+      "path": "crates/zap-wire/src/bounded.rs",
+      "bytes": 2343,
+      "sha256": "01f4d55108395ff4233d8b2a14a0aef41ce2ba540ab0ecd56886f5860f8f56bc"
+    },
+    {
+      "path": "crates/zap-wire/src/canonical.rs",
+      "bytes": 14527,
+      "sha256": "d72bebd710221de1724e7532f3ccb1776b5d1f91bd4c83a3883fac05b7679590"
+    },
+    {
+      "path": "crates/zap-wire/src/canonical/tests.rs",
+      "bytes": 9739,
+      "sha256": "e0e823d11b99c8d878162fbfb2bba93063510c09a781257717215be71a65b9e1"
+    },
+    {
+      "path": "crates/zap-wire/src/command.rs",
+      "bytes": 12605,
+      "sha256": "e70df52e9e197d41f1e56388d2d74490418562330fe8e6d7c30c8f93d5a67742"
+    },
+    {
+      "path": "crates/zap-wire/src/digest.rs",
+      "bytes": 5753,
+      "sha256": "31918f1a0e8a73182b095256649ee7fddedfbe94eb9b14310f7f38d08c6a78f7"
+    },
+    {
+      "path": "crates/zap-wire/src/epochs.rs",
+      "bytes": 7758,
+      "sha256": "74e4d92a83b2a3eeeaf674dd1fa013fd74595c1c1074d6c7ea2fb0c2c473d3d0"
+    },
+    {
+      "path": "crates/zap-wire/src/error.rs",
+      "bytes": 9633,
+      "sha256": "228c44ab645c6ddfe60136d50255c42e87ddf8653926b45c110be9db014a61c7"
+    },
+    {
+      "path": "crates/zap-wire/src/identifiers.rs",
+      "bytes": 5793,
+      "sha256": "3dca5a9a9279fdc4595e8fa26922c6996591c53932a763a4a194154c9e15c02d"
+    },
+    {
+      "path": "crates/zap-wire/src/lib.rs",
+      "bytes": 2416,
+      "sha256": "519815e19876446c7bca47068421dfe3159b68104cde1e155fb71466950eecf7"
+    },
+    {
+      "path": "crates/zap-wire/src/route.rs",
+      "bytes": 4869,
+      "sha256": "1c6ff8b0eed18fd9a473ef0e3a45e4509c0a46cb821cede9f899a5dd1b17363d"
+    },
+    {
+      "path": "crates/zap-wire/src/subject.rs",
+      "bytes": 1420,
+      "sha256": "43a0757d60eac8f30295c3892e5fd16bca82b15ae9345fc8b84ee20d0cb32a97"
+    },
+    {
+      "path": "crates/zap-wire/tests/wire_contracts.rs",
+      "bytes": 3989,
+      "sha256": "6a388fff45a74c017efefa46a9c8f83a382023d8839cf845250aa4e2e47cf946"
+    },
+    {
+      "path": "discipline/DEBT.md",
+      "bytes": 3097,
+      "sha256": "b58c474dacd8b68ce3c8d2d04718d7d75db34972d8769d59f6b06fcfb89f1bd4"
+    },
+    {
+      "path": "discipline/health/latest.json",
+      "bytes": 10203,
+      "sha256": "b4b976bccdf6ff52559c9df22d2352170b07582d1b7cae515eaec2ce2f832863"
+    },
+    {
+      "path": "discipline/INTENT.md",
+      "bytes": 678,
+      "sha256": "18b1af4ac4d6968ed8161c285ad65ee094b479730548b7e1360a6c046be0a1b3"
+    },
+    {
+      "path": "discipline/registry/debt.json",
+      "bytes": 9805,
+      "sha256": "e4a5abf59bd285b6e1d6978fb372d6f3244e8c9daa4cf9ffd1e86a207fa6b4c3"
+    },
+    {
+      "path": "discipline/registry/intent.json",
+      "bytes": 1792,
+      "sha256": "b72f1167d0a3db6bec70fcbab9dc9ba171f91e578e4f4113f07624166aaa81da"
+    },
+    {
+      "path": "discipline/registry/tests-baseline.json",
+      "bytes": 2295,
+      "sha256": "a3df6f6da79a285ad1dc3c110c510e3331da53bbc40e5a7dfd74a0fb7b56fb38"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 1833,
+      "sha256": "ff62ce25b7887cc01f138039b0ea3217248ece5f92c08fc7f9a5c6758b2d6a29"
+    },
+    {
+      "path": "README.md",
+      "bytes": 9295,
+      "sha256": "81f53fe2552c211542abd4b488e1b7904b8c4d7815854dda6047bea591726dfc"
+    },
+    {
+      "path": "specmap.json",
+      "bytes": 1279135,
+      "sha256": "e6da6c4293e0d836e057bcc27c485d5567b9d54e28350dc41077397e7606f9b0"
+    },
+    {
+      "path": "specmap.toml",
+      "bytes": 1264,
+      "sha256": "a3eb54e574371cbc368d397f8035d472482bdff5b48023e490a82d0f40077e78"
+    },
+    {
+      "path": "vibe.toml",
+      "bytes": 1694,
+      "sha256": "d265bbecdad373a01d7e93a8ac1373fb798b3a26b66b6fd3c2a2598b66d6781c"
+    },
+    {
+      "path": "vibevm/vibespecs/boot/13-flow-zap.xml",
+      "bytes": 3288,
+      "sha256": "19a761105a457fa4bf0c858ed2651ba4b8ee83aa043efbc86f03647fc947f8d7"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+      "bytes": 15789,
+      "sha256": "2bcd85a50ae44dd3b78cd6846e7e02136847bc732f4f34f6b2f8e1d308dd0f1e"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-AGENT-PROTOCOL.xml",
+      "bytes": 14766,
+      "sha256": "26596f67371a9dc555f4437773c8f2bdf8268a634ac4a9f8a42c764fa59be9d2"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-BACKEND-API.md",
+      "bytes": 6719,
+      "sha256": "48a866331b6057eb7c9ee7b4649b54603d86d3603162d5bb495084e6047db2c2"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+      "bytes": 26229,
+      "sha256": "78036dbcc2545771ee07577f16e0ac05f6145d7383c6e002627061ac93959a6f"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-CLI.md",
+      "bytes": 7138,
+      "sha256": "bd0e18de56108067c6ab7fecb5e08876250d94c1aa091abaea587f5004367251"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml",
+      "bytes": 30460,
+      "sha256": "18fbe45bea72cf3919f2daa6f8402b1b26a609b32e645ee257dcf3eefa391034"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+      "bytes": 13945,
+      "sha256": "e7cd769b2b22573e613e6244e89796bea9480ef79dd9031f724d148b97c4548a"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml",
+      "bytes": 28716,
+      "sha256": "68ffb2f0ed63bef769614d8ab5b593375c279f7ca68f56f550068d84a5728ae7"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-MIGRATION-CHANGE-RECORD.xml",
+      "bytes": 3418,
+      "sha256": "9d051df09f66ee0769237388dffad79bcf1949d558af7ece09106d3e2c169432"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
+      "bytes": 12412,
+      "sha256": "2bb2c7ad55852d8c9ed8640d9d1b7911f3289058ecac1d4713da36a3f5dd80c9"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-APP-GUIDE.md",
+      "bytes": 22084,
+      "sha256": "f016bd23e3e402f5d772384a40ec73032654e0a278d4ab6056985d3fe449992d"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-CORE-GUIDE.md",
+      "bytes": 65411,
+      "sha256": "1d98a9e87f00462d16fe9d31bb2cd6805978615386737ee3ab53b8b3205b855a"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
+      "bytes": 90999,
+      "sha256": "7fa0cadada7ff886429a4b7da06673ac732099571e9fbddf201afbe02cb51e15"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+      "bytes": 6419,
+      "sha256": "ed5d6710acb4505564152b6a7870db8b474e2e8e2842ae5edcf9f8762c26ed19"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-LEGACY-GUIDE.md",
+      "bytes": 10326,
+      "sha256": "ac252dc7a7b672c6bff73f2570900774c62d837bbd0b4ddb5615cdd54757011a"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
+      "bytes": 15505,
+      "sha256": "1e5594a07c0a67cbbe99b52b6db12cca412dea70100b5cc22b9f527dd756265a"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-RUNTIME-GUIDE.md",
+      "bytes": 25725,
+      "sha256": "c0ee415035991395578632af692539174661d97a09c6cdb59b9f20be67c8cc2b"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORAGE.xml",
+      "bytes": 14289,
+      "sha256": "c50fde4330caa5faf47e49b383003cea4f145515cb6cf76b3f52b7cc265e1549"
+    },
+    {
+      "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORE-GUIDE.md",
+      "bytes": 10989,
+      "sha256": "b794a12b5168dfb5468d66e11e50df19003bacf3a82b58ad3b5c80548517eb4b"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/.gitattributes",
+      "bytes": 115,
+      "sha256": "2a4ea1a8455ea391214c203c1aa295eb6ecdb41af57beb72cae6de7e7e8ed032"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/ANCILLARY-REVIEW.xml",
+      "bytes": 9678,
+      "sha256": "dbb4aa38655c02ff5ce28ed3ff983026b4ae0f522ac5c5e7406f25471b91c67c"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/idea-map.json",
+      "bytes": 43889,
+      "sha256": "d34f019ab969a498ef31706337a7bc3abf1035f4d0c598eb46d1b83f49faaf30"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/IDEA-MAP.xml",
+      "bytes": 51612,
+      "sha256": "abefb4ca1d1ec9956dbae76241901622c5332a722e64f03c1ee59c957fe4be3b"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/pilot-report.json",
+      "bytes": 1826,
+      "sha256": "225a9b03bbc39b95c0733cee700141e8b2d0456fe8c797d4b9e600fa8a5d90d8"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/PILOT-REPORT.xml",
+      "bytes": 4549,
+      "sha256": "dd9da869539bba87cfe94d3605bf81e496ccee50f82e9abce56edf9a964e3257"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/source-inventory.json",
+      "bytes": 15747,
+      "sha256": "78710c8a7f0133e39267eb5ee03e9567aa30519d65bfc54fed6376fbfb62d9f6"
+    },
+    {
+      "path": "vibevm/vibespecs/research/zap/ZAP-RUST-MVP-VISION-2026-09-13.md",
+      "bytes": 49038,
+      "sha256": "3eb5ca89b79f13164fe7215c95df780a4a5ed40e06a3b249c59556c2e1a6004d"
+    },
+    {
+      "path": "vibevm/vibespecs/skills/zap-draft/SKILL.md",
+      "bytes": 4932,
+      "sha256": "6ec062c95b8ecbf5226e0dd454f6370a42708c01d4cfde91c5d718e5668bda7c"
+    },
+    {
+      "path": "vibevm/vibespecs/skills/zap-run/SKILL.md",
+      "bytes": 4329,
+      "sha256": "497a83b6148fbb119750ad8d2af149048413e5e6d1dce5871d018665a831bb11"
+    },
+    {
+      "path": "vibevm/vibespecs/skills/zap-state/SKILL.md",
+      "bytes": 2840,
+      "sha256": "597cb8300157bd3d538b8f1898a46d3af09d6767d65a3106eb3d61839d22fc68"
+    }
+  ]
+}

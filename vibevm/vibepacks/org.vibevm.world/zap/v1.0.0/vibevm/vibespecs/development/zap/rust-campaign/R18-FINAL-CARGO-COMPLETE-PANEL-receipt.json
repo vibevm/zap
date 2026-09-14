@@ -1,0 +1,137 @@
+{
+  "schema": "zap-r18-final-cargo-complete-panel-receipt/1",
+  "run_id": "R18-FINAL-COMPLETE-20260914T120410Z",
+  "completed_at_utc": "2026-09-14T12:07:57.0653217Z",
+  "package_root": "C:/Users/olegc/git/v/vibevm-next/vibevm/vibepacks/org.vibevm.world/zap/v1.0.0",
+  "source_state": "root-declared frozen after the accepted legacy-activation repair",
+  "packages": [
+    "zap-api",
+    "zap-app",
+    "zap-cli",
+    "zap-core",
+    "zap-domain",
+    "zap-legacy",
+    "zap-runtime",
+    "zap-store",
+    "zap-wire"
+  ],
+  "excluded_workspace_members": [
+    "core-ai-native-specmark",
+    "core-ai-native-specmark-grammar"
+  ],
+  "test": {
+    "command": "run-cargo.ps1 cargo test --workspace --exclude core-ai-native-specmark --exclude core-ai-native-specmark-grammar --no-fail-fast",
+    "exit": 101,
+    "status": "failed_complete_denominator",
+    "no_fail_fast": true,
+    "native_probe_environment_unset": true,
+    "result_lines": 49,
+    "ordinary": {
+      "passed": 169,
+      "failed": 7,
+      "ignored": 16,
+      "measured": 0,
+      "filtered": 0
+    },
+    "doctests": {
+      "executed": true,
+      "passed": 185,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    "aggregate": {
+      "passed": 354,
+      "failed": 7,
+      "ignored": 16,
+      "measured": 0,
+      "filtered": 0
+    },
+    "failed_targets": [
+      {
+        "target": "zap-app --test read_server",
+        "failed_tests": [
+          "real_loopback_server_snapshot_query_tail_resync_and_cancellation"
+        ],
+        "failure": "serde JSON missing field kind at line 1 column 378",
+        "read_only_diagnosis": "fixture store lacks the derived index catalog; a 378-byte UnsupportedEpoch error is decoded as MachineResponse"
+      },
+      {
+        "target": "zap-domain --test dreamer_service",
+        "failed_tests": [
+          "hypothetical_grill_ambiguity_and_recalculation_stay_detached",
+          "removal_requires_complete_dispositions_and_preserves_proof_history",
+          "expensive_scope_add_uses_exact_owner_pause_and_effect_admission",
+          "one_owner_response_binds_charter_amendment_and_exact_dream_envelope"
+        ],
+        "failure": "UnsupportedEpoch: derived graph index catalog is missing and requires explicit rebuild",
+        "requirement": "spec://org.vibevm.world/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-MANDATORY-INDEXES",
+        "fix_surface": "Migration"
+      },
+      {
+        "target": "zap-domain --test lowering_contracts",
+        "failed_tests": [
+          "registered_lowering_and_bundle_surface_is_complete"
+        ],
+        "failure": "registered-family presence assertion failed",
+        "source_location": "crates/zap-domain/tests/lowering_contracts.rs:27"
+      },
+      {
+        "target": "zap-runtime --test runtime_contracts",
+        "failed_tests": [
+          "runtime_record_registration_is_complete"
+        ],
+        "failure": "registration count actual 17 expected 16",
+        "source_location": "crates/zap-runtime/tests/runtime_contracts.rs:424"
+      }
+    ],
+    "ignored_tests": [
+      "legacy_import::service::representation_probe::representation_payload_encode_phase",
+      "legacy_import::service::representation_probe::representation_payload_reference_phase",
+      "legacy_import::service::representation_probe::representation_physical_a2_phase",
+      "legacy_import::service::representation_probe::representation_replay_audit_phase",
+      "legacy_import::service::representation_probe::representation_translation_phase",
+      "inspect_preserved_native_campaign_without_replaying_effects",
+      "one_campaign_two_native_jobs_complete_through_product_routes",
+      "representation_commit_phase",
+      "representation_fixture_phase",
+      "representation_hash_audit_phase",
+      "r17_performance::measured_registered_queries_on_mixed_graph",
+      "engine::tests::a2_measure::paired_a2_representation_measurement",
+      "history::tests::representation_projection_reference_phase",
+      "history::tests::representation_projection_stream_phase",
+      "canonical::tests::representation_probe_direct",
+      "canonical::tests::representation_probe_reference"
+    ],
+    "r15a_vibe_environment": {
+      "ZAP_R15A_VIBE_EXE_set": false,
+      "ZAP_R15A_VIBE_PROJECT_set": false,
+      "cargo_test_passed": true,
+      "actual_integration_evidence": false
+    }
+  },
+  "log": {
+    "path": "C:/Users/olegc/.vibe/zap/development/vibevm-next/final-validation/R18-FINAL-COMPLETE-20260914T120410Z-test.log",
+    "bytes": 47745,
+    "sha256": "aae6970b0c32a70d49654497f6a18f4537c6cbddc1a7f57647628d82adbf6864",
+    "created_at_utc": "2026-09-14T12:05:20.6872617Z",
+    "last_write_at_utc": "2026-09-14T12:07:57.0653217Z",
+    "lifetime_seconds": 156.378
+  },
+  "repeated_gates": {
+    "clippy": false,
+    "format": false
+  },
+  "executor_actions": [
+    "ran one all-nine no-fail-fast package test command",
+    "reported concrete failures while the command continued",
+    "performed no repair",
+    "did not run ignored, live, native-probe or host tests"
+  ],
+  "source_changes": [
+    "vibevm/vibespecs/development/zap/rust-campaign/REPORT-R18-FINAL-CARGO-COMPLETE-PANEL.md",
+    "vibevm/vibespecs/development/zap/rust-campaign/R18-FINAL-CARGO-COMPLETE-PANEL-receipt.json"
+  ],
+  "release_status": "blocked_pending finite repair and focused verification of four failed targets"
+}

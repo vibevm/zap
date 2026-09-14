@@ -1,5 +1,12 @@
 # Root review of the first real read server
 
+Current disposition at ROOT-0055: corrected bounded R13A accepted. The custom
+normal-request parser was replaced by Hyper HTTP/1 under Tokio; body framing,
+RAII connection capacity, I/O deadlines and drain, exact routes and bounded
+JSON/SSE encoding were source-reviewed and covered by the strengthened actual
+server and compiled-binary cases. Full R13B/C query/command/runtime integration
+remains open. The original review findings follow for traceability.
+
 Status: bounded R13A repair required. The actual binary/server receipts support
 the normal read/cursor path, but do not cover these source-level edge failures.
 

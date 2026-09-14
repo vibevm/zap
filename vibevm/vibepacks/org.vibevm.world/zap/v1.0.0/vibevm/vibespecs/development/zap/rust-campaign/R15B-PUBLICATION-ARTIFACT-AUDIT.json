@@ -1,0 +1,308 @@
+{
+  "schema": "zap-r15b-publication-artifact-audit/1",
+  "status": "artifact_integrity_and_local_links_verified",
+  "verified_utc": "2026-09-14T12:36:18Z",
+  "scope": "Independent read-only verification of the explicitly named final sealed payload. Root retains release/acceptance/publication decisions.",
+  "artifact": {
+    "manifest_path": "C:/Users/olegc/.vibe/zap/development/zap-publication-20260914T1234104656056Z/R15B-PAYLOAD-MANIFEST.json",
+    "manifest_file_sha256": "5ADFF62CEBD7A07A2F689C5F4A06C9C224D1F7BEB5CF5FCCB18B19C492357F92",
+    "payload_root": "C:\\Users\\olegc\\.vibe\\zap\\development\\zap-publication-20260914T1234104656056Z\\org.vibevm.world\\zap\\v1.0.0",
+    "package": "flow:org.vibevm.world/zap@=1.0.0",
+    "manifest_generated_at": "2026-09-14T12:34:12.5689316Z",
+    "file_count": 507,
+    "total_bytes": 6243786,
+    "payload_manifest_sha256": "d426892fc6d5980061e5b06aa5576bc6fe39bc9325811707183c360ed0029fe5"
+  },
+  "manifest_integrity": {
+    "actual_file_count": 507,
+    "manifest_rows": 507,
+    "all_manifest_paths_lengths_sha256_match": true,
+    "exact_actual_path_set": true,
+    "calculated_payload_manifest_sha256": "d426892fc6d5980061e5b06aa5576bc6fe39bc9325811707183c360ed0029fe5",
+    "expected_payload_manifest_sha256": "d426892fc6d5980061e5b06aa5576bc6fe39bc9325811707183c360ed0029fe5",
+    "digest_matches": true,
+    "invalid_paths": [],
+    "duplicate_paths": [],
+    "missing_files": [],
+    "unexpected_files": [],
+    "path_absences": [],
+    "length_or_sha256_mismatches": [],
+    "reparse_entries": [],
+    "manifest_unchanged_at_final_check": true
+  },
+  "forbidden_path_audit": {
+    "target_directory_segment_at_any_depth": true,
+    "other_categories_checked": [
+      "Python .py/.pyc and __pycache__",
+      "development campaign/checkpoints and prototype examples/scripts",
+      "generated boot STATIC/INDEX/lock",
+      "generated agent folders",
+      "nested vibedeps",
+      "private/.vibe paths, token/trust filenames",
+      "root harness projections and vibe.lock",
+      "known compiled-output extensions"
+    ],
+    "forbidden_paths": [],
+    "ignore_rule_count": 27,
+    "ignore_matches_manifest": true
+  },
+  "relative_link_audit": {
+    "documents": 28,
+    "hyperlink_occurrences": 510,
+    "relative_hyperlink_occurrences": 456,
+    "distinct_relative_target_files": 259,
+    "missing_targets": [],
+    "out_of_manifest_targets": [],
+    "fragment_checks": [
+      {
+        "source": "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+        "line": 108,
+        "target": "ZAP-RUST-APP-GUIDE.md#internal-boundaries",
+        "exists": true
+      }
+    ],
+    "unparsed_markdown_destination_forms": [],
+    "http_hyperlink_occurrences": 54,
+    "http_distinct_destinations": 50,
+    "external_network_verification": false,
+    "method": "Reused the independently parsed456 relative links only after all28 document paths/lengths/SHA-256 matched the prior507-row audit byte-for-byte. Reverified every target inside this final507-file manifest and actual sealed directory. Historical literal source paths are not hyperlinks.",
+    "document_identities": [
+      {
+        "path": "README.md",
+        "bytes": 9295,
+        "sha256": "81f53fe2552c211542abd4b488e1b7904b8c4d7815854dda6047bea591726dfc",
+        "relative_link_occurrences": 20,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/boot/13-flow-zap.xml",
+        "bytes": 3288,
+        "sha256": "19a761105a457fa4bf0c858ed2651ba4b8ee83aa043efbc86f03647fc947f8d7",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml",
+        "bytes": 15789,
+        "sha256": "2bcd85a50ae44dd3b78cd6846e7e02136847bc732f4f34f6b2f8e1d308dd0f1e",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-AGENT-PROTOCOL.xml",
+        "bytes": 14766,
+        "sha256": "26596f67371a9dc555f4437773c8f2bdf8268a634ac4a9f8a42c764fa59be9d2",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-BACKEND-API.md",
+        "bytes": 6719,
+        "sha256": "48a866331b6057eb7c9ee7b4649b54603d86d3603162d5bb495084e6047db2c2",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-CHANGE-ECONOMICS.xml",
+        "bytes": 26229,
+        "sha256": "78036dbcc2545771ee07577f16e0ac05f6145d7383c6e002627061ac93959a6f",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-CLI.md",
+        "bytes": 7138,
+        "sha256": "bd0e18de56108067c6ab7fecb5e08876250d94c1aa091abaea587f5004367251",
+        "relative_link_occurrences": 3,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-DATA-AND-VIEWER.xml",
+        "bytes": 30460,
+        "sha256": "18fbe45bea72cf3919f2daa6f8402b1b26a609b32e645ee257dcf3eefa391034",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+        "bytes": 13945,
+        "sha256": "e7cd769b2b22573e613e6244e89796bea9480ef79dd9031f724d148b97c4548a",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-METHODOLOGY.xml",
+        "bytes": 28716,
+        "sha256": "68ffb2f0ed63bef769614d8ab5b593375c279f7ca68f56f550068d84a5728ae7",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-MIGRATION-CHANGE-RECORD.xml",
+        "bytes": 3418,
+        "sha256": "9d051df09f66ee0769237388dffad79bcf1949d558af7ece09106d3e2c169432",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
+        "bytes": 12412,
+        "sha256": "2bb2c7ad55852d8c9ed8640d9d1b7911f3289058ecac1d4713da36a3f5dd80c9",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-APP-GUIDE.md",
+        "bytes": 22084,
+        "sha256": "f016bd23e3e402f5d772384a40ec73032654e0a278d4ab6056985d3fe449992d",
+        "relative_link_occurrences": 46,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-CORE-GUIDE.md",
+        "bytes": 65411,
+        "sha256": "1d98a9e87f00462d16fe9d31bb2cd6805978615386737ee3ab53b8b3205b855a",
+        "relative_link_occurrences": 91,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
+        "bytes": 90999,
+        "sha256": "7fa0cadada7ff886429a4b7da06673ac732099571e9fbddf201afbe02cb51e15",
+        "relative_link_occurrences": 152,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+        "bytes": 6419,
+        "sha256": "ed5d6710acb4505564152b6a7870db8b474e2e8e2842ae5edcf9f8762c26ed19",
+        "relative_link_occurrences": 9,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-LEGACY-GUIDE.md",
+        "bytes": 10326,
+        "sha256": "ac252dc7a7b672c6bff73f2570900774c62d837bbd0b4ddb5615cdd54757011a",
+        "relative_link_occurrences": 23,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
+        "bytes": 15505,
+        "sha256": "1e5594a07c0a67cbbe99b52b6db12cca412dea70100b5cc22b9f527dd756265a",
+        "relative_link_occurrences": 29,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-RUNTIME-GUIDE.md",
+        "bytes": 25725,
+        "sha256": "c0ee415035991395578632af692539174661d97a09c6cdb59b9f20be67c8cc2b",
+        "relative_link_occurrences": 54,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORAGE.xml",
+        "bytes": 14289,
+        "sha256": "c50fde4330caa5faf47e49b383003cea4f145515cb6cf76b3f52b7cc265e1549",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/flows/zap/ZAP-RUST-STORE-GUIDE.md",
+        "bytes": 10989,
+        "sha256": "b794a12b5168dfb5468d66e11e50df19003bacf3a82b58ad3b5c80548517eb4b",
+        "relative_link_occurrences": 22,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/ANCILLARY-REVIEW.xml",
+        "bytes": 9678,
+        "sha256": "dbb4aa38655c02ff5ce28ed3ff983026b4ae0f522ac5c5e7406f25471b91c67c",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/IDEA-MAP.xml",
+        "bytes": 51612,
+        "sha256": "abefb4ca1d1ec9956dbae76241901622c5332a722e64f03c1ee59c957fe4be3b",
+        "relative_link_occurrences": 1,
+        "external_link_occurrences": 51
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/PILOT-REPORT.xml",
+        "bytes": 4549,
+        "sha256": "dd9da869539bba87cfe94d3605bf81e496ccee50f82e9abce56edf9a964e3257",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/research/zap/ZAP-RUST-MVP-VISION-2026-09-13.md",
+        "bytes": 49038,
+        "sha256": "3eb5ca89b79f13164fe7215c95df780a4a5ed40e06a3b249c59556c2e1a6004d",
+        "relative_link_occurrences": 3,
+        "external_link_occurrences": 3
+      },
+      {
+        "path": "vibevm/vibespecs/skills/zap-draft/SKILL.md",
+        "bytes": 4932,
+        "sha256": "6ec062c95b8ecbf5226e0dd454f6370a42708c01d4cfde91c5d718e5668bda7c",
+        "relative_link_occurrences": 3,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/skills/zap-run/SKILL.md",
+        "bytes": 4329,
+        "sha256": "497a83b6148fbb119750ad8d2af149048413e5e6d1dce5871d018665a831bb11",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      },
+      {
+        "path": "vibevm/vibespecs/skills/zap-state/SKILL.md",
+        "bytes": 2840,
+        "sha256": "597cb8300157bd3d538b8f1898a46d3af09d6767d65a3106eb3d61839d22fc68",
+        "relative_link_occurrences": 0,
+        "external_link_occurrences": 0
+      }
+    ]
+  },
+  "comparison_to_clean507_manifest": {
+    "previous_payload_manifest_sha256": "18a20963f6beb68c2498b39df54a69ca422075fe13690180b59431a980445ca1",
+    "removed_paths": [],
+    "added_paths": [],
+    "changed_common_files": [
+      {
+        "path": "discipline/DEBT.md",
+        "bytes": 3097,
+        "sha256": "b58c474dacd8b68ce3c8d2d04718d7d75db34972d8769d59f6b06fcfb89f1bd4"
+      },
+      {
+        "path": "discipline/registry/debt.json",
+        "bytes": 9805,
+        "sha256": "e4a5abf59bd285b6e1d6978fb372d6f3244e8c9daa4cf9ffd1e86a207fa6b4c3"
+      }
+    ],
+    "interpretation": "Only discipline/DEBT.md and discipline/registry/debt.json changed. No Rust, Cargo or public-document byte change was observed relative to that507-row manifest; debt semantics and installed tests remain root-owned evidence."
+  },
+  "prior_rejections_preserved": [
+    {
+      "receipt": "R15B-FINAL-ARTIFACT-AUDIT.json",
+      "payload_manifest_sha256": "4540e024ec2122e00d7472916b79de32bbf4c294f022a3729da679031b6983b8",
+      "reason": "525-file candidate contained18 nested target/conform caches."
+    },
+    {
+      "receipt": "R15B-CLEAN-ARTIFACT-AUDIT.json",
+      "payload_manifest_sha256": "18a20963f6beb68c2498b39df54a69ca422075fe13690180b59431a980445ca1",
+      "reason": "507 manifest members were intact, but the preview container had509 actual files after two unmanifested test-probe additions."
+    }
+  ],
+  "blocking_findings": [],
+  "not_performed": [
+    "artifact or source mutation",
+    "probe files in artifact",
+    "Rust/test execution",
+    "installed slot/binary revalidation",
+    "external URL/network audit",
+    "Git or publication"
+  ],
+  "publication_performed": false
+}

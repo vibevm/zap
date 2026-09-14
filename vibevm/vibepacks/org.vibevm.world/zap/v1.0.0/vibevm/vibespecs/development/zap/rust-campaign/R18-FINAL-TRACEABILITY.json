@@ -1,0 +1,22 @@
+{
+  "schema": "zap-final-traceability/1",
+  "checked_utc": "2026-09-14T12:04:27.4318591Z",
+  "specmap_sha256": "e6da6c4293e0d836e057bcc27c485d5567b9d54e28350dc41077397e7606f9b0",
+  "spec_units": 608,
+  "code_items": 1260,
+  "edges": 1479,
+  "suspects": 0,
+  "warnings": 0,
+  "required_facts": 279,
+  "missing_facts": [],
+  "invalid_source_files": [],
+  "conform_findings": 0,
+  "gated_crates": 9,
+  "exempt_crates": 0,
+  "frozen_baseline": 0,
+  "public_type_gated": 9,
+  "files_over_600": 0,
+  "deterministic_check": "pass",
+  "orphan_gate": "zero",
+  "change_since_prior": "Final permanent implementation evidence paragraph added;608units1260items1479edges remain deterministic. All21indexed spec files verified in published manifest."
+}

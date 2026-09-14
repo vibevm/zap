@@ -1,0 +1,47 @@
+{
+  "schema": "zap-rust-release-receipt/1",
+  "status": "published_verified",
+  "package": "flow:org.vibevm.world/zap@1.0.0",
+  "repo": "https://github.com/vibespecs/org.vibevm.world.zap.git",
+  "tag": "v1.0.0",
+  "tag_object": "35344dcf3f17ed20bde8c605b6fc734c5aaf5d22",
+  "published_commit": "12e9e5b1b39ccbbd79a5ab484be943201b6aaf20",
+  "host_source_commit": "85d528123c55134f4bb65637dd44f8f97dadb166",
+  "manifest": "FINAL-PAYLOAD-MANIFEST-R19.json",
+  "payload_sha256": "d426892fc6d5980061e5b06aa5576bc6fe39bc9325811707183c360ed0029fe5",
+  "source_files": 507,
+  "installed_source_files": 506,
+  "installed_content_hash": "sha256:2af96b2500f93f4dcb6eb12e6bb02fa0d37597918b34de8a566d1846f401a22f",
+  "cargo_cases": {
+    "unit_integration": 176,
+    "ignored": 16,
+    "scope": "complete denominator plus reviewed focused repairs",
+    "doctests": 185
+  },
+  "installed_service_cases": 8,
+  "published_fresh_build": {
+    "profile": "release",
+    "target": "installed slot",
+    "registry_unavailable": true,
+    "binary_sha256": "e6c0fb56a7dc13f5e53741a5588e20d2ac0077fe894a60fb9a9a5784510fe1d1",
+    "exit_code": 0
+  },
+  "published_draft": {
+    "pointer_switched": false,
+    "authority_activated": false,
+    "snapshot_exit": 0,
+    "obligations": 4,
+    "mandates": 1,
+    "revision": 1,
+    "contracts": 1,
+    "nodes": 3,
+    "commands_executed": false,
+    "import_exit": 0
+  },
+  "root_reports": [
+    "REPORT-R18.md",
+    "REPORT-R19.md",
+    "R16-FINAL-DISPOSITION.json"
+  ],
+  "scope_notes": "Known comparison/import/native/client limits remain explicit. Online Vibe installation was not exercised. No NEXT/local inference or source-repository push."
+}
