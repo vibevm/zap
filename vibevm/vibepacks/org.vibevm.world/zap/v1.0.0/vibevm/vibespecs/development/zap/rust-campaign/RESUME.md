@@ -1,5 +1,12 @@
 # Resume ZAP Rust MVP implementation
 
+Coordinator cadence: keep judgment bounded and evidence-driven. While workers
+run, do not spend long reasoning passages inventing hypothetical future API
+problems. Read new findings, make the smallest concrete decision, save a
+checkpoint within five active minutes, and wait briefly when no new evidence
+needs action. Root coordinates and reviews; Sol/xhigh writes code. This
+continuity task does not stop at an intermediate milestone.
+
 Owner accepted the complete vision and authorized planning plus execution on
 2026-09-13. ZAP implementation, scoped checks, and the earlier publication
 commission are active. Do not invoke local Qwen or execute NEXT product work.
@@ -14,6 +21,40 @@ Accepted code baseline before Rust: 2d48bd51 (Python prototype and economics
 design). Uncommitted Python economics code is unaccepted reference work. Its
 completion-ready/direct-close omission is recorded in ../REVIEW-CE-INTEGRATION.md.
 Never silently accept, discard, or mix it with Rust commits.
+
+Latest frontier override (see campaign.json and ROOT-0102): R07's independent
+final review found three blockers in REVIEW-R07-FINAL.md, now assigned through
+packets/R07-final-review-repair.md to zap_r07_finish (Sol/xhigh). R08 is a green
+bounded candidate in REPORT-R08-EXECUTION.md; the same zap_r08_finish worker
+now implements R09 via packets/R09-implementation.md. zap_r14_finish completed
+the accepted bounded receipt/path recovery and now owns the actual tiny-import
+activation test. All three are coding workers at xhigh. Protocol model test
+executors use medium; none has been launched for final R16 yet.
+
+R07's pending comparison amendment separates ChangeAssessment comparison
+request/digest from local effect bases, derives union read inputs on one
+snapshot, retains unknowns, and exposes prepared-prefix read-only state for
+constructing a later effect's produced bindings. Do not reintroduce first-local
+basis equality or prior-effect action/hold/decision equality across a prefix.
+Every privileged action must respect scoped Owner pauses even without an
+economics hold.
+
+R17 P0/A1 is root accepted in REVIEW-R17-P0-A1.md: exact encoder/projection
+bytes preserved, measured isolated memory reductions. Combined fixture replay
+still peaks around1.37GB; full-operation before/after gain is unmeasured.
+Record/history values are75.07% of table values. A2 packet is saved but not yet
+started; B remains unselected. Full R17 and publication are unfinished.
+
+Use verified C:/Users/olegc/.vibe/zap/development/vibevm-next/run-cargo.ps1 with
+-CargoArgs @(...), explicit package workdir. It fixes next-rust and prevents
+target-dir overrides. A second wrong target, C:/Users/olegc/.vibe/zap/build/next-r Dee,
+created2,117,399,950 bytes/1,876 files; its exact native deletion was rejected
+with blocked by policy. It and C:/Users/olegc/.vibe Subs zap remain untouched.
+Do not retry cleanup through another tool/language/agent. Final disclosure must
+name both retained directories and the automatic rejection.
+
+The historical frontier below explains earlier ownership and receipts; the
+latest override and campaign.json take precedence.
 
 Current frontier: R07 shared core/control implementation, R08 executable
 lowering/packet implementation, R14 bounded recovery repairs and R17 measured
