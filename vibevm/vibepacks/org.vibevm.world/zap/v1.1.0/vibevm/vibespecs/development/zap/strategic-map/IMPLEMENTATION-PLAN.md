@@ -1,4 +1,10 @@
-# Strategic map implementation, 1.1.0
+# Initial strategic map projection stage, 1.1.0
+
+SM01–SM05 below describe the accepted initial stage, not the whole strategic-map
+design. The Owner has now explicitly commissioned completion of the milestone
+algorithm in [MILESTONES-PLAN.md](MILESTONES-PLAN.md), without a comparative pilot.
+The current programming profile is gpt-5.6-sol/high; historical xhigh references
+below describe the already completed stage.
 
 Owner authorization: the latest conversation explicitly approves beginning
 implementation of the strategic-map review and the subsequent human-readable

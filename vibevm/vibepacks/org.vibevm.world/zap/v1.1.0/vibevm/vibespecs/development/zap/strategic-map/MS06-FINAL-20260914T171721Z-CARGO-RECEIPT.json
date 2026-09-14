@@ -1,0 +1,58 @@
+{
+  "schema": "zap-ms06-final-cargo-receipt/1",
+  "created_utc": "2026-09-14T17:32:50.8943484Z",
+  "scope": [
+    "zap-wire",
+    "zap-core",
+    "zap-domain",
+    "zap-app",
+    "zap-cli"
+  ],
+  "test": {
+    "command": "cargo test -p zap-wire -p zap-core -p zap-domain -p zap-app -p zap-cli --offline --no-fail-fast",
+    "compiler_concurrency": "CARGO_BUILD_JOBS=1",
+    "status": "passed",
+    "summaries": 43,
+    "passed": 355,
+    "failed": 0,
+    "ignored": 13,
+    "measured": 0,
+    "filtered_out": 0,
+    "log": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-FINAL-20260914T171843Z-test-attempt2-jobs1.log",
+    "failed_attempt_log": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-FINAL-20260914T171721Z-test.log",
+    "failed_attempt_reason": "parallel rustc allocator exhaustion; no assertion failure"
+  },
+  "regrouped_tests": {
+    "command": "cargo test -p zap-domain --test lowering_service --test knowledge_service --offline --no-fail-fast",
+    "status": "passed",
+    "passed": 36,
+    "failed": 0,
+    "ignored": 1,
+    "log": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-FINAL-20260914T173131Z-regrouped-domain-tests.log",
+    "reason": "confirms final test-target reorganization after the 355-pass baseline"
+  },
+  "clippy": {
+    "command": "cargo clippy -p zap-wire -p zap-core -p zap-domain -p zap-app -p zap-cli --all-targets --offline -- -D warnings",
+    "compiler_concurrency": "CARGO_BUILD_JOBS=1",
+    "status": "passed",
+    "warnings": 0,
+    "errors": 0,
+    "log": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-FINAL-20260914T173018Z-clippy-attempt3.log",
+    "failed_attempt_logs": [
+      "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-FINAL-20260914T171721Z-clippy.log",
+      "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-FINAL-20260914T172358Z-clippy-attempt2.log"
+    ]
+  },
+  "fmt": {
+    "command": "cargo fmt --all --check",
+    "status": "passed",
+    "differences": 0,
+    "log": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-FINAL-20260914T171721Z-fmt.log"
+  },
+  "restrictions": {
+    "live_probes_run": false,
+    "performance_pilot_run": false,
+    "build_install_run": false,
+    "git_run": false
+  }
+}

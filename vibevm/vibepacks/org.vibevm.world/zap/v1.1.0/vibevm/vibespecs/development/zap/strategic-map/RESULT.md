@@ -1,6 +1,10 @@
-# Strategic map 1.1.0 implementation result
+# Strategic map initial projection stage result
 
-Status: root accepted, implementation complete. Source commit:
+Status: root accepted for the bounded SM01–SM05 projection stage only. The
+broader cities/milestones algorithm is completed and accepted in
+[MILESTONES-RESULT.md](MILESTONES-RESULT.md); this historical stage report alone
+does not establish that broader completion.
+The source boundary verified below is commit:
 7a80667cfd0703fd251182ca7c7ca7f20726900e on next. The 1.1.0 slot is prepared
 and verified locally; this commission did not publish a new registry version.
 Released 1.0.0 and its tag remain unchanged.

@@ -1,0 +1,123 @@
+{
+  "schema": "zap-milestone-acceptance/1",
+  "accepted_utc": "2026-09-14T17:52:23.6005173Z",
+  "status": "accepted",
+  "source_commit": "63312486df182fa8645e25fd9569c34a7335a5c7",
+  "version": "1.1.0",
+  "facts": [
+    {
+      "status": "accepted",
+      "id": "MILESTONE-IDENTITY"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-ACCEPTANCE"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-HISTORY"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-DISCOVERY"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-FOCUS"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-PROLIFERATION"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-ADMISSION"
+    },
+    {
+      "status": "accepted",
+      "id": "INFORMATION-OPPORTUNITY"
+    },
+    {
+      "status": "accepted",
+      "id": "INFORMATION-SELECTION"
+    },
+    {
+      "status": "accepted",
+      "id": "INFORMATION-REUSE"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-TRANSFORM"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-CONSERVATION"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-RUNNING-WORK"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-QUERIES"
+    },
+    {
+      "status": "accepted",
+      "id": "MILESTONE-VERIFICATION"
+    }
+  ],
+  "scope_report": "MILESTONES-RESULT.md",
+  "excluded": [
+    "comparative agent pilot",
+    "graphical client",
+    "automatic publication",
+    "NEXT activation or live migration"
+  ],
+  "coding_profile": "gpt-5.6-sol/high",
+  "tests": {
+    "five_crate_passed": 355,
+    "installed_app_http_passed": 2,
+    "installed_cli_passed": 1,
+    "regrouped_failed": 0,
+    "five_crate_ignored": 13,
+    "regrouped_ignored": 1,
+    "regrouped_passed": 36,
+    "five_crate_failed": 0
+  },
+  "gates": {
+    "exemptions": 0,
+    "deterministic_specmap": "pass",
+    "gated_crates": 9,
+    "ledger": "pass",
+    "spec_warnings": 0,
+    "strict_all_target_clippy": "pass",
+    "spec_units": 687,
+    "frozen_baseline": 0,
+    "over_600_lines": 0,
+    "spec_edges": 1749,
+    "tagged_items": 1442,
+    "spec_orphans": 0,
+    "conform_findings": 0,
+    "format": "pass"
+  },
+  "artifact": {
+    "manifest_digest": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992",
+    "files": 589,
+    "installed_slot_records": 1,
+    "committed_blob_matches": 589,
+    "cold_build_ms": 150256,
+    "registry_restored": true,
+    "binary_sha256": "323a0f7529088e0beb3ad2a3e648f9983275b86e832a75965b6e8d53d0265304",
+    "installed_payload_files": 588,
+    "bytes": 7239571
+  },
+  "evidence": [
+    "REPORT-MS01-MS04-MILESTONES.md",
+    "REPORT-MS02-MS05-INFORMATION.md",
+    "REPORT-MS06-FINAL-CARGO.md",
+    "MS06-ARTIFACT-AUDIT.md",
+    "REPORT-MS06-INSTALLED.md",
+    "MS06-COMMITTED-PAYLOAD.json",
+    "MS06-SOURCE-MANIFEST.json"
+  ]
+}

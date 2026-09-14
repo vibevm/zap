@@ -1,0 +1,7 @@
+{
+  "schema": "zap-committed-payload-proof/1",
+  "commit": "63312486df182fa8645e25fd9569c34a7335a5c7",
+  "files_verified": 589,
+  "payload_manifest_sha256": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992",
+  "result": "exact_raw_git_blob_match"
+}

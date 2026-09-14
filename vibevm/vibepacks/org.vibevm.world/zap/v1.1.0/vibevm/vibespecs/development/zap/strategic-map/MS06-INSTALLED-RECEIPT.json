@@ -1,0 +1,150 @@
+{
+  "schema": "zap-ms06-installed-proof/1",
+  "created_utc": "2026-09-14T17:47:16.3223703Z",
+  "consumer": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z",
+  "registry": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-registry-20260914T1653575271008Z",
+  "installed_slot": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0",
+  "payload": {
+    "file_count": 589,
+    "bytes": 7239571,
+    "manifest_digest": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992"
+  },
+  "parity": {
+    "manifest_file_count": 589,
+    "manifest_digest": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992",
+    "payload_files": 589,
+    "installed_files": 589,
+    "checked_installed_payload_files": 588,
+    "vibeignore_source_present": true,
+    "vibeignore_installed_present": false,
+    "slot_metadata_present": true,
+    "slot_metadata_sha256": "dfd026743888154bcaac9bb0d793b3a3b7d9aedcb180f4c75fbe909c2798b48b",
+    "target_initially_present": false,
+    "mismatch_count": 0,
+    "mismatches": []
+  },
+  "build": {
+    "command": "vibe bin build zap --assume-yes --offline --unattended --invoked-by codex --agent-mode agent",
+    "cargo_target_dir": "unset before invocation",
+    "cargo_build_jobs": 1,
+    "registry_unavailable_during_build": true,
+    "registry_restored": true,
+    "exit_code": 0,
+    "duration_ms": 150256,
+    "log": {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-INSTALLED-20260914T173829Z-bin-build.log",
+      "bytes": 4175,
+      "sha256": "5aa1d6759cf5ed40a8d14ffaf4346416d0667a4824e3f1a4a5f50655162f2dc3"
+    },
+    "binary": {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\target\\release\\zap.exe",
+      "bytes": 30563328,
+      "sha256": "323a0f7529088e0beb3ad2a3e648f9983275b86e832a75965b6e8d53d0265304"
+    }
+  },
+  "capabilities": {
+    "command": "vibe bin exec --assume-yes --offline --unattended --invoked-by codex --agent-mode agent zap -- capabilities",
+    "exit_code": 0,
+    "role": "default process availability probe",
+    "query_ids": [],
+    "configured_query_proof": [
+      "zap.milestone.read",
+      "zap.milestone.plan",
+      "zap.information.opportunities.v1",
+      "zap.map.overview.v1",
+      "zap.map.object.v1",
+      "zap.map.route.v1"
+    ],
+    "log": {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-INSTALLED-20260914T173829Z-capabilities.log",
+      "bytes": 560,
+      "sha256": "c05cae15f01d90ca88e878a53d475702f71f5d01ca95b2487d68c841313beed3"
+    }
+  },
+  "tests": {
+    "cargo_target_dir": "installed slot target",
+    "cargo_build_jobs": 1,
+    "cli": {
+      "command": "cargo test --release --locked --offline -p zap-cli --test strategic_map",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "duration_ms": 48152,
+      "binary": {
+        "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\target\\release\\deps\\strategic_map-b092b836e8f60e6e.exe",
+        "bytes": 13984256,
+        "sha256": "e8abd6c1b2a989c75e6dc81c8856fe6a47a4aa2f97ed251423b8b9439b672c43"
+      },
+      "log": {
+        "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-INSTALLED-20260914T173829Z-cli-strategic-map.log",
+        "bytes": 1457,
+        "sha256": "debf3f98ad91c4136523ace0d18cc0d02c45bee4528360501e479d2c3ddcbd4d"
+      }
+    },
+    "app": {
+      "command": "cargo test --release --locked --offline -p zap-app --test strategic_map_service",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "duration_ms": 49931,
+      "binary": {
+        "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\target\\release\\deps\\strategic_map_service-43d9f2f4daa1ced3.exe",
+        "bytes": 33042432,
+        "sha256": "07ae5a2d17c1b4455de47c1d9139f3050ef09f4eb6a04f66de77b21100800428"
+      },
+      "log": {
+        "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\vibevm-next\\strategic-map\\MS06-INSTALLED-20260914T173829Z-app-strategic-map-service.log",
+        "bytes": 1594,
+        "sha256": "69b4a8df56c34df5c10f4eb7506588f57efe0b4ac999bd1cd65a111b2f33a140"
+      }
+    }
+  },
+  "sources": [
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\Cargo.lock",
+      "bytes": 15194,
+      "sha256": "4320a1fcb84b91fb1ef9af97878428a40987e4a8ccb3d6022c926340a2e54f2b"
+    },
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\.vibe-slot.toml",
+      "bytes": 82872,
+      "sha256": "dfd026743888154bcaac9bb0d793b3a3b7d9aedcb180f4c75fbe909c2798b48b"
+    },
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\crates\\zap-cli\\tests\\strategic_map.rs",
+      "bytes": 5672,
+      "sha256": "3a0e25ebcd03549e0666eb7c517942e17d45cc1b03c9c57aa7d275f190bb23d3"
+    },
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\crates\\zap-app\\tests\\strategic_map_service.rs",
+      "bytes": 234,
+      "sha256": "126808d13c63a2448f25c667f2b8d7c78088be5e697ae2696f533d7937268884"
+    },
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\crates\\zap-app\\tests\\strategic_map_service\\journey.rs",
+      "bytes": 12413,
+      "sha256": "e966f8d239f42aeaa8d66413dc83c3e0a8acdf16415b7b1ac7c66e93dc8e6008"
+    },
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\crates\\zap-app\\tests\\strategic_map_service\\map_objects.rs",
+      "bytes": 11845,
+      "sha256": "853c4c7a72a7899198e56b96c6a5f4760528653b76de707dd8db96fd8b52464e"
+    },
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\crates\\zap-app\\tests\\strategic_map_service\\seed.rs",
+      "bytes": 21051,
+      "sha256": "181a356effd4f1e1d63ba9fd86f590e9efcb1c514591966a63f68db4d1d90cae"
+    },
+    {
+      "path": "C:\\Users\\olegc\\.vibe\\zap\\development\\milestone-1.1-consumer-20260914T1653575271008Z\\vibevm\\vibedeps\\org.vibevm.world.zap\\1.1.0\\crates\\zap-app\\tests\\strategic_map_service\\support.rs",
+      "bytes": 10698,
+      "sha256": "e026ca4ca22f205d3e2bdb573dc3ce69cab5d5a5991689268c0b0b6d99ad1d66"
+    }
+  ],
+  "final_state": {
+    "registry_restored": true,
+    "unavailable_registry_paths": 0,
+    "source_or_payload_mutated": false,
+    "publication_or_git_run": false
+  }
+}

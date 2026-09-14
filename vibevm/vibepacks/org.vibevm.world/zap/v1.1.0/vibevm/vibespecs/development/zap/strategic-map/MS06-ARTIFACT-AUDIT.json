@@ -1,0 +1,112 @@
+{
+  "schema": "zap-ms06-artifact-audit/1",
+  "status": "source_artifact_integrity_spec_targets_and_relative_links_verified",
+  "checked_utc": "2026-09-14T17:38:17.1766568Z",
+  "blockers": [],
+  "artifact": {
+    "manifest_path": "C:/Users/olegc/.vibe/zap/development/milestone-1.1-registry-20260914T1653575271008Z/ZAP-PAYLOAD-MANIFEST.json",
+    "manifest_file_sha256": "50c22c491582b88f67124c90c826b0cfb32a011f7c6583b5d1ee7f26b8b37954",
+    "payload_root": "C:/Users/olegc/.vibe/zap/development/milestone-1.1-registry-20260914T1653575271008Z/org.vibevm.world/zap/v1.1.0",
+    "source_root": "C:/Users/olegc/git/v/vibevm-next/vibevm/vibepacks/org.vibevm.world/zap/v1.1.0",
+    "package": "flow:org.vibevm.world/zap@=1.1.0",
+    "version": "1.1.0",
+    "generated_at_utc": "2026-09-14T17:32:51.1150271Z",
+    "file_count": 589,
+    "total_bytes": 7239571,
+    "payload_manifest_sha256": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992"
+  },
+  "source_to_manifest": {
+    "selected_source_rows": 589,
+    "selected_source_bytes": 7239571,
+    "calculated_source_rows_sha256": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992",
+    "exact_paths_lengths_and_sha256_match_sealed_manifest": true,
+    "source_vibeignore_sha256": "1a014e0d42d67b4f0d7401448733bc608a7649a0d7e52bd26392a1e22380f178",
+    "manifest_selection_exclusions": 27
+  },
+  "manifest_to_artifact": {
+    "manifest_rows": 589,
+    "actual_files": 589,
+    "manifest_bytes": 7239571,
+    "actual_bytes": 7239571,
+    "calculated_artifact_rows_sha256": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992",
+    "expected_rows_sha256": "a7e268f6a4a2d92f9745935ba30ce7f32962c3e54b756f7f1de87d9b89def992",
+    "exact_complete_pathset": true,
+    "all_lengths_and_sha256_match": true,
+    "duplicate_paths": [],
+    "invalid_paths": [],
+    "missing_files": [],
+    "unexpected_files": [],
+    "length_or_hash_mismatches": [],
+    "reparse_entries": []
+  },
+  "forbidden_path_verification": {
+    "target_segment_checked_at_every_depth": true,
+    "checked_categories": [
+      "target at any depth",
+      "development and private trees",
+      "vibedeps and deps trees",
+      "token, trust and secret-bearing names",
+      "cache and __pycache__ trees",
+      "Python bytecode and source",
+      "harness-private configuration trees",
+      "generated boot STATIC, INDEX and lock files",
+      "compiled-output extensions"
+    ],
+    "matched_paths": []
+  },
+  "specmap_source_targets": {
+    "specmap_sha256": "e0437f4500ff4a9642d3cc71f3313195156f5ea965e4e88278fb015b21eaeeec",
+    "spec_unit_count": 687,
+    "unique_file_targets": 27,
+    "all_file_targets_are_manifest_and_actual_members": true,
+    "all_lines_are_in_range": true,
+    "all_anchors_are_present": true,
+    "duplicate_uris": [],
+    "invalid_or_unavailable_targets": [],
+    "specmap_warnings": 0,
+    "specmap_suspects": 0
+  },
+  "relative_links": {
+    "published_documents": 34,
+    "published_document_bytes": 631936,
+    "hyperlinks": 534,
+    "relative_hyperlinks": 480,
+    "distinct_relative_target_files": 268,
+    "external_hyperlinks": 54,
+    "http_hyperlinks": 54,
+    "fragment_checks": 1,
+    "all_fragments_found": true,
+    "missing_or_out_of_payload_targets": [],
+    "unparsed_destinations": [],
+    "checked_fragment": {
+      "source": "vibevm/vibespecs/flows/zap/ZAP-RUST-IMPLEMENTATION-NOTES.md",
+      "line": 114,
+      "target": "ZAP-RUST-APP-GUIDE.md#internal-boundaries",
+      "resolved_file": "vibevm/vibespecs/flows/zap/ZAP-RUST-APP-GUIDE.md",
+      "found": true
+    },
+    "reused_prior_parse": {
+      "path": "vibevm/vibespecs/research/zap/IDEA-MAP.xml",
+      "sha256": "abefb4ca1d1ec9956dbae76241901622c5332a722e64f03c1ee59c957fe4be3b",
+      "reason": "Exact artifact hash equals the independently audited SM05 document identity; reused its one relative and 51 HTTP Markdown-style links embedded in XML after fresh byte/hash verification."
+    },
+    "external_network_verification": false,
+    "historical_literal_paths_treated_as_links": false
+  },
+  "method": {
+    "file_identity": "Re-enumerated source selection and sealed payload independently; normalized relative paths; recomputed every file length and SHA-256; recomputed the canonical compact-JSON row digest.",
+    "spec_targets": "Decoded the included specmap, checked every spec-unit file against manifest and payload membership, checked line bounds and explicit XML/Markdown anchor presence, and checked URI uniqueness.",
+    "links": "Parsed inline/image/reference-definition Markdown links and XML/HTML href/src links, resolved relative paths beneath the payload root, checked manifest and file membership, and resolved explicit or heading fragments."
+  },
+  "mutations": {
+    "payload": false,
+    "source": false,
+    "manifest": false,
+    "install_or_build": false,
+    "git": false,
+    "written_outputs": [
+      "vibevm/vibespecs/development/zap/strategic-map/MS06-ARTIFACT-AUDIT.json",
+      "vibevm/vibespecs/development/zap/strategic-map/MS06-ARTIFACT-AUDIT.md"
+    ]
+  }
+}
