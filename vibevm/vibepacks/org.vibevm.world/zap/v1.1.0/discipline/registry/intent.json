@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "entries": [
+    {"id":"INT-R18-001","source":"vibevm/vibespecs/development/zap/rust-campaign/packets/R18-production.md","title":"Gate every product crate after its findings reach zero","text":"Replace each living pre-adoption exemption with a real crate gate without widening the conformance baseline.","links":["DBT-R18-001","DBT-R18-002","DBT-R18-003","DBT-R18-004","DBT-R18-005","DBT-R18-006","DBT-R18-007","DBT-R18-008"],"state":"done"},
+    {"id":"INT-R18-002","source":"REPORT-R18-INVENTORY.md#traceability-and-specifications","title":"Regenerate and review the complete ZAP specmap","text":"Repair real unmarked targets and disposition intentional non-code units after current production source stabilizes.","links":["DBT-R18-009"],"state":"open"},
+    {"id":"INT-R18-003","source":"REPORT-R18-INVENTORY.md#packaging-and-retirement","title":"Create the final source-only package and installed consumer receipt","text":"Reuse the proven R15B staging mechanism once all accepted production bytes are stable.","links":["DBT-R18-012"],"state":"open"},
+    {"id":"INT-R18-004","source":"packets/R18-production.md","title":"Record environment and audit roots at actual process boundaries","text":"Apply the environment audit to filesystem, process, network, and ambient configuration boundaries owned by app, runtime, and store.","links":["DBT-R18-010"],"state":"open"},
+    {"id":"INT-R18-005","source":"REPORT-R18-INVENTORY.md#packaging-and-retirement","title":"Preserve permanent migration and execution records before campaign retirement","text":"Identify the DP1-to-DP2 permanent record and compact final execution receipt before root retires temporary campaign material.","links":["vibevm/vibespecs/flows/zap/ZAP-MIGRATION-CHANGE-RECORD.xml"],"state":"done"}
+  ]
+}

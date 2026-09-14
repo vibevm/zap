@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spec xmlns="https://vibevm.org/spec/1">
+  <title id="root">ZAP migration and documentation change record</title>
+  <status stage="doc" state="done" comment="Permanent record of the Python-to-Rust ZAP implementation transition. It does not claim a VibeVM developer-preview release, publication, NEXT execution, or migration of a particular user store."/>
+
+  <current-source title="1. Current source boundary">
+    <p>`design r1`</p>
+    <p><ZAP-DP1-DP2-CURRENT-SOURCE fact="true" status="impl/done">The supported ZAP 1.0.0 implementation is the package-owned Rust workspace under crates/. The earlier Python implementation remains historical investigation and migration input; it is excluded from the publication payload and ordinary build, install, execution, and verification.</ZAP-DP1-DP2-CURRENT-SOURCE></p>
+    <p><ZAP-DP1-DP2-NO-RELEASE-CLAIM fact="true" status="doc/done">This source transition does not itself publish ZAP, execute the NEXT workspace, activate a public registry coordinate, or prove that any existing user store has been migrated. Those actions require their own reviewed receipts.</ZAP-DP1-DP2-NO-RELEASE-CLAIM></p>
+  </current-source>
+
+  <compatibility title="2. Compatibility and migration">
+    <p>`req r1`</p>
+    <p><ZAP-DP1-DP2-LEGACY-READ fact="true" status="impl/done">Frozen schema-1 event, authority, admission, and legacy corpus readers retain their explicit decoders. Current logical-event schema 2 and typed authority have explicit separate contracts; an old payload is never silently reinterpreted as a current credential, admission, or effect assertion. The historical anchor names remain stable; this record describes ZAP, not a VibeVM DP1-to-DP2 release.</ZAP-DP1-DP2-LEGACY-READ></p>
+    <p><ZAP-DP1-DP2-EXPLICIT-IMPORT fact="true" status="impl/done">Migration uses the typed legacy inventory, mapping, replay, and import service. It writes through the current transactional store, records deterministic identity mappings and diagnostics, supports exact retry/recovery, and refuses corrupt or ambiguous input.</ZAP-DP1-DP2-EXPLICIT-IMPORT></p>
+    <p><ZAP-DP1-DP2-STORE-RECEIPT fact="true" status="impl/done">A concrete store is considered migrated only when its own import and reopen receipts succeed. Package-level tests and historical corpus hashes prove the mechanism; they do not substitute for that store-specific receipt.</ZAP-DP1-DP2-STORE-RECEIPT></p>
+  </compatibility>
+
+  <documentation title="3. Documentation change">
+    <p>`design r1`</p>
+    <p><ZAP-DP1-DP2-PUBLIC-DOCUMENTATION fact="true" status="impl/done">The public README, authored boot flow, backend/CLI documents, and thin native skills describe the Rust commands and typed service surfaces. Historical Python commands, examples, generated boot projections, campaign checkpoints, private captures, and build products are excluded from the source-only package.</ZAP-DP1-DP2-PUBLIC-DOCUMENTATION></p>
+    <p><ZAP-DP1-DP2-CHANGE-EVIDENCE fact="true" status="doc/done">The retained legacy corpus, accepted migration/recovery reports, Cargo.lock, vendored specmark provenance, conformance registries, and final package manifest form the review trail. Temporary campaign material may be retired only after root review confirms that every unique accepted fact and unfinished obligation has a permanent home.</ZAP-DP1-DP2-CHANGE-EVIDENCE></p>
+  </documentation>
+</spec>

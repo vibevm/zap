@@ -1,0 +1,46 @@
+[package]
+name = "zap"
+group = "org.vibevm.world"
+kind = "flow"
+version = "1.1.0"
+epoch = 1
+format = "normal"
+authors = ["Oleg Chirukhin"]
+license = "UPL-1.0"
+description = "Adaptive campaign runtime with explicit uncertainty, owner-defined stops, trusted control, replay, graph queries, and durable execution"
+keywords = ["planning", "campaigns", "facts", "observability", "decisions", "recovery", "lowering", "runtime", "backend"]
+
+[compatibility]
+min_vibe_version = "0.1.0"
+requires_kinds = []
+
+[requires]
+packages = { "lang:org.vibevm.ai-native/rust-ai-native-lang" = "=1.0.0" }
+
+# This is an independently selectable successor design, not a second central
+# authority installed on top of multi-user-planning. No upstream skill or
+# tracker service is a runtime dependency. Existing campaigns stay on MUP.
+[boot_snippet]
+source = "vibevm/vibespecs/boot/13-flow-zap.xml"
+category = "flow"
+concepts = ["adaptive planning", "explicit uncertainty", "decision provenance", "owner-defined stops"]
+
+[[skill]]
+name = "zap-draft"
+path = "vibevm/vibespecs/skills/zap-draft"
+description = "Draft or revise a ZAP campaign methodology, owner contract and obligation graph without activating execution"
+
+[[skill]]
+name = "zap-state"
+path = "vibevm/vibespecs/skills/zap-state"
+description = "Inspect, query, prepare and reconcile an isolated ZAP campaign through its typed Rust command surface"
+
+[[skill]]
+name = "zap-run"
+path = "vibevm/vibespecs/skills/zap-run"
+description = "Operate ZAP's protected Rust service with cooperating native drivers, durable receipts and explicit authority"
+
+[[binary]]
+name = "zap"
+crate = "crates/zap-cli"
+description = "Typed ZAP campaign service and machine interface"

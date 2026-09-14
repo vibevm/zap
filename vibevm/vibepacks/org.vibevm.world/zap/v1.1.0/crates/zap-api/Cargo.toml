@@ -1,0 +1,19 @@
+[package]
+name = "zap-api"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license-file.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+specmark.workspace = true
+zap-core.workspace = true
+zap-runtime.workspace = true
+zap-wire.workspace = true
+
+[lints]
+workspace = true

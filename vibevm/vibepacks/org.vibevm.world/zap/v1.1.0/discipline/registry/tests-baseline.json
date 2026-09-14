@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-09-14T05:27:00Z",
+  "scope": "zap-wire first gated crate",
+  "runner": "cargo nextest run -p zap-wire --status-level all through run-cargo.ps1",
+  "entries": [
+    {"test":"zap-wire canonical::tests::direct_encoder_matches_reference_errors","status":"passing"},
+    {"test":"zap-wire canonical::tests::direct_encoder_matches_reference_for_deterministic_float_bit_corpus","status":"passing"},
+    {"test":"zap-wire canonical::tests::direct_encoder_matches_reference_for_nested_bytes_maps_and_unicode","status":"passing"},
+    {"test":"zap-wire canonical::tests::direct_encoder_matches_reference_for_numeric_boundaries","status":"passing"},
+    {"test":"zap-wire canonical::tests::direct_encoder_matches_reference_for_supported_mixed_map_keys","status":"passing"},
+    {"test":"zap-wire canonical::tests::opaque_constructor_uses_direct_bytes_and_digest","status":"passing"},
+    {"test":"zap-wire canonical::tests::unsupported_codec_preserves_reference_error_precedence","status":"passing"},
+    {"test":"zap-wire::wire_contracts canonical_json_rejects_duplicates_and_noncanonical_spelling","status":"passing"},
+    {"test":"zap-wire::wire_contracts command_reason_requires_sorted_unique_references","status":"passing"},
+    {"test":"zap-wire::wire_contracts concrete_decode_rejects_unknown_fields","status":"passing"},
+    {"test":"zap-wire::wire_contracts digest_wire_form_is_exact_lower_hex","status":"passing"},
+    {"test":"zap-wire::wire_contracts epochs_and_counters_reject_invalid_boundaries","status":"passing"},
+    {"test":"zap-wire::wire_contracts identity_and_bounded_text_constructors_preserve_exact_values","status":"passing"},
+    {"test":"zap-wire::wire_contracts legacy_deserialization_cannot_bypass_the_constructor","status":"passing"},
+    {"test":"zap-wire::wire_contracts typed_encoder_rejects_nested_nonfinite_numbers","status":"passing"}
+  ],
+  "ignored": ["zap-wire canonical::tests::representation_probe_direct","zap-wire canonical::tests::representation_probe_reference"],
+  "notes": "No failing-known or flaky entry was observed in this scoped run. The two ignored tests are explicit fresh-process R17 measurement probes and are not failure exemptions. Doctests are gated separately by cargo test and conform seam checks."
+}

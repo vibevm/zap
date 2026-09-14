@@ -1,0 +1,22 @@
+[package]
+name = "zap-domain"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license-file.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+specmark.workspace = true
+zap-core.workspace = true
+zap-wire.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+zap-runtime.workspace = true
+zap-store.workspace = true

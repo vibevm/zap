@@ -1,0 +1,866 @@
+<?xml version="1.0" encoding="utf-8"?>
+<spec xmlns="https://vibevm.org/spec/1">
+  <title id="root">ZAP idea map: source concepts and an independent composition</title>
+  <status stage="doc" state="done" comment="Completed non-normative research and original design assessment. Qualitative fit, not empirical proof; no live campaign migration or Qwik application implementation." />
+  <context title="1. What this map establishes">
+    <p>This map identifies concepts that fit the owner’s workflow and makes the reasons for adoption, adaptation or rejection explicit. Its completed status means that the research artifact was authored; it does not mean that these behaviors are implemented or that the pilot campaign has run.</p>
+    <p>The source was inspected at the recorded commit. This is an independently authored design with acknowledged inspiration, not an organizationally isolated clean-room process. The artifacts contain original explanations rather than copied prompt instructions, templates, taxonomy or implementation code.</p>
+    <p>Evidence labels distinguish principles stated by the source authors, qualitative experiences reported in their documentation, and our design composition. None is a measured ranking of the “best” skills.</p>
+    <table>
+      <tr>
+        <td>Source</td>
+        <td>Lines</td>
+        <td>Scope</td>
+      </tr>
+      <tr>
+        <td>[`github.com/external-skills/skills@3cca18b368ae95cdbdebbff572ccafa662551015`](https://example.invalid/removed-upstream)</td>
+        <td>not specified</td>
+        <td>research source at exact commit</td>
+      </tr>
+    </table>
+    <p>GitHub links identify research sources only. The proposed method has no GitHub or issue-tracker runtime dependency. Host-repository references preserve research context and are not package runtime dependencies.</p>
+  </context>
+  <application-context title="2. The VibeVM usage pattern">
+    <p>**Role: workflow.** Interactive owner drafting, then unattended execution governed by explicit owner-defined stop rules.</p>
+    <p>**Role: foundation.** Existing multi-user-planning responsibilities, VibeVM facts and evidence, and the saved recursive/staged-delivery idea.</p>
+    <p>**Role: pilot.** Design against the existing 425-node, 212-task graph; preserve source records and stable mappings. No live campaign mutation is performed by this research.</p>
+    <p>**Role: future_viewer.** A Qwik 2 viewer is future work. It should render deterministic projections and recorded event rationale, not ask a model to reconstruct plan state.</p>
+    <p>**Role: documentation.** Future owner-provided documentation is a versioned evidence and obligation input, not an assumed available source.</p>
+    <p>The owner-selected stop examples are a global pause before a public-format change whose migration affects user data, and a global pause after two failed architectural approaches to the same problem with options presented. These methodological pauses differ from unavoidable provider or resource waiting and actual system limits. A limitation is reported honestly; it never becomes a fabricated completed result.</p>
+  </application-context>
+  <source-concepts title="3. Source ideas assessed through our requirements">
+    <section id="ZAP-I01" title="Represent uncertainty before it can become an executable question">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adopt`.</p>
+      <p>**Role: reason.** A precise unanswered question and an area whose questions are not yet expressible require different treatment. Creating detailed tasks for both conceals assumptions and makes later work depend on invented certainty.</p>
+      <p>**Role: zap-application.** Represent an unknown region separately from a question, a known fact and an exclusion. Link the region to the outcome it concerns and the observations that could clarify it. Refinement records whether it produced questions, tasks, exclusions or no further work. Do not claim that the absence of recorded unknowns proves the world has been fully analyzed.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`82-93`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`35-38`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I02" title="Keep scope boundaries separate from incomplete knowledge">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** An excluded area does not become authorized merely because it becomes better understood. However, requiring a completely new effort for every legitimate scope amendment would discard useful continuity.</p>
+      <p>**Role: zap-application.** Keep exclusions in the mandate and knowledge gaps in the uncertainty graph. An authorized mandate amendment can revise the affected region without replacing the whole campaign. Record the old scope, the amendment and its authority; a task or a worker note cannot grant itself more scope.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`95-101`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I03" title="Derive compact views from canonical records">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** An overview can make a large effort understandable without repeating every decision. Independently editable summaries create a second source of truth and eventually disagree with detailed records.</p>
+      <p>**Role: zap-application.** Give facts, decisions, tasks and evidence stable identities. Generate overview, current working context and dependency views from those records. Show readable names with links and available machine IDs. Refresh relevant records when their inputs change; avoid loading the complete historical body before every small action.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`21-29`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`122-126`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`31-40`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I04" title="Separate work purpose, result maturity and decision authority">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `our-design`; disposition `adapt`.</p>
+      <p>**Role: reason.** The source uses task categories to select a method, but also couples several categories to live human participation. That coupling does not fit an owner who drafts interactively and then leaves the agent working.</p>
+      <p>**Role: zap-application.** Use evidence, decision, change, verification and integration as work purposes. Prototype, functional MVP and productization describe result maturity and are a separate axis. Owner input is governed by the mandate and its stop rules, not by purpose or maturity. This classification is ZAP's own composition, not the upstream taxonomy.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`73-80`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`42-55`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`17-22`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I05" title="Resolve question prerequisites before downstream choices">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** A decision depends on earlier choices and observations; asking downstream questions too soon invites answers based on assumptions that may immediately change. Asking every available question in a large batch can also overload the owner.</p>
+      <p>**Role: zap-application.** Give questions explicit prerequisites and affected obligations. During drafting, present bounded sets of independent material choices with reasons and recommendations. During unattended execution, resolve technical choices within delegated authority and evaluate the owner's stop rules for reserved choices. Recompute only the affected question frontier after new evidence.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/productivity/grilling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`6-8`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/productivity/grilling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`24-28`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I06" title="Discover facts autonomously and retain their sources">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** The owner should not have to supply observable repository or environment facts. A sourced observation still needs an applicability boundary; a research report alone does not establish every claim for every later revision.</p>
+      <p>**Role: zap-application.** Research local code, tools and external primary sources through bounded evidence tasks. Record the observed subject, revision or time, source, uncertainty and contradictions. Add candidate facts to the graph and accept them under the applicable evidence contract. Reuse valid facts before rediscovering them, and dispatch independent research only when review capacity can absorb it.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/productivity/grilling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`26`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/research/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`6-12`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`115`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I07" title="Make domain meanings explicit and test them with concrete cases">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** A common term may conceal different state transitions or ownership rules. Checking a concrete scenario against both the declared meaning and actual code exposes disagreements that a vocabulary list alone cannot settle.</p>
+      <p>**Role: zap-application.** Bind domain terms to VibeVM fact and specification identities, including context boundaries, examples and contradictions. Treat observed code behavior and intended behavior as distinguishable claims. Keep consequential trade-offs with their decisions. Do not introduce a copied glossary-file convention as a second authority beside the existing fact graph.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/domain-modeling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`44-64`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/domain-modeling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`66-74`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I08" title="Preserve consequential decisions and revalidate their premises">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `reported-experience`; disposition `adapt`.</p>
+      <p>**Role: reason.** The source documentation reports weak handling of a previously closed decision that later proves wrong. Editing a summary or retaining a closed status is insufficient to explain which conclusions are now unreliable; the report is qualitative, not an effectiveness measurement.</p>
+      <p>**Role: zap-application.** Record premises, evidence, alternatives, concise rationale, authority and resulting obligations for consequential decisions. New contradictory evidence marks affected conclusions for revalidation. A successor decision supersedes the earlier one without erasing history. Follow explicit premise links to identify impacted work, while preserving acceptance whose subjects remain valid.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`125-126`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`83-84`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/domain-modeling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`66-74`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I09" title="Use bounded experiments to answer design uncertainty">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** A concrete experiment can distinguish approaches more cheaply than prolonged speculation. A useful prototype is defined by its question and observations, not by a particular UI framework, by compulsory human selection or by an absolute prohibition on tests.</p>
+      <p>**Role: zap-application.** Name the uncertainty, distinguishing observations, effect perimeter and bounded experiment before implementation. Choose a headless probe, executable scenario or interactive artifact as appropriate. Keep observations, limitations and the resulting decision even if code is discarded. Tests are allowed when they are the cheapest discriminating instrument; a working prototype does not imply production acceptance.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/prototype/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`8-26`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/prototype/LOGIC.md`](https://example.invalid/removed-upstream)</td>
+          <td>`18-33`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/prototype/LOGIC.md`](https://example.invalid/removed-upstream)</td>
+          <td>`43-48`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/prototype/UI.md`](https://example.invalid/removed-upstream)</td>
+          <td>`98-112`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I10" title="Use independent behavioral oracles and targeted checks">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** A test derived from the implementation's own calculation can pass while both are wrong. Testing a meaningful boundary supports refactoring, but neither an always-highest-boundary rule nor a full-suite run after every local task follows from that principle.</p>
+      <p>**Role: zap-application.** Choose the narrowest reliable observation that establishes the required behavior or invariant. Derive expected outcomes from independent specifications, worked examples or trusted observations. Reuse evidence only for matching consequential inputs. Retain VibeVM's targeted-test and suspicion-only mutation policies; record why a wider check is needed rather than turning each task into a full test campaign.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/tdd/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`12-32`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/implement/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`9-13`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I11" title="Review behavior and formal conformance as separate questions">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** A conforming implementation can solve the wrong problem, and a functional implementation can leave formal obligations open. Treating these as separate questions is useful; automatically allocating two reviewers to every change is not necessary.</p>
+      <p>**Role: zap-application.** Keep findings about behavior, conformance and permitted deferrals distinguishable. Use independent reviewers for consequential uncertainty, isolated review axes or difficult evidence, with a pinned subject and closed packet. Let deterministic tools handle what they can establish. Central acceptance includes all required axes and does not average away a failure in one of them.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/code-review/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`6-11`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/code-review/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`38-41`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/code-review/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`80-87`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I12" title="Plan increments around verifiable guarantees">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `authored-principle`; disposition `adapt`.</p>
+      <p>**Role: reason.** A small integrated result exposes problems earlier than a collection of unrelated layer edits. Some widespread changes cannot be split into independently valid product increments without an explicit compatibility transition.</p>
+      <p>**Role: zap-application.** Prefer increments that establish an observable guarantee, and make dependencies refer to the guarantee actually needed. For widespread migrations, model introduction of a compatible form, bounded caller migration and eventual removal. When only joint integration can establish the guarantee, name that boundary and its integrator rather than marking each partial branch as accepted product behavior.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/to-tickets/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`19-40`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/to-tickets/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`65`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I13" title="Coordinate parallelism using accepted inputs and real constraints">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `upstream-idea`; evidence level `reported-experience`; disposition `adapt`.</p>
+      <p>**Role: reason.** Dependency edges help find independent work, but the source reports duplicated owner questions in parallel conversations. Unrestricted worker fanout also ignores shared files, build resources and the coordinator's capacity to review results.</p>
+      <p>**Role: zap-application.** Derive candidates from accepted input versions, question prerequisites, write perimeters, shared resources and pending review. Capture the inputs each worker used, assign integration ownership and bound concurrent heavy checks by observed capacity. Keep one durable owner-decision record. Parallel preparation and review can overlap execution without accepting a worker's own report as the final result.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`67-69`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`74-75`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/in-progress/implement-spec/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`11-29`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+  </source-concepts>
+  <original-composition title="4. Our composition: recursion, obligations, authority and observability">
+    <p>This section combines the owner’s prior recursive and staged-delivery idea with the requirements of long unattended execution. Citations indicate comparison points or saved design context; they do not attribute the resulting ZAP architecture to the upstream author.</p>
+    <section id="ZAP-I14" title="Refine plans progressively while conserving obligations">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `zap-composition`; evidence level `our-design`; disposition `adopt`.</p>
+      <p>**Role: reason.** The owner's recursive planning idea combines broad intent with local execution refinement. Detailed instructions for distant work become stale, but leaving a region coarse must not erase its known obligations.</p>
+      <p>**Role: zap-application.** At any level, lower the current outcome revision into executable work only when useful. Map its active obligations to implementation and proof, retaining unresolved regions and inherited authority. An authorized outcome revision separately records which original obligations are retained, replaced or remain unmet, rather than silently deleting them. Check explicit coverage and graph validity algorithmically; semantic equivalence still needs judgment.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`11-14`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`34-39`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`65-72`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/to-tickets/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`19-40`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I15" title="Treat staged delivery as a route with conserved completion debt">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `zap-composition`; evidence level `our-design`; disposition `adopt`.</p>
+      <p>**Role: reason.** Prototype, functional MVP and productization can separate discovery from formal completion, especially under AI-Native requirements. Forcing every task through all stages would add overhead, while ignoring deferrals would silently reduce the final contract.</p>
+      <p>**Role: zap-application.** Choose direct delivery or the useful subset of stages for the current outcome revision. Record permitted deferrals, current guarantees and where applicable obligations close. Preserve required invariants and effect boundaries. Accept an experiment as an experiment; a discarded prototype need not be productized merely to satisfy an obsolete route, but its remaining effects and inapplicable obligations need explicit disposition. Probe uncertain final constraints early.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`17-31`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`42-45`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/prototype/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`21-26`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I16" title="Separate owner authority from agent-editable planning">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `zap-composition`; evidence level `our-design`; disposition `adopt`.</p>
+      <p>**Role: reason.** The upstream documentation reports an agent writing an execution exception into its own notes and later treating that text as authorization. ZAP must make the authority of an instruction distinguishable from the plan that proposes how to act on it.</p>
+      <p>**Role: zap-application.** Record who established the mandate, delegation bounds and stop conditions. Agent decisions and plan changes cite their existing authority. They cannot promote an agent-authored note into an owner grant. A change in account, model or permission bypass mode does not create a new mandate. This is a provenance and validation requirement, not a promise that a document format can defeat arbitrary code execution.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`68-69`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`28`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`42-44`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I17" title="Make owner-defined stop rules an independent execution contract">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `zap-composition`; evidence level `our-design`; disposition `adapt`.</p>
+      <p>**Role: reason.** The intended pattern is initial interactive drafting followed by hours, days or weeks of unattended work. Whether a task asks a question or builds a prototype should not itself force a pause; the owner determines the reserved boundaries.</p>
+      <p>**Role: zap-application.** Record evaluable stop rules with scope, triggering observations and the required response. The owner has selected a global pause for the stated examples: before a public-format change whose migration affects user data, and after two failed architectural approaches to the same problem, with options presented. Keep these methodological pauses distinct from unavoidable infrastructure waiting and actual system limits. A blocked external dependency is not successful completion.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/in-progress/loop-me/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`18-27`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/productivity/grilling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`26-28`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`42-45`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I18" title="Resume from durable work without inventing a new session ritual">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `zap-composition`; evidence level `our-design`; disposition `adopt`.</p>
+      <p>**Role: reason.** A long unattended campaign can outlive model context, quota availability and a client session. Session-shaped workflow boundaries cannot reliably represent whether a tool operation completed or whether an accepted result remains applicable.</p>
+      <p>**Role: zap-application.** Restore the exact campaign binding, artifact state, evidence and concise recorded decisions. Reconcile live workers and ambiguous external effects before resubmission. Keep retry episodes, unresolved obligations and owner stop-rule state across restarts. Unrecorded reasoning is not recoverable evidence and may require fresh justification. Restarting does not reset a failed-approach count or permit duplicate side effects.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`31`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`45`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`105-116`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`125-128`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I19" title="Record decisions once and explain graph changes deterministically">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `zap-composition`; evidence level `our-design`; disposition `adopt`.</p>
+      <p>**Role: reason.** The planned viewer must explain why the plan changed without a model rereading history and inventing an explanation. A free-form activity log alone cannot establish reproducible graph state or link a change to its justification.</p>
+      <p>**Role: zap-application.** Record versioned change events with stable subjects, input revision, decision or observation links, concise rationale and authority. Define deterministic validation and projection so backend and future UI can derive the same graph and event stream. Pin the reviewed schema and initial state. Preserve source data and explicit mappings when piloting on the existing MUP graph; this research does not migrate its live state or build the future Qwik 2 application.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`23-29`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`125-126`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`38-39`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+        <tr>
+          <td>`vibevm/vibespecs/design/fractal-planning-and-staged-delivery.xml`</td>
+          <td>`45`</td>
+          <td>host-repository research context, not a package runtime dependency</td>
+        </tr>
+      </table>
+    </section>
+    <section id="ZAP-I21" title="Continuously reassess knowledge, value and the achievable outcome">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `zap-composition`; evidence level `our-design`; disposition `adopt`.</p>
+      <p>**Role: reason.** Changing the route alone leaves the original destination effectively fixed. Discoveries can expand uncertainty, change value and make a different approximate outcome more useful or feasible while preserving the owner intent.</p>
+      <p>**Role: zap-application.** Repeat observation, knowledge revision, value and feasibility assessment, outcome selection, plan and live-job reconciliation, then useful action. Reconsider affected regions and newly relevant unknowns; do not require a full review after every small edit. Choose a revised outcome within delegated tradeoffs, retaining the history and unmet parts of the original promise. Persist rationale and before/after assessments for deterministic views. A goal revision never resets owner stops or problem identity; when this research snapshot was authored, the cycle was designed but not implemented by the additive kernel then available.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`vibevm/vibespecs/flows/zap/ZAP-ADAPTIVE-CYCLE.xml`](../../flows/zap/ZAP-ADAPTIVE-CYCLE.xml)</td>
+          <td>not specified</td>
+          <td>package design from owner clarification, 2026-09-12</td>
+        </tr>
+      </table>
+    </section>
+  </original-composition>
+  <not-adopted title="5. Rules deliberately excluded from ZAP">
+    <section id="ZAP-I20" title="Reject session rituals and categorical cost rules as scheduling policy">
+      <status stage="doc" state="done" />
+      <p>**Metadata:** origin `source-rules-not-adopted`; evidence level `our-design`; disposition `reject`.</p>
+      <p>**Role: reason.** Fixed context sizes, one-ticket sessions, always-human prototypes, questions on every decision, planning-only sessions, automatic research fanout, maximum worker concurrency, blanket no-test experiments and repeated full suites impose costs or pauses unrelated to the owner's outcome.</p>
+      <p>**Role: zap-application.** Choose refinement, experiment shape, review and test scope from the current contract and uncertainty. Preserve explicit owner stops and execution authority rather than inheriting upstream stopping defaults. Use ZAP-native identities and deterministic storage independent of issue trackers. Upstream repository links are research citations only; neither GitHub nor a remote tracker is a runtime dependency.</p>
+      <table>
+        <tr>
+          <td>Source</td>
+          <td>Lines</td>
+          <td>Scope</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`57`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`75-80`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/wayfinder/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`105-116`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/productivity/grilling/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`8-28`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/prototype/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`24`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/engineering/implement/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`11`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`skills/in-progress/implement-spec/SKILL.md`](https://example.invalid/removed-upstream)</td>
+          <td>`15-29`</td>
+          <td>not specified</td>
+        </tr>
+        <tr>
+          <td>[`docs/engineering/wayfinder.md`](https://example.invalid/removed-upstream)</td>
+          <td>`25-27`</td>
+          <td>not specified</td>
+        </tr>
+      </table>
+    </section>
+  </not-adopted>
+  <relationships title="6. How the ideas support each other">
+    <p>The full relation set below is also present in idea-map.json. The diagram summarizes the main feedback path; it is explanatory, not an executable scheduler or a claim that all semantic decisions can be derived algorithmically.</p>
+    <section id="relationships-diagram" title="6.1. Relationship diagram">
+    <fence lang="mermaid"><![CDATA[
+flowchart LR
+  M["Owner mandate"] --> U["Unknown regions"]
+  U --> Q["Precise questions"]
+  Q --> E["Research and experiments"]
+  E --> F["Facts and evidence"]
+  F --> R["Reassess unknowns, value and feasible outcomes"]
+  M --> R
+  R --> U
+  R --> D["Consequential decisions"]
+  D --> L["Local lowering"]
+  L --> T["Executable work and stage obligations"]
+  T --> V["Targeted verification and acceptance"]
+  V --> F
+  V --> U
+  M --> S["Owner stop rules"]
+  S --> T
+  D --> J["Recorded change events"]
+  L --> J
+  V --> J
+  J --> P["Deterministic plan and event views"]
+    ]]></fence>
+    </section>
+    <section id="relationships-01-12" title="6.2. Relationships 1-12">
+    <table>
+      <tr>
+        <td>From</td>
+        <td>To</td>
+        <td>Relation</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I02`</td>
+        <td>`ZAP-I01`</td>
+        <td>bounds which unknown regions belong to the mandate</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I01`</td>
+        <td>`ZAP-I05`</td>
+        <td>refines into specific questions when prerequisites become expressible</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I05`</td>
+        <td>`ZAP-I06`</td>
+        <td>requests observable evidence before dependent choices</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I05`</td>
+        <td>`ZAP-I09`</td>
+        <td>selects an experiment when reading alone cannot distinguish alternatives</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I06`</td>
+        <td>`ZAP-I08`</td>
+        <td>supplies sourced premises and contradictory observations</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I07`</td>
+        <td>`ZAP-I05`</td>
+        <td>makes the meaning of a question explicit</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I07`</td>
+        <td>`ZAP-I08`</td>
+        <td>binds consequential decisions to stable domain meanings</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I09`</td>
+        <td>`ZAP-I08`</td>
+        <td>provides distinguishing observations for a decision</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I08`</td>
+        <td>`ZAP-I14`</td>
+        <td>supplies accepted choices and obligations to lowering</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I14`</td>
+        <td>`ZAP-I01`</td>
+        <td>retains unresolved regions during local refinement</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I14`</td>
+        <td>`ZAP-I04`</td>
+        <td>assigns independent purpose and maturity dimensions to executable work</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I14`</td>
+        <td>`ZAP-I12`</td>
+        <td>produces increments with explicit guarantees</td>
+      </tr>
+    </table>
+    </section>
+    <section id="relationships-13-24" title="6.3. Relationships 13-24">
+    <table>
+      <tr>
+        <td>From</td>
+        <td>To</td>
+        <td>Relation</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I15`</td>
+        <td>`ZAP-I14`</td>
+        <td>carries deferred obligations into child contracts</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I09`</td>
+        <td>`ZAP-I15`</td>
+        <td>can establish a justified transition from experimentation</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I10`</td>
+        <td>`ZAP-I11`</td>
+        <td>provides behavioral evidence to acceptance</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I11`</td>
+        <td>`ZAP-I15`</td>
+        <td>distinguishes accepted stage results from remaining conformance debt</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I12`</td>
+        <td>`ZAP-I13`</td>
+        <td>defines the guarantees required by parallel consumers</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I13`</td>
+        <td>`ZAP-I11`</td>
+        <td>limits fanout by available integration and review capacity</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I16`</td>
+        <td>`ZAP-I17`</td>
+        <td>establishes the owner authority behind a stop rule</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I17`</td>
+        <td>`ZAP-I13`</td>
+        <td>can pause dispatch globally when the owner-selected condition holds</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I16`</td>
+        <td>`ZAP-I14`</td>
+        <td>bounds recursive refinement without expanding permission</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I18`</td>
+        <td>`ZAP-I17`</td>
+        <td>preserves stop-rule observations and counters across restarts</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I08`</td>
+        <td>`ZAP-I19`</td>
+        <td>explains plan changes through recorded decisions and premises</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I14`</td>
+        <td>`ZAP-I19`</td>
+        <td>records obligation-preserving graph transformations</td>
+      </tr>
+    </table>
+    </section>
+    <section id="relationships-25-36" title="6.4. Relationships 25-36">
+    <table>
+      <tr>
+        <td>From</td>
+        <td>To</td>
+        <td>Relation</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I19`</td>
+        <td>`ZAP-I03`</td>
+        <td>provides canonical inputs for deterministic views</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I19`</td>
+        <td>`ZAP-I18`</td>
+        <td>preserves the recoverable change history</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I20`</td>
+        <td>`ZAP-I04`</td>
+        <td>prevents task classification from smuggling in a stopping ritual</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I20`</td>
+        <td>`ZAP-I13`</td>
+        <td>replaces maximum fanout with context-sensitive scheduling</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I01`</td>
+        <td>`ZAP-I21`</td>
+        <td>supplies unknown regions for relevance and knowledge reassessment</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I06`</td>
+        <td>`ZAP-I21`</td>
+        <td>provides observations that can change outcome feasibility</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I08`</td>
+        <td>`ZAP-I21`</td>
+        <td>exposes revised premises and decision consequences</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I16`</td>
+        <td>`ZAP-I21`</td>
+        <td>defines delegated outcome tradeoffs</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I21`</td>
+        <td>`ZAP-I14`</td>
+        <td>selects the current outcome revision before lowering</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I21`</td>
+        <td>`ZAP-I15`</td>
+        <td>reassesses stage obligations and discarded artifacts</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I21`</td>
+        <td>`ZAP-I19`</td>
+        <td>records why value and destination changed</td>
+      </tr>
+      <tr>
+        <td>`ZAP-I21`</td>
+        <td>`ZAP-I13`</td>
+        <td>reconciles active jobs with the revised route</td>
+      </tr>
+    </table>
+    </section>
+  </relationships>
+  <evaluation title="7. What remains to be demonstrated">
+    <p>IDs and relationship endpoints are mechanically checkable; semantic suitability still requires judgment.</p>
+    <p>Future evaluation should compare accepted behavior, rework, review backlog and verification cost on equivalent work; task count or disappearing recorded uncertainty is not a quality result.</p>
+    <p>Research completion records that the idea map was authored; it does not mark the ZAP implementation or the pilot campaign complete.</p>
+    <p>A useful pilot will retain the original MUP graph and compare explicit transformations, acceptance continuity and practical execution costs. The source records, existing accepted evidence and owner execution hold remain intact. Unknown-region counts may grow after useful investigation; their reduction is not by itself a measure of progress.</p>
+  </evaluation>
+</spec>

@@ -1,0 +1,344 @@
+{
+  "schema": 1,
+  "source_repository": "https://example.invalid/removed-upstream",
+  "source_commit": "3cca18b368ae95cdbdebbff572ccafa662551015",
+  "source_license": "MIT",
+  "source_tree_observed_clean": true,
+  "purpose": "Research provenance only; upstream instructions are not active ZAP policy. Focused review supports conceptual suitability judgments, not measured success claims.",
+  "skills": [
+    {
+      "name": "ask-matt",
+      "path": "skills/engineering/ask-matt/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "d8934db5ccf28b8c6e43d44d88801936d3831ab5666280b26d6f0852a312dc63",
+      "lines": 90,
+      "review_depth": "overview",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "code-review",
+      "path": "skills/engineering/code-review/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "3abbdfe52540f9242e16589fae2cc423b3d98994c37683944462b29bab89495c",
+      "lines": 87,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "codebase-design",
+      "path": "skills/engineering/codebase-design/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "362b0bec828219d9f4b08ca7c466164e67253bdd817359258e60d2e9c5692a8f",
+      "lines": 114,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "diagnosing-bugs",
+      "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "bca66b7141da7d225b7dfd1abf6f2bee657b8044d3897604055e760749c71724",
+      "lines": 138,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "domain-modeling",
+      "path": "skills/engineering/domain-modeling/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "dd4c753a617bd7db97c34fd3e049581c4bc0c0590e8a8b1f97d3b9d6013131dc",
+      "lines": 74,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "grill-with-docs",
+      "path": "skills/engineering/grill-with-docs/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "abc0fa7948db18b5fb0e1cc1c522ac5ff47d874e2da1e5df60619d79be11f38b",
+      "lines": 7,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "implement",
+      "path": "skills/engineering/implement/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "30cd7bc1ebfb3891e85a1eed3b3b81aea0fa4ad4553a784de7f8e421b2d223e0",
+      "lines": 15,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "path": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "ab67dc77f7fb0e82ac2ce45e3680c4f90bd68f638c86522996cdf03426084ac7",
+      "lines": 71,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "prototype",
+      "path": "skills/engineering/prototype/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "f74ae01f4fc454d3a4ef21271920f1706e626271e715dda0559e489f45c792c3",
+      "lines": 26,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "research",
+      "path": "skills/engineering/research/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "524b404b1ca373a8b00f63a64667ec4b0a61c3c9cf4e8f246e639be859bb6979",
+      "lines": 12,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "path": "skills/engineering/resolving-merge-conflicts/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "d97e7320010bbe7d32313c574acd47cec830d64edd59c956bd0ce2cba84e6ad7",
+      "lines": 14,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "setup-external-skills-skills",
+      "path": "skills/engineering/setup-external-skills-skills/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "86c0dee483fb69f7f5ecfcd010f6d7cbb30df2c47a9b059ac95f98380f383d86",
+      "lines": 116,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "tdd",
+      "path": "skills/engineering/tdd/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "193b791c489d1640ccfb58d7cbd60fc9e059ef44632b3c92f208784cfe45ab78",
+      "lines": 38,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "to-spec",
+      "path": "skills/engineering/to-spec/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "c73a2250beac0479e384f5466e834bb54ce6e30b7f8705e9999ba840d9d59b36",
+      "lines": 75,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "to-tickets",
+      "path": "skills/engineering/to-tickets/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "8082bc6ef165027c5df3215763055f4a9668878bf27f25f582db78a14c3ed3c1",
+      "lines": 105,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "triage",
+      "path": "skills/engineering/triage/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "652c815971c2df925cee0f250ae2596f50fde19328305f3c55afd157a7f06fe6",
+      "lines": 112,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "wayfinder",
+      "path": "skills/engineering/wayfinder/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "3362fa360948f8526e88ebe8184f5402f9b5f4d9dced2ba0ed2721f64ae3de5a",
+      "lines": 128,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "wizard",
+      "path": "skills/engineering/wizard/SKILL.md",
+      "bucket": "engineering",
+      "sha256": "dbefb750eae07d9f8b05ab1084f6acfdda2752df2a6b577c46a505e2bc790164",
+      "lines": 44,
+      "review_depth": "overview",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "claude-handoff",
+      "path": "skills/in-progress/claude-handoff/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "7f99b9c489c8d55374d261c31e2dcf7e75c2ee103dbb64e87b18971a05449f21",
+      "lines": 18,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "implement-spec",
+      "path": "skills/in-progress/implement-spec/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "986c0becc03a5b72d1c8b04c8e7c0830b8b9baae109acba404d0f1a8831966a5",
+      "lines": 35,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "loop-me",
+      "path": "skills/in-progress/loop-me/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "38ac316635d244abfdc1526edec49596f9284b36595f5a212fc5983894b6094a",
+      "lines": 32,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "retro",
+      "path": "skills/in-progress/retro/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "27213192896e3efa8f0a5dd316bfcfd072e7ae794658523cf1bfe0908b819f1c",
+      "lines": 44,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "setup-ts-deep-modules",
+      "path": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "3709fc7d62ea75cd7da1d6f21e33d58d758766fb8f5247a859687d7ed63c213e",
+      "lines": 102,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "writing-beats",
+      "path": "skills/in-progress/writing-beats/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "b23f7851987dab7828c83d42df98090ccebff586b64908ce6a5e772440214621",
+      "lines": 67,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "writing-fragments",
+      "path": "skills/in-progress/writing-fragments/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "3be6ffe9386ddd6de8b320c331295953995792fd65d0972aa2a28524ead73e90",
+      "lines": 79,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "writing-shape",
+      "path": "skills/in-progress/writing-shape/SKILL.md",
+      "bucket": "in-progress",
+      "sha256": "c13cbc364fbceefce654d9a4b0331113ff47efe90ce2523c2de23ecef63fefbd",
+      "lines": 79,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "git-guardrails-claude-code",
+      "path": "skills/misc/git-guardrails-claude-code/SKILL.md",
+      "bucket": "misc",
+      "sha256": "12d335b84bcf984b213b527014262233f27ffa1eb807db466832ff711b96f41f",
+      "lines": 95,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "migrate-to-shoehorn",
+      "path": "skills/misc/migrate-to-shoehorn/SKILL.md",
+      "bucket": "misc",
+      "sha256": "200c11163ecd56d908ec431154e4b452cd6afeb3de91e5b54434f543f0822201",
+      "lines": 118,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "scaffold-exercises",
+      "path": "skills/misc/scaffold-exercises/SKILL.md",
+      "bucket": "misc",
+      "sha256": "de28db7a0954db55c11ba1e3cc0fd4c037bf0f5cb8313cb292e319bcce47f424",
+      "lines": 106,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "setup-pre-commit",
+      "path": "skills/misc/setup-pre-commit/SKILL.md",
+      "bucket": "misc",
+      "sha256": "e069e6a23069ebdba946d4dea11e5d663c10640c6b14b55c4585c81b1a256ac9",
+      "lines": 91,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "grill-me",
+      "path": "skills/productivity/grill-me/SKILL.md",
+      "bucket": "productivity",
+      "sha256": "19e660207b447acf6ee0d600471c02e549c7aca8fb3ab38fdc2c7056aa442fc8",
+      "lines": 7,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "grilling",
+      "path": "skills/productivity/grilling/SKILL.md",
+      "bucket": "productivity",
+      "sha256": "d806733216b16e51adad834e724bfec5540a436d06395bfc75b843cda9f7404b",
+      "lines": 28,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "handoff",
+      "path": "skills/productivity/handoff/SKILL.md",
+      "bucket": "productivity",
+      "sha256": "96f8045f01f569daa3737150d918b7201ccd090905fb10cefedd326e4001f551",
+      "lines": 16,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "teach",
+      "path": "skills/productivity/teach/SKILL.md",
+      "bucket": "productivity",
+      "sha256": "3377485cbb1d62782122c1cc8cab4ceb37d5457c0543889784f3d7d9ca359e04",
+      "lines": 140,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "to-questionnaire",
+      "path": "skills/productivity/to-questionnaire/SKILL.md",
+      "bucket": "productivity",
+      "sha256": "77825120815c21400f82e2794faf342d1d1a4ab1493be3fe061857885d26b768",
+      "lines": 54,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "wait-what",
+      "path": "skills/productivity/wait-what/SKILL.md",
+      "bucket": "productivity",
+      "sha256": "dcaa44ef972d5a3f9bda65a69442fb11e36eb41b7e9bb0dc8b63031ba0582fdb",
+      "lines": 7,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    },
+    {
+      "name": "writing-for-agents",
+      "path": "skills/productivity/writing-for-agents/SKILL.md",
+      "bucket": "productivity",
+      "sha256": "1c0c4ebf2d221917591144f0ced4fe46dae13301cb3d6d93fc88ecf0dda6aed2",
+      "lines": 81,
+      "review_depth": "focused",
+      "url": "https://example.invalid/removed-upstream"
+    }
+  ],
+  "coverage_note": "All 37 entrypoint skills read. 35 focused conceptual reviews and 2 routing/setup overviews; supporting documents inspected for selected engineering skills, not every ancillary script. No upstream skill activated."
+}
