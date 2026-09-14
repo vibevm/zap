@@ -1,7 +1,8 @@
 # Strategic map structure: deferred Owner commission
 
-Status: authorized follow-up; saved now, research and implementation deferred
-until the already planned main ZAP Rust development campaign is complete.
+Status: authorized analysis-only follow-up after the already planned main ZAP
+Rust development campaign. The Owner's later instruction revokes automatic
+implementation: finish analysis/design review, then stop for discussion.
 
 Source: OWNER-STRATEGIC-MAP-INPUT-2026-09-14.txt preserves the Owner's Russian
 request. This document is an English planning brief, not an accepted algorithm
@@ -43,13 +44,14 @@ of the important outcomes without imposing arbitrary product size limits.
 2. Write a substantial English design review that the Owner can read while work
    continues. Explain evidence, competing approaches, the proposed algorithm,
    tradeoffs, uncertainty and reasons to adopt, modify or reject the metaphor.
-3. If justified, design and implement the selected concepts and adaptive
-   behavior under the already authorized autonomous workflow. Owner review of
-   the design document is not a prerequisite to implementation. Preserve
-   existing authority, economics, stop conditions, proof and recovery rules.
-4. Prefer explicit, mechanical graph transformations with stable identities,
-   migration/evidence records and machine-readable events. Use the existing
-   campaign graph as a pilot where lawful; do not activate NEXT execution.
+3. If justified, propose a design for the selected concepts and adaptive
+   behavior, preserving authority, economics, stop conditions, proof and
+   recovery. Do not implement it automatically. Finish the design review and
+   discuss the proposal with the Owner before any implementation.
+4. Assess explicit, mechanical graph transformations with stable identities,
+   migration/evidence records and machine-readable events. Inspect the existing
+   campaign graph as a potential pilot; do not migrate it or activate NEXT
+   execution for this analysis-only follow-up.
 5. Describe the data and event mapping for a future game-like canvas: milestone
    towns, task objects, helpful resources, routes, fog and agents as heroes.
    A future visualization should reflect real algorithmic state and actions.
@@ -60,8 +62,9 @@ of the important outcomes without imposing arbitrary product size limits.
 Do not interrupt or replace the current Rust MVP work with this research.
 After the main campaign, return to this commission automatically; the earlier
 instruction to stop and wait after that campaign is superseded for this exact
-follow-up. The Owner explicitly authorizes implementation if the review finds
-the approach suitable, without waiting for their return or a new approval.
+follow-up. The later Owner instruction supersedes the initial implementation
+grant: after analysis and the design review, stop and discuss the result. Do
+not start implementation or modify the pilot graph without new Owner direction.
 Maintain the standing coding-worker selection (Sol/xhigh), protocol test-worker
 selection (Sol/medium), native delegation and frequent filesystem checkpoints.
 Do not silently treat the metaphor or proposed names as already accepted facts.

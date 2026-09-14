@@ -3,7 +3,8 @@
 Owner update, 2026-09-14: after the existing main campaign is actually complete,
 continue automatically with
 ../../../../research/zap/ZAP-STRATEGIC-MAP-FOLLOWUP-2026-09-14.md. It authorizes
-research, a reviewable design document and implementation if justified. This
+analysis and a reviewable design document only. The Owner's later correction
+requires discussion afterward and revokes automatic implementation. This
 overrides the old final wait below only for that saved follow-up. Do not skip
 or shorten the current publication/installation gates to start it earlier.
 

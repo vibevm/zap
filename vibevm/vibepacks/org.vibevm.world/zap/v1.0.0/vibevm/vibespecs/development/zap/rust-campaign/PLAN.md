@@ -150,11 +150,14 @@ available operations and unsupported adapters honestly.
 ## Production and release closure
 
 Owner continuation update, 2026-09-14: completion of this existing main
-campaign is followed by the separately authorized strategic-map research and
-conditional implementation in
+campaign is followed by the separately authorized strategic-map analysis and
+design review in
 ../../../research/zap/ZAP-STRATEGIC-MAP-FOLLOWUP-2026-09-14.md. That commission
 does not change this campaign's current scope or gates. It supersedes the
 older instruction below to wait after publication for that exact follow-up.
+The later Owner correction revokes automatic implementation: finish analysis,
+then stop and discuss it. No pilot migration or feature implementation is
+authorized by that follow-up without new Owner direction.
 
 Temporary staged implementation may use explicit deferrals with exact closure
 tasks, but production acceptance requires runnable contracts, spec traceability,

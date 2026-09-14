@@ -1,0 +1,19 @@
+{
+  "active": [
+    "Main campaign unchanged: R16 integration, R17 scale/indexes, R15B final package barrier"
+  ],
+  "owner_amendment": "After analyzing towns/milestones/strategic-map proposals, DO NOT implement automatically. Write analysis/design review, then discuss with Owner. Automatic implementation grant is revoked.",
+  "followup": {
+    "id": "POST-ZAP-STRATEGIC-MAP",
+    "state": "authorized_deferred_analysis_only",
+    "after": "R19 main completion",
+    "next": "Analysis/design review, then wait for discussion/new direction"
+  },
+  "continuity": "Updated English brief, original-input amendment, RESUME, PLAN, R19 packet and machine follow-up. This changes only deferred task, not current ZAP implementation/publication.",
+  "R16": "Root accepted R13C bounded service and assigned zap_r08_finish actual CampaignClosed journey, full279ledger and native medium probe preparation.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0144",
+  "time_utc": "2026-09-14T03:25:46.9058021Z",
+  "previous": "checkpoints/ROOT-0143.json",
+  "head": "a9a80776"
+}
