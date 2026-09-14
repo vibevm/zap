@@ -1,0 +1,23 @@
+{
+  "self_update": {
+    "state": "completed_and_activated",
+    "command": "vibe self update --offline --unattended --invoked-by codex --json",
+    "session_id": 65958,
+    "exit": 0,
+    "build_duration": "1m48s",
+    "active_directory": "C:/Users/olegc/.vibe/opt/vibevm/versions/branch/main/71",
+    "version": "1.0.0",
+    "verification": "PATH vibe build --help now succeeds"
+  },
+  "active": [
+    "R15B new neutral offline install on updated PATH CLI; workarounds paused until outcome",
+    "R13C/R15A full archive/body/backend final proof"
+  ],
+  "R15_progress": "R13C reports real production material/workspace R09 journey1/1green3.96s: indexed job creation history + exact event claim, historical capture verify, typed archive neutral reopen and actual Packet/Assignment/ResultSchema/raw Rule bodies; foreign partial destination preserved.",
+  "boundary": "No host source fix or online installer repair performed. New Owner deferred strategic-map commission remains after main completion.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0135",
+  "time_utc": "2026-09-14T02:27:04.5646042Z",
+  "previous": "checkpoints/ROOT-0134.json",
+  "head": "457f3c02"
+}

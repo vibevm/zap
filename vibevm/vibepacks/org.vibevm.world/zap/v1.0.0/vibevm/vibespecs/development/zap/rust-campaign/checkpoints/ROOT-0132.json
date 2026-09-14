@@ -1,0 +1,14 @@
+{
+  "active": [
+    "R15B offline package/consumer install and build",
+    "R13C protected service/CLI",
+    "R15A full archive body/inspection proof"
+  ],
+  "owner_instruction": "Use --offline for installations for now. Online-install hang belongs to another worker; do not investigate/repair it here.",
+  "continuity": "Saved temporary installation_posture in user-local plan.json and R15B packet; worker notified. This is not a permanent product limit. Deferred strategic-map commission remains unchanged after main campaign.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0132",
+  "time_utc": "2026-09-14T02:11:44.4042598Z",
+  "previous": "checkpoints/ROOT-0131.json",
+  "head": "457f3c02"
+}

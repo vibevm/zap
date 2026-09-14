@@ -1,0 +1,14 @@
+{
+  "active": [
+    "R15B package-contained vendor/clean artifact and real offline consumer",
+    "R13C/R15A final service/archive proof"
+  ],
+  "updated_cli_recheck": "Fresh PATH main/71 neutral consumer r15b-consumer-updated-20260914T0227Z still copies excluded .py/development/nested deps/projections; install failed during live checkpoint-file churn. Prior .vibeignore finding persists; distinct from online hang.",
+  "decision": "No host source/hash/installer fix. Approved exact small upstream specmark+grammar vendoring with license/provenance and deterministic source-only artifact staging as real packaging; actual Vibe install/build owns resulting neutral slot. Keep raw-worktree defect visible. Snapshot validates included bytes/stability; final release comes from accepted coherent source. Dev-only PowerShell packaging tooling allowed; no production Python.",
+  "scope": "Main ZAP work remains first. CLI self update completed. Owner deferred strategic-map commission after main R19 unchanged.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0136",
+  "time_utc": "2026-09-14T02:29:08.5144080Z",
+  "previous": "checkpoints/ROOT-0135.json",
+  "head": "457f3c02"
+}

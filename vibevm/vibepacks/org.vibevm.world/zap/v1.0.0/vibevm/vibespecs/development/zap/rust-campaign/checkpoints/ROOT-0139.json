@@ -1,0 +1,17 @@
+{
+  "accepted": [
+    "R15A production adapters/typed archive/timeout tail, REVIEW-R15A-ACCEPTANCE.md"
+  ],
+  "active": [
+    "zap_r14_finish now R17 measured graph/history scaling",
+    "zap_r08_finish R13C lease tail + actual public archive routes",
+    "zap_r07_finish R15B clean artifact/real offline consumer"
+  ],
+  "R13_review": "Fixed completion evaluator wired to real domain/control/economics/runtime providers; missing actual direct CampaignClosed refusal/acceptance remains R16. Root found unsafe lease recovery/drop ownership assumptions and absent public archive operations (only SDK getter). Assigned exact repairs to current owner before acceptance.",
+  "next": "Continue main through full R16 evidence/native medium probes/R17/R18/R19; then saved strategic-map commission. No host installer/hash fix; Vibe updatedmain71, installs offline.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0139",
+  "time_utc": "2026-09-14T02:51:50.3100835Z",
+  "previous": "checkpoints/ROOT-0138.json",
+  "head": "457f3c02"
+}

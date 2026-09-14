@@ -1,0 +1,20 @@
+{
+  "active": [
+    "R17 staged scaling/index plan",
+    "R13C lease/public archive final repairs",
+    "R15B artifact restage waits coherent source; R07/R10 evidence map"
+  ],
+  "latest_source_capture": "C:/Users/olegc/.vibe/zap/development/vibevm-next/checkpoints/rust-candidates-20260914T0257437856548Z",
+  "source_capture": {
+    "files": 328,
+    "bytes": 3440851,
+    "status": "unaccepted per-file live capture, not globally coherent build"
+  },
+  "recovery": "Use updated PATH Vibe main/71 and offline installs. Main source/hash/online installer not edited. R15B clean artifact/vendor route is approved because fresh raw-tree install still ignored .vibeignore.",
+  "next": "Read current worker reports/packets; do not re-run accepted R07/R10/R15A/A2 tests. R16 actual close/native probes, R17 scale, R18/R19 and post-main strategic-map commission remain.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0141",
+  "time_utc": "2026-09-14T02:58:02.6438008Z",
+  "previous": "checkpoints/ROOT-0140.json",
+  "head": "457f3c02"
+}

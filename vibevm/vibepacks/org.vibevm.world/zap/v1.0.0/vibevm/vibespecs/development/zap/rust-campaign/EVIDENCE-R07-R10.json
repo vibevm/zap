@@ -1,0 +1,2763 @@
+{
+  "schema": "zap-rust-campaign-evidence-map/1",
+  "generated_at": "2026-09-14T02:57:52.014275Z",
+  "candidate_for": "R16 evidence integration",
+  "source_requirements": "REQUIREMENTS.json",
+  "selector": "Only fact IDs appearing in a REQUIREMENTS vision/fact/legacy group whose tasks include R07 or R10, further limited to facts for which R07/R10 has evidence, a reviewed source invariant, a named integration deferral, or a known limitation.",
+  "acceptance": "This file records evidence classification only. It does not accept a requirement, close R16/R18, or replace root review.",
+  "receipts": [
+    {
+      "id": "r07-review-repair",
+      "kind": "runtime_test",
+      "command": "run-cargo.ps1 test -p zap-domain --test r07_review_repair",
+      "result": "2/2 green",
+      "source": "REPORT-R07-REPAIR-FINAL.md"
+    },
+    {
+      "id": "r07-economics-service",
+      "kind": "runtime_test",
+      "command": "run-cargo.ps1 test -p zap-domain --test economics_service",
+      "result": "8/8 green at R07 final; named prefix/pause regressions green after repair",
+      "source": "REPORT-R07-FINAL.md; REPORT-R07-REPAIR-FINAL.md"
+    },
+    {
+      "id": "r07-economics-contracts",
+      "kind": "runtime_test",
+      "command": "run-cargo.ps1 test -p zap-domain --test economics_contracts",
+      "result": "5/5 green",
+      "source": "REPORT-R07-REPAIR-FINAL.md"
+    },
+    {
+      "id": "r07-knowledge-service",
+      "kind": "runtime_test",
+      "command": "run-cargo.ps1 test -p zap-domain --test knowledge_service",
+      "result": "9/9 green current schema",
+      "source": "REPORT-R07-FINAL.md"
+    },
+    {
+      "id": "r07-lowering-semantic",
+      "kind": "runtime_test",
+      "command": "run-cargo.ps1 test -p zap-domain --test lowering_semantic_service",
+      "result": "1/1 green, coordinated R08 receipt",
+      "source": "REPORT-R07-REPAIR-FINAL.md"
+    },
+    {
+      "id": "r10-dreamer-service",
+      "kind": "runtime_test",
+      "command": "run-cargo.ps1 test -p zap-domain --test dreamer_service",
+      "result": "4/4 green",
+      "source": "REPORT-R10.md"
+    },
+    {
+      "id": "r10-owner-regression",
+      "kind": "runtime_test",
+      "command": "run-cargo.ps1 test -p zap-domain --test economics_service owner_decision_order_pause_and_completion_share_the_real_service_path -- --exact",
+      "result": "1/1 green",
+      "source": "REPORT-R10.md"
+    },
+    {
+      "id": "r07-repair-acceptance",
+      "kind": "root_acceptance",
+      "path": "REVIEW-R07-REPAIR-ACCEPTANCE.md",
+      "scope": "three final-review repairs; broader integration remains deferred"
+    },
+    {
+      "id": "r10-acceptance",
+      "kind": "root_acceptance",
+      "path": "REVIEW-R10-ACCEPTANCE.md",
+      "scope": "Dreamer and held-execution repair; installed/native integration remains deferred"
+    }
+  ],
+  "mappings": [
+    {
+      "fact_id": "ACTUAL-RUNNER",
+      "requirements_groups": [
+        "ZAP-RUNTIME.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "AFFECTED-HOLD",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "ALTERNATIVES-AND-NO-OP",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "known_limitation",
+      "status": "partial_with_explicit_boundary",
+      "evidence_refs": [
+        "r07-review-repair",
+        "r07-lowering-semantic",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-core/src/preflight.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Existing-root multi-kind comparison and NoOp preparation are proven. A comparison root created only by an earlier simulated effect is evaluated on the base snapshot and may refuse; arbitrary produced-root comparisons are not claimed."
+    },
+    {
+      "fact_id": "APPROACH-IDENTITY",
+      "requirements_groups": [
+        "vision:V07",
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "ATOMIC-REVIEW",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "ATTRIBUTABLE-COST",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "ATTRIBUTION-CHECK",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "AUTOMATIC-BELOW-THRESHOLD",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "BALANCED-DECISION",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "BASELINE-NON-REDUNDANCY",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "BOUNDED-FOG-COST",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "BOUNDED-RECONSIDERATION",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "CASE-BETTER-OPPORTUNITY",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "CASE-NEW-FOG",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "CASE-NO-SELF-SUCCESS",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "CASE-REVISED-OUTCOME",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "CASE-STOP-SURVIVES-PIVOT",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "CHANGE-ASSESSMENT-LAW",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "CHANGE-ECONOMICS-ACCEPTANCE",
+      "requirements_groups": [
+        "legacy:LEGACY-ECONOMICS-CLOSURE-P1",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "CHARTER-AMENDMENT",
+      "requirements_groups": [
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "COMBINED-OWNER-DECISION",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "COMMAND-PRECONDITIONS",
+      "requirements_groups": [
+        "ZAP-DATA-AND-VIEWER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R16",
+        "R17"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "CONSEQUENCE-CATEGORIES",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "CONTEXT-CHANGE-NON-SEMANTIC",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "COST-FORECAST",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "DECISION-CHOICES",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "DECISION-RECORD",
+      "requirements_groups": [
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DEFAULT-COST-BANDS",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "DEFAULT-THRESHOLD",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "DETACHED-BRANCH-DATA",
+      "requirements_groups": [
+        "ZAP-DATA-AND-VIEWER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R16",
+        "R17"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DETERMINISTIC-REPLAY",
+      "requirements_groups": [
+        "ZAP-DATA-AND-VIEWER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R16",
+        "R17"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DORMANT-ALTERNATIVES-NONWORK",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DREAMER-COMBINED-OWNER-DECISION",
+      "requirements_groups": [
+        "vision:V15",
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DREAMER-EXACT-APPLICATION",
+      "requirements_groups": [
+        "vision:V15",
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DREAMER-GRILL",
+      "requirements_groups": [
+        "vision:V15",
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DREAMER-INTENT-MODES",
+      "requirements_groups": [
+        "vision:V15",
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DREAMER-NONEXECUTABLE",
+      "requirements_groups": [
+        "vision:V15",
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "DREAMER-REMOVAL-CONSERVATION",
+      "requirements_groups": [
+        "vision:V15",
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "ECONOMICS-COMPLETION-BLOCKER",
+      "requirements_groups": [
+        "legacy:LEGACY-ECONOMICS-CLOSURE-P1",
+        "vision:V17",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "ECONOMICS-OBSERVABILITY",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "EVIDENCE-APPLICABILITY",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "EXACT-ENVELOPE",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "FEASIBILITY-AND-INFORMATION",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "FEEDBACK-LOOP",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "FOG-RECOMPUTATION",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "HISTORICAL-COMPATIBILITY",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "source_invariant",
+      "status": "candidate_supported",
+      "evidence_refs": [
+        "r07-review-repair",
+        "r07-economics-contracts",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-core/src",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Reviewed source keeps frozen schema readers separate, uses registered effect/service boundaries, and shares pure kernels between preparation, simulation and execution."
+    },
+    {
+      "fact_id": "HOLD-RESOLUTION",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "IDEMPOTENT-COMMAND",
+      "requirements_groups": [
+        "ZAP-DATA-AND-VIEWER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R16",
+        "R17"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "IMPLEMENTATION-SPLIT",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "source_invariant",
+      "status": "candidate_supported",
+      "evidence_refs": [
+        "r07-review-repair",
+        "r07-economics-contracts",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-core/src",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Reviewed source keeps frozen schema readers separate, uses registered effect/service boundaries, and shares pure kernels between preparation, simulation and execution."
+    },
+    {
+      "fact_id": "LIVE-WORK-RECONCILIATION",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "LOWERING-ADAPTIVE-ECONOMICS",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "LOWERING-CONSERVATION",
+      "requirements_groups": [
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "LOWERING-HOLD-SCOPE",
+      "requirements_groups": [
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "LOWERING-OWNER-STOP-PRECEDENCE",
+      "requirements_groups": [
+        "ZAP-LOWERING-AND-DREAMER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "MODEL-AND-KERNEL",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "NECESSITY-CLASS",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "NO-HYPOTHETICAL-HOLD",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "NO-SUNK-COST-BIAS",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "OWNER-CHOICE-PRESENTATION",
+      "requirements_groups": [
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "OWNER-COMMAND-PROJECTION",
+      "requirements_groups": [
+        "ZAP-DATA-AND-VIEWER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R16",
+        "R17"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "OWNER-STOP-PRECEDENCE",
+      "requirements_groups": [
+        "vision:V16",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "PLAN-RECONCILIATION",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "PORTABLE-RUNTIME",
+      "requirements_groups": [
+        "ZAP-RUNTIME.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "QUALITATIVE-UTILITY",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "RECOVERY",
+      "requirements_groups": [
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "RESOURCE-WAIT",
+      "requirements_groups": [
+        "ZAP-DATA-AND-VIEWER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R16",
+        "R17"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "RETRY-AND-CONTINUATION",
+      "requirements_groups": [
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "REVISED-DEFERRALS",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "RUNTIME-CAPABILITY-TRUTH",
+      "requirements_groups": [
+        "ZAP-RUNTIME.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "RUNTIME-COMPLETION-PREDICATE",
+      "requirements_groups": [
+        "legacy:LEGACY-ECONOMICS-CLOSURE-P1",
+        "vision:V17",
+        "ZAP-RUNTIME.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "RUNTIME-ENFORCEMENT",
+      "requirements_groups": [
+        "vision:V17",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "RUNTIME-GENERIC-PROJECT",
+      "requirements_groups": [
+        "ZAP-RUNTIME.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "RUNTIME-SERVICE-ENFORCEMENT",
+      "requirements_groups": [
+        "vision:V17",
+        "ZAP-RUNTIME.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "RUNTIME-TOTAL-OBSERVABILITY",
+      "requirements_groups": [
+        "ZAP-RUNTIME.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "classification": "unverified_integration",
+      "status": "deferred_to_R13_R15_R16_R18",
+      "evidence_refs": [
+        "r07-repair-acceptance",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [],
+      "note": "R07/R10 establish domain/service invariants but their root acceptance records explicitly defer assembled public transport, installed/native operation or whole-runtime observability/closure evidence."
+    },
+    {
+      "fact_id": "SAFE-DRAIN",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "SCOPED-CAUSAL-BASIS",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "known_limitation",
+      "status": "partial_with_explicit_boundary",
+      "evidence_refs": [
+        "r07-review-repair",
+        "r07-lowering-semantic",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-core/src/preflight.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Existing-root multi-kind comparison and NoOp preparation are proven. A comparison root created only by an earlier simulated effect is evaluated on the base snapshot and may refuse; arbitrary produced-root comparisons are not claimed."
+    },
+    {
+      "fact_id": "SEMANTIC-CHANGE-BOUNDARY",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "SEMANTIC-LOWERING-ECONOMICS",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "SERVICE-ENFORCEMENT",
+      "requirements_groups": [
+        "vision:V17",
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R01",
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "source_invariant",
+      "status": "candidate_supported",
+      "evidence_refs": [
+        "r07-review-repair",
+        "r07-economics-contracts",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-core/src",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Reviewed source keeps frozen schema readers separate, uses registered effect/service boundaries, and shares pure kernels between preparation, simulation and execution."
+    },
+    {
+      "fact_id": "TIME-DIMENSIONS",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "TRUSTED-CONTROL-BOUNDARY",
+      "requirements_groups": [
+        "ZAP-DATA-AND-VIEWER.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R16",
+        "R17"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "UNKNOWN-IMPACT-HOLD",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "UNKNOWN-POLICY",
+      "requirements_groups": [
+        "ZAP-CHANGE-ECONOMICS.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R10",
+        "R11",
+        "R13",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r07-economics-service",
+        "r07-economics-contracts",
+        "r07-knowledge-service",
+        "r07-lowering-semantic",
+        "r07-review-repair",
+        "r07-repair-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/economics",
+        "crates/zap-core/src/effects.rs",
+        "crates/zap-core/src/preflight.rs"
+      ],
+      "note": "Covered by current-schema registered economics/effect service journeys and the accepted R07 repair boundary; no campaign-wide acceptance is implied."
+    },
+    {
+      "fact_id": "UNKNOWN-REGIONS",
+      "requirements_groups": [
+        "ZAP-METHODOLOGY.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16",
+        "R18"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    },
+    {
+      "fact_id": "VALUE-REASSESSMENT",
+      "requirements_groups": [
+        "ZAP-ADAPTIVE-CYCLE.xml"
+      ],
+      "requirements_tasks": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R10",
+        "R11",
+        "R16"
+      ],
+      "classification": "runtime_test",
+      "status": "root_accepted_bounded_boundary",
+      "evidence_refs": [
+        "r10-dreamer-service",
+        "r10-owner-regression",
+        "r10-acceptance"
+      ],
+      "implementation_surfaces": [
+        "crates/zap-domain/src/dreamer",
+        "crates/zap-core/src/execution_views/job.rs",
+        "crates/zap-domain/src/economics"
+      ],
+      "note": "Covered by the four real Dreamer journeys and the shared Owner/pause/completion regression; scope remains the bounded R10 model described by acceptance."
+    }
+  ],
+  "limitations": [
+    {
+      "id": "produced-root-comparison",
+      "fact_ids": [
+        "SCOPED-CAUSAL-BASIS",
+        "ALTERNATIVES-AND-NO-OP"
+      ],
+      "description": "Comparison unions registered read roots and evaluates them on the base snapshot. Roots created only in an earlier simulated prefix are not generally supported.",
+      "required_current_paths": "No accepted R09 or R10 path requires this case; R16 retains the boundary."
+    },
+    {
+      "id": "integration-deferred",
+      "fact_ids": [
+        "RUNTIME-ENFORCEMENT",
+        "ECONOMICS-OBSERVABILITY",
+        "RUNTIME-SERVICE-ENFORCEMENT",
+        "RUNTIME-COMPLETION-PREDICATE",
+        "PORTABLE-RUNTIME",
+        "RUNTIME-GENERIC-PROJECT",
+        "ACTUAL-RUNNER",
+        "RUNTIME-CAPABILITY-TRUTH",
+        "RUNTIME-TOTAL-OBSERVABILITY"
+      ],
+      "description": "Installed transport, external native invocation, whole-runtime observability and final shared closure were outside R07/R10 acceptance."
+    }
+  ]
+}

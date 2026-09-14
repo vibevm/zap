@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R17 short scale baseline and registered index design",
+    "R13C final public HTTP archive journey after lease repair",
+    "R15B final artifact waits source; evidence map prepared"
+  ],
+  "evidence_map": "EVIDENCE-R07-R10.json candidate85mappings:71runtime,3source,9unverified integration,2limitations; root separately verifies file hash. No new tests/acceptance implied.",
+  "R13C": "Worker reports retained ownership lease repair2/2focused+application lifecycle green; actual archive publish/verify/entry DTOs/service/HTTP/CLI added and check green; public route journey in progress.",
+  "next": "Accept final service/artifact boundaries; proceed fullR16/native medium, R17, R18/R19 then saved strategic-map follow-up. Root preserves checkpoints, no host repair.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0142",
+  "time_utc": "2026-09-14T03:02:07.4857048Z",
+  "previous": "checkpoints/ROOT-0141.json",
+  "head": "457f3c02"
+}

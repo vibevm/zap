@@ -2,7 +2,7 @@
 
 ##subagent-quiet-clause
 
-Middle gpt-5.6-sol/high; root dispatches and accepts. Read R04-store.md and
+Middle gpt-5.6-sol/xhigh; root dispatches and accepts. Read R04-store.md and
 R13-surface.md for exact workspace/package and standing-rule paths, reusing
 prior reads. No full boot, local inference, external runner, NEXT execution,
 Git/publication, full host suite or blanket mutation tests.
@@ -12,6 +12,13 @@ R17 entries of ../REQUIREMENTS.json, V18/V21 in the accepted vision, permanent
 ZAP-RUST-STORAGE.xml, accepted store/knowledge/surface reports and outstanding
 index/performance debts. Own assigned benchmark harness and index/query changes;
 coordinate shared source with its implementation owner before editing.
+
+Current boundary: read ../REVIEW-R17-A2.md and ../REVIEW-R15A-ACCEPTANCE.md;
+A1/A2 representation evidence is accepted and must not be rerun without a new
+reason. B and actual425-node reimport remain unselected. R13C owns service/lease
+repairs, R15B owns package metadata/vendor/consumer. Use the verified local
+run-cargo.ps1 wrapper; no other Cargo target path. The missing package-local
+attribution XML is omitted; no worker Git is permitted and root owns commits.
 
 Measure the actual Rust service and public queries using deterministic mixed
 work/knowledge graphs, both edge directions, evidence and a long committed

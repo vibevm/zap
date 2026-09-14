@@ -1,0 +1,17 @@
+{
+  "accepted": [
+    "R07 held-job repair and R10 Dreamer/combined Owner route, REVIEW-R10-ACCEPTANCE.md"
+  ],
+  "active": [
+    "zap_r07_finish now R15B package/skills/neutral consumer",
+    "zap_r08_finish R13C service/CLI and typed archive body derivation",
+    "zap_r14_finish R15A actual archive bodies/entry reading"
+  ],
+  "next": "After current assembly: R16 complete279 evidence/native medium probes, R17 measured graph/history scale, R18 discipline/temporary-spec retirement, R19 publish1.0.0. Then saved strategic-map research/design/conditional implementation, no final wait for that commission.",
+  "evidence": "R10 four real service journeys, economics5, knowledge9, ordinary Owner1 and scoped lint/format accepted. No repeated tests by root. R15 digest-only archive gap remains open until actual semantic bodies and neutral inspection are proved.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0130",
+  "time_utc": "2026-09-14T02:00:55.3343945Z",
+  "previous": "checkpoints/ROOT-0129.json",
+  "head": "457f3c02"
+}

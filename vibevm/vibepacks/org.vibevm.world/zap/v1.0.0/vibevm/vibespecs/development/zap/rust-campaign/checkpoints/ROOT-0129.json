@@ -1,0 +1,16 @@
+{
+  "active": [
+    "R10B one combined Owner response proof",
+    "R13C service/CLI/backend proof",
+    "R15A real archive bodies repair"
+  ],
+  "R15A_blocker": "Root found BundleSemanticEntryV1 contains only schema/kind/path/semantic_digest. Packet/Assignment/ResultSchema/Capability/StopRule entries have no actual semantic body; verified hash labels cannot support offline execution. VerifiedPortableBundle also discards bodies and returns manifest only.",
+  "decision": "R13C cross_domain derives canonical typed actual packet/claim/contract/result/capability/stop/permission bodies from stored state; R15A serializes and independently validates per-kind meaning and exposes bounded read/inspection from archive alone. Extend app-owned BundleArtifactProvider seam; no caller body authority, no live filesystem in writer. Original digest-only product not accepted.",
+  "additional_review": "Archive stat-then-fs::read can exceed allocation cap on growth; root requested enforced bounded handle read and checked encode growth including footer. Query output/timeout repair already reports focused green.",
+  "followup": "Owner strategic-map commission remains deferred after main R19; saved and committed457f3c02. Do not start it now.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0129",
+  "time_utc": "2026-09-14T01:54:25.9953228Z",
+  "previous": "checkpoints/ROOT-0128.json",
+  "head": "457f3c02"
+}

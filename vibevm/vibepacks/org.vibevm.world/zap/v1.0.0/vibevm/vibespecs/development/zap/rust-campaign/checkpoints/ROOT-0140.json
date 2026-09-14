@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R17 mixed-graph baseline/index seam design",
+    "R13C lease/archive machine repairs",
+    "R15B waits coherent source; prepares bounded R07/R10 evidence mapping"
+  ],
+  "R17_finding": "Viewer non-history queries scan4096prefix per10families+4096edges before selecting; focus outside visited prefix misclassified missing, UnknownBoundary. No public index row read API or domain record index contributions. Treat correctness and measured performance separately.",
+  "R17_authorization": "mixed-graph-v1 seed170017, actualCommitService fixture,1k/10k short release baseline,10edges/node and10%knowledge mix;100k requires measured report first. Narrow registered index-read/contribution seam authorized in principle, exact DTO plan pending. A2format/actual425source unchanged.",
+  "parallelism": "R15B clean artifact prior bytes verified but4R13Cfiles drifted; final restage/build waits freeze. During wait worker maps R07/R10 normative IDs to existing evidence only, no new tests/acceptance. Main release and deferred follow-up retained.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0140",
+  "time_utc": "2026-09-14T02:55:07.7946267Z",
+  "previous": "checkpoints/ROOT-0139.json",
+  "head": "457f3c02"
+}

@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R15B offline package/consumer proof",
+    "R13C historical committed claim lookup plus service surface",
+    "R15A actual complete portable archive"
+  ],
+  "owner_clarification": "Online installer is owned by a separate Claude worker. Root will not repair it; installs use --offline temporarily. Owner asked host dependency boundary.",
+  "verified_answer": "Git working tree and committed paths2d48bd51..457f3c02 contain only ZAP package changes. No VibeVM core/source modification required so far. ZAP standalone Rust workspace depends on declared Rust libs/rust-ai-native-lang and existing Vibe install/build/query APIs plus native driver; final neutral consumer proof pending. Saved VIBE-INTEGRATION-BOUNDARY.md.",
+  "R15_blocker": "Historical bundle export must use exact committed RuntimeJobClaimRecord and immutable artifacts, never live recapture or widened revision interval. R13C assigned lookup; R15A told not to weaken rule. Existing body/lookup proof remains current work.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0133",
+  "time_utc": "2026-09-14T02:15:49.9770935Z",
+  "previous": "checkpoints/ROOT-0132.json",
+  "head": "457f3c02"
+}

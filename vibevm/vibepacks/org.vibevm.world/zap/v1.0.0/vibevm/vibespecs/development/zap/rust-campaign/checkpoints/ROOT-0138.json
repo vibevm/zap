@@ -1,0 +1,14 @@
+{
+  "active": [
+    "R15A final EOF-before-exit timeout repair and module split",
+    "R13C final report/service",
+    "R15B clean source artifact/vendor/consumer proof"
+  ],
+  "R15A_review": "Full typed archive report/source inspected; bodies and historical claim path align. Root found bounded_process exits read loop on both EOF then uses unbounded child.wait; requested deadline-bound process completion and bounded reader cleanup, focused EOF-before-exit case. bundle.rs exceeds600lines; owner splits responsibilities before final acceptance.",
+  "next": "After R15A tail green, freeze adapters and assign full R17 performance packet; root will review tail while benchmark preparation proceeds. R16 complete evidence/native medium tests remain after assembly; no main completion claim.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0138",
+  "time_utc": "2026-09-14T02:38:40.4052466Z",
+  "previous": "checkpoints/ROOT-0137.json",
+  "head": "457f3c02"
+}

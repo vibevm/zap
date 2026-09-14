@@ -1,0 +1,21 @@
+{
+  "active": [
+    "R10B combined Owner service proof",
+    "R13C endpoint/lease/CLI backend proof",
+    "R15A bounded query process and real archive fixture"
+  ],
+  "latest_source_capture": "C:/Users/olegc/.vibe/zap/development/vibevm-next/checkpoints/rust-candidates-20260914T0151197971988Z",
+  "source_capture": {
+    "files": 317,
+    "bytes": 3319879,
+    "status": "unaccepted per-file live capture, not coherent build"
+  },
+  "head_commit": "457f3c02 preserves new Owner strategic-map follow-up",
+  "followup": "POST-ZAP-STRATEGIC-MAP stays deferred until main R19 completion, then research/design review/conditional implementation automatically; old final wait superseded for that task.",
+  "status": "R13C typed server+adapters compose/check green, physical snapshots exposed. R10B typed combined route compiles; actual no-second-approval journey pending. Root asked R13C/R15A to refresh lagging execution checkpoints.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0128",
+  "time_utc": "2026-09-14T01:51:35.6053784Z",
+  "previous": "checkpoints/ROOT-0127.json",
+  "head": "457f3c02"
+}

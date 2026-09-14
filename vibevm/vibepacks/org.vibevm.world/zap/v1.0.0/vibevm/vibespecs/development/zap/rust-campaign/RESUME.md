@@ -28,26 +28,38 @@ design). Uncommitted Python economics code is unaccepted reference work. Its
 completion-ready/direct-close omission is recorded in ../REVIEW-CE-INTEGRATION.md.
 Never silently accept, discard, or mix it with Rust commits.
 
-Latest frontier override (see campaign.json and ROOT-0123): R08/R09 protocol
+Latest frontier override (see campaign.json and ROOT-0141): R08/R09 protocol
 is accepted in REVIEW-R09-ACCEPTANCE.md, including real runtime candidates,
 causal relowering and symmetric candidate CAS. zap_r08_finish now implements
 R13C protected service/CLI/runtime composition and durable preparation outside
-the writer, governed by AMENDMENT-R13C-STAGED-CAPTURE.md. R17 A2 is accepted in
-REVIEW-R17-A2.md; zap_r14_finish now implements R15A material/workspace/archive
-adapters. Full R17 graph/history scale is still pending, B is unselected.
+the writer, governed by AMENDMENT-R13C-STAGED-CAPTURE.md. Its current tail is
+exclusive-store/owned-lease recovery and actual archive machine routes; the
+terminal CampaignClosed journey remains required in R16. R17 A2 and R15A are
+accepted in REVIEW-R17-A2.md / REVIEW-R15A-ACCEPTANCE.md. zap_r14_finish now
+owns full R17 graph/history scale. Its1k/10k baseline is authorized;100k waits
+for the measured report. Prefix-scanned viewer queries can falsely miss a
+focus beyond4096; a narrow registered index-read/contribution seam is next.
 
-zap_r07_finish owns R10 Dreamer and a newly surfaced R07 hold-release repair:
-an authorized graph change cannot require the post-product affected scope to
-equal the old held scope. Persist exact held execution identities, check their
-current safety and newly affected jobs, and preserve frozen replay behavior.
-Do not replace the real nonempty-job case with an empty-job success fixture.
-The prior three R07 review fixes remain accepted in their bounded scope.
+R07 held-job repair and R10 Dreamer are now accepted in
+REVIEW-R10-ACCEPTANCE.md, including the real nonempty-job case and one combined
+charter/economics Owner response. zap_r07_finish now owns R15B packaging, thin
+skills and the ordinary consumer proof. Preserve the accepted exact held-job
+identity/current safety rule and both R10 amendments; do not redo those repairs.
+R15A now carries full typed instruction/contract/rule bodies, supports neutral
+inspection and exports the exact indexed committed claim rather than recapturing
+current files. Keep the accepted architecture; digest-only labels were rejected.
+R15B uses a deterministic clean source artifact and package-local vendored real
+specmark crates, then actual offline Vibe install/build. Updated PATH Vibe
+main/71 still ignored .vibeignore on raw live source; no host/hash fix is selected.
+The online-install bug belongs to a separate Claude worker. Use --offline for
+installations. Owner-requested vibe self update completed successfully.
 All three code at Sol/xhigh; native protocol test executors use medium. No final
-R16 native probe has launched. Remaining route: R07/R10, R12 integration,
-R13C/observable surface, R15A/package/skills, R16 full279 evidence, R17 scale,
-R18 production/temporary-spec retirement, R19 publication1.0.0, then stop.
+R16 native probe has launched. Remaining route: R12 integration,
+R13C/observable surface, R15B/package/skills, R16 full279 evidence, R17 scale,
+R18 production/temporary-spec retirement, R19 publication1.0.0, then the saved
+strategic-map follow-up under the newer Owner instruction.
 
-R07's pending comparison amendment separates ChangeAssessment comparison
+R07's accepted comparison amendment separates ChangeAssessment comparison
 request/digest from local effect bases, derives union read inputs on one
 snapshot, retains unknowns, and exposes prepared-prefix read-only state for
 constructing a later effect's produced bindings. Do not reintroduce first-local

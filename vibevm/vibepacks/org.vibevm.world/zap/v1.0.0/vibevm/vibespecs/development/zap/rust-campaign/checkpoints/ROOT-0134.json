@@ -1,0 +1,21 @@
+{
+  "active": [
+    "Owner-requested Vibe self update running",
+    "R15B packaging workaround paused pending updated tool test",
+    "R13C/R15A continue Zap"
+  ],
+  "self_update": {
+    "command": "vibe self update --offline --unattended --invoked-by codex --json",
+    "workdir": "C:/Users/olegc/git/v/vibevm",
+    "session_id": 65958,
+    "state": "building, not yet activated/verified",
+    "reason": "Owner explicitly said installed version may be old and requested self update; this is not an online installer bug repair"
+  },
+  "packaging": "Prior raw local install copied excluded files; package specmark relative path also depended on copied nested deps. Host fixes NOT started. Vendor/source-only staging was conditional and is now paused until updated CLI is checked.",
+  "next": "Wait/reconcile this exact update; inspect activated binary capabilities and repeat neutral offline installation before deciding whether any workaround is still needed. Preserve main ZAP and deferred strategic-map commissions.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0134",
+  "time_utc": "2026-09-14T02:23:59.9441474Z",
+  "previous": "checkpoints/ROOT-0133.json",
+  "head": "457f3c02"
+}
