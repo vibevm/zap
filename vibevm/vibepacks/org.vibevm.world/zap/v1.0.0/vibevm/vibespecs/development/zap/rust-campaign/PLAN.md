@@ -98,6 +98,13 @@ baseline task merely because the entire accepted campaign is large.
 
 ## Execution detail and staged obligations
 
+Short scoped Cargo checks/tests use Cargo's actual cache lock and current
+process state; no manual reservation is held while editing or waiting for a
+forgotten release message. Explicit scheduling is reserved for genuinely heavy
+builds, benchmarks and integration commands. Evidence remains bound to actual
+source/API inputs, so concurrent relevant changes can stale a receipt without
+forcing unrelated work to wait.
+
 R01 fixes identifiers, role versus authority, command/observation/control routes,
 pure transition interfaces, atomic store commit, indexes and query cursors,
 external-effect intent/receipt contract, semantic-provider versus AgentHost,
@@ -141,6 +148,13 @@ simulated and does not claim Qwen quality. Public capabilities describe actual
 available operations and unsupported adapters honestly.
 
 ## Production and release closure
+
+Owner continuation update, 2026-09-14: completion of this existing main
+campaign is followed by the separately authorized strategic-map research and
+conditional implementation in
+../../../research/zap/ZAP-STRATEGIC-MAP-FOLLOWUP-2026-09-14.md. That commission
+does not change this campaign's current scope or gates. It supersedes the
+older instruction below to wait after publication for that exact follow-up.
 
 Temporary staged implementation may use explicit deferrals with exact closure
 tasks, but production acceptance requires runnable contracts, spec traceability,

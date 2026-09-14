@@ -7,6 +7,12 @@ checkpoint within five active minutes, and wait briefly when no new evidence
 needs action. Root coordinates and reviews; Sol/xhigh writes code. This
 continuity task does not stop at an intermediate milestone.
 
+New Owner follow-up (2026-09-14): after the already planned main campaign,
+automatically research and, if justified, implement the strategic-map idea
+in ../../../research/zap/ZAP-STRATEGIC-MAP-FOLLOWUP-2026-09-14.md. Its original
+request is preserved beside it. This supersedes the earlier final wait only
+for that exact follow-up; do not start it before the main work is complete.
+
 Owner accepted the complete vision and authorized planning plus execution on
 2026-09-13. ZAP implementation, scoped checks, and the earlier publication
 commission are active. Do not invoke local Qwen or execute NEXT product work.

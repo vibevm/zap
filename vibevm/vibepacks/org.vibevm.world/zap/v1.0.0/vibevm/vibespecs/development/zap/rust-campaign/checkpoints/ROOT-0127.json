@@ -1,0 +1,19 @@
+{
+  "active": [
+    "Main ZAP campaign continues unchanged: R10B, R13C, R15A"
+  ],
+  "owner_followup": {
+    "id": "POST-ZAP-STRATEGIC-MAP",
+    "state": "authorized_deferred",
+    "brief": "../../../research/zap/ZAP-STRATEGIC-MAP-FOLLOWUP-2026-09-14.md",
+    "source": "../../../research/zap/OWNER-STRATEGIC-MAP-INPUT-2026-09-14.txt",
+    "trigger": "After the already planned main campaign R19 completes",
+    "authorization": "Critically research milestone/task/resource strategic-game map, write substantial English design review, implement if suitable without waiting for Owner; future canvas mapping only, no immediate frontend"
+  },
+  "continuity": "Follow-up saved in campaign.json, RESUME.md, PLAN.md and R19 packet; supersedes prior final wait for this exact commission, not current main work. Original Owner text preserved separately.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0127",
+  "time_utc": "2026-09-14T01:47:53.7063540Z",
+  "previous": "checkpoints/ROOT-0126.json",
+  "head": "2a515943"
+}

@@ -1,5 +1,12 @@
 # R19: publish version1.0.0 and close the implementation commission
 
+Owner update, 2026-09-14: after the existing main campaign is actually complete,
+continue automatically with
+../../../../research/zap/ZAP-STRATEGIC-MAP-FOLLOWUP-2026-09-14.md. It authorizes
+research, a reviewable design document and implementation if justified. This
+overrides the old final wait below only for that saved follow-up. Do not skip
+or shorten the current publication/installation gates to start it earlier.
+
 Coordinator/root-only release procedure. Publication was explicitly authorized
 by the Owner; use the existing commission after R18 acceptance. This packet does
 not authorize a main-branch merge, NEXT product execution, local inference,
