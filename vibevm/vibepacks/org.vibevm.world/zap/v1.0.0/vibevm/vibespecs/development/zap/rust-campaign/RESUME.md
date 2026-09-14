@@ -22,15 +22,24 @@ design). Uncommitted Python economics code is unaccepted reference work. Its
 completion-ready/direct-close omission is recorded in ../REVIEW-CE-INTEGRATION.md.
 Never silently accept, discard, or mix it with Rust commits.
 
-Latest frontier override (see campaign.json and ROOT-0110): R07's three
-independent review blockers are accepted in REVIEW-R07-REPAIR-ACCEPTANCE.md.
-zap_r07_finish now implements R10 Dreamer. R08 is a green bounded candidate;
-zap_r08_finish implements R09's real candidate/return/review/relowering journey.
-Its current repair makes candidate CAS handling bind the actual post-dispatch
-execution basis, distinct from packet render and lowering bases. The tiny
-import activation is accepted in REVIEW-R08-R14-ACTIVATION.md. zap_r14_finish
-now implements R17 A2 compact physical storage. All three code at Sol/xhigh;
-native protocol test executors use medium. No final R16 probe has launched.
+Latest frontier override (see campaign.json and ROOT-0123): R08/R09 protocol
+is accepted in REVIEW-R09-ACCEPTANCE.md, including real runtime candidates,
+causal relowering and symmetric candidate CAS. zap_r08_finish now implements
+R13C protected service/CLI/runtime composition and durable preparation outside
+the writer, governed by AMENDMENT-R13C-STAGED-CAPTURE.md. R17 A2 is accepted in
+REVIEW-R17-A2.md; zap_r14_finish now implements R15A material/workspace/archive
+adapters. Full R17 graph/history scale is still pending, B is unselected.
+
+zap_r07_finish owns R10 Dreamer and a newly surfaced R07 hold-release repair:
+an authorized graph change cannot require the post-product affected scope to
+equal the old held scope. Persist exact held execution identities, check their
+current safety and newly affected jobs, and preserve frozen replay behavior.
+Do not replace the real nonempty-job case with an empty-job success fixture.
+The prior three R07 review fixes remain accepted in their bounded scope.
+All three code at Sol/xhigh; native protocol test executors use medium. No final
+R16 native probe has launched. Remaining route: R07/R10, R12 integration,
+R13C/observable surface, R15A/package/skills, R16 full279 evidence, R17 scale,
+R18 production/temporary-spec retirement, R19 publication1.0.0, then stop.
 
 R07's pending comparison amendment separates ChangeAssessment comparison
 request/digest from local effect bases, derives union read inputs on one
@@ -43,9 +52,10 @@ economics hold.
 R17 P0/A1 is root accepted in REVIEW-R17-P0-A1.md: exact encoder/projection
 bytes preserved, measured isolated memory reductions. Combined fixture replay
 still peaks around1.37GB; full-operation before/after gain is unmeasured.
-Record/history values are75.07% of table values. A2 is active with dual-schema
-compatibility and small paired measurements; B remains unselected. Full R17
-and publication are unfinished.
+Record/history values were75.07% of v1 table values. Accepted A2 retains22.12%
+of record/history values and36.93% of database/NTFS allocation on the SAME
+small P0 fixture, with equal logical rows. This is not a full-operation memory
+or actual425-node claim. B remains unselected; full R17/release are unfinished.
 
 Use verified C:/Users/olegc/.vibe/zap/development/vibevm-next/run-cargo.ps1 with
 -CargoArgs @(...), explicit package workdir. It fixes next-rust and prevents

@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R13C staged capture and actual service implementation",
+    "R10 live-add and removal service evidence",
+    "R17 A2 final report after publication repair"
+  ],
+  "R13C_amendment": "AMENDMENT-R13C-STAGED-CAPTURE.md saved and reviewed. Immutable preparations use create-new/hard-link no-clobber; unknown outcomes reuse exact frame/CommandId; proven NotCommitted with stale revision may create new linked CommandId/frame retaining semantic job/effect IDs. Explicit lease recovery is machine operation, not Owner approval. Core getter migration compile-green and R10 notified.",
+  "coordination": "Do not rerun checks on transient shared edits; owning workers send coherent-boundary notifications. New prepared-capture interfaces will be supplied to R15A.",
+  "next": "Accept A2 and assign its xhigh worker to R15A, then full integration/scale/production/release.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0118",
+  "time_utc": "2026-09-14T01:02:59.1457416Z",
+  "previous": "checkpoints/ROOT-0117.json",
+  "head": "895fa452"
+}

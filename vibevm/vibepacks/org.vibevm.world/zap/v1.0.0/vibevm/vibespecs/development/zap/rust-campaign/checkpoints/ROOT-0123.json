@@ -1,0 +1,27 @@
+{
+  "accepted": [
+    "R17 A2 including final partial cleanup recovery, REVIEW-R17-A2.md",
+    "R08/R09 protocol remains accepted"
+  ],
+  "active": [
+    "zap_r07_finish R07 exact-held-job release +R10",
+    "zap_r08_finish R13C protected service/durable staged capture",
+    "zap_r14_finish R15A real material/workspace/archive"
+  ],
+  "remaining": [
+    "R07/R10 completion",
+    "R12 real/manual capability integration",
+    "R13C plus complete observable surface",
+    "R15A then packaging/skills/installed consumer",
+    "R16 all279 facts and native medium probes",
+    "R17 scale",
+    "R18 production/spec retirement",
+    "R19 authorized publish1.0.0 then stop"
+  ],
+  "boundaries": "No NEXT/Qwen/external runner/reset/retried denied cleanup. R17B and actual-sized run unselected. Capture helper +ROOT-0122 preserve current source.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0123",
+  "time_utc": "2026-09-14T01:21:35.7317430Z",
+  "previous": "checkpoints/ROOT-0122.json",
+  "head": "895fa452"
+}

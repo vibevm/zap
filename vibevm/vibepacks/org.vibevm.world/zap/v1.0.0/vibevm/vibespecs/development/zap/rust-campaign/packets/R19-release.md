@@ -19,6 +19,14 @@ the Python prototype is still current. Use the ordinary authenticated VibeVM
 registry publication path, not an improvised token or source-repository push.
 Do not print credentials or reuse a publication token for source Git.
 
+Verified 2026-09-14: the command is `vibe registry publish`, not a top-level
+`vibe publish`. The current host checkout binary's help supports SOURCE,
+--registry, --path, --dry-run, --json, --invoked-by and --agent-mode. Its
+--repo-url mode is a separate direct-Git publication route and does not load
+the registry publish token; do not silently switch routes. Recheck capability
+before release and use --agent-mode agent / --invoked-by codex. This help-only
+inspection performed no publication, authentication or remote writes.
+
 Preflight the exact accepted source-only payload and declared dependencies.
 Confirm production Rust commands, resolved public links, no Python runtime,
 no compiled blobs/private data/development checkpoints and version1.0.0.

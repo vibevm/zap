@@ -1,0 +1,18 @@
+{
+  "accepted": [
+    "R08 executable protocol with tiny imported activation and actual R11 candidate",
+    "R09 offline return/reassessment/candidate CAS/current applicability, REVIEW-R09-ACCEPTANCE.md"
+  ],
+  "active": [
+    "zap_r08_finish now R13C protected service/CLI/runtime composition",
+    "zap_r07_finish R10 Dreamer",
+    "zap_r14_finish R17 A2"
+  ],
+  "next": "R15A adapters assigned when next slot free; R16 full279 evidence/native medium probes, R17 scale, R18 production, R19 publication still required.",
+  "effects": "No actual NEXT execution, no publication/reset/external runner/cleanup retry.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0116",
+  "time_utc": "2026-09-14T00:55:44.3033916Z",
+  "previous": "checkpoints/ROOT-0115.json",
+  "head": "895fa452"
+}

@@ -1,0 +1,19 @@
+{
+  "active": [
+    "R09 final candidate CAS consistency/report",
+    "R10 registered Dreamer service tests and projection completeness",
+    "R17 A2 reservation publication and actual small fixture measurement"
+  ],
+  "accepted_direction": [
+    "R09 current applicability now checks live Work, contract, generation, active job and actual Dispatch basis; old candidate after relowering read-only classifies stale. Worker reports app1/1green3.08s.",
+    "R17 physical/logical manifest now shares one read; publication reservation amendment and exact P0 v1 sibling rebuild test-only adapter approved."
+  ],
+  "R10_review": "Early source pass confirms detached branch model; requested computed value/cost consequence view and distinction between blocking missing conditions and bounded declared uncertainty, not global fog elimination.",
+  "head_commit": "895fa452",
+  "next": "R13C command/runtime, R15A material adapters, full remaining route through publication.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0114",
+  "time_utc": "2026-09-14T00:48:29.7970475Z",
+  "previous": "checkpoints/ROOT-0113.json",
+  "head": "895fa452"
+}

@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R13C staged service implementation",
+    "R10 final module split/lint after3service journeys green",
+    "R17 A2 completed-publication cleanup recovery fix"
+  ],
+  "R10": "Checkpoint reports all3principal registered journeys green; expensive addition binds six-hour assessment/Owner hold and bounded fog; removal preserves obligations/dependencies/proof/debt/artifacts. Final source/report review pending.",
+  "R17": "Report and selected P0 debug/release measurements read. Root confirmed single-snapshot digest and DB verification before ready receipt. Last concrete gap: crash after removing reservation marker but before matching claim retirement must recognize exact ready publication and clean idempotently. Requested narrow regression only; no repeated benchmarks.",
+  "next": "Next available xhigh slot starts R15A adapters against saved R13C amendment. Final native behavior probes remain medium.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0120",
+  "time_utc": "2026-09-14T01:11:58.4701781Z",
+  "previous": "checkpoints/ROOT-0119.json",
+  "head": "895fa452"
+}

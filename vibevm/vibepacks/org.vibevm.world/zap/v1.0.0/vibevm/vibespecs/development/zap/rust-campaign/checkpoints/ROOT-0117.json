@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R13C actual typed service/CLI/config and durable prepared-capture seam",
+    "R10 Dreamer service evidence",
+    "R17 A2 publication final fixes/report"
+  ],
+  "R13C_decision": "Approved exact command identity in PacketResolutionContext; app preparation outside writer, durable immutable prepared capture keyed by command/store/base/request/revision, pure transaction revalidation, historical replay verification. Approved injected service dependencies and closed config with credential paths only, endpoint-bound authority and typed machine routes. Worker saves API amendment for R15A.",
+  "R17": "Same accepted small P0 v1 fixture -> v2:record/history39,993,249->8,847,677B;DB136,318,976->50,339,840B;logical equality. Final source review requests fresh reservation cannot adopt foreign empty destination, and verify existing destination DB before final ready receipt publication.",
+  "next": "Assign R15A once A2 accepted; no actual425-node rerun, B unselected. Entire route remains through R19.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0117",
+  "time_utc": "2026-09-14T00:59:32.8654580Z",
+  "previous": "checkpoints/ROOT-0116.json",
+  "head": "895fa452"
+}

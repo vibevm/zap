@@ -130,8 +130,19 @@ canonical index value; it gains no envelope.
 V1 stays readable, writable through its frozen codec, auditable and exportable.
 New creation defaults to v2. Upgrade is only
 `rebuild_physical_v2(source, absent_destination)`: replay exact events into a
-fresh sibling, fsync a source/head/schema-bound receipt and publish the sibling
-directory by no-clobber rename. Source and configured pointer remain untouched.
+fresh sibling staging store and fsync a source/head/schema-bound receipt. Final
+publication first acquires an exact recoverable sibling claim, atomically
+creates the absent destination directory as the owned reservation, and records
+that ownership with a no-clobber hard-linked reservation marker. It then
+hard-links the already verified database, independently verifies its exact
+source/head/schema identity, and hard-links the ready receipt last as the
+publication point. An interrupted claimed directory resumes only with the exact
+reservation marker; an ambiguous empty directory, foreign claim, foreign
+database or existing unrelated destination refuses and is preserved. Source
+and configured pointer remain untouched. If the ready receipt already exists
+with the matching claim, recovery re-verifies the complete publication before
+retiring any remaining reservation or claim state; the marker is required only
+for an incomplete claimed destination.
 Event/command bytes, typed record bytes/versions, index rows and reconstructed
 history entries must agree. V1/v2 physical projection digests deliberately
 differ and are both recorded; a versioned streaming logical-row digest must

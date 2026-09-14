@@ -40,6 +40,7 @@ pub struct ReviewWorkCas {
     pub contract_id: Option<ContractId>,
     pub contract_version: Option<Revision>,
     pub contract_digest: Option<ContractDigest>,
+    pub candidate_basis: RelevantBasisDigest,
     pub current_candidate_ids: Vec<CandidateId>,
     pub affected_jobs_digest: PayloadDigest,
 }
@@ -131,6 +132,28 @@ starting/running/unknown effect, missing candidate disposition, unsafe job,
 post-review CAS drift or foreign predecessor refuses. Successful lowering marks
 the sidecar `Consumed`, records `consumed_by`, and cannot consume it twice.
 
+The packet's `render_basis` and a returned candidate's execution basis identify
+two lawful `Dispatch(work)` states. Packet rendering seals the Ready pre-dispatch
+state. R08 packet resolution validates that state, permits only the exact
+Ready-to-Active `WorkDispatched` progress, and seals the runtime job and
+candidate provenance with the resulting current execution basis. The two
+digests are therefore not compared directly.
+
+`ApplyReview` captures candidates on its pre-state by deriving the exact current
+`Dispatch(work)` basis and requiring each candidate to match it, the Work
+subject, active contract, validation generation, and its persisted producer
+packet's identity. Packet state is not required, so a pure rerender does not
+discard proof. After review the Work is Blocked and that pre-state basis cannot
+be recomputed, so `ReviewWorkCas.candidate_basis` stores the exact captured
+digest. Lowering requires every sealed candidate ID to retain that provenance
+and rescans candidates by the same candidate basis and producer packet, Work,
+contract, and generation lineage. The sorted set must equal the sealed set. A
+stale sibling from another execution basis remains history but does not enter
+the set; a new or removed candidate on the sealed basis is CAS drift and
+refuses. Runtime candidate ingress already bound each such candidate to its
+exact job execution basis, so this post-review check neither widens provenance
+nor silently drops returned proof when review changes current Work facts.
+
 ## Exact ownership
 
 - The adaptive-review owner adds the sidecar record/registration, makes
@@ -168,3 +191,25 @@ the sidecar `Consumed`, records `consumed_by`, and cannot consume it twice.
 
 This amendment adds no new authority path and does not alter the accepted R07
 effect identity or R08 packet-basis decisions.
+
+## Initial executable root amendment
+
+`LoweredGraph` adds `root: Option<WorkRecord>`. `Some(root)` is permitted only
+for the first lowering of an ordinary campaign when the exact `parent_id` does
+not yet exist. The root has that identity, no parent or dependencies, no active
+job, a container work kind, `Planned` state and the transaction revision. It is
+not a contract leaf and is materialized atomically with the lowering and child
+graph. `None` requires the exact external parent to exist and be a live
+non-executing container; a dangling parent or a colliding root refuses.
+
+For this bootstrap only, `LoweringBasisScope` uses the already existing
+obligation and source subjects and does not name absent root or child Work
+subjects. Normal lowering of an existing target includes that target Work
+subject. The registered schema-2 lowering extractor emits
+`ActionImpactRule::InitialLoweringOrSemantic { strategy_id, target }` from the
+strictly decoded payload. The domain impact provider derives `InitialBaseline`
+only when the active charter, intent, outcome and strategy match and no prior
+`LoweringRecord` exists anywhere in the campaign; every later lowering is a
+semantic change independent of economics-baseline record existence. The pure
+lowering kernel remains responsible for validating and atomically creating the
+root, so a malformed root cannot gain initial-baseline authority.

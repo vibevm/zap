@@ -1,0 +1,20 @@
+{
+  "active": [
+    "R07/R10 exact-held-job release repair",
+    "R13C actual service/CLI and durable evidence preparation",
+    "R17 A2 partial staging-cleanup tail, then authorized R15A"
+  ],
+  "latest_source_capture": "C:/Users/olegc/.vibe/zap/development/vibevm-next/checkpoints/rust-candidates-20260914T0119132300840Z",
+  "source_capture": {
+    "files": 293,
+    "bytes": 3049544,
+    "status": "unaccepted per-file live capture; not a coherent build"
+  },
+  "helpers": "Local capture-rust-source.ps1 saved and exercised; checkpoint helper now optionally updates latest_source_capture pointer.",
+  "next": "R14 worker explicitly authorized after green cleanup tail to freeze A2, notify root and proceed immediately to R15A; root reviews A2 concurrently. R07 holds repair remains tracked, not papered over by empty-job tests.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0122",
+  "time_utc": "2026-09-14T01:19:33.1729431Z",
+  "previous": "checkpoints/ROOT-0121.json",
+  "head": "895fa452"
+}

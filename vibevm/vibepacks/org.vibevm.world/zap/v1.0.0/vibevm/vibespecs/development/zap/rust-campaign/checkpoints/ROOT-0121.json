@@ -1,0 +1,15 @@
+{
+  "active": [
+    "R07 nonempty held-job release repair by zap_r07_finish, alongside R10",
+    "R13C actual service/capture implementation",
+    "R17 A2 last cleanup recovery/final report"
+  ],
+  "blocker": "R10 actual removal with one NotStarted/safe job applies authorized graph change then cannot resolve hold: SafeJobRequest compares current scope digest to pre-product hold digest. Root confirmed source and reopened R07 narrow acceptance boundary.",
+  "decision": "Persist exact held job/attempt/work/contract/generation; resolve current safety for ALL held jobs even outside new scope and also newly affected current jobs. Missing/changed/unsafe/unknown refuses, graph change alone does not. Preserve exact-scope legacy replay explicitly. Worker coordinates core preflight changes with R13C; no empty-job workaround accepted.",
+  "next": "Accept A2 and start R15A; complete R07/R10 then assembled product, full evidence, scale, production, publication.",
+  "schema": "zap-development-checkpoint/1",
+  "id": "ROOT-0121",
+  "time_utc": "2026-09-14T01:13:59.1885202Z",
+  "previous": "checkpoints/ROOT-0120.json",
+  "head": "895fa452"
+}

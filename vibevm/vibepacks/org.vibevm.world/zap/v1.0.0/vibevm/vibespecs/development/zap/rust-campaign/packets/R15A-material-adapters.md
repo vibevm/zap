@@ -11,7 +11,8 @@ credentials, external runner, model call, local Qwen, NEXT work, publication,
 whole host panel or blanket mutations. Use the verified run-cargo.ps1 wrapper.
 
 Read ../REPAIR-R08-EXECUTION-API.md, ../REPAIR-R09-RETURN-API.md,
-../REPORT-R08-EXECUTION.md and the completed R09 report when available;
+../REPORT-R08-EXECUTION.md, ../REPORT-R09-FINAL.md,
+../REVIEW-R09-ACCEPTANCE.md and ../AMENDMENT-R13C-STAGED-CAPTURE.md;
 permanent ZAP-AGENT-PROTOCOL.xml, ZAP-RUNTIME.xml and ZAP-RUST-STORAGE.xml;
 core execution_views/packet.rs, ArtifactStore public API, app packet_resolution
 and cross_domain public seams. Inspect their specific implementations only as
@@ -43,6 +44,8 @@ The chosen container format is an implementation decision, not new authority;
 document its version and expose machine-readable preparation/verification.
 
 Coordinate factory/configuration DTOs with R13C before editing shared exports.
+R13C owns durable command-bound preparation and pure writer revalidation; these
+providers perform actual capture and historical verification outside the writer.
 R13C owns service/transport/CLI/composition, R10 owns Dreamer, and R09 owns
 cross_domain semantic rules. Do not change those meanings to make an adapter
 pass. Avoid live filesystem access inside a transaction: if an existing seam
