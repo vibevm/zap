@@ -1,10 +1,17 @@
-# Managed project coordinators and shared Lens clients
+# Lens-supervised project coordinators and shared clients
 
 Status: architecture research, 2026-09-15. This supplements the initial
 [communication design](AGENT-LENS-PROTOCOL-2026-09-15.md) and supports
 [PROP-005](../PROP-005.xml). Documentation and installed CLI help were inspected;
 no new agent inference, coordinator launch, installation or exhaustive test run
 was performed for this research. Existing prototype integration gaps remain open.
+
+Terminology update: [PROP-006](../PROP-006.xml) reserves **managed agents** for
+Lens-owned interactive worker terminals and **native subagents** for children
+created by the coordinator's harness. This file studies coordinator session
+supervision through host protocols. Its historical filename and SDK/daemon
+observations must not be read as proof of managed-terminal support. Codex is the
+owner-selected initial test product; the other adapters remain future targets.
 
 ## Shared application boundary
 
@@ -46,14 +53,14 @@ pending-action view. Plan history preserves requested/proposed/held/applied
 distinctions and old/new plan references. A combined ingestion sequence is a
 display ordering, not evidence of causality across independent sources.
 
-## Managed host seams
+## Coordinator host seams
 
 Installed help versions observed: Codex CLI 0.152.1, Claude Code 2.1.220,
 OpenCode 1.18.25, Qwen Code 0.23.4. Runtime adapters must negotiate or verify their
 actual version; a newer documentation field is not automatically available in
 the installed binary.
 
-| Host | Candidate managed adapter | Existing native-session boundary |
+| Host | Candidate coordinator adapter | Existing user-started session boundary |
 | --- | --- | --- |
 | Codex | Child-process app-server over default JSONL stdio; initialize, explicit thread start/resume, turn start/steer/interrupt, public item events and exact server-request responses. | A stored-thread resume is not attachment to another live process. Arbitrary Desktop/private-stdio sessions are not assumed attachable. Explicit remote TUI mode is separate and experimental. |
 | Claude Code | Agent SDK streaming input/output with explicit working directory and saved session ID; interrupt and resume through the owned SDK session. | Independently resuming one transcript in two writers is not a safe universal multi-client transport. Native Remote Control is not a documented custom Lens control API. |
@@ -109,13 +116,14 @@ is shared. [Qwen daemon](https://qwenlm.github.io/qwen-code-docs/en/users/qwen-s
 
 1. Consolidate per-project runtime ownership in the shared server; define common
    project, coordinator, conversation, question and event contracts.
-2. Add one managed coordinator path: start from Quicklens, perform the full
-   project boot with explicit coordinator role, chat, ask through Lens, answer
-   and continue the same conversation.
+2. Add the Codex coordinator path with native subagents: start from Quicklens,
+   perform the full project boot with explicit coordinator role, chat, ask
+   through Lens, answer and continue the same conversation.
 3. Show two registered projects both through focus switching and on one board;
    demonstrate shared interaction state in two connected clients.
-4. Extend the same adapter contract to the other hosts; build later Codlens IDE
-   shells and Gamelens presentation over the common services.
+4. Add the optional local managed-terminal mode defined by PROP-006. Extend
+   product adapters, remote execution and strategies later; Codlens IDE shells
+   and Gamelens presentation consume the same common services.
 
 Do not rebuild the coordinator for each message or project switch. Do not assume
 provider caching removes the boot cost. Resume the known session where possible;

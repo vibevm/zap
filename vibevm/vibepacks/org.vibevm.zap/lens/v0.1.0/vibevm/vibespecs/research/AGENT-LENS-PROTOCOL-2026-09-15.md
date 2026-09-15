@@ -4,6 +4,12 @@ Status: proposed implementation contract, 2026-09-15. This document designs the
 first step requested by the Owner; it does not claim an implemented broker,
 installed host adapters, or a finished graphical client.
 
+Later owner architecture decisions are captured in [PROP-005](../PROP-005.xml)
+and [PROP-006](../PROP-006.xml). In particular, native versus managed now names
+subagent execution ownership, while Lens-launched versus user-started names
+coordinator origin. The optional managed mode requires a real owned interactive
+terminal; earlier SDK/daemon supervision references do not establish that mode.
+
 ## Product names and order
 
 - **quicklens**: the initial practical Electron/browser client.
@@ -92,8 +98,11 @@ Separate three concerns:
 3. **Domain workflows:** questions, plan proposals, previews, approvals and ZAP
    commands. A message transport does not acquire planning authority.
 
-Do not intercept the user's terminal input or replace the usual agent chat.
-Do not edit transcript databases or inject keystrokes into a terminal/prompt box.
+For ordinary or unowned native sessions, do not intercept the user's terminal
+input, edit transcript databases or inject keystrokes into terminal/prompt boxes.
+The later [managed-terminal contract](../PROP-006.xml) permits explicit input
+through a virtual terminal Lens owns, with visible human/automation input
+ownership. It does not attach to unrelated user terminals.
 
 ## Nonblocking contract
 
