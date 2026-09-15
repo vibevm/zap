@@ -216,6 +216,77 @@ pub(super) fn successor_plan(
     Ok(successor)
 }
 
+pub(super) fn composite_create_fixture()
+-> Result<(MilestoneCreated, CompositeSuccessorPlanIntent), ZapError> {
+    let seed = milestone_seed(true)?;
+    let revision_id = MilestoneRevisionId::parse("milestone-revision.http-created.1")?;
+    let mut definition = seed.milestone_revision.definition.clone();
+    definition.name = BoundedText::parse("Dynamically created boundary")?;
+    let created = MilestoneCreated {
+        schema: MilestoneCreatedSchema::V1,
+        milestone_id: MilestoneId::parse("milestone.http-created")?,
+        revision_id: revision_id.clone(),
+        affected_work_ids: vec![WorkId::parse("work.change-admission")?],
+        definition,
+    };
+    Ok((created, composite_plan_intent(&seed, revision_id)?))
+}
+
+pub(super) fn composite_revise_fixture()
+-> Result<(MilestoneRevised, CompositeSuccessorPlanIntent), ZapError> {
+    let seed = milestone_seed(true)?;
+    let previous = seed.milestone_revision.clone();
+    let revision_id = MilestoneRevisionId::parse("milestone-revision.http-ready.2")?;
+    let mut definition = previous.definition.clone();
+    definition.name = BoundedText::parse("Dynamically revised boundary")?;
+    let revised = MilestoneRevised {
+        schema: MilestoneRevisedSchema::V1,
+        milestone_id: previous.milestone_id.clone(),
+        revision_id: revision_id.clone(),
+        expected_head_revision: seed.milestone.revision,
+        expected_current_revision_id: previous.revision_id.clone(),
+        expected_current_fingerprint: previous.semantic_fingerprint,
+        affected_work_ids: vec![WorkId::parse("work.change-admission")?],
+        definition,
+        conservation: MilestoneConservation {
+            retained_obligation_ids: previous.definition.required_obligation_ids.clone(),
+            retained_consumers: previous.definition.consumers.clone(),
+            retained_contributions: previous.definition.contributions.clone(),
+            retained_dependencies: previous.definition.dependencies.clone(),
+            reason: BoundedText::parse("Preserve the existing milestone commitments")?,
+        },
+    };
+    Ok((revised, composite_plan_intent(&seed, revision_id)?))
+}
+
+fn composite_plan_intent(
+    seed: &MilestoneSeed,
+    revision_id: MilestoneRevisionId,
+) -> Result<CompositeSuccessorPlanIntent, ZapError> {
+    let plan = plan(
+        seed.outcome.outcome_id.clone(),
+        &seed.strategy,
+        revision_id,
+        seed.obligation.obligation_id.clone(),
+        seed.source.source_id.clone(),
+        seed.source.current.digest,
+        Revision::new(2),
+        Some(seed.initial_plan.key.clone()),
+        RelevantBasisDigest::hash(b"derived by composite preparation"),
+        Revision::GENESIS,
+    )?;
+    Ok(CompositeSuccessorPlanIntent {
+        key: plan.key,
+        previous: plan.previous,
+        strategic_revision_id: plan.strategic_revision_id,
+        strategic_record_revision: plan.strategic_record_revision,
+        strategic_semantic_digest: plan.strategic_semantic_digest,
+        outcome_revision: plan.outcome_revision,
+        expected_plan_state_revision: Some(seed.plan_state.revision),
+        content: plan.content,
+    })
+}
+
 #[allow(clippy::too_many_arguments)]
 fn plan(
     outcome_id: OutcomeId,

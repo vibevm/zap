@@ -299,6 +299,10 @@ include!("application_server/protected_routes.rs");
 
 #[path = "application_server/change_admission.rs"]
 mod change_admission;
+#[path = "application_server/change_admission_composite.rs"]
+mod change_admission_composite;
+#[path = "application_server/change_admission_composite_support.rs"]
+mod change_admission_composite_support;
 #[path = "application_server/change_admission_economics.rs"]
 mod change_admission_economics;
 #[path = "application_server/change_admission_fixture.rs"]

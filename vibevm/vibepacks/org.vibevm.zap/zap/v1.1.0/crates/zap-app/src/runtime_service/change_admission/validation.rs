@@ -5,7 +5,11 @@ use zap_core::{
     KeyRange, PageLimit, RecordCompleteness, StateReader, StateReaderExt, StoredRecord,
 };
 use zap_domain::economics::{ChangeAdmissionRecord, ChangeAssessmentRecord, CostForecastRecord};
+use zap_domain::milestone_planning::{
+    CompositePlanCandidateBindingRecord, MilestonePlanAdopted, MilestonePlanProposalRecord,
+};
 use zap_wire::{BasisBinding, ZapError};
+use zap_wire::{CanonicalDecode, CanonicalPayload, CodecEpoch};
 
 use super::orchestration_error;
 
@@ -131,6 +135,7 @@ pub(super) fn validate_persisted_request(
             "persisted selected alternative contains an unauthorized action",
         ));
     }
+    validate_composite_effect_binding(state, alternative)?;
     let applied_prefix = state
         .get_typed::<ChangeAdmissionRecord>(&assessment.change_id)?
         .map_or_else(Vec::new, |admission| admission.applied_effect_ids);
@@ -175,6 +180,57 @@ pub(super) fn validate_persisted_request(
         ));
     }
     validate_product_identity(request, &assessment)
+}
+
+fn validate_composite_effect_binding(
+    state: &dyn StateReader,
+    alternative: &zap_domain::economics::ChangeAlternative,
+) -> Result<(), ZapError> {
+    for (adoption_index, adoption_effect) in alternative
+        .effects
+        .iter()
+        .enumerate()
+        .filter(|(_, effect)| effect.kind.as_str() == "milestone.plan-adopted")
+    {
+        let adoption = MilestonePlanAdopted::decode_canonical(
+            &CanonicalPayload::from_canonical_json(CodecEpoch::CURRENT, &adoption_effect.payload)?,
+        )?;
+        let Some(binding) =
+            state.get_typed::<CompositePlanCandidateBindingRecord>(&adoption.plan.key)?
+        else {
+            continue;
+        };
+        let stored_plan = state
+            .get_typed::<MilestonePlanProposalRecord>(&adoption.plan.key)?
+            .ok_or_else(|| {
+                orchestration_error(
+                    zap_wire::ErrorCode::MissingReference,
+                    "composite successor plan candidate is missing",
+                )
+            })?;
+        if stored_plan != adoption.plan
+            || adoption_index + 1 != alternative.effects.len()
+            || binding.precursors.len() != adoption_index
+            || binding
+                .precursors
+                .iter()
+                .zip(&alternative.effects[..adoption_index])
+                .any(|(bound, effect)| {
+                    bound.effect_id != effect.effect_id
+                        || bound.index != effect.index
+                        || bound.kind != effect.kind
+                        || bound.payload_digest != effect.payload_digest
+                        || bound.predecessors != effect.predecessors
+                        || bound.product_event_id != effect.product_event_id
+                })
+        {
+            return Err(orchestration_error(
+                zap_wire::ErrorCode::IdempotencyConflict,
+                "selected effects differ from the composite successor candidate binding",
+            ));
+        }
+    }
+    Ok(())
 }
 
 pub(super) fn validate_product_identity(

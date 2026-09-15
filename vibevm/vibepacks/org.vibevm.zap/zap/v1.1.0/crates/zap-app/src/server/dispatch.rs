@@ -311,6 +311,17 @@ fn execute_service_request_blocking(
         MachineRequest::PrepareEffectComparison { request } => service
             .prepare_effect_comparison(request)
             .map(MachineResponse::PreparedEffectComparison),
+        MachineRequest::PrepareCompositeSuccessor { request } => service
+            .prepare_composite_successor(*request)
+            .map(Box::new)
+            .map(MachineResponse::PreparedCompositeSuccessor),
+        MachineRequest::RecordCompositeSuccessor { request } => {
+            let (id, secret) = credential()?;
+            service
+                .record_composite_successor(id, secret, *request)
+                .map(Box::new)
+                .map(MachineResponse::RecordedCompositeSuccessor)
+        }
         MachineRequest::AdvanceChangeAdmission { request } => {
             let (id, secret) = credential()?;
             service

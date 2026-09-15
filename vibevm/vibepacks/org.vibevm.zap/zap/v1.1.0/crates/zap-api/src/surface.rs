@@ -41,6 +41,12 @@ pub enum MachineRequest {
     PrepareEffectComparison {
         request: crate::PrepareComparisonRequest,
     },
+    PrepareCompositeSuccessor {
+        request: Box<crate::PrepareCompositeSuccessorRequest>,
+    },
+    RecordCompositeSuccessor {
+        request: Box<crate::RecordCompositeSuccessorRequest>,
+    },
     AdvanceChangeAdmission {
         request: Box<crate::ChangeAdmissionAdvanceRequest>,
     },
@@ -446,6 +452,8 @@ pub enum MachineResponse {
     Command(crate::SubmissionStatusView),
     PreparedEffectBundle(crate::PreparedEffectBundleView),
     PreparedEffectComparison(crate::PreparedEffectComparisonView),
+    PreparedCompositeSuccessor(Box<crate::PreparedCompositeSuccessorView>),
+    RecordedCompositeSuccessor(Box<crate::RecordedCompositeSuccessorView>),
     ChangeAdmission(crate::ChangeAdmissionAdvanceView),
     ProjectedRecord(crate::ProjectedRecordView),
     BundleArchive(crate::BundleArchiveView),

@@ -511,6 +511,8 @@ impl MachineReadPort for ApplicationService {
             "agent",
             "prepare_effect_bundle",
             "prepare_effect_comparison",
+            "prepare_composite_successor",
+            "record_composite_successor",
             "advance_change_admission",
             "prepare_projected_record",
             "publish_bundle_archive",

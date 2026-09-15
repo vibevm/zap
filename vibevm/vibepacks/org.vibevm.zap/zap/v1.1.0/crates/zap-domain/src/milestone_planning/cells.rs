@@ -51,7 +51,7 @@ impl PayloadBasisScope<MilestonePlanAdopted> for MilestonePlanBasisScope {
     }
 }
 
-fn plan_basis(
+pub(super) fn plan_basis(
     state: &dyn StateReader,
     plan: &MilestonePlanProposalRecord,
 ) -> Result<BasisRequest, ZapError> {
@@ -272,7 +272,7 @@ fn stale(message: &'static str) -> ZapError {
 }
 
 pub(crate) fn cell_sets() -> Result<Vec<CellSet>, ZapError> {
-    Ok(vec![
+    let mut sets = vec![
         CellSet::single_with_basis(MilestonePlanProposedCell, MilestonePlanBasisScope)?,
         CellRegistrationBuilder::new(MilestonePlanAdoptedCell)
             .basis(MilestonePlanBasisScope)?
@@ -307,5 +307,7 @@ pub(crate) fn cell_sets() -> Result<Vec<CellSet>, ZapError> {
             .effect_contract(MilestonePlanAdoptionEffect)?
             .build()?,
         CellSet::single(RefinementPlanProposedCell)?,
-    ])
+    ];
+    sets.push(super::composite::cell_set()?);
+    Ok(sets)
 }

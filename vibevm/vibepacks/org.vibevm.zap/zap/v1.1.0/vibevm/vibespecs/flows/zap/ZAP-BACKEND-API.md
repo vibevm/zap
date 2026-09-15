@@ -62,6 +62,14 @@ record scan cannot establish the active policy.
   bounded retry release, and recovered job-observation/candidate collection.
 - `POST /v1/prepare/bundle` — read-only strict effect bundle preparation.
 - `POST /v1/prepare/comparison` — read-only alternatives/comparison preparation.
+- `POST /v1/prepare/composite-successor` — read-only validation of ordered
+  milestone create/revise precursors and one successor plan intent against the
+  resulting projected state; returns a stable dormant-candidate reconciliation
+  identity without committing any state.
+- `POST /v1/composite-successor` — data-proposal-authenticated recording of the
+  exact prepared dormant plan candidate. It re-prepares byte-for-byte, never
+  changes milestone heads or active plan state, and uses ordinary command
+  reconciliation for lost responses and exact retries.
 - `POST /v1/prepare/projected-record` — one record from the same prepared final
   overlay used by the effect kernel.
 - `POST /v1/archive/publish` — trusted publication of a configured no-clobber

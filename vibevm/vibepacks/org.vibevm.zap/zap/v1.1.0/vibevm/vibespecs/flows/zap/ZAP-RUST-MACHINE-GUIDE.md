@@ -1,6 +1,6 @@
 # Rust machine API usage guide {#root}
 
-`guide r4`
+`guide r5`
 
 This non-normative guide groups the public `zap_api` types by client operation. Its catalogs cover all 54 locally declared types and traits exposed by the [crate exports](../../../../crates/zap-api/src/lib.rs). Three runtime-owned reexports are identified separately below.
 
@@ -207,6 +207,27 @@ These existing test entrypoints show how the public types are used with configur
 - [Change-admission fixture writer](../../../../crates/zap-app/tests/application_server/change_admission_fixture.rs): set `ZAP_CHANGE_ADMISSION_FIXTURE_DIR` to a new empty directory and optionally set `ZAP_CHANGE_ADMISSION_FIXTURE_PROFILE=current`, then run the ignored `write_isolated_change_admission_fixture` test. Start its ordinary `application-server.json` with `zap serve-runtime`; discover the loopback address in `application.endpoint.json`. The generated `fixture.json` names synthetic role credential files and seeded strategy, Work, milestone, plan and resource identities without copying bearer values.
 
 The examples use explicit fixture configuration. Their source is a construction and integration reference; an execution receipt establishes which checks actually ran against particular source and configuration.
+
+## Prepare and record a composite successor candidate {#composite-successor}
+
+`guide r1`
+
+`PrepareCompositeSuccessorRequest` binds one operation, store revision, a
+nonempty ordered precursor bundle and a codec-2 successor plan intent. Every
+precursor must decode as the registered `MilestoneCreated` or
+`MilestoneRevised` payload named by its effect kind. Preparation projects those
+effects without committing them, derives and validates the plan against that
+projected state, and returns the normalized plan, precursor preflight, request
+digest and internal candidate-recording reconciliation identity.
+
+The client persists that complete prepared response before calling the
+credentialed record operation. The record operation authenticates only the
+configured data-proposal channel, repeats preparation, and refuses any changed
+request or preparation. It commits one dormant plan-proposal record and returns
+the ordinary submission union. A lost response is resolved through
+`/v1/reconcile` and an exact record retry. The candidate commit does not create
+or revise milestone heads and does not adopt a plan. Those changes remain the
+ordered privileged products of one later comparison and assessment.
 
 ## Advance one selected change admission {#change-admission-orchestration}
 

@@ -2,6 +2,7 @@ mod accessors;
 mod application;
 mod archive;
 mod change_admission;
+mod composite_successor;
 mod config;
 mod eligibility;
 mod factory;

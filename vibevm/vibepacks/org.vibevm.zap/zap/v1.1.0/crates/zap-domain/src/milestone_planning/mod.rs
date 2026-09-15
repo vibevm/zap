@@ -2,6 +2,7 @@
 
 mod cells;
 mod comparisons;
+mod composite;
 mod model;
 mod payloads;
 mod queries;
@@ -9,6 +10,11 @@ mod records;
 mod refinement;
 mod validation;
 
+pub use composite::{
+    CompositePlanCandidateBindingRecord, CompositePlanCandidateRecorded,
+    CompositePrecursorEffectBinding, CompositeSuccessorPlanIntent,
+    prepare_composite_successor_plan,
+};
 pub use model::*;
 pub use payloads::*;
 pub use queries::{

@@ -22,6 +22,11 @@ mod change_admission;
 pub use change_admission::{
     ChangeAdmissionAdvanceRequest, ChangeAdmissionAdvanceView, OwnerDecisionContextView,
 };
+mod composite_successor;
+pub use composite_successor::{
+    PrepareCompositeSuccessorRequest, PreparedCompositeSuccessorView,
+    RecordCompositeSuccessorRequest, RecordedCompositeSuccessorView,
+};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", content = "revision", rename_all = "snake_case")]

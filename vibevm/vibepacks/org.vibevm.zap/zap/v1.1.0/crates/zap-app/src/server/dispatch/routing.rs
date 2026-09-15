@@ -25,6 +25,14 @@ pub(super) fn request_matches_route(path: &str, request: &MachineRequest) -> boo
                 MachineRequest::PrepareEffectComparison { .. }
             )
             | (
+                "/v1/prepare/composite-successor",
+                MachineRequest::PrepareCompositeSuccessor { .. }
+            )
+            | (
+                "/v1/composite-successor",
+                MachineRequest::RecordCompositeSuccessor { .. }
+            )
+            | (
                 "/v1/change/admission",
                 MachineRequest::AdvanceChangeAdmission { .. }
             )
@@ -73,6 +81,7 @@ pub(super) fn is_read_only_service_request(request: &MachineRequest) -> bool {
         request,
         MachineRequest::PrepareEffectBundle { .. }
             | MachineRequest::PrepareEffectComparison { .. }
+            | MachineRequest::PrepareCompositeSuccessor { .. }
             | MachineRequest::PrepareProjectedRecord { .. }
             | MachineRequest::RuntimeInspect { .. }
             | MachineRequest::VerifyBundleArchive { .. }

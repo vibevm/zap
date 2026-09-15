@@ -85,6 +85,7 @@ pub fn record_set() -> Result<RecordSet, ZapError> {
     set.register::<crate::milestones::MilestoneAchievementRecord>()?;
     set.register::<crate::milestones::MilestoneTransformRecord>()?;
     set.register::<crate::milestone_planning::MilestonePlanProposalRecord>()?;
+    set.register::<crate::milestone_planning::CompositePlanCandidateBindingRecord>()?;
     set.register::<crate::milestone_planning::MilestonePlanStateRecord>()?;
     set.register::<crate::milestone_planning::RefinementPlanRecord>()?;
     Ok(set)
