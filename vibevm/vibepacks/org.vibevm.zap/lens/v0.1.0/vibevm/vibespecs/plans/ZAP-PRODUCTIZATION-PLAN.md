@@ -11,6 +11,7 @@ documented paths; it is not acceptance of the larger product workflows below.
 | --- | --- | --- |
 | Local start and project setup | Open Zap, add an existing project, choose an available agent and explicitly start development. | A clean local workspace opens without invented sample projects or manually authored protocol IDs. Adding a project does not launch a model. Another client sees the registration and can reconnect to the same service. |
 | Agent products | Codex, Claude Code, OpenCode and Qwen Code have real registered provider drivers and truthful capabilities. | Installed/configured/authenticated/exercised states are distinct. Supported conversation and managed paths are exercised with available inexpensive profiles; unavailable account setup is actionable rather than hidden behind a nominal provider label. |
+| Agent networking | Choose a shared proxy or a profile-specific inherited, direct or explicit route. | Every owned agent/provider process receives the effective policy, native children inherit it where supported, local control traffic bypasses it and TLS stays verified. No global environment mutation, credential disclosure or silent direct/provider fallback. |
 | Managed work | Delegate a bounded task, inspect its real agent terminal, answer questions, receive a report and review it. | Durable launch claim precedes spawn; server identities and model selection are preserved. Human control fences automation. Closing a viewer does not kill work. Process exit is separate from report and acceptance. |
 | Questions for people | Understand who is asking, why and in which project; answer ordinary rich question groups comfortably. | Choices, descriptions, custom/text/multiple answers, limits, drafts, cancel/amendment, deadlines and accessible feedback work. Drafts do not cross question revisions or silently overwrite another client. Cancellation and delivery states reflect the actual recipient path. |
 | One project map | Several project regions and their work appear in one pan/zoom canvas. | Exact scoped selection opens the right card or terminal; layout indicates decomposition/dependencies, and unavailable or partial data remains visible. Camera/collapse state survives refresh. No cross-project authority or edges are invented. |
@@ -31,6 +32,11 @@ task/run state, questions, annotations, delivery eligibility and Trash. Provider
 drivers own product-specific session/process operations. PTY infrastructure owns
 the actual terminal. ZAP retains plan/economics/admission authority. A result
 report, a terminal exit, an answer and a plan approval are different records.
+
+Provider-native session/message/turn IDs and Zap submission correlations are
+different records too. An accepted submission can precede a native turn ID;
+adapters retain explicit correlation provenance and reconcile later events
+without fabricating a native identifier or sending the same request again.
 
 Wire/model schemas remain below runtime implementations in the import graph.
 The common workspace protocol must not import a managed backend which imports
