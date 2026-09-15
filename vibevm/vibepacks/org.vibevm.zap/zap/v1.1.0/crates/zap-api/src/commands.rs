@@ -18,6 +18,11 @@ use zap_wire::{
 
 use crate::QueryInput;
 
+mod change_admission;
+pub use change_admission::{
+    ChangeAdmissionAdvanceRequest, ChangeAdmissionAdvanceView, OwnerDecisionContextView,
+};
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", content = "revision", rename_all = "snake_case")]
 #[spec(documents = "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation")]
@@ -209,6 +214,7 @@ pub struct PreparedEffectComparisonView {
     pub alternatives: Vec<PreparedEffectBundleView>,
     pub basis_request: BasisRequest,
     pub relevant_basis: zap_wire::RelevantBasisDigest,
+    pub affected_scopes: Vec<AffectedScopeView>,
 }
 
 impl From<&PreparedEffectComparison> for PreparedEffectComparisonView {
@@ -223,6 +229,7 @@ impl From<&PreparedEffectComparison> for PreparedEffectComparisonView {
                 .collect(),
             basis_request: value.basis_request().clone(),
             relevant_basis: value.relevant_basis(),
+            affected_scopes: value.affected_scopes().to_vec(),
         }
     }
 }

@@ -22,271 +22,307 @@
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 476,
+      "line": 483,
       "symbol": "zap_api::commands::BundleArchiveRequest",
-      "end_line": 481,
+      "end_line": 488,
       "fingerprint": "tok1:09de0a3c280143ae33cd134d6ad9a84ccd8d918aa7dd6891c02449c9526a2ece"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 517,
+      "line": 524,
       "symbol": "zap_api::commands::BundleArchiveView",
-      "end_line": 530,
+      "end_line": 537,
       "fingerprint": "tok1:5e0de197705cac828166f385372107e465ed64cc34d318776a8d94b33bd88b31"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 499,
+      "line": 506,
       "symbol": "zap_api::commands::BundleEntryReadRequest",
-      "end_line": 507,
+      "end_line": 514,
       "fingerprint": "tok1:8de980f85f8985f44a88a65a6289e62a21a51fc8197c628977b4a1faac415005"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 532,
+      "line": 539,
       "symbol": "zap_api::commands::BundleEntryView",
-      "end_line": 545,
+      "end_line": 552,
       "fingerprint": "tok1:54d1c1aa01b3853b4726d0498af756f3a7b55ef0c9fdd1d7e8870372e28c4a88"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 427,
+      "line": 434,
       "symbol": "zap_api::commands::CommandFrameInput",
-      "end_line": 436,
+      "end_line": 443,
       "fingerprint": "tok1:cbcf0847740d5572a1f539353588e98c2b8c5da40d40699918427a872ee370d9"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "enum",
-      "line": 287,
+      "line": 294,
       "symbol": "zap_api::commands::CommitDispositionView",
-      "end_line": 296,
+      "end_line": 303,
       "fingerprint": "tok1:3ea4b58c2aa1c1e93e8d108825d5e7ff901e9f2b33d67a595288ff7ce7522298"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 250,
+      "line": 257,
       "symbol": "zap_api::commands::CommitReceiptView",
-      "end_line": 264,
+      "end_line": 271,
       "fingerprint": "tok1:a6bba80db231e0619655fcdc00d3b18a83d6de9ea3037ea1a351fe7adce404f3"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 63,
+      "line": 68,
       "symbol": "zap_api::commands::EffectBundleDraftInput",
-      "end_line": 71,
+      "end_line": 76,
       "fingerprint": "tok1:857025e16c79c1a7d1ead1c30c919bbcc51bdfd5f8011cbb792bd8131ead9542"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 149,
+      "line": 154,
       "symbol": "zap_api::commands::EffectBundleRequestView",
-      "end_line": 159,
+      "end_line": 164,
       "fingerprint": "tok1:6da207fa3e86670648d53807493422b9b9f86ff222c95d8ee8cf4768d1c13bca"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 87,
+      "line": 92,
       "symbol": "zap_api::commands::EffectComparisonDraftInput",
-      "end_line": 96,
+      "end_line": 101,
       "fingerprint": "tok1:adb64458859bc297a1d6acd3ad1cdc14b95e6e29bcf29aa5e4fc35e7a92f253e"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 38,
+      "line": 43,
       "symbol": "zap_api::commands::EffectDraftInput",
-      "end_line": 48,
+      "end_line": 53,
       "fingerprint": "tok1:ab17b15f00aafd117745a0ab8a7e6a448dc4a873cc8bc7303f14d75780dc7b81"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 113,
+      "line": 118,
       "symbol": "zap_api::commands::EffectPreflightRequestView",
-      "end_line": 127,
+      "end_line": 132,
       "fingerprint": "tok1:42ad3d3c8b3127950926eabf1d2590c3973c4a7da265f09bf53a8f3a0ff8362f"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "enum",
-      "line": 316,
+      "line": 323,
       "symbol": "zap_api::commands::NativeDriverRequest",
-      "end_line": 362,
+      "end_line": 369,
       "fingerprint": "tok1:433e4c8f69e5e55ff4cbdcb4a8363119548cb7dbecfef4ef4505ac020c417051"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 364,
+      "line": 371,
       "symbol": "zap_api::commands::NativeLaunchReadyView",
-      "end_line": 370,
+      "end_line": 377,
       "fingerprint": "tok1:ffd38ff93e2251e0255b9f6f9e2d49ea0c81dd6a874140e6a634cfbbf2a4813b"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 372,
+      "line": 379,
       "symbol": "zap_api::commands::NativeRecoveryStatusView",
-      "end_line": 387,
+      "end_line": 394,
       "fingerprint": "tok1:9b8614cb95e7e01dd0b403259182ca4e34d80b173bb2edbca9f1eecc4e5e6b84"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "enum",
-      "line": 509,
+      "line": 516,
       "symbol": "zap_api::commands::PortableEntryBodyFormat",
-      "end_line": 515,
+      "end_line": 522,
       "fingerprint": "tok1:621c0b99778ec7b10c49eb04b0e63fc8da60580d94872674897c79bd2b92f29a"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "enum",
-      "line": 483,
+      "line": 490,
       "symbol": "zap_api::commands::PortableEntryKindView",
-      "end_line": 497,
+      "end_line": 504,
       "fingerprint": "tok1:98aca15779a56c2d4ad2cd7ecbfa2536b110aa9856aeca239bbae2da63bc0450"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "enum",
-      "line": 21,
+      "line": 26,
       "symbol": "zap_api::commands::PreparationRead",
-      "end_line": 27,
+      "end_line": 32,
       "fingerprint": "tok1:f21fa1b5517956235d1c78e368fec382596e73234a964169f8045f3b579ef4c8"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 448,
+      "line": 455,
       "symbol": "zap_api::commands::PrepareBundleRequest",
-      "end_line": 455,
+      "end_line": 462,
       "fingerprint": "tok1:7c503304c23e132445bb0a21a1eefa55d1cd84d2326c350fa888328ef4080a9f"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 457,
+      "line": 464,
       "symbol": "zap_api::commands::PrepareComparisonRequest",
-      "end_line": 464,
+      "end_line": 471,
       "fingerprint": "tok1:db372afa9e0901c76e52e86adc8fecc5c6488a4cdec6f3a18f9457889e133653"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 466,
+      "line": 473,
       "symbol": "zap_api::commands::PrepareProjectedRecordRequest",
-      "end_line": 474,
+      "end_line": 481,
       "fingerprint": "tok1:30afef5dd35839db50cc290e0bebcd9d8529adbe669071211a4bac8da0e23f16"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 178,
+      "line": 183,
       "symbol": "zap_api::commands::PreparedEffectBundleView",
-      "end_line": 187,
+      "end_line": 192,
       "fingerprint": "tok1:b84f23207a975130511bef2ce029575e6095e3b61ce5b5c3f1c5b21b56c57f62"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 203,
+      "line": 208,
       "symbol": "zap_api::commands::PreparedEffectComparisonView",
-      "end_line": 212,
-      "fingerprint": "tok1:4ef0b85eafbf6faf683e03f9ab748c09fe51558e49c63f224821ada0954671fe"
+      "end_line": 218,
+      "fingerprint": "tok1:08c8dbba0d45fab0e9ee83b57ccb545ebc663856ec6e8ec29b98acc00e027528"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 230,
+      "line": 237,
       "symbol": "zap_api::commands::ProjectedRecordSelector",
-      "end_line": 236,
+      "end_line": 243,
       "fingerprint": "tok1:8b58ae1e723071012a8d5c5d729e5245cd95089fca02abba16307dc056fd175c"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 238,
+      "line": 245,
       "symbol": "zap_api::commands::ProjectedRecordView",
-      "end_line": 248,
+      "end_line": 255,
       "fingerprint": "tok1:2ecc7f57a808f3576e8c076d9d42976f4c01a91aee14daa375c1da6566696ab7"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 408,
+      "line": 415,
       "symbol": "zap_api::commands::ProtectedCommand",
-      "end_line": 415,
+      "end_line": 422,
       "fingerprint": "tok1:50c8a6212cbb17e0b39567f215f0bcff147e1dfd745cd07c220607b9efdd5b7a"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 438,
+      "line": 445,
       "symbol": "zap_api::commands::ReconcileRequest",
-      "end_line": 446,
+      "end_line": 453,
       "fingerprint": "tok1:35cf0d15b6dbfedae8d028e832d778919151abd143c74ea3a81dca78f0f964b9"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 389,
+      "line": 396,
       "symbol": "zap_api::commands::RuntimeInspectRequest",
-      "end_line": 395,
+      "end_line": 402,
       "fingerprint": "tok1:b5211b244286616b0fea6b3070e8db8689ea45a3d6b7453d3412668d8194e18b"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "struct",
-      "line": 397,
+      "line": 404,
       "symbol": "zap_api::commands::RuntimeView",
-      "end_line": 406,
+      "end_line": 413,
       "fingerprint": "tok1:434cb266c10c335f3f9cb5faff4366e71500ad055913cbc64fb39999179e1bd4"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/commands.rs",
       "item_kind": "enum",
-      "line": 298,
+      "line": 305,
       "symbol": "zap_api::commands::SubmissionStatusView",
-      "end_line": 314,
+      "end_line": 321,
       "fingerprint": "tok1:317de65d8fdf1c9de451f6eef74beba7ccd30a53dfb99947725fa4db66b60699"
+    },
+    {
+      "crate_name": "zap-api",
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "item_kind": "mod",
+      "line": 12,
+      "symbol": "zap_api::commands::change_admission",
+      "end_line": 12,
+      "fingerprint": "tok1:05650d7a611de4681c44275a1745bc6d93ae7d97e768ef8ae84ea11cfe991729"
+    },
+    {
+      "crate_name": "zap-api",
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "item_kind": "struct",
+      "line": 14,
+      "symbol": "zap_api::commands::change_admission::ChangeAdmissionAdvanceRequest",
+      "end_line": 36,
+      "fingerprint": "tok1:4fedc73934d78281b6ad16236e58e853b4863ace365f50ccdbef7d5421d3895a"
+    },
+    {
+      "crate_name": "zap-api",
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "item_kind": "enum",
+      "line": 38,
+      "symbol": "zap_api::commands::change_admission::ChangeAdmissionAdvanceView",
+      "end_line": 65,
+      "fingerprint": "tok1:75d90a5553a04f357e062034867b0e51ed44f4426a0e3670334264a137fa0c76"
+    },
+    {
+      "crate_name": "zap-api",
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "item_kind": "struct",
+      "line": 67,
+      "symbol": "zap_api::commands::change_admission::OwnerDecisionContextView",
+      "end_line": 82,
+      "fingerprint": "tok1:dba88a98f65dfdf5f89f0942c37ace5759e5ea559bd227c0896ba76f0a5075fb"
     },
     {
       "crate_name": "zap-api",
@@ -301,108 +337,108 @@
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 178,
+      "line": 181,
       "symbol": "zap_api::surface::AffectedTraversalBeginRequest",
-      "end_line": 192,
+      "end_line": 195,
       "fingerprint": "tok1:ea054e48fe0af6664e14b8f5c6b33089293b85ba8af164e40095613e741d3b84"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 208,
+      "line": 211,
       "symbol": "zap_api::surface::AffectedTraversalCancelRequest",
-      "end_line": 216,
+      "end_line": 219,
       "fingerprint": "tok1:5c3e3d3fba5d3d094933adf3a92de2845705c2c60f8704a563d6314fcb62a022"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 194,
+      "line": 197,
       "symbol": "zap_api::surface::AffectedTraversalContinueRequest",
-      "end_line": 206,
+      "end_line": 209,
       "fingerprint": "tok1:6009548a8b549316a169aa60629e01c8f0e3aebeadce68beb534a8b0d5030ea9"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 218,
+      "line": 221,
       "symbol": "zap_api::surface::AffectedTraversalView",
-      "end_line": 239,
+      "end_line": 242,
       "fingerprint": "tok1:e79a27abf23fef61413ea32c3c440cf008fa3b689ca6858592b1ef8c66b75072"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "enum",
-      "line": 124,
+      "line": 127,
       "symbol": "zap_api::surface::EventActionAdmission",
-      "end_line": 133,
+      "end_line": 136,
       "fingerprint": "tok1:4f5cb8c50d2f255cda42c001a14500fb94aa438380bdee436bbfed92a277cc22"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "enum",
-      "line": 113,
+      "line": 116,
       "symbol": "zap_api::surface::EventAuthority",
-      "end_line": 122,
+      "end_line": 125,
       "fingerprint": "tok1:271fdc59cbf17d1af0a2ac90299047fc430404bbebd5aeadd4868ca5c8a2a4c7"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 86,
+      "line": 89,
       "symbol": "zap_api::surface::EventCursor",
-      "end_line": 96,
+      "end_line": 99,
       "fingerprint": "tok1:0623ef3e76942f2b760d5b6379db7b6a67be80a4d326325f889fa93d81992ae4"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 263,
+      "line": 266,
       "symbol": "zap_api::surface::EventPage",
-      "end_line": 274,
+      "end_line": 277,
       "fingerprint": "tok1:f4850be3b3d7c7597a350898af5065e65bf9eb0e56e85df3a6497faa00414a8d"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 98,
+      "line": 101,
       "symbol": "zap_api::surface::EventSummary",
-      "end_line": 111,
+      "end_line": 114,
       "fingerprint": "tok1:aef8330e06435aba59eea2b195d7effde36ccabe25e1f94635ca65293c764ca8"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 156,
+      "line": 159,
       "symbol": "zap_api::surface::IndexRebuildRequest",
-      "end_line": 165,
+      "end_line": 168,
       "fingerprint": "tok1:177d1e93669d80e1ab6a4600fddff6a8e6bceae5079b30315b3f4c271d72830b"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 167,
+      "line": 170,
       "symbol": "zap_api::surface::IndexRebuildView",
-      "end_line": 176,
+      "end_line": 179,
       "fingerprint": "tok1:33aeffcbfdb67c7e79f8ef6cf2b69db78ef723f0b32bc7a0c98d27d52501f57d"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "trait",
-      "line": 453,
+      "line": 458,
       "symbol": "zap_api::surface::MachineReadPort",
-      "end_line": 476,
+      "end_line": 481,
       "fingerprint": "tok1:ed2857c52e401f5d00ddfacafad575293accdeb9e9356c45727dfe0530fb3ac1"
     },
     {
@@ -411,88 +447,88 @@
       "item_kind": "enum",
       "line": 13,
       "symbol": "zap_api::surface::MachineRequest",
-      "end_line": 84,
-      "fingerprint": "tok1:26b0dad81a298c7ea600509e8ad295d51cd148e80166764dca087fe23e85eb96"
+      "end_line": 87,
+      "fingerprint": "tok1:d9ded5d096d1088d1e0deb09b06bcc619584b9a8963c4fbd92562f3ca115a147"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "enum",
-      "line": 433,
+      "line": 437,
       "symbol": "zap_api::surface::MachineResponse",
-      "end_line": 451,
-      "fingerprint": "tok1:56a47ee941b190da1002c85b13d2081c2c8551bb975f7e7b098f157d24fd9340"
+      "end_line": 456,
+      "fingerprint": "tok1:467f509155fce1c3f400cce47d75b95abbc29b20b954d4f16230053f84513569"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "enum",
-      "line": 306,
+      "line": 309,
       "symbol": "zap_api::surface::PageCompleteness",
-      "end_line": 316,
+      "end_line": 319,
       "fingerprint": "tok1:6d6869e69680d44bce959f04cfaaf12e6f4789a46db413caa1cbf0f503f10da7"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "enum",
-      "line": 252,
+      "line": 255,
       "symbol": "zap_api::surface::PhysicalProjectionAlgorithmView",
-      "end_line": 261,
+      "end_line": 264,
       "fingerprint": "tok1:bfefe9d47784c57fe3260187534cf75031456ad3a81dc431381404802f82221e"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "enum",
-      "line": 241,
+      "line": 244,
       "symbol": "zap_api::surface::PhysicalSchemaView",
-      "end_line": 250,
+      "end_line": 253,
       "fingerprint": "tok1:b486b2b955622c119d3cab9954fa510d1d0c1e0b1cf012998c29374eabbbc573"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 289,
+      "line": 292,
       "symbol": "zap_api::surface::QueryInput",
-      "end_line": 298,
+      "end_line": 301,
       "fingerprint": "tok1:2fb348e456ea8467404e8b67b09eac069f1286b96f436a1eaec45a26a0cc312b"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 276,
+      "line": 279,
       "symbol": "zap_api::surface::QueryPage",
-      "end_line": 287,
+      "end_line": 290,
       "fingerprint": "tok1:76cd65b0e83f32c187569421718135b8d11b5fbc5cdc09bb25122cf28ac825e9"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 135,
+      "line": 138,
       "symbol": "zap_api::surface::SnapshotView",
-      "end_line": 154,
+      "end_line": 157,
       "fingerprint": "tok1:8b29541505798b13918aa637e277b23e1480fe980c279aecb7d1812a2c0ae057"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "struct",
-      "line": 318,
+      "line": 321,
       "symbol": "zap_api::surface::SurfaceCapabilities",
-      "end_line": 331,
+      "end_line": 334,
       "fingerprint": "tok1:7d529123f8e8687736838b01054da79b6c1b938c9bcca828e02a4bb153fe0042"
     },
     {
       "crate_name": "zap-api",
       "file": "crates/zap-api/src/surface.rs",
       "item_kind": "fn",
-      "line": 478,
+      "line": 483,
       "symbol": "zap_api::surface::execute_read",
-      "end_line": 494,
+      "end_line": 499,
       "fingerprint": "tok1:92aacbbfab31429673c7e09270ef9251ead990fd6934570d9ef3fee181e68b7f"
     },
     {
@@ -1079,6 +1115,24 @@
       "symbol": "zap_app::runtime_service::application::ApplicationServiceDependencies",
       "end_line": 51,
       "fingerprint": "tok1:cbef8a00616b65b6fbe3c388bfa85f21898cf7be492ac6a27e06b132eb0103d3"
+    },
+    {
+      "crate_name": "zap-app",
+      "file": "crates/zap-app/src/runtime_service/change_admission.rs",
+      "item_kind": "mod",
+      "line": 1,
+      "symbol": "zap_app::runtime_service::change_admission",
+      "end_line": 1,
+      "fingerprint": "tok1:05650d7a611de4681c44275a1745bc6d93ae7d97e768ef8ae84ea11cfe991729"
+    },
+    {
+      "crate_name": "zap-app",
+      "file": "crates/zap-app/src/runtime_service/change_admission.rs",
+      "item_kind": "fn",
+      "line": 31,
+      "symbol": "zap_app::runtime_service::change_admission::ApplicationService::advance_change_admission",
+      "end_line": 187,
+      "fingerprint": "tok1:03f59f0eb69edc753ca02f49c4b1d35c4a067a29311fb3c844bbba0c20069af9"
     },
     {
       "crate_name": "zap-app",
@@ -2515,19 +2569,28 @@
       "crate_name": "zap-core",
       "file": "crates/zap-core/src/commit/service.rs",
       "item_kind": "mod",
-      "line": 3,
+      "line": 5,
       "symbol": "zap_core::commit::service",
-      "end_line": 5,
+      "end_line": 7,
       "fingerprint": "tok1:18f37a034f182c48a0ee04a59482f4d7aad3e4e9c40de28682e40fbc0bf9eaee"
     },
     {
       "crate_name": "zap-core",
       "file": "crates/zap-core/src/commit/service.rs",
       "item_kind": "struct",
-      "line": 7,
+      "line": 9,
       "symbol": "zap_core::commit::service::CommitService",
-      "end_line": 30,
+      "end_line": 32,
       "fingerprint": "tok1:20cc5bd4a497d0ce5234a53f1573be81a0f2422f852985f91b3080e93da44a71"
+    },
+    {
+      "crate_name": "zap-core",
+      "file": "crates/zap-core/src/commit/service/impact_preparation.rs",
+      "item_kind": "fn",
+      "line": 4,
+      "symbol": "zap_core::commit::service::impact_preparation::CommitService<S>::prepare_action_impact",
+      "end_line": 60,
+      "fingerprint": "tok1:5570afa32f305ceb7148bd22cbbbcb9d6bcee87b50447000635e6959ddc90d4e"
     },
     {
       "crate_name": "zap-core",
@@ -2641,9 +2704,9 @@
       "crate_name": "zap-core",
       "file": "crates/zap-core/src/effects.rs",
       "item_kind": "struct",
-      "line": 547,
+      "line": 553,
       "symbol": "zap_core::effects::CommandPreflightRecord",
-      "end_line": 555,
+      "end_line": 561,
       "fingerprint": "tok1:92d114fa46bf5b71eaa1a2729fd78930b1ca4d0af0d43029f7f100cf221c0ca4"
     },
     {
@@ -2733,8 +2796,8 @@
       "item_kind": "struct",
       "line": 468,
       "symbol": "zap_core::effects::PreparedEffectComparison",
-      "end_line": 476,
-      "fingerprint": "tok1:f83b94d2c799c807e34de0f3518bda9fe9a80596184fc5fd2dc960a7aab4ff3f"
+      "end_line": 477,
+      "fingerprint": "tok1:955c5c6390bfe02a41b110c58d0a3b695835a51c6b06bc979bb079daeb601477"
     },
     {
       "crate_name": "zap-core",
@@ -13080,134 +13143,6 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::BundleArchiveRequest",
-      "line": 478,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::BundleArchiveView",
-      "line": 519,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::BundleEntryReadRequest",
-      "line": 501,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::BundleEntryView",
-      "line": 534,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::CommandFrameInput",
-      "line": 429,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::CommitDispositionView",
-      "line": 289,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::CommitReceiptView",
-      "line": 252,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::EffectBundleDraftInput",
-      "line": 65,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::EffectBundleRequestView",
-      "line": 151,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::EffectComparisonDraftInput",
-      "line": 89,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::EffectDraftInput",
-      "line": 40,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::EffectPreflightRequestView",
-      "line": 115,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::NativeDriverRequest",
-      "line": 318,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::NativeLaunchReadyView",
-      "line": 366,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::NativeRecoveryStatusView",
-      "line": 374,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::PortableEntryBodyFormat",
-      "line": 511,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
-      "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/commands.rs",
-      "from_symbol": "zap_api::commands::PortableEntryKindView",
       "line": 485,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
@@ -13215,8 +13150,136 @@
     },
     {
       "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::BundleArchiveView",
+      "line": 526,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::BundleEntryReadRequest",
+      "line": 508,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::BundleEntryView",
+      "line": 541,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::CommandFrameInput",
+      "line": 436,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::CommitDispositionView",
+      "line": 296,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::CommitReceiptView",
+      "line": 259,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::EffectBundleDraftInput",
+      "line": 70,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::EffectBundleRequestView",
+      "line": 156,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::EffectComparisonDraftInput",
+      "line": 94,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::EffectDraftInput",
+      "line": 45,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::EffectPreflightRequestView",
+      "line": 120,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::NativeDriverRequest",
+      "line": 325,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::NativeLaunchReadyView",
+      "line": 373,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::NativeRecoveryStatusView",
+      "line": 381,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::PortableEntryBodyFormat",
+      "line": 518,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
+      "from_symbol": "zap_api::commands::PortableEntryKindView",
+      "line": 492,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#portable-archive",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::PreparationRead",
-      "line": 23,
+      "line": 28,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
       "verb": "documents"
@@ -13224,7 +13287,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::PrepareBundleRequest",
-      "line": 450,
+      "line": 457,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
       "verb": "documents"
@@ -13232,7 +13295,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::PrepareComparisonRequest",
-      "line": 459,
+      "line": 466,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
       "verb": "documents"
@@ -13240,7 +13303,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::PrepareProjectedRecordRequest",
-      "line": 468,
+      "line": 475,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#projected-record",
       "verb": "documents"
@@ -13248,7 +13311,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::PreparedEffectBundleView",
-      "line": 180,
+      "line": 185,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
       "verb": "documents"
@@ -13256,7 +13319,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::PreparedEffectComparisonView",
-      "line": 205,
+      "line": 210,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#effect-preparation",
       "verb": "documents"
@@ -13264,7 +13327,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::ProjectedRecordSelector",
-      "line": 232,
+      "line": 239,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#projected-record",
       "verb": "documents"
@@ -13272,7 +13335,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::ProjectedRecordView",
-      "line": 240,
+      "line": 247,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#projected-record",
       "verb": "documents"
@@ -13280,7 +13343,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::ProtectedCommand",
-      "line": 410,
+      "line": 417,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
       "verb": "documents"
@@ -13288,7 +13351,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::ReconcileRequest",
-      "line": 440,
+      "line": 447,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
       "verb": "documents"
@@ -13296,7 +13359,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::RuntimeInspectRequest",
-      "line": 391,
+      "line": 398,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
       "verb": "documents"
@@ -13304,7 +13367,7 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::RuntimeView",
-      "line": 399,
+      "line": 406,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#native-runtime",
       "verb": "documents"
@@ -13312,9 +13375,57 @@
     {
       "file": "crates/zap-api/src/commands.rs",
       "from_symbol": "zap_api::commands::SubmissionStatusView",
-      "line": 300,
+      "line": 307,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#command-reconciliation",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "from_symbol": "zap_api::commands::change_admission",
+      "line": 12,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#CHANGE-ADMISSION-ORCHESTRATION",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "from_symbol": "zap_api::commands::change_admission::ChangeAdmissionAdvanceRequest",
+      "line": 16,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#CHANGE-ADMISSION-ORCHESTRATION",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "from_symbol": "zap_api::commands::change_admission::ChangeAdmissionAdvanceRequest",
+      "line": 19,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#change-admission-orchestration",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "from_symbol": "zap_api::commands::change_admission::ChangeAdmissionAdvanceView",
+      "line": 40,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#CHANGE-ADMISSION-ORCHESTRATION",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "from_symbol": "zap_api::commands::change_admission::ChangeAdmissionAdvanceView",
+      "line": 43,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#change-admission-orchestration",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-api/src/commands/change_admission.rs",
+      "from_symbol": "zap_api::commands::change_admission::OwnerDecisionContextView",
+      "line": 69,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#change-admission-orchestration",
       "verb": "documents"
     },
     {
@@ -13328,7 +13439,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::AffectedTraversalBeginRequest",
-      "line": 180,
+      "line": 183,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-ALGORITHMIC-NAVIGATION",
       "verb": "implements"
@@ -13336,47 +13447,47 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::AffectedTraversalBeginRequest",
-      "line": 183,
+      "line": 186,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#index-traversal",
       "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::AffectedTraversalCancelRequest",
-      "line": 210,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-ALGORITHMIC-NAVIGATION",
-      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::AffectedTraversalCancelRequest",
       "line": 213,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#index-traversal",
-      "verb": "documents"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-ALGORITHMIC-NAVIGATION",
+      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::AffectedTraversalContinueRequest",
-      "line": 196,
+      "from_symbol": "zap_api::surface::AffectedTraversalCancelRequest",
+      "line": 216,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-ALGORITHMIC-NAVIGATION",
-      "verb": "implements"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#index-traversal",
+      "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::AffectedTraversalContinueRequest",
       "line": 199,
       "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-ALGORITHMIC-NAVIGATION",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-api/src/surface.rs",
+      "from_symbol": "zap_api::surface::AffectedTraversalContinueRequest",
+      "line": 202,
+      "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#index-traversal",
       "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::AffectedTraversalView",
-      "line": 220,
+      "line": 223,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-ALGORITHMIC-NAVIGATION",
       "verb": "implements"
@@ -13384,79 +13495,79 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::AffectedTraversalView",
-      "line": 223,
+      "line": 226,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#index-traversal",
       "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::EventActionAdmission",
-      "line": 126,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
-      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::EventActionAdmission",
       "line": 129,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
-      "verb": "documents"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
+      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::EventAuthority",
-      "line": 115,
+      "from_symbol": "zap_api::surface::EventActionAdmission",
+      "line": 132,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
-      "verb": "implements"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
+      "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::EventAuthority",
       "line": 118,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
-      "verb": "documents"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
+      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::EventCursor",
-      "line": 88,
+      "from_symbol": "zap_api::surface::EventAuthority",
+      "line": 121,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
-      "verb": "implements"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
+      "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::EventCursor",
       "line": 91,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
-      "verb": "documents"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
+      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::EventPage",
-      "line": 264,
+      "from_symbol": "zap_api::surface::EventCursor",
+      "line": 94,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
-      "verb": "implements"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
+      "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::EventPage",
       "line": 267,
       "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-api/src/surface.rs",
+      "from_symbol": "zap_api::surface::EventPage",
+      "line": 270,
+      "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
       "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::EventSummary",
-      "line": 99,
+      "line": 102,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
       "verb": "implements"
@@ -13464,7 +13575,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::EventSummary",
-      "line": 102,
+      "line": 105,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
       "verb": "documents"
@@ -13472,7 +13583,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::IndexRebuildRequest",
-      "line": 158,
+      "line": 161,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-MANDATORY-INDEXES",
       "verb": "implements"
@@ -13480,7 +13591,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::IndexRebuildRequest",
-      "line": 161,
+      "line": 164,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#index-traversal",
       "verb": "documents"
@@ -13488,7 +13599,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::IndexRebuildView",
-      "line": 169,
+      "line": 172,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-MANDATORY-INDEXES",
       "verb": "implements"
@@ -13496,7 +13607,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::IndexRebuildView",
-      "line": 172,
+      "line": 175,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#index-traversal",
       "verb": "documents"
@@ -13504,7 +13615,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::MachineReadPort",
-      "line": 467,
+      "line": 472,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#BACKEND-CONSISTENCY",
       "verb": "implements"
@@ -13512,7 +13623,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::MachineReadPort",
-      "line": 468,
+      "line": 473,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#read-surface",
       "verb": "documents"
@@ -13536,7 +13647,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::MachineResponse",
-      "line": 435,
+      "line": 439,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#BACKEND-CONSISTENCY",
       "verb": "implements"
@@ -13544,7 +13655,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::MachineResponse",
-      "line": 436,
+      "line": 440,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#read-surface",
       "verb": "documents"
@@ -13552,7 +13663,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::PageCompleteness",
-      "line": 308,
+      "line": 311,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-BOUNDED-QUERIES",
       "verb": "implements"
@@ -13560,47 +13671,47 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::PageCompleteness",
-      "line": 311,
+      "line": 314,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#query-pages",
       "verb": "documents"
-    },
-    {
-      "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::PhysicalProjectionAlgorithmView",
-      "line": 254,
-      "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
-      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::PhysicalProjectionAlgorithmView",
       "line": 257,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
-      "verb": "documents"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
+      "verb": "implements"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
-      "from_symbol": "zap_api::surface::PhysicalSchemaView",
-      "line": 243,
+      "from_symbol": "zap_api::surface::PhysicalProjectionAlgorithmView",
+      "line": 260,
       "provenance": "authored",
-      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
-      "verb": "implements"
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
+      "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::PhysicalSchemaView",
       "line": 246,
       "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-api/src/surface.rs",
+      "from_symbol": "zap_api::surface::PhysicalSchemaView",
+      "line": 249,
+      "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
       "verb": "documents"
     },
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::QueryInput",
-      "line": 291,
+      "line": 294,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-BOUNDED-QUERIES",
       "verb": "implements"
@@ -13608,7 +13719,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::QueryInput",
-      "line": 294,
+      "line": 297,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#query-pages",
       "verb": "documents"
@@ -13616,7 +13727,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::QueryPage",
-      "line": 277,
+      "line": 280,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-BOUNDED-QUERIES",
       "verb": "implements"
@@ -13624,7 +13735,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::QueryPage",
-      "line": 280,
+      "line": 283,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#query-pages",
       "verb": "documents"
@@ -13632,7 +13743,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::SnapshotView",
-      "line": 136,
+      "line": 139,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-SNAPSHOT-TAIL",
       "verb": "implements"
@@ -13640,7 +13751,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::SnapshotView",
-      "line": 139,
+      "line": 142,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#snapshot-events",
       "verb": "documents"
@@ -13648,7 +13759,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::SurfaceCapabilities",
-      "line": 319,
+      "line": 322,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-TRUTHFUL-CAPABILITIES",
       "verb": "implements"
@@ -13656,7 +13767,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::SurfaceCapabilities",
-      "line": 322,
+      "line": 325,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#read-surface",
       "verb": "documents"
@@ -13664,7 +13775,7 @@
     {
       "file": "crates/zap-api/src/surface.rs",
       "from_symbol": "zap_api::surface::execute_read",
-      "line": 478,
+      "line": 483,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#BACKEND-CONSISTENCY",
       "verb": "implements"
@@ -14228,6 +14339,22 @@
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-APP-GUIDE#service-lifecycle",
       "verb": "documents"
+    },
+    {
+      "file": "crates/zap-app/src/runtime_service/change_admission.rs",
+      "from_symbol": "zap_app::runtime_service::change_admission",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#CHANGE-ADMISSION-ORCHESTRATION",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-app/src/runtime_service/change_admission.rs",
+      "from_symbol": "zap_app::runtime_service::change_admission::ApplicationService::advance_change_admission",
+      "line": 31,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#CHANGE-ADMISSION-ORCHESTRATION",
+      "verb": "implements"
     },
     {
       "file": "crates/zap-app/src/runtime_service/config.rs",
@@ -15600,7 +15727,7 @@
     {
       "file": "crates/zap-core/src/commit/service.rs",
       "from_symbol": "zap_core::commit::service",
-      "line": 3,
+      "line": 5,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-ONE-TRANSACTION",
       "verb": "implements"
@@ -15608,9 +15735,17 @@
     {
       "file": "crates/zap-core/src/commit/service.rs",
       "from_symbol": "zap_core::commit::service::CommitService",
-      "line": 8,
+      "line": 10,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-CORE-GUIDE#commit-service",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-core/src/commit/service/impact_preparation.rs",
+      "from_symbol": "zap_core::commit::service::impact_preparation::CommitService<S>::prepare_action_impact",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-CORE-GUIDE#action-impact",
       "verb": "documents"
     },
     {
@@ -15736,7 +15871,7 @@
     {
       "file": "crates/zap-core/src/effects.rs",
       "from_symbol": "zap_core::effects::CommandPreflightRecord",
-      "line": 549,
+      "line": 555,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-CORE-GUIDE#prepared-effects",
       "verb": "documents"
@@ -30295,7 +30430,7 @@
     },
     {
       "anchor": "root",
-      "content_hash": "sha256:44d9043f550863de2f70a8f1cc3a358448987a943d066a261de95930caf712ac",
+      "content_hash": "sha256:019d6d32969b23c4ee51381304eb00eeb72c373cec727f2b3046ac81b3898826",
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "ZAP runtime: Rust execution architecture and acceptance boundary",
@@ -30475,7 +30610,7 @@
     },
     {
       "anchor": "surface",
-      "content_hash": "sha256:d42d4480fe594304d02901b22947e98cdc5a616a39d66e0d19c9627f75ef495c",
+      "content_hash": "sha256:18daf2926f4882c1b0db22ad88dca93896f295bc5fde2c5d52c5452cdf558598",
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "5. Machine surface and truthful capabilities",
@@ -30510,12 +30645,21 @@
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#RUNTIME-TOTAL-OBSERVABILITY"
     },
     {
+      "anchor": "CHANGE-ADMISSION-ORCHESTRATION",
+      "content_hash": "sha256:e216f90c2a3b4ea36e2d2c4ed8e11b2c945bd6ff7e14bc8b096fb4cc5104db98",
+      "doc_path": "flows/zap/ZAP-RUNTIME",
+      "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
+      "heading": "A protected change-admission orchestration operation may advance only the registered ServiceInternal assessment-adjudication and selected-admission records for one exact already-proposed assessment. It authenticates a credential already configured with the selected registered action scope, re-prepares the supplied comparison against the named store and revision, derives hold, affected jobs, effect identity and admission fields from current registered state, and commits each internal step under stable operation-derived command identities. Existing Owner credentials retain their separate exact decision/control role and gain no action scope. The operation never exposes a general ServiceInternal command route and never applies the product effect. Automatic eligible work returns admission-ready without another Owner decision; Owner-decision-required work durably records its hold and returns the exact decision boundary until a current bound Owner decision exists. Retry reconciles each internal command identity before advancing, while stale basis, foreign state, changed comparison, refusal and uncertain in-flight work remain explicit. @status:spec/plan",
+      "line": 37,
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#CHANGE-ADMISSION-ORCHESTRATION"
+    },
+    {
       "anchor": "migration",
       "content_hash": "sha256:c5d04f716bb1c86efc4a31f1cde460e46d8d89b56e12d926729b9ea064c5368a",
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "6. Migration and release acceptance",
-      "line": 39,
+      "line": 40,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#migration"
     },
     {
@@ -30524,7 +30668,7 @@
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "Migration captures the complete shared or user-local MUP plan, every task contract and legacy constraint, original bytes and hash domains, and an exact identity, obligation, evidence, and authority-classification map into a separate recoverable Rust store. It validates before switching the store pointer and never starts NEXT. Release evidence covers isolated campaigns, native parallel work, restart and unknown-effect reconciliation, stop and economics precedence, lowering and Dreamer, weak-bundle fixtures, bounded large-graph queries, generic-project installation, source-only payload, and absence of production Python. Applicable receipts are reused; the final scoped package gate does not require an unrelated VibeVM product panel. @status:spec/plan",
-      "line": 40,
+      "line": 41,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#MIGRATION-AND-RELEASE"
     },
     {
@@ -30533,7 +30677,7 @@
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "Temporary campaign specifications and prototype material may be retired only after unique requirements, decisions, behavior mappings, provenance, and accepted evidence are promoted to permanent project sources. Corrected Rust behavior uses its explicit epoch and is not misreported as byte-identical legacy behavior. Package release version, store and wire epochs, artifact maturity, and campaign completion remain independent. @status:spec/plan",
-      "line": 41,
+      "line": 42,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#RUNTIME-PROMOTION-BOUNDARY"
     },
     {
@@ -32133,14 +32277,14 @@
     },
     {
       "anchor": "root",
-      "content_hash": "sha256:aef5344ef6a00243bb4b7b9a7326597cd2399fd1184bed01aee37e833389f76f",
+      "content_hash": "sha256:20ebdff809819666a6f3a95a2d6175fd197605e68ba08d8338a12899292f2c30",
       "doc_path": "flows/zap/ZAP-RUST-MACHINE-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
       "heading": "Rust machine API usage guide",
       "line": 1,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#root",
       "kind": "guide",
-      "revision": 1
+      "revision": 4
     },
     {
       "anchor": "read-surface",
@@ -32243,14 +32387,25 @@
     },
     {
       "anchor": "integration-examples",
-      "content_hash": "sha256:8a0a2eef470d7126ce284cef1ed1fb786ae0f3c35f108acba060ba088d2681ad",
+      "content_hash": "sha256:e9e87380886415628a462f58c7d6c9af48bc6901fed5d60fe88dc51e1f058df8",
       "doc_path": "flows/zap/ZAP-RUST-MACHINE-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
       "heading": "Executable integration examples",
       "line": 198,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#integration-examples",
       "kind": "guide",
-      "revision": 1
+      "revision": 3
+    },
+    {
+      "anchor": "change-admission-orchestration",
+      "content_hash": "sha256:ac24f0a9a97e7249b48a9886ee9bcc56ce3205bfba527bea1b737e4cce02f462",
+      "doc_path": "flows/zap/ZAP-RUST-MACHINE-GUIDE",
+      "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-MACHINE-GUIDE.md",
+      "heading": "Advance one selected change admission",
+      "line": 211,
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-MACHINE-GUIDE#change-admission-orchestration",
+      "kind": "guide",
+      "revision": 3
     },
     {
       "anchor": "root",

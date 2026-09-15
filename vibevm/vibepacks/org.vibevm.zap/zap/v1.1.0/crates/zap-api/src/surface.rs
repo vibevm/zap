@@ -41,6 +41,9 @@ pub enum MachineRequest {
     PrepareEffectComparison {
         request: crate::PrepareComparisonRequest,
     },
+    AdvanceChangeAdmission {
+        request: Box<crate::ChangeAdmissionAdvanceRequest>,
+    },
     PrepareProjectedRecord {
         request: crate::PrepareProjectedRecordRequest,
     },
@@ -348,6 +351,7 @@ impl Default for SurfaceCapabilities {
             query_ids: Vec::new(),
             unavailable_operations: [
                 "runtime_step",
+                "advance_change_admission",
                 "command",
                 "control",
                 "observation",
@@ -442,6 +446,7 @@ pub enum MachineResponse {
     Command(crate::SubmissionStatusView),
     PreparedEffectBundle(crate::PreparedEffectBundleView),
     PreparedEffectComparison(crate::PreparedEffectComparisonView),
+    ChangeAdmission(crate::ChangeAdmissionAdvanceView),
     ProjectedRecord(crate::ProjectedRecordView),
     BundleArchive(crate::BundleArchiveView),
     BundleEntry(crate::BundleEntryView),

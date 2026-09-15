@@ -311,6 +311,12 @@ fn execute_service_request_blocking(
         MachineRequest::PrepareEffectComparison { request } => service
             .prepare_effect_comparison(request)
             .map(MachineResponse::PreparedEffectComparison),
+        MachineRequest::AdvanceChangeAdmission { request } => {
+            let (id, secret) = credential()?;
+            service
+                .advance_change_admission(id, secret, *request)
+                .map(MachineResponse::ChangeAdmission)
+        }
         MachineRequest::PrepareProjectedRecord { request } => service
             .prepare_projected_record(request)
             .map(MachineResponse::ProjectedRecord),

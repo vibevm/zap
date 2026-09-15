@@ -64,6 +64,23 @@ query. Opening a view performs no model call or semantic mutation.
 - `POST /v1/archive/entry` — read one bounded typed entry from verified archive
   bytes without the live campaign store.
 - `POST /v1/reconcile` — inspect a protected command's exact durable outcome.
+- `POST /v1/change/admission` — a credentialed coordinator operation whose
+  configured action scope must cover every selected registered effect. It
+  re-prepares one exact proposed assessment, durably adjudicates it and prepares
+  its selected admission without applying the product command. The request binds
+  operation, store, revision, action, source and current assessment digests,
+  selected alternative, its ordered applied prefix, comparison draft and exact
+  next product command. Each call prepares one next effect while retaining the
+  aggregate assessment and alternative. The backend derives the registered
+  action-impact digest and ServiceInternal payloads;
+  those payloads remain unavailable through general routes. A required Owner
+  decision returns a durable held boundary and can be resumed after the exact
+  Owner decision is recorded through the separate Owner control channel. Stable internal command identities make lost-response and
+  restart retries reconcile before advancing. Latest-forecast discovery is
+  bounded to 4,096 forecast records in 512-record pages; exceeding that bound
+  returns typed `limit_exceeded`. The caller must reduce or archive forecast
+  history through a future supported maintenance policy before retrying; the
+  orchestration never falls back to an unbounded scan.
 
 `POST /v1/prepare/projected-record` can inspect one known registered current record
 without applying an effect. Send `PreparationRead::Current`, an empty-prefix/empty-effect

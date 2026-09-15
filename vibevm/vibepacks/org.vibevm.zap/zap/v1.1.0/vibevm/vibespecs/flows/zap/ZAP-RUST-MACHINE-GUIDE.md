@@ -1,8 +1,8 @@
 # Rust machine API usage guide {#root}
 
-`guide r1`
+`guide r4`
 
-This non-normative guide groups the public `zap_api` types by client operation. Its catalogs cover all 51 locally declared types and traits exposed by the [crate exports](../../../../crates/zap-api/src/lib.rs). Three runtime-owned reexports are identified separately below.
+This non-normative guide groups the public `zap_api` types by client operation. Its catalogs cover all 54 locally declared types and traits exposed by the [crate exports](../../../../crates/zap-api/src/lib.rs). Three runtime-owned reexports are identified separately below.
 
 The [backend contract](ZAP-BACKEND-API.md), [CLI guide](ZAP-CLI.md), [runtime contract](ZAP-RUNTIME.xml) and [agent protocol](ZAP-AGENT-PROTOCOL.xml) describe the configured service and its authority boundaries. Constructing or deserializing a DTO establishes neither configured capability nor permission to execute it. Preparation, admission, an external invocation and its receipt remain separate observations.
 
@@ -197,12 +197,43 @@ The [backend archive description](ZAP-BACKEND-API.md) explains configured bounds
 
 ## Executable integration examples {#integration-examples}
 
-`guide r1`
+`guide r3`
 
 These existing test entrypoints show how the public types are used with configured applications:
 
 - [Application server journey](../../../../crates/zap-app/tests/application_server.rs): configured service channels, canonical protected commands and authenticated HTTP helpers for the protected-route and completion scenarios.
 - [Packet and bundle journey](../../../../crates/zap-app/tests/packet_resolution_service.rs): lowered packet material, a sealed runtime claim, captured-source identity and prepared portable bundles within one service composition.
 - [Compiled binary journeys](../../../../crates/zap-cli/tests/binary_server.rs): a typed revision-difference query and authenticated snapshot read against a temporary store, followed by configured index maintenance and a missing-traversal refusal.
+- [Change-admission fixture writer](../../../../crates/zap-app/tests/application_server/change_admission_fixture.rs): set `ZAP_CHANGE_ADMISSION_FIXTURE_DIR` to a new empty directory and optionally set `ZAP_CHANGE_ADMISSION_FIXTURE_PROFILE=current`, then run the ignored `write_isolated_change_admission_fixture` test. Start its ordinary `application-server.json` with `zap serve-runtime`; discover the loopback address in `application.endpoint.json`. The generated `fixture.json` names synthetic role credential files and seeded strategy, Work, milestone, plan and resource identities without copying bearer values.
 
 The examples use explicit fixture configuration. Their source is a construction and integration reference; an execution receipt establishes which checks actually ran against particular source and configuration.
+
+## Advance one selected change admission {#change-admission-orchestration}
+
+`guide r3`
+
+`ChangeAdmissionAdvanceRequest` binds one stable operation, exact store and
+revision, configured privileged action, proposed assessment and selected
+alternative, the comparison draft to re-run, and the next
+protected product command without submitting that command.
+`source_assessment_digest` remains the pre-adjudication retry identity;
+`assessment_digest` is initially equal to it and changes to the exact digest
+returned by `OwnerDecisionRequired` when the held operation resumes. Optional
+decision and exception identities are references to existing exact records,
+not authority claims. Ordered multi-effect changes retain their one aggregate
+assessment and advance one effect at a time with the exact applied prefix.
+
+The authenticated service requires a configured coordinator credential whose
+action scope matches the selected registered effects. Owner credentials retain
+their separate exact decision/control role and do not gain action scope. The
+service derives and commits `ChangeAssessmentAdjudicated` and,
+when allowed, `ChangeAdmissionPrepared` through its private internal handle.
+Comparison preparation returns one backend-derived aggregate affected scope per
+alternative, so callers do not reproduce closure logic. Orchestration derives
+the action-impact digest through the registered cell and provider; it is not a
+caller claim. The response distinguishes `Ready` and `OwnerDecisionRequired` and returns stable
+internal command receipts. A lost HTTP response leaves the client uncertain;
+retry the byte-equivalent operation request, which reconciles both internal
+stage identities before advancing and returns `ExactRetry` receipts without a
+duplicate store revision. It never applies the product command. Reader/data
+credentials refuse, and no request field can create Owner/coordinator authority.

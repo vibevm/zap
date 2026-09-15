@@ -25,6 +25,10 @@ pub(super) fn request_matches_route(path: &str, request: &MachineRequest) -> boo
                 MachineRequest::PrepareEffectComparison { .. }
             )
             | (
+                "/v1/change/admission",
+                MachineRequest::AdvanceChangeAdmission { .. }
+            )
+            | (
                 "/v1/prepare/projected-record",
                 MachineRequest::PrepareProjectedRecord { .. }
             )

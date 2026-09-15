@@ -228,12 +228,45 @@ pub(crate) fn prepare_effect_comparison(
     let basis_provider = providers.basis.ok_or_else(preflight_error)?;
     basis_provider.validate_scope(state, &basis_request, basis_request.roots())?;
     let relevant_basis = basis_provider.relevant_basis(state, &basis_request)?.digest;
+    let affected_scopes = alternatives
+        .iter()
+        .map(|alternative| {
+            let mut roots = alternative
+                .request()
+                .effects()
+                .iter()
+                .flat_map(|effect| effect.declared_subjects().iter().cloned())
+                .collect::<Vec<_>>();
+            roots.sort();
+            roots.dedup();
+            let mut work_ids = alternative
+                .request()
+                .effects()
+                .iter()
+                .flat_map(|effect| effect.declared_subjects())
+                .filter_map(|subject| match subject {
+                    zap_wire::SubjectRef::Work(id) => Some(id.clone()),
+                    _ => None,
+                })
+                .collect::<Vec<_>>();
+            work_ids.sort();
+            work_ids.dedup();
+            let request = AffectedScopeRequest::new(roots, work_ids)?;
+            resolve_affected_scope(
+                state,
+                providers.affected_scope.ok_or_else(preflight_error)?,
+                providers.affected_jobs.ok_or_else(preflight_error)?,
+                &request,
+            )
+        })
+        .collect::<Result<Vec<_>, ZapError>>()?;
     Ok(crate::PreparedEffectComparison::new(
         state.identity(),
         state.revision(),
         alternatives,
         basis_request,
         relevant_basis,
+        affected_scopes,
     ))
 }
 

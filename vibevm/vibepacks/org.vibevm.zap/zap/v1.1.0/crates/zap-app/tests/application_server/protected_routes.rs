@@ -411,6 +411,89 @@ fn protected_application_server_owns_one_store_and_routes_exact_channels()
     )?;
     assert_eq!(status(&denied_traversal)?, 401);
 
+    let comparison = zap_api::PrepareComparisonRequest {
+        at: zap_api::PreparationRead::Current,
+        actor: None,
+        draft: zap_api::EffectComparisonDraftInput {
+            assessment_id: ChangeAssessmentId::parse("assessment.http-orchestration")?,
+            alternatives: Vec::new(),
+            policy: ContextRequirement::NotApplicable,
+            capacity: ContextRequirement::NotApplicable,
+            closure: ClosureRequirement::KnownGraph,
+        },
+    };
+    let orchestration_product = CharterActivated {
+        schema: CharterActivatedSchema::V1,
+        charter_id: charter.charter_id.clone(),
+        charter_digest: charter.digest,
+    };
+    let orchestration = |action: &str| -> Result<MachineRequest, ZapError> {
+        Ok(MachineRequest::AdvanceChangeAdmission {
+            request: Box::new(zap_api::ChangeAdmissionAdvanceRequest {
+                operation_id: OperationId::parse("operation.http-orchestration")?,
+                store: identity.clone(),
+                expected_revision: service.store().head()?,
+                action: ActionClass::parse(action)?,
+                assessment_id: ChangeAssessmentId::parse("assessment.http-orchestration")?,
+                alternative_id: ChangeAlternativeId::parse("alternative.http-orchestration")?,
+                source_assessment_digest: PayloadDigest::hash(b"assessment.http-orchestration"),
+                assessment_digest: PayloadDigest::hash(b"assessment.http-orchestration"),
+                relevant_basis: RelevantBasisDigest::hash(b"basis.http-orchestration"),
+                comparison: comparison.clone(),
+                product: Box::new(protected(
+                    &identity,
+                    &orchestration_product,
+                    service.store().head()?.checked_next()?,
+                    "command.http-orchestration-product",
+                )?),
+                decision_id: None,
+                exception_id: None,
+            }),
+        })
+    };
+    let data_cannot_orchestrate = send(
+        address,
+        "POST",
+        "/v1/change/admission",
+        "data.application-server",
+        "data-secret",
+        &serde_json::to_vec(&orchestration("plan.lower")?)?,
+    )?;
+    assert_eq!(status(&data_cannot_orchestrate)?, 401);
+    let wrong_action = send(
+        address,
+        "POST",
+        "/v1/change/admission",
+        "coordinator.application-server",
+        "coordinator-secret",
+        &serde_json::to_vec(&orchestration("work.dispatch")?)?,
+    )?;
+    assert_eq!(status(&wrong_action)?, 404);
+
+    let internal = MachineRequest::Command {
+        command: protected(
+            &identity,
+            &zap_domain::economics::ChangeAssessmentAdjudicated {
+                assessment_id: ChangeAssessmentId::parse("assessment.http-orchestration")?,
+                hold_id: None,
+                drain_job_ids: Vec::new(),
+                independence_basis: RelevantBasisDigest::hash(b"basis.http-orchestration"),
+                independent_effect_fingerprints: Vec::new(),
+            },
+            service.store().head()?,
+            "command.http-service-internal",
+        )?,
+    };
+    let general_route_refuses_internal = send(
+        address,
+        "POST",
+        "/v1/command",
+        "coordinator.application-server",
+        "coordinator-secret",
+        &serde_json::to_vec(&internal)?,
+    )?;
+    assert_eq!(status(&general_route_refuses_internal)?, 401);
+
     stopped.store(true, Ordering::Release);
     server_thread.join().map_err(|_| "server panicked")??;
     drop(service);

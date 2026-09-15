@@ -473,6 +473,7 @@ pub struct PreparedEffectComparison {
     alternatives: Vec<PreparedEffectBundle>,
     basis_request: BasisRequest,
     relevant_basis: RelevantBasisDigest,
+    affected_scopes: Vec<crate::AffectedScopeView>,
 }
 
 impl PreparedEffectComparison {
@@ -482,6 +483,7 @@ impl PreparedEffectComparison {
         alternatives: Vec<PreparedEffectBundle>,
         basis_request: BasisRequest,
         relevant_basis: RelevantBasisDigest,
+        affected_scopes: Vec<crate::AffectedScopeView>,
     ) -> Self {
         Self {
             store,
@@ -489,6 +491,7 @@ impl PreparedEffectComparison {
             alternatives,
             basis_request,
             relevant_basis,
+            affected_scopes,
         }
     }
     pub fn store(&self) -> &StoreIdentity {
@@ -505,6 +508,9 @@ impl PreparedEffectComparison {
     }
     pub const fn relevant_basis(&self) -> RelevantBasisDigest {
         self.relevant_basis
+    }
+    pub fn affected_scopes(&self) -> &[crate::AffectedScopeView] {
+        &self.affected_scopes
     }
 }
 

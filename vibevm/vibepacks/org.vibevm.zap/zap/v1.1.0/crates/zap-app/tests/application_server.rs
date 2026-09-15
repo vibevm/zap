@@ -141,6 +141,7 @@ fn service_config(root: &std::path::Path) -> Result<ApplicationServiceConfig, Za
                     ControlClass::CharterActivate,
                     ControlClass::CampaignStop,
                     ControlClass::PauseResume,
+                    ControlClass::ChangeDecisionRecord,
                 ],
             },
             coordinator: CoordinatorChannelConfig {
@@ -295,6 +296,21 @@ fn body(response: &[u8]) -> Result<&[u8], Box<dyn std::error::Error>> {
 }
 
 include!("application_server/protected_routes.rs");
+
+#[path = "application_server/change_admission.rs"]
+mod change_admission;
+#[path = "application_server/change_admission_fixture.rs"]
+mod change_admission_fixture;
+#[path = "application_server/change_admission_milestone.rs"]
+mod change_admission_milestone;
+#[path = "application_server/change_admission_milestone_support.rs"]
+mod change_admission_milestone_support;
+#[path = "application_server/change_admission_multi.rs"]
+mod change_admission_multi;
+#[path = "application_server/change_admission_owner_support.rs"]
+mod change_admission_owner_support;
+#[path = "application_server/change_admission_support.rs"]
+mod change_admission_support;
 include!("application_server/projected_record.rs");
 include!("application_server/runtime_start_guard.rs");
 
