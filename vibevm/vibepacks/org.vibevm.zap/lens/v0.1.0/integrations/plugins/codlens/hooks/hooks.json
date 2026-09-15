@@ -1,0 +1,57 @@
+{
+  "description": "Offer persisted Codlens inbox items at supported Codex safe points.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEX_PLUGIN_ROOT}/scripts/codlens-hook.mjs\" codex",
+            "timeout": 2,
+            "statusMessage": "Checking Codlens inbox",
+            "additionalContextLimit": 2500
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEX_PLUGIN_ROOT}/scripts/codlens-hook.mjs\" codex",
+            "timeout": 2,
+            "statusMessage": "Binding Codlens actor",
+            "additionalContextLimit": 2500
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEX_PLUGIN_ROOT}/scripts/codlens-hook.mjs\" codex",
+            "timeout": 2,
+            "additionalContextLimit": 2500
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEX_PLUGIN_ROOT}/scripts/codlens-hook.mjs\" codex",
+            "timeout": 2,
+            "additionalContextLimit": 2500
+          }
+        ]
+      }
+    ]
+  }
+}

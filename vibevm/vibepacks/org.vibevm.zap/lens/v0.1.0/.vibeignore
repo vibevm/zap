@@ -1,0 +1,9 @@
+dist/**
+coverage/**
+.vitest/**
+*.sqlite
+*.sqlite-*
+*.log
+private/**
+**/*.token
+**/target/**

@@ -1,0 +1,6 @@
+{
+  "dualOutput": {
+    "jsonFile": "<PROTECTED_RUNTIME_DIR>/qwen-events.jsonl",
+    "inputFile": "<PROTECTED_RUNTIME_DIR>/qwen-input.jsonl"
+  }
+}

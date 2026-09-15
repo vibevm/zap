@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "codlens": {
+      "command": "node",
+      "args": ["${CODEX_PLUGIN_ROOT}/scripts/codlens-mcp.mjs"]
+    }
+  }
+}

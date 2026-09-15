@@ -1,0 +1,1065 @@
+{
+  "code_items": [
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/broker.test.ts",
+      "item_kind": "module",
+      "line": 22,
+      "symbol": "src/cells/broker/broker.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/core.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/broker/core.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/database.ts",
+      "item_kind": "module",
+      "line": 3,
+      "symbol": "src/cells/broker/database.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/delivery.ts",
+      "item_kind": "module",
+      "line": 3,
+      "symbol": "src/cells/broker/delivery.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/identity.ts",
+      "item_kind": "module",
+      "line": 3,
+      "symbol": "src/cells/broker/identity.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/implementation.ts",
+      "item_kind": "module",
+      "line": 3,
+      "symbol": "src/cells/broker/implementation.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/implementation.ts",
+      "item_kind": "export",
+      "line": 30,
+      "symbol": "src/cells/broker/implementation.ts::openBroker"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/index.ts",
+      "item_kind": "module",
+      "line": 4,
+      "symbol": "src/cells/broker/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/question-deadline.test.ts",
+      "item_kind": "module",
+      "line": 18,
+      "symbol": "src/cells/broker/question-deadline.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/questions.ts",
+      "item_kind": "module",
+      "line": 3,
+      "symbol": "src/cells/broker/questions.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/broker/test-support.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/broker/test-support.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/capabilities.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/host-adapters/capabilities.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/capabilities.ts",
+      "item_kind": "export",
+      "line": 5,
+      "symbol": "src/cells/host-adapters/capabilities.ts::getHostCapabilities"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/index.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/host-adapters/index.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/index.ts",
+      "item_kind": "module",
+      "line": 4,
+      "symbol": "src/cells/host-adapters/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/index.vitest.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/host-adapters/index.vitest.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/open-code.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/host-adapters/open-code.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/open-code.ts",
+      "item_kind": "export",
+      "line": 72,
+      "symbol": "src/cells/host-adapters/open-code.ts::dispatchOpenCode"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/safe-point.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/host-adapters/safe-point.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/safe-point.ts",
+      "item_kind": "export",
+      "line": 207,
+      "symbol": "src/cells/host-adapters/safe-point.ts::buildSafePointOffer"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/safe-point.ts",
+      "item_kind": "export",
+      "line": 52,
+      "symbol": "src/cells/host-adapters/safe-point.ts::routeSafePointHook"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/host-adapters/types.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/host-adapters/types.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/http/client.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/http/client.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/http/host-hook.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/http/host-hook.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/http/index.ts",
+      "item_kind": "module",
+      "line": 3,
+      "symbol": "src/cells/http/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/http/resume.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/http/resume.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/http/wire.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/http/wire.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mcp/index.ts",
+      "item_kind": "module",
+      "line": 4,
+      "symbol": "src/cells/mcp/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "module",
+      "line": 4,
+      "symbol": "src/cells/protocol/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 29,
+      "symbol": "src/cells/protocol/index.ts::ActorIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 33,
+      "symbol": "src/cells/protocol/index.ts::BindingIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 49,
+      "symbol": "src/cells/protocol/index.ts::ClientRequestIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 21,
+      "symbol": "src/cells/protocol/index.ts::ConversationIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 53,
+      "symbol": "src/cells/protocol/index.ts::DecimalSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 41,
+      "symbol": "src/cells/protocol/index.ts::DeliveryIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 37,
+      "symbol": "src/cells/protocol/index.ts::MessageIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 25,
+      "symbol": "src/cells/protocol/index.ts::PrincipalIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 45,
+      "symbol": "src/cells/protocol/index.ts::QuestionIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/index.ts",
+      "item_kind": "export",
+      "line": 17,
+      "symbol": "src/cells/protocol/index.ts::WorkspaceIdSchema"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/public-connection.test.ts",
+      "item_kind": "module",
+      "line": 6,
+      "symbol": "src/cells/protocol/public-connection.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/protocol/types.vitest.ts",
+      "item_kind": "module",
+      "line": 5,
+      "symbol": "src/cells/protocol/types.vitest.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/session-vault/index.ts",
+      "item_kind": "module",
+      "line": 3,
+      "symbol": "src/cells/session-vault/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/session-vault/index.ts",
+      "item_kind": "export",
+      "line": 42,
+      "symbol": "src/cells/session-vault/index.ts::openSqliteAdapterSessionVault"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/transport/index.ts",
+      "item_kind": "module",
+      "line": 4,
+      "symbol": "src/cells/transport/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cli.ts",
+      "item_kind": "module",
+      "line": 4,
+      "symbol": "src/cli.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/mcp.ts",
+      "item_kind": "module",
+      "line": 4,
+      "symbol": "src/mcp.ts"
+    }
+  ],
+  "edges": [
+    {
+      "file": "src/cells/broker/broker.test.ts",
+      "from_symbol": "src/cells/broker/broker.test.ts",
+      "line": 22,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/broker.test.ts",
+      "from_symbol": "src/cells/broker/broker.test.ts",
+      "line": 148,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/broker.test.ts",
+      "from_symbol": "src/cells/broker/broker.test.ts",
+      "line": 199,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/broker.test.ts",
+      "from_symbol": "src/cells/broker/broker.test.ts",
+      "line": 321,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/broker.test.ts",
+      "from_symbol": "src/cells/broker/broker.test.ts",
+      "line": 427,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/broker.test.ts",
+      "from_symbol": "src/cells/broker/broker.test.ts",
+      "line": 507,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/broker.test.ts",
+      "from_symbol": "src/cells/broker/broker.test.ts",
+      "line": 580,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/core.ts",
+      "from_symbol": "src/cells/broker/core.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/database.ts",
+      "from_symbol": "src/cells/broker/database.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/database.ts",
+      "from_symbol": "src/cells/broker/database.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/delivery.ts",
+      "from_symbol": "src/cells/broker/delivery.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#delivery",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/delivery.ts",
+      "from_symbol": "src/cells/broker/delivery.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#delivery",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/identity.ts",
+      "from_symbol": "src/cells/broker/identity.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/identity.ts",
+      "from_symbol": "src/cells/broker/identity.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/implementation.ts",
+      "from_symbol": "src/cells/broker/implementation.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/implementation.ts",
+      "from_symbol": "src/cells/broker/implementation.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/implementation.ts",
+      "from_symbol": "src/cells/broker/implementation.ts::openBroker",
+      "line": 30,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/index.ts",
+      "from_symbol": "src/cells/broker/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/index.ts",
+      "from_symbol": "src/cells/broker/index.ts",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker",
+      "verb": "implements",
+      "reason": "*"
+    },
+    {
+      "file": "src/cells/broker/question-deadline.test.ts",
+      "from_symbol": "src/cells/broker/question-deadline.test.ts",
+      "line": 18,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/questions.ts",
+      "from_symbol": "src/cells/broker/questions.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#questions",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/questions.ts",
+      "from_symbol": "src/cells/broker/questions.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#questions",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/broker/test-support.ts",
+      "from_symbol": "src/cells/broker/test-support.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/capabilities.ts",
+      "from_symbol": "src/cells/host-adapters/capabilities.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/capabilities.ts",
+      "from_symbol": "src/cells/host-adapters/capabilities.ts::getHostCapabilities",
+      "line": 5,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/index.test.ts",
+      "from_symbol": "src/cells/host-adapters/index.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/index.ts",
+      "from_symbol": "src/cells/host-adapters/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/index.ts",
+      "from_symbol": "src/cells/host-adapters/index.ts",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements",
+      "reason": "*"
+    },
+    {
+      "file": "src/cells/host-adapters/index.vitest.ts",
+      "from_symbol": "src/cells/host-adapters/index.vitest.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/open-code.ts",
+      "from_symbol": "src/cells/host-adapters/open-code.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/open-code.ts",
+      "from_symbol": "src/cells/host-adapters/open-code.ts::dispatchOpenCode",
+      "line": 72,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/safe-point.ts",
+      "from_symbol": "src/cells/host-adapters/safe-point.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/safe-point.ts",
+      "from_symbol": "src/cells/host-adapters/safe-point.ts::buildSafePointOffer",
+      "line": 207,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#delivery",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/safe-point.ts",
+      "from_symbol": "src/cells/host-adapters/safe-point.ts::routeSafePointHook",
+      "line": 52,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/host-adapters/types.ts",
+      "from_symbol": "src/cells/host-adapters/types.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/http/client.ts",
+      "from_symbol": "src/cells/http/client.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/http/host-hook.ts",
+      "from_symbol": "src/cells/http/host-hook.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/http/index.ts",
+      "from_symbol": "src/cells/http/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/http/index.ts",
+      "from_symbol": "src/cells/http/index.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements",
+      "reason": "*"
+    },
+    {
+      "file": "src/cells/http/resume.ts",
+      "from_symbol": "src/cells/http/resume.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/http/wire.ts",
+      "from_symbol": "src/cells/http/wire.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mcp/index.ts",
+      "from_symbol": "src/cells/mcp/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mcp/index.ts",
+      "from_symbol": "src/cells/mcp/index.ts",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements",
+      "reason": "*"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol",
+      "verb": "implements",
+      "reason": "*"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::ActorIdSchema",
+      "line": 29,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::BindingIdSchema",
+      "line": 33,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::ClientRequestIdSchema",
+      "line": 49,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::ConversationIdSchema",
+      "line": 21,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::DecimalSchema",
+      "line": 53,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::DeliveryIdSchema",
+      "line": 41,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#delivery",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::MessageIdSchema",
+      "line": 37,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#delivery",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::PrincipalIdSchema",
+      "line": 25,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::QuestionIdSchema",
+      "line": 45,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#questions",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/index.ts",
+      "from_symbol": "src/cells/protocol/index.ts::WorkspaceIdSchema",
+      "line": 17,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/public-connection.test.ts",
+      "from_symbol": "src/cells/protocol/public-connection.test.ts",
+      "line": 6,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/protocol/types.vitest.ts",
+      "from_symbol": "src/cells/protocol/types.vitest.ts",
+      "line": 5,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/session-vault/index.ts",
+      "from_symbol": "src/cells/session-vault/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/session-vault/index.ts",
+      "from_symbol": "src/cells/session-vault/index.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/session-vault/index.ts",
+      "from_symbol": "src/cells/session-vault/index.ts::openSqliteAdapterSessionVault",
+      "line": 42,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/transport/index.ts",
+      "from_symbol": "src/cells/transport/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/transport/index.ts",
+      "from_symbol": "src/cells/transport/index.ts",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements",
+      "reason": "*"
+    },
+    {
+      "file": "src/cli.ts",
+      "from_symbol": "src/cli.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cli.ts",
+      "from_symbol": "src/cli.ts",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/mcp.ts",
+      "from_symbol": "src/mcp.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/mcp.ts",
+      "from_symbol": "src/mcp.ts",
+      "line": 4,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    }
+  ],
+  "schema": 3,
+  "spec_units": [
+    {
+      "anchor": "root",
+      "content_hash": "sha256:3d8c124455c35ea9399425ef73c1f12c74e96bc0351ecea63a4a12eb03dbaeb9",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Lens: shared clients and background agent communication",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#root"
+    },
+    {
+      "anchor": "packaging",
+      "content_hash": "sha256:02602e39d775f64b0dbadd9a996871fa49cbd52dc289efe71799d23e060ef693",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "The package is org.vibevm.zap/lens, with npm identity @org.vibevm.zap/lens. Quicklens, gamelens and codlens are separate entry points sharing the same protocol, client model, domain adapter and reusable components. Browser, Electron main/preload and Node broker have explicit import and build boundaries. The planning engine is the separate org.vibevm.zap/zap package, accessed through its public interface. Product runtime code has no dependency on host Vibevm source-tree paths; repository extraction remains deferred. @status:spec/plan",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#packaging"
+    },
+    {
+      "anchor": "replanning",
+      "content_hash": "sha256:9feb7d948cce4ed8edcd04ae34c8719e0e3a2d14e482ab25197f09ac801b3dd9",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Ordinary agent chat and lens controls can both initiate plan changes during execution through the same domain operations. A proposal records its base plan revision and relevant specification digest. New or changed specifications trigger reassessment through change signals and authoritative digest checks at preparation/admission boundaries. Specification text is input, not authority. Stale previews refuse application. Affected in-flight results retain their original basis and require reconciliation; unaffected work may continue. Existing scoped textual authorization does not require a duplicate graphical approval. This domain behavior must not be claimed implemented by the initial communication broker. @status:spec/plan",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#replanning"
+    },
+    {
+      "anchor": "protocol",
+      "content_hash": "sha256:df40b76cb9a5b3b06e570aa961cd18e11cbfe203211b599d607a2336ff6ce4a3",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "The application protocol is lens/1 and is independent of MCP transport revision. Runtime schemas validate unknown external data; semantic identifiers are distinct types. Broker-issued message IDs, stable principal/actor/client-request idempotency, correlation and causation IDs, and lossless sequence/revision representations survive reconnect. Incompatible versions and malformed or oversized payloads return typed errors. @status:spec/plan",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#protocol"
+    },
+    {
+      "anchor": "broker",
+      "content_hash": "sha256:f4a5ca4f18df2d1acda159d60781ca5efa0f907f1158e427ff45a8c0590a3710",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "One user-local broker serves several lens clients and many simultaneous actors/conversations. Transactional persistence commits actionable messages, questions, answers, bindings, deliveries and event positions before acknowledging them. The broker remains independent of a renderer lifetime and has no global current question or current agent. Restart restores durable state; bounded paging/backpressure never silently discards an unanswered question or answer. @status:spec/plan",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#broker"
+    },
+    {
+      "anchor": "nonblocking",
+      "content_hash": "sha256:63af9924279d4866d11ce846286faa2d534f0d917b6f18f72dbdc4d2c4196ccf",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Publishing a question returns its durable ID promptly and never waits for a human response. Model-facing inbox reads default to no wait. Background subscriptions and host adapters wait outside the normal agent tool request. The ordinary CLI/desktop text flow remains usable; no terminal keystroke injection, visible prompt manipulation or transcript rewriting is permitted. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#nonblocking"
+    },
+    {
+      "anchor": "identity",
+      "content_hash": "sha256:568770774586ce06e599326c9467bc464d304bb5b35de46eaec9e945d2f2b89c",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Authenticated principals, durable actor identities and transient bindings are separate. Create and resume are different operations. Resume proves ownership, atomically advances the binding generation and fences stale writers/receivers. An actor can delegate only a subset of its authorized workspace/conversation capabilities. MCP client/session metadata, native display names and parent claims alone are not authentication. Subagents have explicit addressed inboxes, including nested and concurrent cases; ambiguous native identity must not route to another actor. @status:spec/plan",
+      "line": 10,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#identity"
+    },
+    {
+      "anchor": "questions",
+      "content_hash": "sha256:540ec93d17add7621d23edd8c2ddf0f63efdd4ffc0964526236f096bcbed5bf7",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "An open question has an exact revision. Answer, cancel and expiry compete transactionally; one transition wins. A duplicate identical request returns its original result, while a conflicting second answer refuses. A separate authorized amendment retains earlier answers and emits a new event. Expired/cancelled questions cannot be answered silently. The original requester and reply policy remain explicit when a completed child's reply is forwarded to its parent. @status:spec/plan",
+      "line": 11,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#questions"
+    },
+    {
+      "anchor": "delivery",
+      "content_hash": "sha256:79a9b8146f9c8d5461c237c3398421739731bdc489c9e3356ba2752cc0053370",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Delivery identity is per message and logical recipient, with separate attempts bound to adapter generation. Persisted, offered, host-accepted, actor-acknowledged and answered are distinct observations; missing observation is not failure or success. At-least-once delivery uses idempotent sparse acknowledgements. A stream cursor resumes observation and never acknowledges inbox contents. Gaps require explicit resynchronization. A lost host response remains uncertain until reconciled, without blindly repeating a command. @status:spec/plan",
+      "line": 12,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#delivery"
+    },
+    {
+      "anchor": "transport",
+      "content_hash": "sha256:7fc7a66c5bd70dcd505395eb26031745b0e8fe79ea880024ce7cde1e535913a3",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "The initial host transport uses bounded HTTP commands and an SSE event stream on loopback, with validated Host/Origin and scoped authentication for reads, writes and streams. The MCP bridge uses an official SDK and immediate-return tools; it does not pretend that generic MCP logging/resource notifications enter a model's context. CLI commands provide a headless lens fixture over the same broker semantics. Logs exclude credential material and raw private payloads by default. @status:spec/plan",
+      "line": 13,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#transport"
+    },
+    {
+      "anchor": "adapters",
+      "content_hash": "sha256:c0462083e4126b6f91323529bb353508ece1a15b4eaa69a5bedebdeb008af686",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Codex, Claude Code, OpenCode and Qwen Code use separate capability-aware adapters. Native hooks, channels or server APIs may deliver at safe points or wake a supported idle session. Existing ordinary sessions are not claimed attachable without a verified binding. Busy/idle races, host rejection, unsupported Windows peer transports and unknown consumption are explicit. Captured/synthetic adapter tests are distinguished from live host inference. Host adapters cannot forge broker or human acknowledgement. @status:spec/plan",
+      "line": 14,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#adapters"
+    },
+    {
+      "anchor": "authority",
+      "content_hash": "sha256:985d8dcd3ad30043f4025eff413c4ac9055ac04685f80ed1215b33966fac3a0a",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Agent, viewer, human responder, human plan approver and trusted execution adapter have distinct scoped capabilities. An agent can request a preview or propose intent but cannot self-assert human authority. Existing scoped Owner authority may permit routine changes without an additional human approval. Where ZAP requires a fresh plan approval, it binds the authenticated human, exact preview digest, store/campaign/base/revision, action/operation identity and expiry, and is consumed once for that operation. ZAP retains its actual credentials, economics, holds, admission and reconciliation. A communication-stage implementation must truthfully refuse unimplemented plan execution. @status:spec/plan",
+      "line": 15,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#authority"
+    },
+    {
+      "anchor": "verification",
+      "content_hash": "sha256:6530ec86d8ab5b858ff44884738b0e1539929acaedb932f3799caa9c78b12724",
+      "doc_path": "PROP-001",
+      "file": "vibevm/vibespecs/PROP-001.xml",
+      "heading": "Acceptance includes runtime validation/type checks, real Node protocol tests, an actual official-SDK MCP round trip, simultaneous parent/nested-child questions and out-of-order lens answers, duplicate/restart/stale-binding/wrong-scope/answer-race/retention-gap cases, and proof that human waits leave tool calls completed. Host capability claims require documented version/OS evidence and live results where claimed. Coding workers use gpt-5.6-sol/high; isolated live protocol actors may use Owner-authorized weak/free models with short bounded prompts. No uncontrolled model polling, paid-provider fallback or local Qwen-model inference is implied. @status:spec/plan",
+      "line": 16,
+      "uri": "spec://org.vibevm.zap/lens/PROP-001#verification"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:7ce36b6c995f1a655d42886a5d55556da0915111482306f3394c86b7379597a0",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "Quicklens and shared ZAP client workflows",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#root"
+    },
+    {
+      "anchor": "shared-client",
+      "content_hash": "sha256:c38c0e2901fbf81013fe148ab5200e81c7f6a168bdee491acdc7244d599b60e9",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "Quicklens is the practical browser and Electron client within org.vibevm.zap/lens. Qwik 2 owns the reusable renderer, Sigma.js renders a Graphology MultiDirectedGraph, and a shared client model owns decoded semantic objects, selection, questions and plan operations. Gamelens may later replace the presentation while reusing those contracts. Codlens remains the agent plugin. Browser code imports only explicit platform-safe seams; the broker, filesystem, credentials and Electron main process remain outside the renderer dependency graph. @status:spec/plan",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#shared-client"
+    },
+    {
+      "anchor": "read-model",
+      "content_hash": "sha256:71bf5d924058e7b8ca184c9231eb26b8b474e9a443dd8e4a18fef8d5dac80b16",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "A configured ZAP service supplies its actual capabilities and exact active planning context. The client discovers the active outcome, current strategy and adopted milestone plan through registered bounded queries. It never guesses those identities from an event tail or requires a human to paste them. Missing state, stale indexes, incomplete pages and unavailable capabilities have explicit views. Snapshot, query and continuation identities remain consistent; mismatched revisions cause refresh rather than mixing records from different plans. Unsigned integer values retain their exact wire meaning without JavaScript precision loss. @status:spec/plan",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#read-model"
+    },
+    {
+      "anchor": "semantic-map",
+      "content_hash": "sha256:850fcfcae20c37a0791dac75f5dac073b7974a3b81147f9a5606873be43a0d95",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "The graph preserves typed object references and parallel directed relationships. Selecting a task, milestone, resource or other object opens a structured card with its available name, purpose, status, relationships, acceptance meaning and provenance. Optional difficulty, complexity, effort, waiting and uncertainty remain separate; missing measurements are visibly unknown. Visual positions, colors and symbols are client presentation and never become planning facts. Graph search, type/status filters and navigation remain usable with partial or empty data. A demonstration dataset is explicitly labelled and never presented as the user's live plan. @status:spec/plan",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#semantic-map"
+    },
+    {
+      "anchor": "plan-control",
+      "content_hash": "sha256:8998a3aad1b5dc83e36d9ed3f759a82348edec91d5977afc8ae2e9e57009c833",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "Agent tools, ordinary agent chat and Quicklens controls address the same ZAP plan authority. Human intent can request a new or revised plan while existing work runs. The client supports plan reads, proposals, current-state previews, applicable decisions, admitted operations, status and reconciliation through the service's registered public interfaces. The trusted adapter preserves ZAP economics, holds and authority. An operation uses the exact store, base, revision and command identity; an uncertain response is reconciled before retry. Unsupported operations are disabled with a useful reason. Existing scoped Owner authorization is respected and does not acquire a redundant GUI confirmation requirement. @status:spec/plan",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#plan-control"
+    },
+    {
+      "anchor": "specification-drift",
+      "content_hash": "sha256:2f9864caf9ece383e55046ff3087b12a452e1c9e6e010e9c33f3ae8adefeebce",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "A background specification change signal is advisory. Before preparing or admitting a revision, the integration verifies the relevant captured source basis. Added or changed specifications become reassessment input and cannot grant new authority by their contents. The successor preview identifies affected work; affected running results retain their prior source and plan basis until reconciled. Unaffected work may continue. Changed plans or source captures invalidate stale previews. The ordinary agent text flow remains available during this process. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#specification-drift"
+    },
+    {
+      "anchor": "interaction",
+      "content_hash": "sha256:3c3b86cb1e803d40b725e254373087d54b006598d767feceb0428fe6a53a4f54",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "Questions and answers use the shared durable broker. The UI shows their addressed actor, pending/answered/cancelled/expired state and explicit amendment history where available. Answering one actor's question cannot satisfy another actor's request or approve an unrelated plan change. Disconnect and restart preserve actionable state and expose reconnect/resynchronization. Rendering and user waits never hold an agent tool call open. @status:spec/plan",
+      "line": 10,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#interaction"
+    },
+    {
+      "anchor": "shells",
+      "content_hash": "sha256:5432de1e174813ff6202de453b85ea4cc2edc51cce426186bbc891e7828fb5bf",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "One built Qwik renderer serves browser and Electron shells. Light and dark themes are explicit, persist the user's preference, and apply to both the graph and cards. Electron uses context isolation and sandboxing with Node integration disabled in the renderer; a narrow bridge exposes only necessary application operations. Local HTTP access retains the broker's origin and role checks. Source maps and implementation errors are not the ordinary product flow; readable recovery actions are. @status:spec/plan",
+      "line": 11,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#shells"
+    },
+    {
+      "anchor": "acceptance",
+      "content_hash": "sha256:bbc95f9ee6c7bc70591b985c97262b72cc3833ce01d99dcb3768ad814d9e6c8e",
+      "doc_path": "PROP-002",
+      "file": "vibevm/vibespecs/PROP-002.xml",
+      "heading": "Acceptance exercises a real configured ZAP query and at least one admitted plan-change/reconciliation path, simultaneous agent questions, stale plan/source rejection, structured cards, graph selection/search/filter, both themes, and the same renderer in browser and Electron. TypeScript discipline and production builds pass. Browser imports cannot resolve privileged modules. Visual inspection verifies usable layout, readable cards and empty/error states. Synthetic fixtures, live host inference and real backend execution are reported as different evidence. @status:spec/plan",
+      "line": 12,
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#acceptance"
+    }
+  ],
+  "suspects": [],
+  "warnings": []
+}

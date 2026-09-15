@@ -1,0 +1,57 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:<CODLENS_PORT>/v1/host-hook/qwen_code",
+            "headers": {
+              "Authorization": "Bearer ${CODLENS_PRINCIPAL_TOKEN}"
+            },
+            "allowedEnvVars": ["CODLENS_PRINCIPAL_TOKEN"],
+            "timeout": 2,
+            "name": "codlens-safe-point"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:<CODLENS_PORT>/v1/host-hook/qwen_code",
+            "headers": {
+              "Authorization": "Bearer ${CODLENS_PRINCIPAL_TOKEN}"
+            },
+            "allowedEnvVars": ["CODLENS_PRINCIPAL_TOKEN"],
+            "timeout": 2,
+            "name": "codlens-subagent-bind"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:<CODLENS_PORT>/v1/host-hook/qwen_code",
+            "headers": {
+              "Authorization": "Bearer ${CODLENS_PRINCIPAL_TOKEN}"
+            },
+            "allowedEnvVars": ["CODLENS_PRINCIPAL_TOKEN"],
+            "timeout": 2,
+            "name": "codlens-safe-point"
+          }
+        ]
+      }
+    ]
+  },
+  "agents": {
+    "crossSessionMessaging": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "kind": "opencode-server",
+  "baseUrl": "http://127.0.0.1:<OPENCODE_PORT>",
+  "sessionId": "<EXACT_SESSION_ID>",
+  "dispatch": {
+    "mode": "idle-only",
+    "statusSource": "session status plus event stream",
+    "completedRequest": "host_accepted",
+    "asyncAcceptance": "uncertain_reconcile_required",
+    "busyRace": "uncertain_reconcile_required"
+  },
+  "constraints": [
+    "Use the server already shared with the normal TUI.",
+    "Never write to the TUI prompt endpoint.",
+    "Never retry an uncertain delivery before message-history reconciliation."
+  ]
+}

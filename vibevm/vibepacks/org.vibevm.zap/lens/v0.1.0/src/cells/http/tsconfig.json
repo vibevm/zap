@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": [
+    "./**/*.ts",
+    "../broker/**/*.ts",
+    "../protocol/**/*.ts",
+    "../session-vault/**/*.ts",
+    "../transport/**/*.ts"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "codlens",
+  "version": "0.1.0",
+  "description": "Durable background communication between coding agents and lens clients.",
+  "author": {
+    "name": "Oleg Chirukhin"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codlens",
+    "shortDescription": "Connect Codex to the local lens broker.",
+    "longDescription": "Codlens provides immediate-return questions, addressed durable inboxes, acknowledgements, and capability-reduced subagent delegation through a local broker.",
+    "developerName": "Oleg Chirukhin",
+    "category": "Productivity",
+    "capabilities": ["mcp", "hooks", "skills"],
+    "defaultPrompt": "Use Codlens for durable agent questions and addressed inbox delivery."
+  },
+  "mcpServers": "./.mcp.json"
+}

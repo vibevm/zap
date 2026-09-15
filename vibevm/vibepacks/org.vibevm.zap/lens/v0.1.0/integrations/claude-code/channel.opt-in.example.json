@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "codlens-channel": {
+      "command": "codlens",
+      "args": ["channel", "serve", "--host", "claude_code"]
+    }
+  },
+  "launchRequirement": "Explicitly opt this server in with Claude Code's channel flag after reviewing the research-preview warning and organization policy."
+}

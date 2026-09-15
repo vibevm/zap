@@ -1,0 +1,15 @@
+[package]
+name = "lens"
+group = "org.vibevm.zap"
+kind = "tool"
+version = "0.1.0"
+epoch = 1
+format = "normal"
+authors = ["Oleg Chirukhin"]
+license = "UPL-1.0"
+description = "User-local background communication broker and shared protocol for codlens, quicklens and gamelens"
+keywords = ["agents", "lens", "broker", "mcp", "typescript"]
+
+[compatibility]
+min_vibe_version = "0.1.0"
+requires_kinds = []

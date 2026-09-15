@@ -1,0 +1,75 @@
+{
+  "name": "@org.vibevm.zap/lens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist",
+    "integrations",
+    "LICENSE.md",
+    "README.md",
+    "vibe.toml",
+    "vibevm/vibespecs"
+  ],
+  "bin": {
+    "codlens": "./dist/cli.js",
+    "codlens-mcp": "./dist/mcp.js"
+  },
+  "exports": {
+    "./protocol": {
+      "types": "./dist/cells/protocol/index.d.ts",
+      "import": "./dist/cells/protocol/index.js"
+    },
+    "./broker": {
+      "types": "./dist/cells/broker/index.d.ts",
+      "import": "./dist/cells/broker/index.js"
+    },
+    "./host-adapters": {
+      "types": "./dist/cells/host-adapters/index.d.ts",
+      "import": "./dist/cells/host-adapters/index.js"
+    },
+    "./transport": {
+      "types": "./dist/cells/transport/index.d.ts",
+      "import": "./dist/cells/transport/index.js"
+    },
+    "./http": {
+      "types": "./dist/cells/http/index.d.ts",
+      "import": "./dist/cells/http/index.js"
+    },
+    "./mcp": {
+      "types": "./dist/cells/mcp/index.d.ts",
+      "import": "./dist/cells/mcp/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "node tooling/clean-dist.js",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit",
+    "test:node": "node --test \"src/**/*.test.ts\"",
+    "test:tooling": "node --test \"tooling/**/*.test.js\"",
+    "test:types": "vitest run",
+    "test": "npm run test:node && npm run test:tooling && npm run test:types",
+    "lint": "eslint src",
+    "verify": "npm run format:check && npm run typecheck && npm test && npm run lint && npm run build",
+    "prepack": "npm run verify"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "lossless-json": "4.3.1",
+    "zod": "4.1.11"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.0",
+    "@types/node": "24.10.1",
+    "eslint": "9.39.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.0",
+    "vitest": "4.1.11"
+  }
+}
