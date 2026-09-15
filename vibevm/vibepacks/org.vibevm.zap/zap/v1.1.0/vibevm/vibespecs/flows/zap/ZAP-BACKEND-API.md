@@ -42,6 +42,12 @@ Query IDs and their availability come from `/v1/capabilities`. Results carry
 bounded completeness and continuation data defined by the selected registered
 query. Opening a view performs no model call or semantic mutation.
 
+`zap.economics.active-context.v1` accepts
+`{maximum_records, maximum_candidates}` and returns the active policy reference
+plus applicable baseline candidates with explicit absent, unique or ambiguous
+selection. It never guesses a latest baseline, and it refuses when the bounded
+record scan cannot establish the active policy.
+
 ## Protected and service routes
 
 - `POST /v1/command` — authenticated Owner/coordinator command route.

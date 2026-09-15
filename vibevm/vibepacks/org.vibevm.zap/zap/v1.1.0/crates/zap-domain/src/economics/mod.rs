@@ -1,3 +1,4 @@
+mod active_context;
 mod admission;
 mod admission_v1;
 mod affected_scope;
@@ -10,6 +11,11 @@ mod model;
 mod preflight;
 mod records;
 
+pub(crate) use active_context::EconomicsContextQuery;
+pub use active_context::{
+    ActiveEconomicsPolicyRef, EconomicsBaselineCandidate, EconomicsBaselineSelection,
+    EconomicsContextInput, EconomicsContextView,
+};
 pub use decision::{
     AssessmentDecision, elapsed_band, engineering_band, evaluate_assessment,
     forecast_requires_owner, validate_forecast,

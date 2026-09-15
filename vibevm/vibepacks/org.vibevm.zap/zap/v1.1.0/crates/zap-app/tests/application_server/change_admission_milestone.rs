@@ -48,6 +48,46 @@ fn public_http_admits_and_applies_a_successor_milestone_plan()
     let stop = stopped.clone();
     let server_thread = std::thread::spawn(move || server.serve_until(&stop));
 
+    let economics_input = CanonicalPayload::encode_json(
+        CodecEpoch::CURRENT,
+        &EconomicsContextInput {
+            maximum_records: 32,
+            maximum_candidates: 8,
+        },
+    )?;
+    let economics_response = send(
+        address,
+        "POST",
+        "/v1/query",
+        "reader.application-server",
+        "reader-secret",
+        &serde_json::to_vec(&MachineRequest::Query {
+            query_id: QueryId::parse("zap.economics.active-context.v1")?,
+            input: QueryInput {
+                codec: CodecEpoch::CURRENT,
+                canonical_json: economics_input.as_bytes().to_vec(),
+            },
+        })?,
+    )?;
+    assert_eq!(status(&economics_response)?, 200);
+    let MachineResponse::Query(economics_page) =
+        serde_json::from_slice(body(&economics_response)?)?
+    else {
+        return Err("wrong economics-context response".into());
+    };
+    let economics: EconomicsContextView =
+        CanonicalPayload::from_canonical_json(CodecEpoch::CURRENT, &economics_page.items[0])?
+            .decode_json()?;
+    assert!(matches!(
+        economics.baseline_selection,
+        EconomicsBaselineSelection::Unique { baseline_id }
+            if baseline_id == ChangeBaselineId::parse("baseline.http-ready")?
+    ));
+    assert_eq!(
+        economics.policy.policy_id,
+        PolicyId::parse("change-policy:default")?
+    );
+
     let basis_request = BasisRequest::new(BasisRequestInput {
         purpose: BasisPurpose::Mutation(EventKind::parse("milestone.plan-basis")?),
         roots: vec![

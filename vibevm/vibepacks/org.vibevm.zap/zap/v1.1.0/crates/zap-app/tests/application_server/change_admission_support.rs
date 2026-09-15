@@ -15,7 +15,7 @@ const SEED_KIND: &str = "test.change-admission-seed";
 #[serde(deny_unknown_fields)]
 struct Seed {
     charter: CharterRecord,
-    baseline: ChangeBaselineRecord,
+    baselines: Vec<ChangeBaselineRecord>,
     policy: ChangePolicyRecord,
     work: Vec<WorkRecord>,
     contract: TaskContractRecord,
@@ -84,7 +84,9 @@ impl TransitionCell for SeedCell {
         changes: &mut ChangeSet,
     ) -> Result<Self::Output, ZapError> {
         changes.insert(command.payload().charter.clone())?;
-        changes.insert(command.payload().baseline.clone())?;
+        for baseline in &command.payload().baselines {
+            changes.insert(baseline.clone())?;
+        }
         changes.insert(command.payload().policy.clone())?;
         for work in &command.payload().work {
             changes.insert(work.clone())?;
@@ -126,6 +128,15 @@ pub(super) fn seed_with_profile(
     path: &std::path::Path,
     identity: &StoreIdentity,
     current_strategy: bool,
+) -> Result<(), ZapError> {
+    seed_with_baseline_count(path, identity, current_strategy, 1)
+}
+
+pub(super) fn seed_with_baseline_count(
+    path: &std::path::Path,
+    identity: &StoreIdentity,
+    current_strategy: bool,
+    baseline_count: usize,
 ) -> Result<(), ZapError> {
     let records = zap_domain::record_set()?;
     let store = RedbStore::create(path, identity.clone())?
@@ -180,19 +191,32 @@ pub(super) fn seed_with_profile(
             status: LifecycleStatus::Active,
             digest: charter_digest,
         },
-        baseline: ChangeBaselineRecord {
-            baseline_id: ChangeBaselineId::parse("baseline.http-ready")?,
-            base_digest: BaseDigest::hash(b"base.http-ready"),
-            committed_prefix_digest: PayloadDigest::hash(b"prefix.http-ready"),
-            committed_sequence: Revision::GENESIS,
-            active_charter_digest: charter_digest,
-            active_intent_id: IntentId::parse("intent.http-ready")?,
-            active_outcome_id: OutcomeId::parse("outcome.http-ready")?,
-            active_outcome_digest: PayloadDigest::hash(b"outcome.http-ready"),
-            observed_plan_digest: PayloadDigest::hash(b"plan.http-ready"),
-            change_policy_revision: policy.revision,
-            revision: Revision::new(1),
-        },
+        baselines: (0..baseline_count)
+            .map(|index| {
+                let suffix = if index == 0 {
+                    String::new()
+                } else {
+                    format!("-{index}")
+                };
+                Ok(ChangeBaselineRecord {
+                    baseline_id: ChangeBaselineId::parse(&format!("baseline.http-ready{suffix}"))?,
+                    base_digest: BaseDigest::hash(format!("base.http-ready{suffix}").as_bytes()),
+                    committed_prefix_digest: PayloadDigest::hash(
+                        format!("prefix.http-ready{suffix}").as_bytes(),
+                    ),
+                    committed_sequence: Revision::GENESIS,
+                    active_charter_digest: charter_digest,
+                    active_intent_id: IntentId::parse("intent.http-ready")?,
+                    active_outcome_id: OutcomeId::parse("outcome.http-ready")?,
+                    active_outcome_digest: PayloadDigest::hash(b"outcome.http-ready"),
+                    observed_plan_digest: PayloadDigest::hash(
+                        format!("plan.http-ready{suffix}").as_bytes(),
+                    ),
+                    change_policy_revision: policy.revision,
+                    revision: Revision::new(1),
+                })
+            })
+            .collect::<Result<Vec<_>, ZapError>>()?,
         policy,
         work: vec![
             WorkRecord {

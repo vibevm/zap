@@ -299,6 +299,8 @@ include!("application_server/protected_routes.rs");
 
 #[path = "application_server/change_admission.rs"]
 mod change_admission;
+#[path = "application_server/change_admission_economics.rs"]
+mod change_admission_economics;
 #[path = "application_server/change_admission_fixture.rs"]
 mod change_admission_fixture;
 #[path = "application_server/change_admission_milestone.rs"]

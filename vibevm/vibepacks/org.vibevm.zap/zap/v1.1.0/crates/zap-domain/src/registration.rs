@@ -192,6 +192,7 @@ pub fn query_set() -> Result<QuerySet, ZapError> {
         crate::information::query_set()?,
         crate::milestones::query_set()?,
         crate::milestone_planning::query_set()?,
+        QuerySet::single(crate::economics::EconomicsContextQuery)?,
         crate::legacy_projection::query_set()?,
     ])
 }

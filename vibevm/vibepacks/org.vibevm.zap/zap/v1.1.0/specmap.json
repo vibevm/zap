@@ -5447,6 +5447,60 @@
     },
     {
       "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "item_kind": "mod",
+      "line": 21,
+      "symbol": "zap_domain::economics::active_context",
+      "end_line": 21,
+      "fingerprint": "tok1:605af47ab2986f232e7d77e85eb60388a35dbe21e98196d8aaaad8f9f4b62c5b"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "item_kind": "struct",
+      "line": 33,
+      "symbol": "zap_domain::economics::active_context::ActiveEconomicsPolicyRef",
+      "end_line": 43,
+      "fingerprint": "tok1:9d6f7801b13d3d81c113eeeb547e2d9b5ccfe9017748743bfbb711fb2746cd34"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "item_kind": "struct",
+      "line": 45,
+      "symbol": "zap_domain::economics::active_context::EconomicsBaselineCandidate",
+      "end_line": 55,
+      "fingerprint": "tok1:120663ac4faba6366b219f5bd3afc3566c4fbf64c683de58f84fa6942697740a"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "item_kind": "enum",
+      "line": 57,
+      "symbol": "zap_domain::economics::active_context::EconomicsBaselineSelection",
+      "end_line": 66,
+      "fingerprint": "tok1:6feb2b9cc705ea578b465bc333c0d330f9cfd3a0dae3bffd663f390ee36bb127"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "item_kind": "struct",
+      "line": 23,
+      "symbol": "zap_domain::economics::active_context::EconomicsContextInput",
+      "end_line": 31,
+      "fingerprint": "tok1:d8b3c425503dabda371526ee01272177e10f0ccdbb665b4003ab33c38c118f20"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "item_kind": "struct",
+      "line": 68,
+      "symbol": "zap_domain::economics::active_context::EconomicsContextView",
+      "end_line": 78,
+      "fingerprint": "tok1:4e5204278e980b9da77551c45d09ba0e84c948eb67b8bb157a85bfd6404f769b"
+    },
+    {
+      "crate_name": "zap-domain",
       "file": "crates/zap-domain/src/economics/admission.rs",
       "item_kind": "mod",
       "line": 1,
@@ -19045,6 +19099,62 @@
       "verb": "documents"
     },
     {
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "from_symbol": "zap_domain::economics::active_context",
+      "line": 21,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#ECONOMICS-AUTHORING-CONTEXT",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "from_symbol": "zap_domain::economics::active_context::ActiveEconomicsPolicyRef",
+      "line": 35,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#economic-policy-baseline",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "from_symbol": "zap_domain::economics::active_context::EconomicsBaselineCandidate",
+      "line": 47,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#economic-policy-baseline",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "from_symbol": "zap_domain::economics::active_context::EconomicsBaselineSelection",
+      "line": 59,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#economic-policy-baseline",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "from_symbol": "zap_domain::economics::active_context::EconomicsContextInput",
+      "line": 25,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#economic-policy-baseline",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "from_symbol": "zap_domain::economics::active_context::EconomicsContextView",
+      "line": 70,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#ECONOMICS-AUTHORING-CONTEXT",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-domain/src/economics/active_context.rs",
+      "from_symbol": "zap_domain::economics::active_context::EconomicsContextView",
+      "line": 71,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#economic-policy-baseline",
+      "verb": "documents"
+    },
+    {
       "file": "crates/zap-domain/src/economics/admission.rs",
       "from_symbol": "zap_domain::economics::admission",
       "line": 1,
@@ -30430,7 +30540,7 @@
     },
     {
       "anchor": "root",
-      "content_hash": "sha256:019d6d32969b23c4ee51381304eb00eeb72c373cec727f2b3046ac81b3898826",
+      "content_hash": "sha256:b4fe4a2b11d739c1683b88641d97b89f2719c08a93aa7de3e608da020e9d1c77",
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "ZAP runtime: Rust execution architecture and acceptance boundary",
@@ -30610,7 +30720,7 @@
     },
     {
       "anchor": "surface",
-      "content_hash": "sha256:18daf2926f4882c1b0db22ad88dca93896f295bc5fde2c5d52c5452cdf558598",
+      "content_hash": "sha256:87e469200c1533c725c3e1b5f7327b83231d9910c976bac3955a2701c1509dbf",
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "5. Machine surface and truthful capabilities",
@@ -30654,12 +30764,21 @@
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#CHANGE-ADMISSION-ORCHESTRATION"
     },
     {
+      "anchor": "ECONOMICS-AUTHORING-CONTEXT",
+      "content_hash": "sha256:295e0241c7a8fbd8c7a4d26e0e4615120a2cd9ad681dbac1f310e07997e63015",
+      "doc_path": "flows/zap/ZAP-RUNTIME",
+      "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
+      "heading": "A bounded read-only economics context query returns the authoritative active policy identity, revision and digest plus applicable baseline candidates. It reports absence, a unique candidate or explicit ambiguity and truncation. Missing baseline pointer semantics never become a guessed latest identifier, and query bounds refuse before an unbounded policy or baseline scan. @status:spec/plan",
+      "line": 38,
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#ECONOMICS-AUTHORING-CONTEXT"
+    },
+    {
       "anchor": "migration",
       "content_hash": "sha256:c5d04f716bb1c86efc4a31f1cde460e46d8d89b56e12d926729b9ea064c5368a",
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "6. Migration and release acceptance",
-      "line": 40,
+      "line": 41,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#migration"
     },
     {
@@ -30668,7 +30787,7 @@
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "Migration captures the complete shared or user-local MUP plan, every task contract and legacy constraint, original bytes and hash domains, and an exact identity, obligation, evidence, and authority-classification map into a separate recoverable Rust store. It validates before switching the store pointer and never starts NEXT. Release evidence covers isolated campaigns, native parallel work, restart and unknown-effect reconciliation, stop and economics precedence, lowering and Dreamer, weak-bundle fixtures, bounded large-graph queries, generic-project installation, source-only payload, and absence of production Python. Applicable receipts are reused; the final scoped package gate does not require an unrelated VibeVM product panel. @status:spec/plan",
-      "line": 41,
+      "line": 42,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#MIGRATION-AND-RELEASE"
     },
     {
@@ -30677,7 +30796,7 @@
       "doc_path": "flows/zap/ZAP-RUNTIME",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUNTIME.xml",
       "heading": "Temporary campaign specifications and prototype material may be retired only after unique requirements, decisions, behavior mappings, provenance, and accepted evidence are promoted to permanent project sources. Corrected Rust behavior uses its explicit epoch and is not misreported as byte-identical legacy behavior. Package release version, store and wire epochs, artifact maturity, and campaign completion remain independent. @status:spec/plan",
-      "line": 42,
+      "line": 43,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUNTIME#RUNTIME-PROMOTION-BOUNDARY"
     },
     {
