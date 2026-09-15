@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.browser.json",
+  "compilerOptions": {
+    "types": ["vite/client", "vitest/globals"]
+  },
+  "include": [
+    "src/cells/quicklens-model/**/*.ts",
+    "src/cells/quicklens-graph/**/*.ts",
+    "src/cells/quicklens-demo/**/*.ts",
+    "src/cells/quicklens-ui/**/*.ts",
+    "src/cells/quicklens-ui/**/*.tsx",
+    "src/quicklens/browser/**/*.ts",
+    "src/quicklens/browser/**/*.tsx"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

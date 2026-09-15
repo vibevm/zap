@@ -13,7 +13,11 @@
   ],
   "bin": {
     "codlens": "./dist/cli.js",
-    "codlens-mcp": "./dist/mcp.js"
+    "codlens-mcp": "./dist/mcp.js",
+    "quicklens-service": "./dist/quicklens.js",
+    "quicklens-web-auth": "./dist/quicklens-web-auth.js",
+    "quicklens-web": "./dist/quicklens-web.js",
+    "zap-wayfinder": "./dist/wayfinder.js"
   },
   "exports": {
     "./protocol": {
@@ -39,20 +43,111 @@
     "./mcp": {
       "types": "./dist/cells/mcp/index.d.ts",
       "import": "./dist/cells/mcp/index.js"
+    },
+    "./quicklens-model": {
+      "types": "./dist/cells/quicklens-model/index.d.ts",
+      "import": "./dist/cells/quicklens-model/index.js"
+    },
+    "./quicklens-service": {
+      "types": "./dist/cells/quicklens-service/index.d.ts",
+      "import": "./dist/cells/quicklens-service/index.js"
+    },
+    "./plan-authoring": {
+      "types": "./dist/cells/plan-authoring/index.d.ts",
+      "import": "./dist/cells/plan-authoring/index.js"
+    },
+    "./specification-watch": {
+      "types": "./dist/cells/specification-watch/index.d.ts",
+      "import": "./dist/cells/specification-watch/index.js"
+    },
+    "./web-auth": {
+      "types": "./dist/cells/web-auth/index.d.ts",
+      "import": "./dist/cells/web-auth/index.js"
+    },
+    "./web-gateway": {
+      "types": "./dist/cells/web-gateway/index.d.ts",
+      "import": "./dist/cells/web-gateway/index.js"
+    },
+    "./zap-client": {
+      "types": "./dist/cells/zap-client/index.d.ts",
+      "import": "./dist/cells/zap-client/index.js"
+    },
+    "./workspace-model": {
+      "types": "./dist/cells/workspace-model/index.d.ts",
+      "import": "./dist/cells/workspace-model/index.js"
+    },
+    "./workspace-store": {
+      "types": "./dist/cells/workspace-store/index.d.ts",
+      "import": "./dist/cells/workspace-store/index.js"
+    },
+    "./workspace-client": {
+      "types": "./dist/cells/workspace-client/index.d.ts",
+      "import": "./dist/cells/workspace-client/index.js"
+    },
+    "./agent-runtime": {
+      "types": "./dist/cells/agent-runtime/index.d.ts",
+      "import": "./dist/cells/agent-runtime/index.js"
+    },
+    "./codex-coordinator": {
+      "types": "./dist/cells/codex-coordinator/index.d.ts",
+      "import": "./dist/cells/codex-coordinator/index.js"
+    },
+    "./workspace-demo": {
+      "types": "./dist/cells/workspace-demo/index.d.ts",
+      "import": "./dist/cells/workspace-demo/index.js"
+    },
+    "./wayfinder-runtime": {
+      "types": "./dist/cells/wayfinder-runtime/index.d.ts",
+      "import": "./dist/cells/wayfinder-runtime/index.js"
+    },
+    "./managed-terminal": {
+      "types": "./dist/cells/managed-terminal/index.d.ts",
+      "import": "./dist/cells/managed-terminal/index.js"
+    },
+    "./managed-terminal-service": {
+      "types": "./dist/cells/managed-terminal-service/index.d.ts",
+      "import": "./dist/cells/managed-terminal-service/index.js"
+    },
+    "./managed-terminal-store": {
+      "types": "./dist/cells/managed-terminal-store/index.d.ts",
+      "import": "./dist/cells/managed-terminal-store/index.js"
+    },
+    "./workspace-interaction": {
+      "types": "./dist/cells/workspace-interaction/index.d.ts",
+      "import": "./dist/cells/workspace-interaction/index.js"
+    },
+    "./workspace-planning": {
+      "types": "./dist/cells/workspace-planning/index.d.ts",
+      "import": "./dist/cells/workspace-planning/index.js"
+    },
+    "./wayfinder-agent": {
+      "types": "./dist/cells/wayfinder-agent/index.d.ts",
+      "import": "./dist/cells/wayfinder-agent/index.js"
     }
   },
   "scripts": {
     "clean": "node tooling/clean-dist.js",
-    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "build:node": "tsc -p tsconfig.build.json",
+    "build:quicklens:browser": "vite build --config quicklens.vite.config.ts",
+    "build:quicklens:electron": "tsc -p tsconfig.electron.json && vite build --config quicklens.preload.vite.config.ts",
+    "build:quicklens": "npm run build:quicklens:browser && npm run build:quicklens:electron",
+    "build": "npm run clean && npm run build:node && npm run build:quicklens",
+    "dev:quicklens": "vite --config quicklens.vite.config.ts --host 127.0.0.1",
+    "preview:quicklens": "vite preview --config quicklens.preview.config.ts --host 127.0.0.1",
+    "start:quicklens-service": "node dist/quicklens.js",
+    "start:quicklens-web": "node dist/quicklens-web.js",
+    "start:wayfinder": "node dist/wayfinder.js",
+    "quicklens:demo": "npm run build:quicklens && electron dist/quicklens/electron/main.js --demo",
     "format": "prettier --write src",
     "format:check": "prettier --check src",
-    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit && tsc -p tsconfig.browser.json --noEmit && tsc -p tsconfig.electron.json --noEmit && tsc -p tsconfig.quicklens.test.json --noEmit",
     "test:node": "node --test \"src/**/*.test.ts\"",
     "test:tooling": "node --test \"tooling/**/*.test.js\"",
     "test:types": "vitest run",
     "test": "npm run test:node && npm run test:tooling && npm run test:types",
     "lint": "eslint src",
-    "verify": "npm run format:check && npm run typecheck && npm test && npm run lint && npm run build",
+    "check:quicklens:boundary": "node tooling/check-quicklens-browser-boundary.js",
+    "verify": "npm run format:check && npm run typecheck && npm test && npm run lint && npm run check:quicklens:boundary && npm run build",
     "prepack": "npm run verify"
   },
   "engines": {
@@ -60,7 +155,13 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0",
+    "@qwik.dev/core": "2.0.0-beta.43",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0",
+    "electron": "44.3.0",
+    "graphology": "0.26.0",
     "lossless-json": "4.3.1",
+    "sigma": "3.0.3",
     "zod": "4.1.11"
   },
   "devDependencies": {
@@ -70,6 +171,10 @@
     "prettier": "3.6.2",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.0",
+    "vite": "8.3.0",
     "vitest": "4.1.11"
+  },
+  "optionalDependencies": {
+    "node-pty": "1.1.0"
   }
 }

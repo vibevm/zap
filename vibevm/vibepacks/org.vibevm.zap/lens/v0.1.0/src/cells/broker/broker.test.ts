@@ -3,7 +3,6 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
-
 import { ConversationIdSchema, DecimalSchema, WorkspaceIdSchema } from "../protocol/index.ts";
 import { openBroker } from "./index.ts";
 import {
@@ -18,7 +17,6 @@ import {
   request,
   take,
 } from "./test-support.ts";
-
 /** @implements spec://org.vibevm.zap/lens/PROP-001#verification */
 void test("interleaved nested actors receive out-of-order answers only in their own inbox", () => {
   const broker = memoryBroker();
@@ -86,7 +84,6 @@ void test("interleaved nested actors receive out-of-order answers only in their 
       independentWorkAvailable: true,
     }),
   );
-
   take(
     broker.answer(
       { principalToken: responderB.principalToken },
@@ -126,7 +123,6 @@ void test("interleaved nested actors receive out-of-order answers only in their 
       },
     ),
   );
-
   const inboxA = take(broker.inbox(auth(agent, childA), {}));
   const inboxB = take(broker.inbox(auth(agent, childB), {}));
   const inboxNested = take(broker.inbox(auth(agent, grandchild), {}));
@@ -144,7 +140,6 @@ void test("interleaved nested actors receive out-of-order answers only in their 
   );
   take(broker.close());
 });
-
 /** @implements spec://org.vibevm.zap/lens/PROP-001#verification */
 void test("restart preserves idempotency and resume fences the old binding generation", () => {
   const directory = mkdtempSync(join(tmpdir(), "codlens-broker-"));
@@ -162,8 +157,8 @@ void test("restart preserves idempotency and resume fences the old binding gener
     }),
   );
   take(first.close());
-
   const second = take(openBroker({ databasePath }));
+  assert.equal(take(second.context(auth(agent, connection))).handle.generation, "1");
   const duplicate = take(
     second.ask(auth(agent, connection), {
       clientRequestId: request("restart_question"),
@@ -191,11 +186,19 @@ void test("restart preserves idempotency and resume fences the old binding gener
     independentWorkAvailable: true,
   });
   expectError(stale, "stale_binding");
+  expectError(second.context(auth(agent, connection)), "stale_binding");
+  const unrelated = enroll(second, "agent", AGENT_CAPABILITIES);
+  expectError(
+    second.context({
+      principalToken: unrelated.principalToken,
+      bindingToken: resumed.credentials.bindingToken,
+    }),
+    "unauthorized",
+  );
   assert.equal(resumed.handle.generation, "2");
   take(second.close());
   rmSync(directory, { recursive: true, force: true });
 });
-
 /** @implements spec://org.vibevm.zap/lens/PROP-001#verification */
 void test("duplicate writes, answer races, cancellation and wrong scope have explicit outcomes", () => {
   const broker = memoryBroker();
@@ -317,7 +320,6 @@ void test("duplicate writes, answer races, cancellation and wrong scope have exp
   assert.equal(amended.answer, "choice_b");
   take(broker.close());
 });
-
 /** @implements spec://org.vibevm.zap/lens/PROP-001#verification */
 void test("sparse acknowledgement, backpressure and completed-child forwarding remain explicit", () => {
   const broker = memoryBroker();
@@ -383,7 +385,6 @@ void test("sparse acknowledgement, backpressure and completed-child forwarding r
     take(broker.inbox(auth(agent, child), {})).deliveries.map((item) => item.message.payload),
     [{ order: 1 }],
   );
-
   const question = take(
     broker.ask(auth(agent, child), {
       clientRequestId: request("forward_question"),
@@ -423,7 +424,6 @@ void test("sparse acknowledgement, backpressure and completed-child forwarding r
   expectError(unsupported, "unsupported_operation");
   take(broker.close());
 });
-
 /** @implements spec://org.vibevm.zap/lens/PROP-001#verification */
 void test("the same conversation label remains isolated by workspace", () => {
   const broker = memoryBroker();
@@ -503,7 +503,6 @@ void test("the same conversation label remains isolated by workspace", () => {
   expectError(invalidCursor, "resync_required");
   take(broker.close());
 });
-
 /** @implements spec://org.vibevm.zap/lens/PROP-001#verification */
 void test("expiry and forwarding maintenance operations enforce bounded batches", () => {
   let instant = new Date("2026-09-15T00:00:00.000Z");
@@ -576,7 +575,6 @@ void test("expiry and forwarding maintenance operations enforce bounded batches"
   assert.equal(thirdBatch.forwardedDeliveryIds.length, 2);
   take(broker.close());
 });
-
 /** @implements spec://org.vibevm.zap/lens/PROP-001#verification */
 void test("public validation and storage errors redact submitted credential material", () => {
   const broker = memoryBroker();

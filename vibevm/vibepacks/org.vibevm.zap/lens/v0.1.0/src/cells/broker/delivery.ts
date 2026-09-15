@@ -21,7 +21,9 @@ import {
   InboxPageSchema,
   JsonValueSchema,
   MessageEnvelopeSchema,
+  MessageIdSchema,
   PrincipalAuthSchema,
+  PrincipalEmitInputSchema,
   ReplyPolicySchema,
   type AckInput,
   type AckResult,
@@ -36,7 +38,9 @@ import {
   type InboxInput,
   type InboxPage,
   type MessageEnvelope,
+  type MessageId,
   type PrincipalAuth,
+  type PrincipalEmitInput,
   type Result,
 } from "../protocol/index.ts";
 import { fail, ok } from "./core.ts";
@@ -69,6 +73,69 @@ const DeliveryRowSchema = MessageRowSchema.extend({
 });
 
 export class DeliveryOperations extends QuestionOperations {
+  emitPrincipal(auth: PrincipalAuth, input: PrincipalEmitInput): Result<MessageEnvelope> {
+    return this.safe(() => {
+      const parsed = PrincipalEmitInputSchema.parse(input);
+      const principal = this.principal(PrincipalAuthSchema.parse(auth));
+      if (!principal.ok) return principal;
+      const denied = this.requireCapability(principal.value, "message:emit");
+      if (denied !== null) return denied;
+      const scope = this.requireScope(principal.value, parsed.workspaceId, parsed.conversationId);
+      if (scope !== null) return scope;
+      const recipient = this.actor(parsed.toActorId);
+      if (
+        recipient === null ||
+        recipient.workspaceId !== parsed.workspaceId ||
+        recipient.conversationId !== parsed.conversationId
+      ) {
+        return fail(
+          "forbidden",
+          "delivery",
+          "principal notice recipient is outside the authenticated scope",
+          "select an actor returned by the same scoped actor listing",
+        );
+      }
+      if (recipient.state !== "active") {
+        return fail(
+          "conflict",
+          "delivery",
+          "principal notice recipient is expired",
+          "refresh eligible actor targets before retrying",
+        );
+      }
+      if (Buffer.byteLength(JSON.stringify(parsed.payload)) > MAX_PAYLOAD_BYTES) {
+        return fail(
+          "backpressure",
+          "protocol",
+          "message payload exceeds the inline limit",
+          "store the artifact separately and send a bounded reference",
+        );
+      }
+      return this.idempotent(
+        principal.value.principalId,
+        "principal",
+        parsed.clientRequestId,
+        "emit_principal",
+        parsed,
+        MessageEnvelopeSchema,
+        () => {
+          const message = this.writeMessage({
+            workspaceId: parsed.workspaceId,
+            conversationId: parsed.conversationId,
+            fromActorId: null,
+            toActorId: parsed.toActorId,
+            kind: "notice.created",
+            correlationId: parsed.correlationId ?? null,
+            causationId: parsed.causationId ?? null,
+            payload: parsed.payload,
+          });
+          this.writeDelivery(message, parsed.toActorId, parsed.toActorId);
+          return ok(message);
+        },
+      );
+    });
+  }
+
   emit(auth: BindingAuth, input: EmitInput): Result<MessageEnvelope> {
     return this.safe(() => {
       const parsed = EmitInputSchema.parse(input);
@@ -170,6 +237,45 @@ export class DeliveryOperations extends QuestionOperations {
           }),
         );
       });
+    });
+  }
+
+  /** Exact authenticated proof that this binding was the selected planning recipient. */
+  planIntent(auth: BindingAuth, messageId: MessageId): Result<MessageEnvelope> {
+    return this.safe(() => {
+      const actor = this.binding(BindingAuthSchema.parse(auth));
+      if (!actor.ok) return actor;
+      const denied = this.requireCapability(actor.value, "plan:propose");
+      if (denied !== null) return denied;
+      if (actor.value.state !== "active") return this.expiredActorFailure();
+      const message = this.messageById(MessageIdSchema.parse(messageId));
+      if (
+        message === null ||
+        message.workspaceId !== actor.value.workspaceId ||
+        message.conversationId !== actor.value.conversationId ||
+        message.toActorId !== actor.value.actorId
+      ) {
+        return fail(
+          "forbidden",
+          "authority",
+          "plan intent is not addressed to this authenticated actor",
+          "use the exact plan-intent message delivered to this actor binding",
+        );
+      }
+      const delivery = this.database.get(
+        `SELECT recipient_actor_id AS recipientActorId FROM deliveries
+          WHERE message_id = ? AND logical_recipient_actor_id = ?`,
+        DeliveryOwnerSchema,
+        [message.messageId, actor.value.actorId],
+      );
+      return delivery === null
+        ? fail(
+            "forbidden",
+            "authority",
+            "plan intent has no delivery for this authenticated actor",
+            "use a broker-addressed plan intent rather than a self-asserted identifier",
+          )
+        : ok(message);
     });
   }
 
@@ -413,7 +519,7 @@ export class DeliveryOperations extends QuestionOperations {
     });
   }
 
-  private messageById(messageId: string): MessageEnvelope | null {
+  protected messageById(messageId: string): MessageEnvelope | null {
     const row = this.database.get(
       `SELECT message_id AS messageId, workspace_id AS workspaceId,
               conversation_id AS conversationId, from_actor_id AS fromActorId,

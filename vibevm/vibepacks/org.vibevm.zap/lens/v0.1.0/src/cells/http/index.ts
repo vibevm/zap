@@ -1,18 +1,18 @@
-/**
- * Loopback HTTP command and SSE transport for lens/1.
- * @scope spec://org.vibevm.zap/lens/PROP-001#transport
- * @example
- * const gateway = createLensHttpGateway(options);
- * const started = await gateway.start({ host: "127.0.0.1", port: 0 });
- */
+/** Loopback HTTP command and SSE transport. @scope spec://org.vibevm.zap/lens/PROP-001#transport */
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
-import { timingSafeEqual } from "node:crypto";
-import type { AddressInfo } from "node:net";
-import { once } from "node:events";
 import { z } from "zod";
 import { executeHostHook } from "./host-hook.ts";
 import { resumeRetainedSessions } from "./resume.ts";
-import { parse, parsedCall, readJson, statusOf } from "./wire.ts";
+import {
+  constantEqual,
+  delay,
+  executePrincipalCommand,
+  hostAllowed,
+  parse,
+  parsedCall,
+  readJson,
+  statusOf,
+} from "./wire.ts";
 import {
   AckInputSchema,
   AnswerQuestionInputSchema,
@@ -25,6 +25,7 @@ import {
   EventsInputSchema,
   InboxInputSchema,
   ClientRequestIdSchema,
+  MessageIdSchema,
   HostBindingSchema,
   type BrokerError,
   type BindingAuth,
@@ -39,7 +40,22 @@ import {
   type AdapterSessionId,
   type AdapterSessionVault,
   type TransportBrokerPort,
+  createRetainedAgentTransport,
 } from "../transport/index.ts";
+import {
+  AgentQuestionInputSchema,
+  type AgentQuestionPublisher,
+} from "../workspace-interaction/index.ts";
+import type { WorkspacePlanningFeature } from "../workspace-planning/index.ts";
+import { executeAgentPlanning } from "./agent-planning.ts";
+import {
+  addressInfo,
+  sendJson,
+  sendResult,
+  singleHeader,
+  writeCors,
+  writeSse,
+} from "./server-response.ts";
 
 const UnattestedHostSchema = HostBindingSchema.extend({
   provenance: z.enum(["explicit_handle", "unverified"]),
@@ -60,6 +76,8 @@ export interface LensHttpGatewayOptions {
   readonly adapterSessionVault?: AdapterSessionVault;
   readonly maximumBodyBytes?: number;
   readonly streamPollMilliseconds?: number;
+  readonly agentQuestions?: AgentQuestionPublisher;
+  readonly planning?: WorkspacePlanningFeature;
 }
 
 export interface GatewayAddress {
@@ -71,7 +89,8 @@ export interface LensHttpGateway {
   start(address: GatewayAddress): Promise<Result<GatewayAddress>>;
   close(): Promise<Result<null>>;
 }
-export { createAgentHttpClient, type AgentHttpClientOptions } from "./client.ts";
+export { createAgentHttpClient, createPrincipalHttpClient } from "./client.ts";
+export type { AgentHttpClientOptions } from "./client.ts";
 
 /** Creates a credential-redacting, origin-checked HTTP façade. */
 export function createLensHttpGateway(options: LensHttpGatewayOptions): LensHttpGateway {
@@ -208,14 +227,19 @@ async function dispatch(
         mcpProtocol: "2025-11-25",
         commands: [
           "connect",
+          "context",
           "emit",
           "ask",
+          "ask-user-question",
           "inbox",
           "ack",
           "delegate",
           "finish",
           "forward",
           "answer",
+          "actors",
+          "questions",
+          "notice",
           "events",
         ],
         unsupported: ["plan.execute", "generic_mcp.unsolicited_model_wake", "mcp.2026-07-28"],
@@ -275,6 +299,22 @@ async function dispatch(
     }
     const answered = await options.broker.answer({ principalToken: principal.value }, parsed.value);
     sendResult(response, answered, statusOf(answered), request);
+    return;
+  }
+
+  if (["/v1/actors", "/v1/questions", "/v1/notice", "/v1/event-page"].includes(url.pathname)) {
+    const principal = bearerCredential(request);
+    if (!principal.ok) {
+      sendResult(response, principal, 401, request);
+      return;
+    }
+    const result = await executePrincipalCommand(
+      url.pathname,
+      body.value,
+      options.broker,
+      principal.value,
+    );
+    sendResult(response, result, statusOf(result), request);
     return;
   }
 
@@ -363,14 +403,56 @@ async function executeActorCommand(
   adapterSessionId: AdapterSessionId,
   auth: BindingAuth,
 ): Promise<Result<unknown>> {
+  if (path.startsWith("/v1/agent-plan/")) {
+    if (options.planning === undefined)
+      return failure("unsupported_operation", "Wayfinder planning is not configured");
+    const actor = await options.broker.context(auth);
+    if (!actor.ok) return actor;
+    const port = options.planning.agent(
+      actor.value,
+      createRetainedAgentTransport({
+        broker: options.broker,
+        principalToken: auth.principalToken,
+        sessions,
+      }),
+    );
+    return port.ok
+      ? executeAgentPlanning(
+          port.value,
+          path.slice("/v1/agent-plan/".length),
+          actor.value,
+          adapterSessionId,
+          body,
+        )
+      : failure(
+          port.error.code === "unavailable" ? "unsupported_operation" : port.error.code,
+          port.error.message,
+        );
+  }
+  if (path === "/v1/ask-user-question") {
+    if (options.agentQuestions === undefined)
+      return failure("unsupported_operation", "Wayfinder rich questions are not configured");
+    const input = parse(AgentQuestionInputSchema, body);
+    if (!input.ok) return input;
+    const actor = await options.broker.context(auth);
+    if (!actor.ok) return actor;
+    if (!actor.value.actor.capabilities.includes("question:ask"))
+      return failure("forbidden", "current actor lacks question authority");
+    return options.agentQuestions.publish(actor.value, input.value);
+  }
   if (path === "/v1/emit")
     return parsedCall(EmitInputSchema, body, (input) => options.broker.emit(auth, input));
   if (path === "/v1/ask")
     return parsedCall(AskInputSchema, body, (input) => options.broker.ask(auth, input));
   if (path === "/v1/inbox")
     return parsedCall(InboxInputSchema, body, (input) => options.broker.inbox(auth, input));
+  if (path === "/v1/plan-intent") {
+    const input = parse(z.object({ messageId: MessageIdSchema }).strict(), body);
+    return input.ok ? options.broker.planIntent(auth, input.value.messageId) : input;
+  }
   if (path === "/v1/ack")
     return parsedCall(AckInputSchema, body, (input) => options.broker.ack(auth, input));
+  if (path === "/v1/context") return options.broker.context(auth);
   if (path === "/v1/finish") {
     const input = parse(z.object({ clientRequestId: ClientRequestIdSchema }).strict(), body);
     if (!input.ok) return input;
@@ -489,15 +571,6 @@ function validateRequestSource(
   return { ok: true, value: null };
 }
 
-function hostAllowed(value: string, allowed: readonly string[]): boolean {
-  if (allowed.includes(value)) return true;
-  try {
-    return allowed.includes(new URL(`http://${value}`).hostname);
-  } catch {
-    return false;
-  }
-}
-
 function bearerCredential(request: IncomingMessage): Result<Credential> {
   const value = singleHeader(request, "authorization");
   const token = value?.startsWith("Bearer ") ? value.slice(7) : "";
@@ -516,84 +589,8 @@ function adapterSessionHeader(request: IncomingMessage): Result<AdapterSessionId
     : failure("unauthorized", "adapter session credential is missing or malformed");
 }
 
-function singleHeader(request: IncomingMessage, name: string): string | undefined {
-  const values: string[] = [];
-  for (let index = 0; index < request.rawHeaders.length; index += 2) {
-    const headerName = request.rawHeaders[index];
-    const headerValue = request.rawHeaders[index + 1];
-    if (headerName?.toLowerCase() === name && headerValue !== undefined) values.push(headerValue);
-  }
-  return values.length === 1 ? values[0] : undefined;
-}
-
-function sendResult<T>(
-  response: ServerResponse,
-  result: Result<T>,
-  status: number,
-  request: IncomingMessage,
-): void {
-  sendJson(response, status, { protocol: "lens/1", ...result }, request);
-}
-
-function sendJson(
-  response: ServerResponse,
-  status: number,
-  value: unknown,
-  request: IncomingMessage,
-): void {
-  writeCors(response, request);
-  response.writeHead(status, {
-    "Content-Type": "application/json",
-    "Cache-Control": "no-store",
-  });
-  response.end(JSON.stringify(value));
-}
-
-function writeCors(response: ServerResponse, request: IncomingMessage): void {
-  const origin = singleHeader(request, "origin");
-  if (origin !== undefined) {
-    response.setHeader("Access-Control-Allow-Origin", origin);
-    response.setHeader("Vary", "Origin");
-  }
-}
-
-function constantEqual(left: string, right: string): boolean {
-  const leftBytes = Buffer.from(left);
-  const rightBytes = Buffer.from(right);
-  return leftBytes.length === rightBytes.length && timingSafeEqual(leftBytes, rightBytes);
-}
-
-function addressInfo(value: AddressInfo): GatewayAddress {
-  return { host: value.address, port: value.port };
-}
-
 function isLoopback(host: string): boolean {
   return host === "127.0.0.1" || host === "localhost" || host === "::1";
-}
-
-async function writeSse(
-  response: ServerResponse,
-  value: string,
-  signal: AbortSignal,
-): Promise<boolean> {
-  if (signal.aborted || response.destroyed) return false;
-  if (response.write(value)) return true;
-  await Promise.race([once(response, "drain"), once(signal, "abort")]);
-  return !signal.aborted;
-}
-
-function delay(milliseconds: number, signal: AbortSignal): Promise<void> {
-  return new Promise((resolve) => {
-    const timer = setTimeout(resolve, milliseconds);
-    signal.addEventListener(
-      "abort",
-      () => {
-        clearTimeout(timer);
-        resolve();
-      },
-      { once: true },
-    );
-  });
 }
 
 export type { BrokerError, PrincipalAuth };

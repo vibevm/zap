@@ -1,0 +1,9 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": [
+    "./**/*.ts",
+    "../workspace-model/**/*.ts",
+    "../protocol/**/*.ts",
+    "../quicklens-model/**/*.ts"
+  ]
+}

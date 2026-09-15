@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": [
+    "./**/*.ts",
+    "../workspace-model/**/*.ts",
+    "../workspace-store/**/*.ts",
+    "../agent-runtime/**/*.ts",
+    "../protocol/**/*.ts"
+  ]
+}

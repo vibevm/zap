@@ -1,0 +1,415 @@
+.coordinator-controls {
+  margin-bottom: 14px;
+}
+
+.launch-option {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 5px 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface-solid);
+}
+
+.launch-option > div {
+  display: grid;
+}
+
+.launch-option > small {
+  grid-column: 1 / -1;
+}
+
+.terminal-capability-slot {
+  display: grid;
+  gap: 3px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+}
+
+.terminal-capability-slot strong {
+  color: var(--text);
+}
+
+.agent-workspace,
+.question-workspace {
+  display: grid;
+  grid-template-columns: minmax(420px, 1.1fr) minmax(320px, 0.9fr);
+  gap: 14px;
+}
+
+.agent-network-graph {
+  width: 100%;
+  min-height: 260px;
+  margin: 8px 0;
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+
+.agent-node circle.agent-node-selected {
+  fill: #d97757;
+  stroke: #141413;
+  stroke-width: 4;
+}
+
+.agent-node-completed circle,
+.agent-node-active circle {
+  fill: #7d9b76;
+}
+
+.agent-node-failed circle {
+  fill: #c15f3c;
+}
+
+.agent-node-unknown circle {
+  fill: #8a8982;
+}
+
+.agent-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.agent-state-dot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 50%;
+  background: #b8b6ad;
+}
+
+.agent-state-active,
+.agent-state-running {
+  background: #3e7b47;
+}
+
+.agent-state-waiting_for_user,
+.agent-state-starting {
+  background: #d4a27f;
+}
+
+.agent-state-failed {
+  background: #c15f3c;
+}
+
+.agent-state-unknown {
+  background: #8a8982;
+}
+
+.agent-output-list,
+.activity-list,
+.chat-list,
+.answer-history ol {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agent-output-list,
+.activity-list,
+.chat-list {
+  max-height: 620px;
+  overflow: auto;
+}
+
+.agent-output-list li,
+.chat-message {
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface-solid);
+}
+
+.agent-output-list p,
+.chat-message p {
+  margin: 7px 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.output-metadata {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.output-metadata pre {
+  max-height: 180px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.output-meta,
+.chat-meta,
+.activity-meta {
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.activity-panel {
+  align-self: start;
+  position: sticky;
+  top: 16px;
+}
+
+.scope-switch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.scope-switch button {
+  max-width: 120px;
+  overflow: hidden;
+  padding: 5px 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-list li {
+  display: grid;
+  grid-template-columns: 8px 1fr;
+  gap: 9px;
+}
+
+.activity-marker {
+  border-radius: 999px;
+  background: #b8b6ad;
+}
+
+.activity-marker[data-source="lens"] {
+  background: #d97757;
+}
+
+.activity-marker[data-source="host"] {
+  background: #7b7ee0;
+}
+
+.activity-marker[data-source="zap"] {
+  background: #7d9b76;
+}
+
+.activity-meta {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.activity-meta strong {
+  color: var(--text);
+  font-size: 0.78rem;
+}
+
+.activity-detail {
+  margin: 5px 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.activity-more {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.chat-panel,
+.question-detail {
+  min-height: 620px;
+}
+
+.chat-user {
+  margin-left: 12%;
+  background: var(--accent-soft);
+}
+
+.chat-assistant {
+  margin-right: 8%;
+}
+
+.chat-composer {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.chat-composer .button {
+  justify-self: end;
+}
+
+.question-groups {
+  align-self: start;
+}
+
+.question-group-link {
+  justify-content: space-between;
+}
+
+.question-introduction {
+  color: var(--muted);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.rich-question-list {
+  display: grid;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.rich-question {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-solid);
+}
+
+.rich-question legend {
+  padding: 0 6px;
+  color: var(--accent-text);
+  font-weight: 800;
+}
+
+.rich-question > p {
+  margin: 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.question-context,
+.question-recommendation {
+  padding: 9px 10px;
+  border-radius: 9px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.question-recommendation {
+  display: grid;
+  gap: 3px;
+}
+
+.question-recommendation strong {
+  color: var(--text);
+}
+
+.question-options {
+  display: grid;
+  gap: 7px;
+}
+
+.question-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.question-option > input,
+.question-option label input {
+  width: auto;
+  margin-top: 3px;
+}
+
+.question-option > span,
+.question-option.custom,
+.question-option.custom label {
+  display: grid;
+  gap: 3px;
+  flex: 1;
+}
+
+.question-option small,
+.question-option em {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.question-option em {
+  white-space: pre-wrap;
+}
+
+.question-amendment {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.answer-history {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.answer-history li {
+  display: grid;
+  gap: 3px;
+  padding: 9px;
+  border-radius: 9px;
+  background: var(--surface-soft);
+}
+
+.workspace-loading {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+@media (max-width: 1240px) {
+  .workspace-body {
+    grid-template-columns: 220px minmax(480px, 1fr);
+  }
+
+  .activity-panel {
+    position: static;
+    grid-column: 1 / -1;
+  }
+
+  .agent-workspace,
+  .question-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 780px) {
+  .workspace-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .workspace-header-context {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .workspace-body {
+    grid-template-columns: 1fr;
+  }
+
+  .project-rail,
+  .activity-panel {
+    position: static;
+  }
+
+  .project-card-grid,
+  .agent-list {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-section-heading {
+    display: grid;
+  }
+}

@@ -25,5 +25,14 @@
     "skipLibCheck": false
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.vitest.ts", "node_modules", "target"]
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.vitest.ts",
+    "src/quicklens/**",
+    "src/cells/quicklens-demo/**",
+    "src/cells/quicklens-graph/**",
+    "src/cells/quicklens-ui/**",
+    "node_modules",
+    "target"
+  ]
 }

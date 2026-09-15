@@ -9,6 +9,7 @@
 import type {
   AckInput,
   AckResult,
+  ActorList,
   ActorDescriptor,
   AmendAnswerInput,
   AnswerQuestionInput,
@@ -28,11 +29,16 @@ import type {
   InboxInput,
   InboxPage,
   MessageEnvelope,
+  MessageId,
   PrincipalAuth,
+  PrincipalEmitInput,
   PrincipalEnrollment,
+  PublicConnection,
   Question,
+  QuestionList,
   Result,
   ResumeInput,
+  ScopedListInput,
 } from "../protocol/index.ts";
 
 export interface OpenBrokerOptions {
@@ -45,12 +51,17 @@ export interface LensBroker {
   enrollPrincipal(input: EnrollPrincipalInput): Result<PrincipalEnrollment>;
   connect(input: ConnectInput): Result<Connection>;
   resume(input: ResumeInput): Result<Connection>;
+  context(auth: BindingAuth): Result<PublicConnection>;
   delegate(auth: BindingAuth, input: DelegateInput): Result<Connection>;
   emit(auth: BindingAuth, input: EmitInput): Result<MessageEnvelope>;
   ask(auth: BindingAuth, input: AskInput): Result<Question>;
   inbox(auth: BindingAuth, input: InboxInput): Result<InboxPage>;
+  planIntent(auth: BindingAuth, messageId: MessageId): Result<MessageEnvelope>;
   ack(auth: BindingAuth, input: AckInput): Result<AckResult>;
   events(auth: PrincipalAuth, input: EventsInput): Result<EventPage>;
+  listActors(auth: PrincipalAuth, input: ScopedListInput): Result<ActorList>;
+  listQuestions(auth: PrincipalAuth, input: ScopedListInput): Result<QuestionList>;
+  emitPrincipal(auth: PrincipalAuth, input: PrincipalEmitInput): Result<MessageEnvelope>;
   answer(auth: PrincipalAuth, input: AnswerQuestionInput): Result<Question>;
   amendAnswer(auth: PrincipalAuth, input: AmendAnswerInput): Result<Question>;
   cancelQuestion(auth: BindingAuth, input: CancelQuestionInput): Result<Question>;

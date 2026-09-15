@@ -20,6 +20,24 @@ infer the package installation path: set `CODLENS_CLI_PATH` to the installed
 package's real `dist/cli.js`. The wrapper refuses with an actionable diagnostic
 when that path is absent.
 
+In the shared Wayfinder profile, agent plan tools proxy through the same
+authenticated loopback gateway as inbox tools. Wayfinder alone owns configured
+ZAP channels, source watchers and workflow journals; MCP processes do not open
+`CODLENS_PLAN_CONFIG_FILE` or a second workflow writer. The legacy standalone
+agent-plan schema/example remains only for direct library compatibility; the
+production MCP entry ignores that environment variable. `QUICKLENS_CONFIG_FILE`, based on
+`quicklens-runtime.example.json`, is used by the trusted local UI service and
+holds its separate human responder and Owner channels. Relative database and
+specification paths resolve from the directory containing each config file, so
+MCP processes launched from different project directories share durable state.
+
+For multiple projects, configure one Wayfinder `agentGateway.scopes[]` entry per
+exact workspace/conversation. Each entry names separate generated agent and
+human-responder credentials. A shared Codex launch profile may use
+`lensMcp.scopeCredentials[]` to select a distinct protected credential file for
+each exact scope. Owned prebound coordinators disable `codlens_connect`; the
+broker still revalidates the current binding on every plan/question operation.
+
 The Codex plugin uses `${CODEX_PLUGIN_ROOT}` to locate its small wrapper. The
 wrapper invokes the installed `codlens` executable, or the executable named by
 `CODLENS_CLI_PATH`, with shell expansion disabled. Hook calls perform a bounded,
@@ -63,3 +81,25 @@ For every host, `persisted`, `offered`, `host_accepted`, and
 an authenticated `codlens_ack` broker operation establishes actor acknowledgement.
 
 Requirement: `spec://org.vibevm.zap/lens/PROP-001#adapters`.
+
+## Shared Wayfinder and Quick Lens
+
+The shared local service is Zap Wayfinder. Zap Quick Lens connects through the
+named WorkspaceClientPort operations exposed by its trusted workspace gateway;
+it does not connect to an agent/MCP listener directly. Use the one-use pairing
+ticket printed by `zap-wayfinder <config.json>` for the local workspace profile.
+
+Host adapters retain their native identity and lifecycle boundaries. A parent
+session label, display name, terminal text or model output is not enough to
+route a child operation. Managed terminal input requires an explicitly owned
+terminal lease and control epoch; native children expose only the capabilities
+their host reports.
+
+Model policy is configured by task purpose/class, tier and effort. The selected
+policy revision, concrete profile/model and later host observation stay
+separate. Test actors use the configured small/Luna/low fixture; coding-worker
+selection remains complexity- and budget-aware. No provider credential belongs
+in a plugin, hook, MCP message or browser payload.
+
+See the [Wayfinder operator guide](../vibevm/vibespecs/WAYFINDER-GUIDE.md) for
+local startup, scopes, lifecycle, history, questions and protected-web limits.

@@ -1,0 +1,29 @@
+{
+  "protocol": "quicklens/1",
+  "workspaceId": "workspace.example",
+  "conversationId": "conversation.example",
+  "zap": {
+    "reader": {
+      "endpoint": "http://127.0.0.1:32192",
+      "credentialId": "reader.example",
+      "bearer": "REPLACE_WITH_READER_BEARER"
+    },
+    "data": {
+      "endpoint": "http://127.0.0.1:32192",
+      "credentialId": "data.example",
+      "bearer": "REPLACE_WITH_DATA_BEARER"
+    },
+    "coordinator": {
+      "endpoint": "http://127.0.0.1:32192",
+      "credentialId": "coordinator.example",
+      "bearer": "REPLACE_WITH_COORDINATOR_BEARER"
+    }
+  },
+  "workflowDatabasePath": "REPLACE_WITH_USER_LOCAL_WORKFLOW_DATABASE",
+  "specifications": [
+    {
+      "root": "REPLACE_WITH_PROJECT_SPECIFICATION_ROOT",
+      "include": ["**/*.xml", "**/*.md"]
+    }
+  ]
+}

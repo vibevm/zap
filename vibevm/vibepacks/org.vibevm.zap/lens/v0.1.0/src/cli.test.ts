@@ -9,8 +9,14 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { z } from "zod";
 import { createAgentHttpClient } from "./cells/http/index.ts";
+import { openBroker } from "./cells/broker/index.ts";
 import { AdapterSessionIdSchema } from "./cells/transport/index.ts";
-import { ClientRequestIdSchema, CredentialSchema } from "./cells/protocol/index.ts";
+import {
+  ClientRequestIdSchema,
+  ConversationIdSchema,
+  CredentialSchema,
+  WorkspaceIdSchema,
+} from "./cells/protocol/index.ts";
 import { runCli } from "./cli.ts";
 
 test("setup creates protected credentials without printing their values", async () => {
@@ -48,6 +54,37 @@ test("setup creates protected credentials without printing their values", async 
   assert.equal(rendered.includes(stored.statusToken), false);
   assert.equal(rendered.includes(stored.agent.principalToken), false);
   assert.equal(rendered.includes(stored.humanResponder.principalToken), false);
+
+  const reopened = openBroker({ databasePath });
+  assert.equal(reopened.ok, true);
+  if (reopened.ok) {
+    const agentToken = CredentialSchema.parse(stored.agent.principalToken);
+    const connected = reopened.value.connect({
+      principalToken: agentToken,
+      clientRequestId: ClientRequestIdSchema.parse("request.setup.planning"),
+      workspaceId: WorkspaceIdSchema.parse("workspace.setup"),
+      conversationId: ConversationIdSchema.parse("conversation.setup"),
+      capabilities: ["message:emit", "inbox:read", "plan:propose"],
+      host: { kind: "test", provenance: "attested" },
+      replyPolicy: { kind: "retain" },
+    });
+    assert.equal(connected.ok, true);
+    if (connected.ok) {
+      const humanToken = CredentialSchema.parse(stored.humanResponder.principalToken);
+      const notice = reopened.value.emitPrincipal(
+        { principalToken: humanToken },
+        {
+          clientRequestId: ClientRequestIdSchema.parse("request.setup.intent"),
+          workspaceId: WorkspaceIdSchema.parse("workspace.setup"),
+          conversationId: ConversationIdSchema.parse("conversation.setup"),
+          toActorId: connected.value.actor.actorId,
+          payload: { type: "plan_intent" },
+        },
+      );
+      assert.equal(notice.ok, true);
+    }
+    reopened.value.close();
+  }
 
   if (process.platform === "win32") {
     const acl = spawnSync("icacls.exe", [credentialPath], {

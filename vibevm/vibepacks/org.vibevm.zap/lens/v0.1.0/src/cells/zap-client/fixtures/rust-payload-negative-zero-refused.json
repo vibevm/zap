@@ -1,0 +1,26 @@
+{
+  "frame": {
+    "header": {
+      "base_id": "base.digest",
+      "basis": { "kind": "not_applicable" },
+      "campaign_id": "campaign.digest",
+      "causes": [],
+      "command_id": "command.payload-negative-zero",
+      "event_id": "event.payload-negative-zero",
+      "expected_revision": 8,
+      "kind": "domain.work-transitioned",
+      "protocol": 1,
+      "store_id": "store.digest"
+    },
+    "payload": {
+      "canonical_json": [123, 34, 118, 97, 108, 117, 101, 34, 58, 45, 48, 46, 48, 125],
+      "codec": 2
+    },
+    "reason": {
+      "change": null,
+      "decision": null,
+      "evidence": [],
+      "summary": "Digest golden payload-negative-zero"
+    }
+  }
+}

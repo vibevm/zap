@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "state": {
+    "databasePath": "C:/zap-wayfinder/state/workspace.sqlite",
+    "modelPolicyDatabasePath": "C:/zap-wayfinder/state/model-policy.sqlite"
+  },
+  "gateway": {
+    "host": "127.0.0.1",
+    "port": 43110,
+    "namespace": "wayfinder",
+    "pairingToken": "synthetic-wayfinder-pairing-token-0001",
+    "allowedHosts": ["127.0.0.1"],
+    "allowedOrigins": ["http://127.0.0.1:4174"]
+  },
+  "profiles": [
+    {
+      "profileId": "profile.codex.native",
+      "executablePath": "C:/placeholder/codex.exe",
+      "requestTimeoutMs": 30000,
+      "model": "gpt-5.6-luna",
+      "effort": "low",
+      "approvalPolicy": "on-request",
+      "sandbox": "workspace-write",
+      "personality": "pragmatic",
+      "serviceName": "zap-wayfinder",
+      "lensMcp": {
+        "serverName": "codlens",
+        "commandPath": "C:/placeholder/codlens-mcp.cmd",
+        "args": [],
+        "brokerUrl": "http://127.0.0.1:43111",
+        "scopeCredentials": [
+          {
+            "workspaceId": "workspace.lens.synthetic",
+            "conversationId": "conversation.lens.synthetic",
+            "credentialFile": "C:/zap-wayfinder/secrets/lens-agent.json"
+          },
+          {
+            "workspaceId": "workspace.zap.synthetic",
+            "conversationId": "conversation.zap.synthetic",
+            "credentialFile": "C:/zap-wayfinder/secrets/zap-agent.json"
+          }
+        ],
+        "communicationPreauthorization": { "allowDelegation": false }
+      }
+    }
+  ],
+  "agentGateway": {
+    "databasePath": "C:/zap-wayfinder/state/broker.sqlite",
+    "host": "127.0.0.1",
+    "port": 43111,
+    "allowedHosts": ["127.0.0.1"],
+    "allowedOrigins": [],
+    "statusToken": "synthetic-wayfinder-status-token-0001",
+    "scopes": [
+      {
+        "workspaceId": "workspace.lens.synthetic",
+        "conversationId": "conversation.lens.synthetic",
+        "humanPrincipalToken": "synthetic-lens-human-token-000001",
+        "agentPrincipalToken": "synthetic-lens-agent-token-000001"
+      },
+      {
+        "workspaceId": "workspace.zap.synthetic",
+        "conversationId": "conversation.zap.synthetic",
+        "humanPrincipalToken": "synthetic-zap-human-token-0000001",
+        "agentPrincipalToken": "synthetic-zap-agent-token-0000001"
+      }
+    ]
+  },
+  "modelPolicies": [
+    {
+      "projectId": "project.lens.synthetic",
+      "contextId": "context.lens.synthetic",
+      "policyId": "policy.wayfinder.lens"
+    },
+    {
+      "projectId": "project.zap.synthetic",
+      "contextId": "context.zap.synthetic",
+      "policyId": "policy.wayfinder.zap"
+    }
+  ],
+  "projects": [
+    {
+      "registrationId": "request.project.lens.synthetic",
+      "projectId": "project.lens.synthetic",
+      "displayName": "Lens synthetic project",
+      "repositoryRootRefs": ["repository.lens.synthetic"],
+      "actions": { "startCoordinator": { "state": "available" } },
+      "context": {
+        "contextId": "context.lens.synthetic",
+        "displayName": "Synthetic worktree",
+        "workspaceRef": "workspace.lens.synthetic",
+        "branchLabel": "main",
+        "revisionBinding": "synthetic example",
+        "planning": {
+          "state": "unavailable",
+          "reason": "ZAP plan adapter is not configured in this example"
+        },
+        "coordinatorConversationId": "conversation.lens.synthetic",
+        "brokerScope": {
+          "workspaceId": "workspace.lens.synthetic",
+          "conversationId": "conversation.lens.synthetic"
+        }
+      },
+      "coordinatorLaunchOptions": [
+        {
+          "profileId": "profile.codex.native",
+          "label": "Codex native coordinator",
+          "interactionKind": "structured",
+          "availability": { "state": "available" }
+        }
+      ],
+      "protected": {
+        "cwd": "C:/placeholder/lens",
+        "launchProfileRef": "profile.codex.native"
+      }
+    },
+    {
+      "registrationId": "request.project.zap.synthetic",
+      "projectId": "project.zap.synthetic",
+      "displayName": "ZAP synthetic project",
+      "repositoryRootRefs": ["repository.zap.synthetic"],
+      "actions": { "startCoordinator": { "state": "available" } },
+      "context": {
+        "contextId": "context.zap.synthetic",
+        "displayName": "Synthetic planning context",
+        "workspaceRef": "workspace.zap.synthetic",
+        "branchLabel": "main",
+        "revisionBinding": "synthetic example",
+        "planning": {
+          "state": "unavailable",
+          "reason": "ZAP plan adapter is not configured in this example"
+        },
+        "coordinatorConversationId": "conversation.zap.synthetic",
+        "brokerScope": {
+          "workspaceId": "workspace.zap.synthetic",
+          "conversationId": "conversation.zap.synthetic"
+        }
+      },
+      "coordinatorLaunchOptions": [
+        {
+          "profileId": "profile.codex.native",
+          "label": "Codex native coordinator",
+          "interactionKind": "structured",
+          "availability": { "state": "available" }
+        }
+      ],
+      "protected": {
+        "cwd": "C:/placeholder/zap",
+        "launchProfileRef": "profile.codex.native"
+      }
+    }
+  ]
+}

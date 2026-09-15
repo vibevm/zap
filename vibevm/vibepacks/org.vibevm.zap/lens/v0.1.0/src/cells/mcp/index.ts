@@ -19,9 +19,16 @@ import {
   ForwardInboxInputSchema,
   InboxInputSchema,
   type BrokerError,
+  type JsonValue,
+  type PublicConnection,
   type Result,
 } from "../protocol/index.ts";
-import { AdapterSessionIdSchema, type AgentTransportPort } from "../transport/index.ts";
+import {
+  AdapterSessionIdSchema,
+  type AdapterSessionId,
+  type AgentTransportPort,
+} from "../transport/index.ts";
+import { AgentQuestionInputSchema } from "../workspace-interaction/index.ts";
 
 export const MCP_PROTOCOL_REVISION = "2025-11-25";
 
@@ -45,6 +52,9 @@ const AskToolInputSchema = z
     input: AskInputSchema,
   })
   .strict();
+const RichQuestionToolInputSchema = AgentQuestionInputSchema.extend({
+  adapterSessionId: AdapterSessionIdSchema,
+}).strict();
 const InboxToolInputSchema = z
   .object({
     adapterSessionId: AdapterSessionIdSchema,
@@ -75,9 +85,80 @@ const ForwardToolInputSchema = z
     input: ForwardInboxInputSchema,
   })
   .strict();
+const ContextToolInputSchema = z.object({ adapterSessionId: AdapterSessionIdSchema }).strict();
+const PlanProposalToolInputSchema = z
+  .object({
+    adapterSessionId: AdapterSessionIdSchema,
+    proposal: z.record(z.string(), z.unknown()),
+  })
+  .strict();
+const PlanWorkflowToolInputSchema = z
+  .object({
+    adapterSessionId: AdapterSessionIdSchema,
+    request: z.record(z.string(), z.unknown()),
+  })
+  .strict();
+const PlanPreparationToolInputSchema = z
+  .object({
+    adapterSessionId: AdapterSessionIdSchema,
+    kind: z.enum(["bundle", "comparison", "projected_record"]),
+    request: z.record(z.string(), z.unknown()),
+  })
+  .strict();
+
+export interface AgentPlanProposalPort {
+  register(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+  submit(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    proposal: unknown,
+  ): Promise<Result<JsonValue>>;
+  preview(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+  apply(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+  reconcile(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+  prepare(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    kind: "bundle" | "comparison" | "projected_record",
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+  discover(actor: PublicConnection, session: AdapterSessionId): Promise<Result<JsonValue>>;
+  author(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+  authorComposite(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+  prepareComposite(
+    actor: PublicConnection,
+    session: AdapterSessionId,
+    input: unknown,
+  ): Promise<Result<JsonValue>>;
+}
 
 export interface CodlensMcpOptions {
   readonly agent: AgentTransportPort;
+  readonly planProposal?: AgentPlanProposalPort;
 }
 
 /**
@@ -89,7 +170,7 @@ export function createCodlensMcpServer(options: CodlensMcpOptions): McpServer {
     { name: "codlens", version: "0.1.0" },
     {
       instructions:
-        "lens/1 durable tools over MCP 2025-11-25. Questions return immediately; call codlens_inbox at a later safe point for answers.",
+        "lens/1 durable tools over MCP 2025-11-25. Publish user clarification through /ZapAskUserQuestion (codlens_ask_user_question), then post a short ordinary-text notice. The tool returns immediately; call codlens_inbox only at a later safe point.",
     },
   );
 
@@ -105,6 +186,17 @@ export function createCodlensMcpServer(options: CodlensMcpOptions): McpServer {
   );
 
   server.registerTool(
+    "codlens_context",
+    {
+      description:
+        "Read this authenticated actor handle, workspace, conversation and capabilities without exposing broker credentials.",
+      inputSchema: ContextToolInputSchema,
+      annotations: { readOnlyHint: true },
+    },
+    async ({ adapterSessionId }) => toolResult(await options.agent.context(adapterSessionId)),
+  );
+
+  server.registerTool(
     "codlens_emit",
     {
       description: "Persist one addressed lens/1 notice and return promptly.",
@@ -114,6 +206,143 @@ export function createCodlensMcpServer(options: CodlensMcpOptions): McpServer {
     async ({ adapterSessionId, input }) =>
       toolResult(await options.agent.emit(adapterSessionId, input)),
   );
+
+  const planProposal = options.planProposal;
+  if (planProposal !== undefined) {
+    server.registerTool(
+      "codlens_plan_discover",
+      {
+        description:
+          "Read the exact current ZAP, specification, policy and baseline authoring context.",
+        inputSchema: ContextToolInputSchema,
+        annotations: { readOnlyHint: true },
+      },
+      async ({ adapterSessionId }) => {
+        const actor = await options.agent.context(adapterSessionId);
+        return toolResult(
+          actor.ok ? await planProposal.discover(actor.value, adapterSessionId) : actor,
+        );
+      },
+    );
+    server.registerTool(
+      "codlens_plan_author",
+      {
+        description:
+          "Submit typed successor-plan metadata through data authority and return one immutable prepared successor for ordered execution.",
+        inputSchema: PlanWorkflowToolInputSchema,
+      },
+      async ({ adapterSessionId, request }) => {
+        const actor = await options.agent.context(adapterSessionId);
+        return toolResult(
+          actor.ok ? await planProposal.author(actor.value, adapterSessionId, request) : actor,
+        );
+      },
+    );
+    server.registerTool(
+      "codlens_plan_prepare_composite",
+      {
+        description:
+          "Prepare and durably bind milestone create/revise identities before authoring successor content that references them.",
+        inputSchema: PlanWorkflowToolInputSchema,
+        annotations: { idempotentHint: true },
+      },
+      async ({ adapterSessionId, request }) => {
+        const actor = await options.agent.context(adapterSessionId);
+        return toolResult(
+          actor.ok
+            ? await planProposal.prepareComposite(actor.value, adapterSessionId, request)
+            : actor,
+        );
+      },
+    );
+    server.registerTool(
+      "codlens_plan_author_composite",
+      {
+        description:
+          "Durably prepare and record milestone create/revise precursors plus one successor plan through the shared Wayfinder journal.",
+        inputSchema: PlanWorkflowToolInputSchema,
+      },
+      async ({ adapterSessionId, request }) => {
+        const actor = await options.agent.context(adapterSessionId);
+        return toolResult(
+          actor.ok
+            ? await planProposal.authorComposite(actor.value, adapterSessionId, request)
+            : actor,
+        );
+      },
+    );
+    server.registerTool(
+      "codlens_plan_prepare",
+      {
+        description:
+          "Call a public ZAP preparation route and return backend-derived bases, affected scope and preflight data without applying a mutation.",
+        inputSchema: PlanPreparationToolInputSchema,
+        annotations: { readOnlyHint: true },
+      },
+      async ({ adapterSessionId, kind, request }) => {
+        const actor = await options.agent.context(adapterSessionId);
+        return toolResult(
+          actor.ok
+            ? await planProposal.prepare(actor.value, adapterSessionId, kind, request)
+            : actor,
+        );
+      },
+    );
+    server.registerTool(
+      "codlens_plan_intent",
+      {
+        description:
+          "Register an explicit plan intent for this authenticated root actor when ordinary chat begins the workflow without a GUI request.",
+        inputSchema: PlanWorkflowToolInputSchema,
+      },
+      async ({ adapterSessionId, request }) => {
+        const actor = await options.agent.context(adapterSessionId);
+        return toolResult(
+          actor.ok ? await planProposal.register(actor.value, adapterSessionId, request) : actor,
+        );
+      },
+    );
+    server.registerTool(
+      "codlens_plan_proposal",
+      {
+        description:
+          "Bind a durably authored operation to the exact queued Quicklens intent; pass preparedOperationId, never copy authority-bearing prepared bytes through model text.",
+        inputSchema: PlanProposalToolInputSchema,
+      },
+      async ({ adapterSessionId, proposal }) => {
+        const actor = await options.agent.context(adapterSessionId);
+        return toolResult(
+          actor.ok ? await planProposal.submit(actor.value, adapterSessionId, proposal) : actor,
+        );
+      },
+    );
+    for (const [name, description, call] of [
+      [
+        "codlens_plan_preview",
+        "Read a prepared proposal or report that the correlated agent proposal is still pending.",
+        planProposal.preview.bind(planProposal),
+      ],
+      [
+        "codlens_plan_apply",
+        "Advance and execute an exact prepared plan through configured Coordinator authority only.",
+        planProposal.apply.bind(planProposal),
+      ],
+      [
+        "codlens_plan_reconcile",
+        "Reconcile an exact uncertain plan operation without selecting Owner credentials.",
+        planProposal.reconcile.bind(planProposal),
+      ],
+    ] as const) {
+      server.registerTool(
+        name,
+        { description, inputSchema: PlanWorkflowToolInputSchema },
+        async ({ adapterSessionId, request }) => {
+          const actor = await options.agent.context(adapterSessionId);
+          return toolResult(actor.ok ? await call(actor.value, adapterSessionId, request) : actor);
+        },
+      );
+    }
+  }
 
   server.registerTool(
     "codlens_ask",
@@ -126,6 +355,26 @@ export function createCodlensMcpServer(options: CodlensMcpOptions): McpServer {
     async ({ adapterSessionId, input }) =>
       toolResult(await options.agent.ask(adapterSessionId, input)),
   );
+
+  if (options.agent.askUserQuestion !== undefined) {
+    const publishRichQuestion = options.agent.askUserQuestion.bind(options.agent);
+    server.registerTool(
+      "codlens_ask_user_question",
+      {
+        description:
+          "/ZapAskUserQuestion: persist one structured question group for the authenticated actor, return its durable ID immediately, then tell the user in ordinary text that the question was sent.",
+        inputSchema: RichQuestionToolInputSchema,
+        annotations: { idempotentHint: true },
+      },
+      async ({ adapterSessionId, clientRequestId, draft }) =>
+        toolResult(
+          await publishRichQuestion(adapterSessionId, {
+            clientRequestId,
+            draft,
+          }),
+        ),
+    );
+  }
 
   server.registerTool(
     "codlens_inbox",

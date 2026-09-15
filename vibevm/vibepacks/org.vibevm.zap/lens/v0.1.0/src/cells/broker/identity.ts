@@ -2,10 +2,11 @@
  * Principal, actor, delegation and binding-generation transitions.
  * @scope spec://org.vibevm.zap/lens/PROP-001#identity
  */
-import type { z } from "zod";
+import { z } from "zod";
 
 import {
   ActorDescriptorSchema,
+  ActorListSchema,
   ActorIdSchema,
   BindingAuthSchema,
   BindingIdSchema,
@@ -16,9 +17,13 @@ import {
   EnrollPrincipalInputSchema,
   ExpireActorInputSchema,
   PrincipalEnrollmentSchema,
+  PrincipalAuthSchema,
+  PublicConnectionSchema,
+  ScopedListInputSchema,
   PrincipalIdSchema,
   ResumeInputSchema,
   type ActorDescriptor,
+  type ActorList,
   type ActorId,
   type BindingAuth,
   type Capability,
@@ -29,7 +34,10 @@ import {
   type ExpireActorInput,
   type PrincipalEnrollment,
   type PrincipalKind,
+  type PublicConnection,
   type Result,
+  type PrincipalAuth,
+  type ScopedListInput,
   type ResumeInput,
 } from "../protocol/index.ts";
 import { BrokerCore, credentialHash, fail, ok, type PrincipalContext } from "./core.ts";
@@ -47,12 +55,104 @@ const ROLE_CAPABILITIES: Readonly<Record<PrincipalKind, readonly Capability[]>> 
     "plan:propose",
   ],
   viewer: ["events:read"],
-  human_responder: ["events:read", "question:answer", "question:amend"],
+  human_responder: ["events:read", "message:emit", "question:answer", "question:amend"],
   human_plan_approver: ["events:read", "plan:approve"],
   trusted_execution_adapter: ["events:read", "plan:execute"],
 };
 
 export class IdentityOperations extends BrokerCore {
+  context(auth: BindingAuth): Result<PublicConnection> {
+    return this.safe(() => {
+      const binding = this.binding(BindingAuthSchema.parse(auth));
+      if (!binding.ok) return binding;
+      return ok(
+        PublicConnectionSchema.parse({
+          actor: {
+            principalId: binding.value.principalId,
+            actorId: binding.value.actorId,
+            workspaceId: binding.value.workspaceId,
+            conversationId: binding.value.conversationId,
+            parentActorId: binding.value.parentActorId,
+            state: binding.value.state,
+            capabilities: binding.value.capabilities,
+            hostKind: binding.value.hostKind,
+            hostProvenance: binding.value.hostProvenance,
+          },
+          handle: {
+            actorId: binding.value.actorId,
+            bindingId: binding.value.bindingId,
+            workspaceId: binding.value.workspaceId,
+            conversationId: binding.value.conversationId,
+            generation: binding.value.bindingGeneration.toString(),
+          },
+        }),
+      );
+    });
+  }
+
+  listActors(auth: PrincipalAuth, input: ScopedListInput): Result<ActorList> {
+    return this.safe(() => {
+      const principal = this.principal(PrincipalAuthSchema.parse(auth));
+      if (!principal.ok) return principal;
+      const denied = this.requireCapability(principal.value, "events:read");
+      if (denied !== null) return denied;
+      const parsed = ScopedListInputSchema.parse(input);
+      const scope = this.requireScope(principal.value, parsed.workspaceId, parsed.conversationId);
+      if (scope !== null) return scope;
+      const rows = this.database.all(
+        `SELECT actor_id AS actorId, principal_id AS principalId, workspace_id AS workspaceId,
+                conversation_id AS conversationId, parent_actor_id AS parentActorId, state,
+                capabilities_json AS capabilitiesJson, host_kind AS hostKind,
+                host_session_id AS hostSessionId, host_subagent_id AS hostSubagentId,
+                host_provenance AS hostProvenance
+           FROM actors WHERE workspace_id = ? AND conversation_id = ?
+          ORDER BY actor_id LIMIT ?`,
+        z
+          .object({
+            actorId: ActorIdSchema,
+            principalId: PrincipalIdSchema,
+            workspaceId: z.string(),
+            conversationId: z.string(),
+            parentActorId: ActorIdSchema.nullable(),
+            state: z.enum(["active", "expired"]),
+            capabilitiesJson: z.string(),
+            hostKind: z.string(),
+            hostSessionId: z.string().nullable(),
+            hostSubagentId: z.string().nullable(),
+            hostProvenance: z.enum(["attested", "explicit_handle", "unverified"]),
+          })
+          .strict(),
+        [parsed.workspaceId, parsed.conversationId, parsed.limit + 1],
+      );
+      return ok(
+        ActorListSchema.parse({
+          actors: rows.slice(0, parsed.limit).map((row) => {
+            const capabilities = z.array(CapabilitySchema).parse(JSON.parse(row.capabilitiesJson));
+            return {
+              actor: {
+                principalId: row.principalId,
+                actorId: row.actorId,
+                workspaceId: row.workspaceId,
+                conversationId: row.conversationId,
+                parentActorId: row.parentActorId,
+                state: row.state,
+                capabilities,
+                hostKind: row.hostKind,
+                hostProvenance: row.hostProvenance,
+              },
+              label: actorLabel(row.hostKind, row.hostSubagentId ?? row.hostSessionId, row.actorId),
+              eligiblePlanTarget:
+                row.state === "active" &&
+                row.parentActorId === null &&
+                capabilities.includes("plan:propose"),
+            };
+          }),
+          hasMore: rows.length > parsed.limit,
+        }),
+      );
+    });
+  }
+
   enrollPrincipal(input: EnrollPrincipalInput): Result<PrincipalEnrollment> {
     return this.safe(() => {
       const parsed = EnrollPrincipalInputSchema.parse(input);
@@ -368,4 +468,9 @@ export class IdentityOperations extends BrokerCore {
   protected subset(requested: readonly Capability[], held: readonly Capability[]): boolean {
     return requested.every((capability) => held.includes(CapabilitySchema.parse(capability)));
   }
+}
+
+function actorLabel(kind: string, nativeId: string | null, actorId: string): string {
+  const suffix = nativeId ?? actorId;
+  return `${kind}:${suffix}`.slice(0, 256);
 }

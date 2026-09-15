@@ -19,6 +19,13 @@ import {
   openSqliteAdapterSessionVault,
   type SqliteAdapterSessionVault,
 } from "../session-vault/index.ts";
+import { openWorkspaceStore, TrustedProjectRegistrationSchema } from "../workspace-store/index.ts";
+import { createWayfinderAgentPublisher } from "../wayfinder-agent/index.ts";
+import {
+  ProjectIdSchema,
+  WorkContextIdSchema,
+  WorkspaceAccessContextSchema,
+} from "../workspace-model/index.ts";
 
 const mcpEntry = fileURLToPath(new URL("../../mcp.ts", import.meta.url));
 
@@ -271,6 +278,136 @@ test("setup credentials support child finish, delayed answer and parent forwardi
   await service.gateway.close();
   service.vault.close();
   service.broker.close();
+});
+
+test("separate MCP process publishes /ZapAskUserQuestion through broker-authenticated scope", async () => {
+  const broker = openBroker({ databasePath: ":memory:" });
+  const store = openWorkspaceStore({ databasePath: ":memory:" });
+  assert.ok(broker.ok && store.ok);
+  if (!broker.ok || !store.ok) return;
+  const registered = store.value.registerProject(
+    TrustedProjectRegistrationSchema.parse({
+      registrationId: "request.mcp-rich.register",
+      projectId: "project.mcp-rich",
+      displayName: "MCP rich",
+      repositoryRootRefs: ["repo.mcp-rich"],
+      actions: {},
+      context: {
+        contextId: "context.mcp-rich",
+        displayName: "MCP rich",
+        workspaceRef: "workspace.mcp-rich",
+        branchLabel: null,
+        revisionBinding: null,
+        planning: { state: "unavailable", reason: "fixture" },
+        coordinatorConversationId: "conversation.mcp-rich",
+        brokerScope: {
+          workspaceId: "workspace.mcp-rich",
+          conversationId: "conversation.mcp-rich",
+        },
+      },
+      coordinatorLaunchOptions: [
+        {
+          profileId: "profile.mcp-rich",
+          label: "MCP rich",
+          interactionKind: "structured",
+          availability: { state: "available" },
+        },
+      ],
+      protected: { cwd: process.cwd(), launchProfileRef: "profile.mcp-rich" },
+    }),
+  );
+  assert.equal(registered.ok, true);
+  const enrollment = broker.value.enrollPrincipal(
+    EnrollPrincipalInputSchema.parse({
+      kind: "agent",
+      workspaceIds: ["workspace.mcp-rich"],
+      conversationIds: ["conversation.mcp-rich"],
+      capabilities: ["question:ask", "inbox:read"],
+    }),
+  );
+  assert.equal(enrollment.ok, true);
+  if (!enrollment.ok) return;
+  const gateway = createLensHttpGateway({
+    broker: broker.value,
+    agentQuestions: createWayfinderAgentPublisher({ store: store.value }),
+    allowedHosts: ["127.0.0.1"],
+    allowedOrigins: [],
+    statusToken: CredentialSchema.parse("status-mcp-rich-000000000000001"),
+    adapterSessionIdFactory: () => "adapter.mcp-rich.000000000000001",
+  });
+  const started = await gateway.start({ host: "127.0.0.1", port: 0 });
+  assert.equal(started.ok, true);
+  if (!started.ok) return;
+  try {
+    const client = await processClient(
+      `http://127.0.0.1:${String(started.value.port)}`,
+      enrollment.value.principalToken,
+    );
+    const handle = publicResult(
+      await client.callTool({
+        name: "codlens_connect",
+        arguments: {
+          clientRequestId: "request.mcp-rich.connect",
+          workspaceId: "workspace.mcp-rich",
+          conversationId: "conversation.mcp-rich",
+          capabilities: ["question:ask", "inbox:read"],
+          host: { kind: "codex", sessionId: "thread.mcp-rich", provenance: "explicit_handle" },
+          replyPolicy: { kind: "retain" },
+        },
+      }),
+    );
+    const result = await client.callTool({
+      name: "codlens_ask_user_question",
+      arguments: {
+        adapterSessionId: handle,
+        clientRequestId: "request.mcp-rich.question",
+        draft: {
+          title: "Choose",
+          introductionMarkdown: "Sent through /ZapAskUserQuestion.",
+          items: [
+            {
+              questionItemId: "question-item.mcp-rich",
+              header: "Choice",
+              promptMarkdown: "Which path?",
+              contextMarkdown: null,
+              artifactRefs: [],
+              required: true,
+              answerMode: "short_text",
+              options: [],
+              customAnswer: null,
+              recommendation: null,
+            },
+          ],
+          independentWorkAvailable: true,
+          deadlineAt: null,
+        },
+      },
+    });
+    assert.equal(result.isError, false);
+    const page = store.value.read(
+      WorkspaceAccessContextSchema.parse({
+        principalId: "principal.mcp-rich-reader",
+        actorId: null,
+        clientId: "client.mcp-rich-reader",
+        authorizedProjectIds: ["project.mcp-rich"],
+      }),
+      {
+        operation: "question.list.v1",
+        projectId: ProjectIdSchema.parse("project.mcp-rich"),
+        contextId: WorkContextIdSchema.parse("context.mcp-rich"),
+        state: "open",
+        limit: 10,
+      },
+    );
+    assert.ok(page.ok && page.value.operation === "question.list.v1");
+    if (page.ok && page.value.operation === "question.list.v1")
+      assert.equal(page.value.questions.length, 1);
+    await client.close();
+  } finally {
+    await gateway.close();
+    store.value.close();
+    broker.value.close();
+  }
 });
 
 async function processClient(url: string, principalToken: Credential): Promise<Client> {

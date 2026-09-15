@@ -170,13 +170,14 @@ function setup(
       "inbox:forward",
       "actor:delegate",
       "actor:expire",
+      "plan:propose",
     ],
   });
   const humanInput = EnrollPrincipalInputSchema.parse({
     kind: "human_responder",
     workspaceIds: [input.value.workspaceId],
     conversationIds: [input.value.conversationId],
-    capabilities: ["question:answer", "question:amend", "events:read"],
+    capabilities: ["message:emit", "question:answer", "question:amend", "events:read"],
   });
   const agent = opened.value.enrollPrincipal(agentInput);
   const human = opened.value.enrollPrincipal(humanInput);

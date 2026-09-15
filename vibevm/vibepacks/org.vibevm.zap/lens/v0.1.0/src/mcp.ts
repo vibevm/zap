@@ -10,6 +10,7 @@ import { z } from "zod";
 import { createAgentHttpClient } from "./cells/http/index.ts";
 import { createCodlensMcpServer } from "./cells/mcp/index.ts";
 import { CredentialSchema } from "./cells/protocol/index.ts";
+import { createAgentPlanningHttpClient } from "./cells/workspace-planning/index.ts";
 
 export async function runMcp(environment: NodeJS.ProcessEnv): Promise<number> {
   const brokerUrl = environment["CODLENS_URL"];
@@ -23,8 +24,13 @@ export async function runMcp(environment: NodeJS.ProcessEnv): Promise<number> {
   } catch {
     return 2;
   }
+  const agent = createAgentHttpClient({ baseUrl, principalToken: principal.data });
   const server = createCodlensMcpServer({
-    agent: createAgentHttpClient({ baseUrl, principalToken: principal.data }),
+    agent,
+    planProposal: createAgentPlanningHttpClient({
+      baseUrl,
+      principalToken: principal.data,
+    }),
   });
   await server.connect(new StdioServerTransport());
   return 0;

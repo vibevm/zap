@@ -10,6 +10,7 @@
 import type {
   AckInput,
   AckResult,
+  ActorList,
   ActorDescriptor,
   ActorHandle,
   ActorId,
@@ -29,9 +30,12 @@ import type {
   InboxInput,
   InboxPage,
   MessageEnvelope,
+  MessageId,
   PrincipalAuth,
+  PrincipalEmitInput,
   PublicConnection,
   Question,
+  QuestionList,
   Result,
   ResumeInput,
   Credential,
@@ -40,9 +44,12 @@ import type {
   ForwardResult,
   LosslessDecimal,
   ReplyPolicy,
+  ScopedListInput,
 } from "../protocol/index.ts";
 import { DecimalSchema, publicConnection } from "../protocol/index.ts";
 import { z } from "zod";
+import type { AgentQuestionInput, AgentQuestionPublisher } from "../workspace-interaction/index.ts";
+import type { QuestionGroup } from "../workspace-model/index.ts";
 
 const requirement = "spec://org.vibevm.zap/lens/PROP-001#identity";
 
@@ -68,11 +75,16 @@ export interface TransportBrokerPort {
   emit(auth: BindingAuth, input: EmitInput): Awaitable<Result<MessageEnvelope>>;
   ask(auth: BindingAuth, input: AskInput): Awaitable<Result<Question>>;
   inbox(auth: BindingAuth, input: InboxInput): Awaitable<Result<InboxPage>>;
+  planIntent(auth: BindingAuth, messageId: MessageId): Awaitable<Result<MessageEnvelope>>;
   ack(auth: BindingAuth, input: AckInput): Awaitable<Result<AckResult>>;
   events(auth: PrincipalAuth, input: EventsInput): Awaitable<Result<EventPage>>;
   answer(auth: PrincipalAuth, input: AnswerQuestionInput): Awaitable<Result<Question>>;
+  listActors(auth: PrincipalAuth, input: ScopedListInput): Awaitable<Result<ActorList>>;
+  listQuestions(auth: PrincipalAuth, input: ScopedListInput): Awaitable<Result<QuestionList>>;
+  emitPrincipal(auth: PrincipalAuth, input: PrincipalEmitInput): Awaitable<Result<MessageEnvelope>>;
   expireActor(auth: BindingAuth, input: ExpireActorInput): Awaitable<Result<ActorDescriptor>>;
   forwardInbox(auth: BindingAuth, input: ForwardInboxInput): Awaitable<Result<ForwardResult>>;
+  context(auth: BindingAuth): Awaitable<Result<PublicConnection>>;
 }
 
 /** Safe agent-side port implemented locally in tests and through HTTP in production. */
@@ -85,23 +97,59 @@ export interface AgentTransportPort {
   emit(session: AdapterSessionId, input: EmitInput): Awaitable<Result<MessageEnvelope>>;
   ask(session: AdapterSessionId, input: AskInput): Awaitable<Result<Question>>;
   inbox(session: AdapterSessionId, input: InboxInput): Awaitable<Result<InboxPage>>;
+  planIntent(session: AdapterSessionId, messageId: MessageId): Awaitable<Result<MessageEnvelope>>;
   ack(session: AdapterSessionId, input: AckInput): Awaitable<Result<AckResult>>;
   finish(
     session: AdapterSessionId,
     clientRequestId: ClientRequestId,
   ): Awaitable<Result<ActorDescriptor>>;
   forward(session: AdapterSessionId, input: ForwardInboxInput): Awaitable<Result<ForwardResult>>;
+  context(session: AdapterSessionId): Awaitable<Result<PublicConnection>>;
+  askUserQuestion?(
+    session: AdapterSessionId,
+    input: AgentQuestionInput,
+  ): Awaitable<Result<QuestionGroup>>;
+}
+
+export interface PrincipalTransportPort {
+  listActors(input: ScopedListInput): Awaitable<Result<ActorList>>;
+  listQuestions(input: ScopedListInput): Awaitable<Result<QuestionList>>;
+  answer(input: AnswerQuestionInput): Awaitable<Result<Question>>;
+  emit(input: PrincipalEmitInput): Awaitable<Result<MessageEnvelope>>;
+  events(input: EventsInput): Awaitable<Result<EventPage>>;
 }
 
 export interface LocalAgentTransportOptions {
   readonly broker: TransportBrokerPort;
   readonly principalToken: Credential;
   readonly adapterSessionIdFactory: () => string;
+  readonly agentQuestions?: AgentQuestionPublisher;
 }
 
 /** Test/in-process composition; production MCP uses the background HTTP port. */
 export function createLocalAgentTransport(options: LocalAgentTransportOptions): AgentTransportPort {
   const sessions = new AdapterSessions(options.adapterSessionIdFactory);
+  return createRetainedAgentTransport({
+    broker: options.broker,
+    principalToken: options.principalToken,
+    sessions,
+    ...(options.agentQuestions === undefined ? {} : { agentQuestions: options.agentQuestions }),
+  });
+}
+
+export interface RetainedAgentTransportOptions {
+  readonly broker: TransportBrokerPort;
+  readonly principalToken: Credential;
+  readonly sessions: AdapterSessions;
+  readonly agentQuestions?: AgentQuestionPublisher;
+}
+
+/** Reuses the HTTP gateway's authoritative durable adapter-session vault. */
+export function createRetainedAgentTransport(
+  options: RetainedAgentTransportOptions,
+): AgentTransportPort {
+  const sessions = options.sessions;
+  const agentQuestions = options.agentQuestions;
   const auth = (session: AdapterSessionId): Result<BindingAuth> => sessions.resolve(session);
   return {
     connect: async (input) => {
@@ -137,6 +185,8 @@ export function createLocalAgentTransport(options: LocalAgentTransportOptions): 
       authorized(auth(session), (value) => options.broker.ask(value, input)),
     inbox: async (session, input) =>
       authorized(auth(session), (value) => options.broker.inbox(value, input)),
+    planIntent: async (session, messageId) =>
+      authorized(auth(session), (value) => options.broker.planIntent(value, messageId)),
     ack: async (session, input) =>
       authorized(auth(session), (value) => options.broker.ack(value, input)),
     finish: async (session, clientRequestId) => {
@@ -152,6 +202,31 @@ export function createLocalAgentTransport(options: LocalAgentTransportOptions): 
     },
     forward: async (session, input) =>
       authorized(auth(session), (value) => options.broker.forwardInbox(value, input)),
+    context: async (session) => authorized(auth(session), (value) => options.broker.context(value)),
+    ...(agentQuestions === undefined
+      ? {}
+      : {
+          askUserQuestion: async (session: AdapterSessionId, input: AgentQuestionInput) => {
+            const context = await authorized(auth(session), (value) =>
+              options.broker.context(value),
+            );
+            return context.ok ? agentQuestions.publish(context.value, input) : context;
+          },
+        }),
+  };
+}
+
+export function createLocalPrincipalTransport(
+  broker: TransportBrokerPort,
+  principalToken: Credential,
+): PrincipalTransportPort {
+  const auth = { principalToken };
+  return {
+    listActors: async (input) => broker.listActors(auth, input),
+    listQuestions: async (input) => broker.listQuestions(auth, input),
+    answer: async (input) => broker.answer(auth, input),
+    emit: async (input) => broker.emitPrincipal(auth, input),
+    events: async (input) => broker.events(auth, input),
   };
 }
 
@@ -303,6 +378,15 @@ export class AdapterSessions {
     return loaded.ok
       ? { ok: true, value: loaded.value.connection.actor }
       : failure("unauthorized", "adapter session is unavailable or expired");
+  }
+
+  public context(id: AdapterSessionId, principalToken: Credential): Result<PublicConnection> {
+    const loaded = this.#vault.get(id);
+    if (!loaded.ok || loaded.value.principalToken !== principalToken) {
+      return failure("unauthorized", "adapter session does not belong to this principal");
+    }
+    const resolved = this.resolve(id);
+    return resolved.ok ? { ok: true, value: publicConnection(loaded.value.connection) } : resolved;
   }
 
   public forget(id: AdapterSessionId): void {

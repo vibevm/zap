@@ -12,8 +12,10 @@ import {
   CancelQuestionInputSchema,
   JsonValueSchema,
   PrincipalAuthSchema,
+  QuestionListSchema,
   QuestionIdSchema,
   QuestionSchema,
+  ScopedListInputSchema,
   type ActorId,
   type AmendAnswerInput,
   type AnswerQuestionInput,
@@ -25,7 +27,9 @@ import {
   type PrincipalAuth,
   type PrincipalId,
   type Question,
+  type QuestionList,
   type Result,
+  type ScopedListInput,
 } from "../protocol/index.ts";
 import { fail, ok } from "./core.ts";
 import { IdentityOperations } from "./identity.ts";
@@ -33,6 +37,61 @@ import { IdentityOperations } from "./identity.ts";
 const QuestionMessageSchema = z.object({ messageId: z.string() });
 
 export class QuestionOperations extends IdentityOperations {
+  listQuestions(auth: PrincipalAuth, input: ScopedListInput): Result<QuestionList> {
+    return this.safe(() => {
+      const principal = this.principal(PrincipalAuthSchema.parse(auth));
+      if (!principal.ok) return principal;
+      const denied = this.requireCapability(principal.value, "events:read");
+      if (denied !== null) return denied;
+      const parsed = ScopedListInputSchema.parse(input);
+      const scope = this.requireScope(principal.value, parsed.workspaceId, parsed.conversationId);
+      if (scope !== null) return scope;
+      const rows = this.database.all(
+        `SELECT q.question_id AS questionId, a.host_kind AS hostKind,
+                a.host_session_id AS hostSessionId, a.host_subagent_id AS hostSubagentId,
+                q.origin_actor_id AS actorId,
+                (SELECT COUNT(*) FROM question_answers qa WHERE qa.question_id = q.question_id)
+                  AS answerCount
+           FROM questions q JOIN actors a ON a.actor_id = q.origin_actor_id
+          WHERE q.workspace_id = ? AND q.conversation_id = ?
+          ORDER BY q.created_at, q.question_id LIMIT ?`,
+        z
+          .object({
+            questionId: z.string(),
+            hostKind: z.string(),
+            hostSessionId: z.string().nullable(),
+            hostSubagentId: z.string().nullable(),
+            actorId: z.string(),
+            answerCount: z.bigint(),
+          })
+          .strict(),
+        [parsed.workspaceId, parsed.conversationId, parsed.limit + 1],
+      );
+      const questions = [];
+      for (const row of rows.slice(0, parsed.limit)) {
+        const question = this.question(row.questionId);
+        if (question === null) {
+          return fail(
+            "not_found",
+            "questions",
+            "question disappeared during bounded listing",
+            "retry the bounded scoped read",
+          );
+        }
+        questions.push({
+          question,
+          addressedActorLabel:
+            `${row.hostKind}:${row.hostSubagentId ?? row.hostSessionId ?? row.actorId}`.slice(
+              0,
+              256,
+            ),
+          amendmentCount: (row.answerCount > 0n ? row.answerCount - 1n : 0n).toString(),
+        });
+      }
+      return ok(QuestionListSchema.parse({ questions, hasMore: rows.length > parsed.limit }));
+    });
+  }
+
   ask(auth: BindingAuth, input: AskInput): Result<Question> {
     return this.safe(() => {
       const parsed = AskInputSchema.parse(input);

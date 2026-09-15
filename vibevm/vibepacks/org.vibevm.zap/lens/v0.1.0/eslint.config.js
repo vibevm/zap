@@ -9,10 +9,16 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   {
-    files: ["src/**/*.ts"],
+    files: ["src/**/*.{ts,tsx}"],
     languageOptions: {
       parserOptions: {
-        project: ["./tsconfig.json", "./tsconfig.test.json"],
+        project: [
+          "./tsconfig.json",
+          "./tsconfig.test.json",
+          "./tsconfig.browser.json",
+          "./tsconfig.electron.json",
+          "./tsconfig.quicklens.test.json",
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },

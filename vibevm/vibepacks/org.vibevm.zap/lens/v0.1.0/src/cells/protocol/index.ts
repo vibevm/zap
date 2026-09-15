@@ -497,3 +497,54 @@ export const EventPageSchema = z
   })
   .strict();
 export type EventPage = z.infer<typeof EventPageSchema>;
+
+/** @implements spec://org.vibevm.zap/lens/PROP-002#interaction */
+export const ScopedListInputSchema = z
+  .object({
+    workspaceId: WorkspaceIdSchema,
+    conversationId: ConversationIdSchema,
+    limit: z.number().int().min(1).max(100).default(50),
+  })
+  .strict();
+export type ScopedListInput = z.input<typeof ScopedListInputSchema>;
+
+export const ActorViewSchema = z
+  .object({
+    actor: ActorDescriptorSchema,
+    label: z.string().min(1).max(256),
+    eligiblePlanTarget: z.boolean(),
+  })
+  .strict();
+export type ActorView = z.infer<typeof ActorViewSchema>;
+
+export const ActorListSchema = z
+  .object({ actors: z.array(ActorViewSchema), hasMore: z.boolean() })
+  .strict();
+export type ActorList = z.infer<typeof ActorListSchema>;
+
+export const QuestionViewRecordSchema = z
+  .object({
+    question: QuestionSchema,
+    addressedActorLabel: z.string().min(1).max(256),
+    amendmentCount: DecimalSchema,
+  })
+  .strict();
+export type QuestionViewRecord = z.infer<typeof QuestionViewRecordSchema>;
+
+export const QuestionListSchema = z
+  .object({ questions: z.array(QuestionViewRecordSchema), hasMore: z.boolean() })
+  .strict();
+export type QuestionList = z.infer<typeof QuestionListSchema>;
+
+export const PrincipalEmitInputSchema = z
+  .object({
+    clientRequestId: ClientRequestIdSchema,
+    workspaceId: WorkspaceIdSchema,
+    conversationId: ConversationIdSchema,
+    toActorId: ActorIdSchema,
+    payload: JsonValueSchema,
+    correlationId: opaqueId.nullable().optional(),
+    causationId: MessageIdSchema.nullable().optional(),
+  })
+  .strict();
+export type PrincipalEmitInput = z.infer<typeof PrincipalEmitInputSchema>;

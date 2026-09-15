@@ -1,0 +1,82 @@
+.web-login-shell {
+  --login-background: #faf9f5;
+  --login-surface: #fcfbf8;
+  --login-border: #e0ddd2;
+  --login-text: #1f1e1b;
+  --login-muted: #63625b;
+  --login-accent: #d97757;
+  --login-accent-ink: #141413;
+  --login-error: #1f1e1b;
+  --login-error-background: #ebcbbc;
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  color: var(--login-text);
+  background: radial-gradient(circle at top, #f1ecdf, var(--login-background) 68%);
+}
+
+.web-login-shell.theme-dark {
+  --login-background: #141413;
+  --login-surface: #1f1e1b;
+  --login-border: #63625b;
+  --login-text: #faf9f5;
+  --login-muted: #b8b6ad;
+  --login-accent: #d97757;
+  --login-accent-ink: #141413;
+  --login-error: #ebcbbc;
+  --login-error-background: #40403e;
+}
+
+.web-login-card {
+  display: grid;
+  width: min(420px, 100%);
+  gap: 12px;
+  padding: 30px;
+  border: 1px solid var(--login-border);
+  border-radius: 20px;
+  color: var(--login-text);
+  background: var(--login-surface);
+  box-shadow: 0 24px 60px rgb(20 20 19 / 24%);
+}
+
+.web-login-card h1,
+.web-login-card p {
+  margin: 0;
+}
+
+.web-login-card > p:not(.eyebrow, .web-login-error) {
+  color: var(--login-muted);
+  line-height: 1.5;
+}
+
+.web-login-error {
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: var(--login-error);
+  background: var(--login-error-background);
+  font-size: 0.86rem;
+}
+
+.web-login-theme-toggle {
+  justify-self: end;
+  color: var(--login-text);
+  border-color: var(--login-border);
+  background: color-mix(in srgb, var(--login-surface) 82%, var(--login-accent));
+}
+
+.web-login-card input {
+  color: var(--login-text);
+  border-color: var(--login-border);
+  background: var(--login-surface);
+}
+
+.web-login-card input:focus {
+  border-color: var(--login-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--login-accent) 20%, transparent);
+}
+
+.web-login-card .button.primary {
+  color: var(--login-accent-ink);
+  background: var(--login-accent);
+}

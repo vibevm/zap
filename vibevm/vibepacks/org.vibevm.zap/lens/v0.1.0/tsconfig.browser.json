@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["vite/client"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@qwik.dev/core",
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/cells/quicklens-model/**/*.ts",
+    "src/cells/quicklens-graph/**/*.ts",
+    "src/cells/quicklens-demo/**/*.ts",
+    "src/cells/quicklens-ui/**/*.ts",
+    "src/cells/quicklens-ui/**/*.tsx",
+    "src/cells/workspace-ui/**/*.ts",
+    "src/cells/workspace-ui/**/*.tsx",
+    "src/quicklens/browser/**/*.ts",
+    "src/quicklens/browser/**/*.tsx"
+  ],
+  "exclude": ["src/**/*.test.ts", "src/**/*.vitest.ts", "node_modules", "dist"]
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": [
+    "./**/*.ts",
+    "../model-policy/**/*.ts",
+    "../model-policy-store/**/*.ts",
+    "../workspace-model/**/*.ts",
+    "../protocol/**/*.ts"
+  ]
+}

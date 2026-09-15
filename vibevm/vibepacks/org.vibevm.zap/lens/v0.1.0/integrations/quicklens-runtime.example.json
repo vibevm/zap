@@ -1,0 +1,47 @@
+{
+  "protocol": "quicklens/1",
+  "workspaceId": "workspace.example",
+  "conversationId": "conversation.example",
+  "sourceLabel": "Configured ZAP campaign",
+  "broker": {
+    "endpoint": "http://127.0.0.1:32191",
+    "humanPrincipalToken": "REPLACE_WITH_HUMAN_RESPONDER_TOKEN"
+  },
+  "zap": {
+    "reader": {
+      "endpoint": "http://127.0.0.1:32192",
+      "credentialId": "reader.example",
+      "bearer": "REPLACE_WITH_READER_BEARER"
+    },
+    "data": {
+      "endpoint": "http://127.0.0.1:32192",
+      "credentialId": "data.example",
+      "bearer": "REPLACE_WITH_DATA_BEARER"
+    },
+    "coordinator": {
+      "endpoint": "http://127.0.0.1:32192",
+      "credentialId": "coordinator.example",
+      "bearer": "REPLACE_WITH_COORDINATOR_BEARER"
+    },
+    "owner": {
+      "endpoint": "http://127.0.0.1:32192",
+      "credentialId": "owner.example",
+      "bearer": "REPLACE_WITH_OWNER_BEARER"
+    }
+  },
+  "workflowDatabasePath": "REPLACE_WITH_USER_LOCAL_WORKFLOW_DATABASE",
+  "specifications": [
+    {
+      "root": "REPLACE_WITH_PROJECT_SPECIFICATION_ROOT",
+      "include": ["**/*.xml", "**/*.md"]
+    }
+  ],
+  "gateway": {
+    "namespace": "project-example",
+    "pairingToken": "REPLACE_WITH_ONE_TIME_PAIRING_TOKEN",
+    "host": "127.0.0.1",
+    "port": 32193,
+    "allowedHosts": ["127.0.0.1:32193"],
+    "allowedOrigins": ["http://127.0.0.1:4173"]
+  }
+}

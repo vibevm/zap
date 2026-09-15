@@ -8,6 +8,7 @@ import {
   ConnectionSchema,
   CredentialSchema,
   QuestionSchema,
+  publicConnection,
   type ActorId,
   type BindingAuth,
   type ConnectInput,
@@ -16,7 +17,7 @@ import {
   type Result,
 } from "../protocol/index.ts";
 import { createLocalAgentTransport, type TransportBrokerPort } from "../transport/index.ts";
-import { createCodlensMcpServer } from "./index.ts";
+import { createCodlensMcpServer, type AgentPlanProposalPort } from "./index.ts";
 
 const principalToken = CredentialSchema.parse("principal-token-0000000000000001");
 
@@ -42,6 +43,21 @@ test("official SDK round trip keeps concurrent child credentials private", async
     }),
   );
   const parentSession = publicResultSchema.parse(parent).adapterSessionId;
+  const context = z
+    .looseObject({
+      actor: ActorDescriptorSchema,
+      handle: z.looseObject({ workspaceId: z.string() }),
+    })
+    .parse(
+      parseSuccess(
+        await client.callTool({
+          name: "codlens_context",
+          arguments: { adapterSessionId: parentSession },
+        }),
+      ),
+    );
+  assert.equal(context.actor.workspaceId, "workspace.test");
+  assert.equal(context.handle.workspaceId, "workspace.test");
   const children = await Promise.all(
     ["a", "b", "c"].map((suffix) =>
       client.callTool({
@@ -156,6 +172,108 @@ test("model-facing connect cannot self-assert attested host provenance", async (
   await server.close();
 });
 
+test("MCP plan tools preserve authenticated adapter session and caller context", async () => {
+  const calls: string[] = [];
+  const record =
+    (name: string): AgentPlanProposalPort["submit"] =>
+    async (actor, session) => {
+      calls.push(`${name}:${actor.actor.actorId}:${session}`);
+      return { ok: true, value: { state: name } };
+    };
+  const plan: AgentPlanProposalPort = {
+    register: record("register"),
+    submit: record("submit"),
+    preview: record("preview"),
+    apply: record("apply"),
+    reconcile: record("reconcile"),
+    prepare: async (actor, session, kind) => {
+      calls.push(`prepare.${kind}:${actor.actor.actorId}:${session}`);
+      return { ok: true, value: { state: "prepared" } };
+    },
+    discover: async (actor, session) => {
+      calls.push(`discover:${actor.actor.actorId}:${session}`);
+      return { ok: true, value: { state: "discover" } };
+    },
+    author: record("author"),
+    prepareComposite: record("prepare-composite"),
+    authorComposite: record("author-composite"),
+  };
+  const server = createCodlensMcpServer({
+    agent: createLocalAgentTransport({
+      broker: fakeBroker(),
+      principalToken,
+      adapterSessionIdFactory: () => "adapter.session.plan.0001",
+    }),
+    planProposal: plan,
+  });
+  const client = new Client({ name: "codlens-plan-test", version: "1.0.0" });
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+  await server.connect(serverTransport);
+  await client.connect(clientTransport);
+  const connected = publicResultSchema.parse(
+    parseSuccess(
+      await client.callTool({
+        name: "codlens_connect",
+        arguments: connectArguments("request.plan"),
+      }),
+    ),
+  );
+  for (const [name, key] of [
+    ["codlens_plan_intent", "request"],
+    ["codlens_plan_proposal", "proposal"],
+    ["codlens_plan_preview", "request"],
+    ["codlens_plan_apply", "request"],
+    ["codlens_plan_reconcile", "request"],
+  ] as const) {
+    await client.callTool({
+      name,
+      arguments: { adapterSessionId: connected.adapterSessionId, [key]: {} },
+    });
+  }
+  await client.callTool({
+    name: "codlens_plan_prepare",
+    arguments: {
+      adapterSessionId: connected.adapterSessionId,
+      kind: "comparison",
+      request: {},
+    },
+  });
+  await client.callTool({
+    name: "codlens_plan_discover",
+    arguments: { adapterSessionId: connected.adapterSessionId },
+  });
+  await client.callTool({
+    name: "codlens_plan_author",
+    arguments: { adapterSessionId: connected.adapterSessionId, request: {} },
+  });
+  await client.callTool({
+    name: "codlens_plan_prepare_composite",
+    arguments: { adapterSessionId: connected.adapterSessionId, request: {} },
+  });
+  await client.callTool({
+    name: "codlens_plan_author_composite",
+    arguments: { adapterSessionId: connected.adapterSessionId, request: {} },
+  });
+  assert.deepEqual(
+    calls.map((value) => value.split(":", 1)[0]),
+    [
+      "register",
+      "submit",
+      "preview",
+      "apply",
+      "reconcile",
+      "prepare.comparison",
+      "discover",
+      "author",
+      "prepare-composite",
+      "author-composite",
+    ],
+  );
+  assert.ok(calls.every((value) => value.includes("actor.1:adapter.session.plan.0001")));
+  await client.close();
+  await server.close();
+});
+
 const publicResultSchema = z.object({
   adapterSessionId: z.string(),
   connection: z.object({
@@ -186,7 +304,14 @@ function connectArguments(clientRequestId: string): Omit<ConnectInput, "principa
     clientRequestId,
     workspaceId: "workspace.test",
     conversationId: "conversation.test",
-    capabilities: ["message:emit", "question:ask", "inbox:read", "inbox:ack", "actor:delegate"],
+    capabilities: [
+      "message:emit",
+      "question:ask",
+      "inbox:read",
+      "inbox:ack",
+      "actor:delegate",
+      "plan:propose",
+    ],
     host: { kind: "test", sessionId: "session.test", provenance: "explicit_handle" },
     replyPolicy: { kind: "retain" },
   };
@@ -196,6 +321,7 @@ function fakeBroker(): TransportBrokerPort {
   let actorNumber = 0;
   let questionNumber = 0;
   const actors = new Map<string, ActorId>();
+  const connections = new Map<string, Connection>();
   const connection = (parentActorId: ActorId | null): Connection => {
     const number = ++actorNumber;
     const actorId = `actor.${number}`;
@@ -207,7 +333,14 @@ function fakeBroker(): TransportBrokerPort {
         conversationId: "conversation.test",
         parentActorId,
         state: "active",
-        capabilities: ["message:emit", "question:ask", "inbox:read", "inbox:ack", "actor:delegate"],
+        capabilities: [
+          "message:emit",
+          "question:ask",
+          "inbox:read",
+          "inbox:ack",
+          "actor:delegate",
+          "plan:propose",
+        ],
         hostKind: "test",
         hostProvenance: "attested",
       },
@@ -224,6 +357,7 @@ function fakeBroker(): TransportBrokerPort {
       },
     });
     actors.set(value.credentials.bindingToken, value.actor.actorId);
+    connections.set(value.credentials.bindingToken, value);
     return value;
   };
   const unsupported = (): Result<never> => ({
@@ -237,6 +371,10 @@ function fakeBroker(): TransportBrokerPort {
   return {
     connect: () => ({ ok: true, value: connection(null) }),
     resume: unsupported,
+    context: (auth) => {
+      const value = connections.get(auth.bindingToken);
+      return value === undefined ? unsupported() : { ok: true, value: publicConnection(value) };
+    },
     delegate: (auth) => ({ ok: true, value: connection(actor(auth, actors)) }),
     emit: unsupported,
     ask: (auth, input) => ({
@@ -244,9 +382,13 @@ function fakeBroker(): TransportBrokerPort {
       value: question(actor(auth, actors), input.prompt, ++questionNumber),
     }),
     inbox: unsupported,
+    planIntent: unsupported,
     ack: unsupported,
     events: unsupported,
     answer: unsupported,
+    listActors: unsupported,
+    listQuestions: unsupported,
+    emitPrincipal: unsupported,
     expireActor: unsupported,
     forwardInbox: unsupported,
   };

@@ -10,5 +10,13 @@
     "rewriteRelativeImportExtensions": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.vitest.ts", "src/**/test-support.ts"]
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.vitest.ts",
+    "src/**/test-support.ts",
+    "src/quicklens/**",
+    "src/cells/quicklens-demo/**",
+    "src/cells/quicklens-graph/**",
+    "src/cells/quicklens-ui/**"
+  ]
 }

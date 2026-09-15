@@ -2,11 +2,15 @@
 import { z, type ZodType } from "zod";
 import {
   AckResultSchema,
+  ActorListSchema,
   ActorDescriptorSchema,
+  EventPageSchema,
   ForwardResultSchema,
   InboxPageSchema,
   MessageEnvelopeSchema,
+  MessageIdSchema,
   PublicConnectionSchema,
+  QuestionListSchema,
   QuestionSchema,
   type Credential,
   type Result,
@@ -16,7 +20,9 @@ import {
   failure,
   type AdapterSessionId,
   type AgentTransportPort,
+  type PrincipalTransportPort,
 } from "../transport/index.ts";
+import { QuestionGroupSchema } from "../workspace-model/index.ts";
 
 export interface AgentHttpClientOptions {
   readonly baseUrl: URL;
@@ -53,10 +59,32 @@ export function createAgentHttpClient(options: AgentHttpClientOptions): AgentTra
     emit: (session, input) => sessionCall("/v1/emit", session, input, MessageEnvelopeSchema),
     ask: (session, input) => sessionCall("/v1/ask", session, input, QuestionSchema),
     inbox: (session, input) => sessionCall("/v1/inbox", session, input, InboxPageSchema),
+    planIntent: (session, messageId) =>
+      sessionCall(
+        "/v1/plan-intent",
+        session,
+        { messageId: MessageIdSchema.parse(messageId) },
+        MessageEnvelopeSchema,
+      ),
     ack: (session, input) => sessionCall("/v1/ack", session, input, AckResultSchema),
     finish: (session, clientRequestId) =>
       sessionCall("/v1/finish", session, { clientRequestId }, ActorDescriptorSchema),
     forward: (session, input) => sessionCall("/v1/forward", session, input, ForwardResultSchema),
+    context: (session) => sessionCall("/v1/context", session, {}, PublicConnectionSchema),
+    askUserQuestion: (session, input) =>
+      sessionCall("/v1/ask-user-question", session, input, QuestionGroupSchema),
+  };
+}
+
+export function createPrincipalHttpClient(options: AgentHttpClientOptions): PrincipalTransportPort {
+  const call = <O>(path: string, input: unknown, schema: ZodType<O>): Promise<Result<O>> =>
+    httpCommand(options.baseUrl, path, options.principalToken, input, schema);
+  return {
+    listActors: (input) => call("/v1/actors", input, ActorListSchema),
+    listQuestions: (input) => call("/v1/questions", input, QuestionListSchema),
+    answer: (input) => call("/v1/answer", input, QuestionSchema),
+    emit: (input) => call("/v1/notice", input, MessageEnvelopeSchema),
+    events: (input) => call("/v1/event-page", input, EventPageSchema),
   };
 }
 
