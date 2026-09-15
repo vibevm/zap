@@ -3,11 +3,18 @@
 Status: implementation authorized, 2026-09-15. Product contract:
 [PROP-005](../PROP-005.xml), [PROP-006](../PROP-006.xml) and the first-experience
 priority in [PROP-007](../PROP-007.xml).
+Task model policy and user-facing Zap branding are specified in
+[PROP-008](../PROP-008.xml).
+Per-project pause/stop/continue follows [PROP-009](../PROP-009.xml).
 This plan replaces the earlier single-project integration order. Existing
 headless communication and ZAP contracts are retained; unfinished prototype
 changes are candidates until their relevant integration path is accepted.
 
 ## Deliverable and boundaries
+
+User-facing names: the complete system is **Zap**, this client is **Zap Quick
+Lens**, and the shared central component is **Zap Wayfinder**. Internal package
+and protocol identifiers remain stable.
 
 Deliver a shared local Lens application server and one Quicklens browser/Electron
 client supporting registered projects, persistent Codex coordinator sessions,
@@ -19,8 +26,10 @@ Keep all application behavior reusable by later Gamelens and Codlens VS Code/
 IDEA clients. Those presentations, additional agent-product implementations,
 distributed execution and a full RLM strategy remain later work. Their adapter,
 host, task/result and strategy interfaces are part of this delivery. The initial
-implementation/test product is Codex; implementation workers are native
-gpt-5.6-luna with high reasoning effort. No comparative model pilot is included.
+implementation/test product is Codex. Coding workers are selected by task and
+budget, including Luna or Sol high/xhigh where appropriate. Live agents under
+test use a low-cost capable profile, currently Luna. These roles remain separate
+when providers change. No comparative model pilot is included.
 
 Explicit coordinator start is the initial default. Opening a window, switching
 projects and subscribing from a second client must not start a model or repeat
@@ -40,8 +49,10 @@ that same screen. The native agent network is distinct from the task/goal map.
 | LW-01 Shared contracts and persistence | Product-neutral project/context/actor/session/attempt models; typed chat, grouped questions, answers, immutable event history and terminal capabilities; SQLite store. | Existing broker identities and model conventions. | Two projects stay isolated; identical request retry is stable; conflicting content refuses; answer revision and amendment preserve history. |
 | LW-02 Coordinator adapters | Common adapter/AgentHost/strategy interfaces and actual Codex JSONL app-server integration; coordinator bootstrap, resume, turns, interruption and observable native children. | LW-01 public identity contract. | Protocol fixture covers start/resume/events/request epochs; one short real Codex conversation proves the supported path. No arbitrary existing-session attachment claim. |
 | LW-03 Shared application server | One owner of registered project runtimes, coordinator launch claims, source watchers, ZAP workflows and input dispatch; thin authenticated MCP and UI clients. | LW-01, LW-02. | Two clients see one coordinator; repeated start does not duplicate it; source/actor authority comes from trusted context; reopening UI leaves running work intact. |
+| LW-03P Project lifecycle | Durable pause/stop/continue, dispatch suspension, scoped native controls and retained continuation. | LW-02, LW-03. | A is paused/stopped while B continues; state waits for actual observations; resume preserves history and avoids duplicate bootstrap where supported. |
 | LW-04 Project/agent operations UI, then interaction | First project switching, global/project/actor activity, agent network and selected output; then Quicklens chat and rich actionable inbox, ZapAskUserQuestion and answer history in the same workspace. | LW-01, LW-03. | First demonstrate two project scopes and a sourced native child/output selection; then a UI message and cross-client question/answer resume the same addressed actor. |
 | LW-05 Projects and planning | Focused project view and simultaneous project board; existing semantic graph/cards; central ZAP plan workflow and history of proposed/held/applied changes. | LW-03, LW-04 and existing ZAP public interfaces. | Two projects show distinct state and remain running across focus changes; one real plan-change path has exact before/after provenance; stale plan/source application refuses. |
+| LW-05M Task model policy | Shared four-tier task/purpose resolver, versioned preferences, configurable model bindings, capability-aware effort and policy settings UI. | LW-01, LW-03; pure resolver can be built independently. | Explicit/inherited/unsupported effort is truthful; changing a policy leaves running selections unchanged; test actors default small without a silent premium fallback. |
 | LW-06 Local managed terminals | Optional real PTY/ConPTY AgentHost, fixed registered agent profiles, terminal observation, input control transfer, input/resize/interrupt and run/result evidence. | LW-01, LW-03; native route remains independent. | Real interactive process in terminal; two observers; one human controller fences automation input; return control; closing a viewer does not close the agent; native-only startup works without managed module. |
 | LW-07 Package and runnable delivery | Documented configuration/start/resume, common server/client exports, browser and Electron build, portable package and account-independent recovery notes. | Accepted preceding stages. | Required package type/lint/build/floor checks once on frozen source; one installed-consumer smoke and one concise browser/Electron visual acceptance. |
 
@@ -80,6 +91,9 @@ locks cannot block another build. Every owned test process has an identified
 lifetime and cleanup path. Live model probes use short tasks and an explicitly
 selected weak Codex model; no silent paid-provider substitution or reset-credit
 consumption is part of testing.
+
+The later true multi-project canvas is recorded in PROP-007#shared-canvas. The
+first portfolio page is an overview, not that unified coordinate-space view.
 
 ## Recovery and checkpoints
 

@@ -403,7 +403,8 @@ The Owner additionally authorized installation of Qwen Code and reuse of the
 existing local OpenRouter credential for it. Credential handling stays with the
 coordinator and outside repository/log/model-visible output. Protocol acceptance
 may use weak/free test models and short isolated sessions; implementation workers
-remain native `gpt-5.6-luna/high`. This does not authorize local Qwen-model inference
+follow task- and budget-aware profiles; inexpensive test actors are a separate
+role under PROP-006. This does not authorize local Qwen-model inference
 or restore the cancelled external GLM launcher. Documented host support and actual
 live host test results must remain separate evidence.
 
