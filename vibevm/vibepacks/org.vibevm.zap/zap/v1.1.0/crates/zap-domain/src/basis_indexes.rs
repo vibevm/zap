@@ -7,6 +7,7 @@ use crate::acceptance::EvidenceAdjudicationRecord;
 use crate::control::{ObligationRecord, TaskContractRecord, WorkRecord};
 use crate::intent::{CharterRecord, IntentRecord, OutcomeRecord};
 use crate::knowledge::{FactRecord, RegionRecord, SourceRecord, SourceScope};
+use crate::lowering::{PlanningRevisionState, StrategicPlanRecord};
 use crate::seams::{LifecycleStatus, ObligationStatus};
 
 specmark::scope!(
@@ -26,6 +27,7 @@ pub const REGION_SUBJECT_INDEX: &str = "zap.basis.region-subject.v1";
 pub const ACTIVE_INTENT_INDEX: &str = "zap.basis.active-intent.v1";
 pub const ACTIVE_OUTCOME_INDEX: &str = "zap.basis.active-outcome.v1";
 pub const ACTIVE_CHARTER_INDEX: &str = "zap.basis.active-charter.v1";
+pub const CURRENT_STRATEGY_INDEX: &str = "zap.planning.current-strategy.v1";
 
 pub fn basis_index_families() -> Result<Vec<IndexFamily>, ZapError> {
     let mut families = [
@@ -42,6 +44,7 @@ pub fn basis_index_families() -> Result<Vec<IndexFamily>, ZapError> {
         ACTIVE_INTENT_INDEX,
         ACTIVE_OUTCOME_INDEX,
         ACTIVE_CHARTER_INDEX,
+        CURRENT_STRATEGY_INDEX,
     ]
     .into_iter()
     .map(IndexFamily::parse)
@@ -97,6 +100,7 @@ pub fn basis_index_families_for_records(
             IntentRecord::FAMILY => &[ACTIVE_INTENT_INDEX],
             OutcomeRecord::FAMILY => &[ACTIVE_OUTCOME_INDEX],
             CharterRecord::FAMILY => &[ACTIVE_CHARTER_INDEX],
+            StrategicPlanRecord::FAMILY => &[CURRENT_STRATEGY_INDEX],
             _ => &[],
         };
         for name in names {
@@ -255,6 +259,19 @@ pub(crate) fn charter_rows(record: &CharterRecord) -> Result<Vec<RecordIndexRow>
         record.status == LifecycleStatus::Active,
         ACTIVE_CHARTER_INDEX,
         &record.charter_id,
+    )
+}
+
+#[specmark::spec(
+    implements = "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-ACTIVE-CONTEXT"
+)]
+pub(crate) fn strategic_plan_rows(
+    record: &StrategicPlanRecord,
+) -> Result<Vec<RecordIndexRow>, ZapError> {
+    active_row(
+        record.state == PlanningRevisionState::Current,
+        CURRENT_STRATEGY_INDEX,
+        &record.strategic_revision_id,
     )
 }
 

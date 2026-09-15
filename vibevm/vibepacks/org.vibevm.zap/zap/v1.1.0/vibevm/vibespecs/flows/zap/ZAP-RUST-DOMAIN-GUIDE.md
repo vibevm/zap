@@ -1,6 +1,6 @@
 # Rust domain usage guide {#root}
 
-`guide r1`
+`guide r3`
 
 This non-normative guide describes the [zap_domain public modules](../../../../crates/zap-domain/src/lib.rs). Its original catalogs cover the 454 externally reachable local types of the 1.0 baseline across charter/intent/outcome, work and obligations, knowledge and proof, adaptive review, economics, acceptance, Owner control, strategic lowering, detached returns, Dreamer and viewer operations. The 1.1 map-work assessment additions appear in their section below; strategic projection types are covered by the [strategic-map guide](ZAP-STRATEGIC-MAP-GUIDE.md).
 
@@ -955,6 +955,37 @@ The [bundle-view query contract](../../../../crates/zap-domain/src/lowering/quer
 | `lowering::BundleView` | Returned strategic/lowering/packet planning view. |
 
 The concrete query implementation is private; the public input/result types do not execute the query or grant permission to apply the inspected plan.
+
+## Discover the active planning context {#active-context-query}
+
+`guide r2`
+
+Call the registered `zap.planning.active-context.v1` query with an empty
+`lowering::ActiveContextInput`. Its single complete item binds `store_id`,
+`campaign_id`, `base_id` and `revision`, then returns tagged references for the
+active outcome, current strategy and adopted milestone plan. An empty campaign
+uses `active_outcome: { "state": "uninitialized" }`; an adopted outcome without
+a current strategy or plan uses explicit `absent` states.
+
+The query reads the active-outcome and current-strategy derived indexes with a
+two-row uniqueness bound, then loads the selected records by typed key. A stale
+or unrebuilt index is `Unavailable`, and ambiguous active/current rows refuse.
+An adopted plan whose proposal or strategy record is missing, stale or
+mismatched remains visible as `needs_reassessment` with the authoritative
+`plan_key`, plan-state revision and stable gap codes. The independently verified
+outcome and current strategy stay available in the same item. Rebuild the
+configured store's registered index catalog before retrying an unavailable
+query. Discovery does not select a campaign, mutate a plan or grant admission.
+
+| Public type | Role in this operation |
+| --- | --- |
+| `lowering::ActiveContextInput` | Closed empty input for configured-service discovery. |
+| `lowering::ActiveContextSnapshot` | Exact store/campaign/base/revision binding. |
+| `lowering::ActiveOutcomeRef` | Uninitialized or exact active outcome identity and revision. |
+| `lowering::CurrentStrategyRef` | Absent or exact current strategic revision and record revision. |
+| `lowering::AdoptedMilestonePlanGap` | Stable reassessment reason code for an adopted binding. |
+| `lowering::AdoptedMilestonePlanRef` | Absent, present, or needs-reassessment plan-state reference. |
+| `lowering::ActiveContextView` | One coherent snapshot-bound discovery result. |
 
 ## Seal a portable execution manifest with exact bindings {#portable-manifest}
 

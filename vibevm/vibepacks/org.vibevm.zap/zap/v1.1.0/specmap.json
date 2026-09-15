@@ -4576,10 +4576,19 @@
       "crate_name": "zap-domain",
       "file": "crates/zap-domain/src/basis_indexes.rs",
       "item_kind": "mod",
-      "line": 12,
+      "line": 13,
       "symbol": "zap_domain::basis_indexes",
-      "end_line": 14,
+      "end_line": 15,
       "fingerprint": "tok1:3c00ffbbd0a6b3fe3fc3a48be579e7814d70bfc6c624dfa69122fd1a1a89f03c"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/basis_indexes.rs",
+      "item_kind": "fn",
+      "line": 265,
+      "symbol": "zap_domain::basis_indexes::strategic_plan_rows",
+      "end_line": 276,
+      "fingerprint": "tok1:14467d80db966ca0bb084e978bc836a0b9c2a5f21b7133e22b590f8e238fb85f"
     },
     {
       "crate_name": "zap-domain",
@@ -7541,6 +7550,78 @@
       "symbol": "zap_domain::legacy_projection::query::LegacyProjectionQueryResult",
       "end_line": 56,
       "fingerprint": "tok1:74adbc0f8df781e55e92d981041a8208c973a5ce4e251f75720677960c3efd44"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "mod",
+      "line": 24,
+      "symbol": "zap_domain::lowering::active_context",
+      "end_line": 26,
+      "fingerprint": "tok1:218ed8238caa771f390d2c02d2bb755774a4849808b3a1141404f7816c9125b6"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "struct",
+      "line": 28,
+      "symbol": "zap_domain::lowering::active_context::ActiveContextInput",
+      "end_line": 33,
+      "fingerprint": "tok1:18a694a6d71a73bb7de7adb263ee3e1b5abe646d3c48c0bf06ed2edf3cb0f858"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "struct",
+      "line": 35,
+      "symbol": "zap_domain::lowering::active_context::ActiveContextSnapshot",
+      "end_line": 45,
+      "fingerprint": "tok1:4c0b54b98614a0d66c7c12db6776890cd079ccad713827d398dc67e85db742e6"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "struct",
+      "line": 105,
+      "symbol": "zap_domain::lowering::active_context::ActiveContextView",
+      "end_line": 118,
+      "fingerprint": "tok1:b9127ef85a92603e1946cef47c842d008060ce99ad8e030caab5dde6b04f797b"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "enum",
+      "line": 47,
+      "symbol": "zap_domain::lowering::active_context::ActiveOutcomeRef",
+      "end_line": 58,
+      "fingerprint": "tok1:c9c87cc68e1d3dff7a28b65a5493aaf6f19bcafcddb05d7d59ec7f874cb857fa"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "enum",
+      "line": 91,
+      "symbol": "zap_domain::lowering::active_context::AdoptedMilestonePlanGap",
+      "end_line": 103,
+      "fingerprint": "tok1:f7ef8ef19be390dce797663015517b6a2adac4a33b9109dcacbc656eb0b119d5"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "enum",
+      "line": 73,
+      "symbol": "zap_domain::lowering::active_context::AdoptedMilestonePlanRef",
+      "end_line": 89,
+      "fingerprint": "tok1:ba0626b9753ef905f9bffc5a9bd6a01a9a9d230b9b064d732a28ec0f5c1267bd"
+    },
+    {
+      "crate_name": "zap-domain",
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "item_kind": "enum",
+      "line": 60,
+      "symbol": "zap_domain::lowering::active_context::CurrentStrategyRef",
+      "end_line": 71,
+      "fingerprint": "tok1:eaa6f658683f9c434fa5c65955d678dc84a8057a31450f0189f49d105aa80e73"
     },
     {
       "crate_name": "zap-domain",
@@ -17551,9 +17632,17 @@
     {
       "file": "crates/zap-domain/src/basis_indexes.rs",
       "from_symbol": "zap_domain::basis_indexes",
-      "line": 12,
+      "line": 13,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-STORAGE#RUST-STORAGE-INCREMENTAL-INVALIDATION",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-domain/src/basis_indexes.rs",
+      "from_symbol": "zap_domain::basis_indexes::strategic_plan_rows",
+      "line": 265,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-ACTIVE-CONTEXT",
       "verb": "implements"
     },
     {
@@ -21034,6 +21123,78 @@
       "line": 47,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#legacy-projection",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context",
+      "line": 24,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-ACTIVE-CONTEXT",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::ActiveContextInput",
+      "line": 30,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::ActiveContextSnapshot",
+      "line": 37,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::ActiveContextView",
+      "line": 107,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-ACTIVE-CONTEXT",
+      "verb": "implements"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::ActiveContextView",
+      "line": 110,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::ActiveOutcomeRef",
+      "line": 49,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::AdoptedMilestonePlanGap",
+      "line": 93,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::AdoptedMilestonePlanRef",
+      "line": 75,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
+      "verb": "documents"
+    },
+    {
+      "file": "crates/zap-domain/src/lowering/active_context.rs",
+      "from_symbol": "zap_domain::lowering::active_context::CurrentStrategyRef",
+      "line": 62,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
       "verb": "documents"
     },
     {
@@ -28773,7 +28934,7 @@
     },
     {
       "anchor": "root",
-      "content_hash": "sha256:1a1ee56dac8e4121818d7134521edf229f790d4cd06c5efe484d266d96c9745a",
+      "content_hash": "sha256:1e4a111bba1d236e117a1ec549b634f3fc3151388a24b0f2e59dddeb3e7327fb",
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "ZAP: checked lowering, strategic forks, and Dreamer branches",
@@ -28782,7 +28943,7 @@
     },
     {
       "anchor": "representations",
-      "content_hash": "sha256:71963ac4a5630743141274ccc99a424562ceb329a984a13b5f22f4c9a5aa7108",
+      "content_hash": "sha256:397c53598f21fd0fa8e4f0b7686dea620eeb4c4a6de794e0bf57f27525b4e92d",
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "1. One plan, four representations",
@@ -28808,12 +28969,21 @@
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-STRATEGY-SURVIVES"
     },
     {
+      "anchor": "LOWERING-ACTIVE-CONTEXT",
+      "content_hash": "sha256:097a82aeb764d42a78d45f14e625fc2e3c05c30d39fbc0f8630797398d15ec02",
+      "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
+      "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
+      "heading": "The registered zap.planning.active-context.v1 query discovers the configured campaign snapshot, active outcome, current strategic revision and adopted milestone-plan reference without requiring a caller-supplied opaque ID. It reads bounded current-state indexes and exact keyed records. Empty and not-yet-planned states remain explicit. A stale, missing or mismatched adopted-plan binding returns its authoritative plan-state reference with stable needs-reassessment gaps while retaining independently verified outcome and strategy context; it never fabricates missing proposal data. Multiple active/current rows and stale or inconsistent derived indexes are refused rather than guessed. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-ACTIVE-CONTEXT"
+    },
+    {
       "anchor": "transformation",
       "content_hash": "sha256:1df99d5263b6158cff4da9497082d630e37bc11b2a49bc818aa0fdcd8f58cd2e",
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "2. Lowering as a checked transformation",
-      "line": 11,
+      "line": 12,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#transformation"
     },
     {
@@ -28822,7 +28992,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A lowering request binds the strategic revision, target branch, executor capabilities, captured facts and source identities, RelevantBasis, delegated choices, required maturity, known risks, and unresolved horizons. The result contains versioned work contracts, dependencies, traceability, verification duties, integration ownership, prepared forks, and refinement triggers. @status:spec/plan",
-      "line": 12,
+      "line": 13,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-REQUEST-BASIS"
     },
     {
@@ -28831,7 +29001,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "The kernel validates identities, references, obligation coverage, dependencies, authority, source closure, write and resource conflicts, stage duties, and deferral dispositions. These checks prove declared structural conservation, not semantic sufficiency. A Senior assesses faithfulness for architecture or meaning changes, and later evidence establishes actual satisfaction. @status:spec/plan",
-      "line": 13,
+      "line": 14,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-COVERAGE-CHECK"
     },
     {
@@ -28840,7 +29010,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Every active obligation and every undischarged prototype, functional-MVP, and productization duty maps to executable work, verification and integration, a named successor, or an authorized inapplicability disposition. Every deferral retains scope, reason, present guarantees, owner, and closure obligation. Refinement, priority change, task deletion, or packet rendering cannot erase debt, history, unmet differences, or consumer obligations. @status:spec/plan",
-      "line": 14,
+      "line": 15,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-OBLIGATION-CONSERVATION"
     },
     {
@@ -28849,7 +29019,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Semantic lowering creates or changes meaning-bearing work contracts, dependencies, ownership, obligation dispositions, stages, or deferrals and therefore follows adaptive and economics admission. Rendering an unchanged admitted contract for a different model, context window, harness, or presentation is derived and does not require another economic decision. A renderer proves semantic-contract identity and preserved debt; changed meaning cannot be labeled rendering to evade admission. @status:spec/plan",
-      "line": 15,
+      "line": 16,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-SEMANTIC-VERSUS-RENDER"
     },
     {
@@ -28858,7 +29028,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Normal execution lowers the nearest valuable frontier until an executor can understand an action and a sufficient check is inexpensive. Distant work stays coarse with inherited obligations, known material forks, and a refinement trigger. A sealed offline envelope lowers as far as present knowledge permits and represents an unknown architectural boundary as a diagnostic task, admissible alternatives, and return condition rather than invented exact steps. @status:spec/plan",
-      "line": 16,
+      "line": 17,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-BOUNDED-RECURSION"
     },
     {
@@ -28867,7 +29037,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A changed strategy, source, contract, policy, capability, or resource marks only affected lowerings and packet renders stale according to captured dependencies and semantic fingerprints. A global event counter, unrelated progress, or economics record does not invalidate an otherwise applicable packet. Applicable artifacts, observations, and proof are retained subject to evidence applicability. @status:spec/plan",
-      "line": 17,
+      "line": 18,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-SCOPED-INVALIDATION"
     },
     {
@@ -28876,7 +29046,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "3. Strategic forks and prepared weak-model choices",
-      "line": 20,
+      "line": 21,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#forks"
     },
     {
@@ -28885,7 +29055,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A material fork has stable identity and records its problem, facts and unknowns, alternatives, preconditions, expected value and cost, hazards, recommendation and rationale, selection authority, rejection conditions, and next diagnostic action. Important forks remain visible in strategy and are projected into lowerings and packets when relevant. @status:spec/plan",
-      "line": 21,
+      "line": 22,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-STRATEGIC-FORK"
     },
     {
@@ -28894,7 +29064,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "An executor selects a prepared fork only while its preconditions and delegated authority remain current. True, false, and unknown conditions remain distinct; unknown requests the named evidence. If no prepared option fits, the executor records an encounter and requests refinement, while any separately authorized diagnostic or independent work may continue. @status:spec/plan",
-      "line": 22,
+      "line": 23,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-FORK-SELECTION"
     },
     {
@@ -28903,7 +29073,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "An unselected strategic alternative is a dormant option. It is not an obligation, queued task, failed approach, selected economic change, or hold. Switching routes preserves rejected and abandoned alternatives, evidence, reasons, and attempt history and cannot reset an Owner stop counter. @status:spec/plan",
-      "line": 23,
+      "line": 24,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-DORMANT-OPTION"
     },
     {
@@ -28912,7 +29082,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "4. Strong-plan and weak-execution round trip",
-      "line": 26,
+      "line": 27,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#weak-roundtrip"
     },
     {
@@ -28921,7 +29091,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A WeakBundle export binds its exact strategic and Lowering revisions, packet set, capability profile, required rules and sources, source closure and omissions, prepared forks and recommendations, delegated decisions, acceptance, stop conditions, content identities, and explicit export scope. It contains no cloud credential and requires no live registry, external model, or source-host connection for bounded local use. @status:spec/plan",
-      "line": 27,
+      "line": 28,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-WEAK-BUNDLE-EXPORT"
     },
     {
@@ -28930,7 +29100,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Offline execution appends stable records for attempts, candidates, selected branches, observations, contradictions, unavailable capabilities, failed methods, unresolved questions, checks, artifacts, and effects. These are returned facts and proposals, not canonical acceptance or authority. A judgment beyond the prepared capability or decision envelope becomes awaiting refinement or a capability wait. @status:spec/plan",
-      "line": 28,
+      "line": 29,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-ENCOUNTER-JOURNAL"
     },
     {
@@ -28939,7 +29109,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A return bundle contains the delta since export and referenced evidence. Import verifies base identity, packet and attempt lineage, artifact hashes, and idempotency, then reconciles against the current strategic revision. It classifies returned material as applicable candidate evidence, stale result, contradiction, failure, new unknown, or semantic-change proposal; it never overwrites newer strategy through last-writer-wins. @status:spec/plan",
-      "line": 29,
+      "line": 30,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-WEAK-BUNDLE-RETURN"
     },
     {
@@ -28948,7 +29118,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A strong planning environment receives a bounded account of changed assumptions, unresolved decisions, and evidence, reassesses only affected meaning, and emits a new strategic or Lowering revision when warranted. Previous strategy, packets, attempts, findings, and applicable evidence remain inspectable. The initial round trip may use explicit file exchange and does not require distributed consensus. @status:spec/plan",
-      "line": 30,
+      "line": 31,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-STRONG-REASSESSMENT"
     },
     {
@@ -28957,7 +29127,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A wholly local installation may use its configured weak model as coordinator for decisions inside the active charter, assigned capability, and prepared decision envelope. It does not fabricate a stronger reviewer or require a cloud round trip after every result. Producer and acceptor identities, evidence requirements, stop rules, and service admission remain unchanged. @status:spec/plan",
-      "line": 31,
+      "line": 32,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-LOCAL-COORDINATION"
     },
     {
@@ -28966,7 +29136,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "5. Dreamer exploration and live scope change",
-      "line": 34,
+      "line": 35,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#dreamer"
     },
     {
@@ -28975,7 +29145,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "The conversational entry distinguishes an explicit live add or remove instruction from requests to imagine, simulate, explore, or plan together. A live instruction prepares an exact semantic proposal. Exploratory language creates a DreamBranch from an exact live revision. When root versus subgoal attachment is materially ambiguous, the system asks one focused placement question rather than guessing. @status:spec/plan",
-      "line": 35,
+      "line": 36,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#DREAMER-INTENT-MODES"
     },
     {
@@ -28984,7 +29154,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Before admitting a new goal, the system asks whether the Owner wants it grilled. If selected, the grill establishes beneficiary, observable success, essential constraints, non-goals, delegated tradeoffs, and consequential forks. Existing evidence answers factual questions first; Owner questions use plain-language consequences, distinct choices, and a recommendation. Answers, sources, and unresolved questions persist across compaction and are reused until material grounds change. @status:spec/plan",
-      "line": 36,
+      "line": 37,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#DREAMER-GRILL"
     },
     {
@@ -28993,7 +29163,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A DreamBranch stores only its delta over a base revision plus assumptions, questions, estimates, alternatives, and calculated effects on dependencies, knowledge, value, evidence, obligations, and lowering. Simulation cannot dispatch work, alter the live frontier, consume live approvals, activate authority, or create an economics hold. Strategic forks, DreamBranches, execution sandboxes, and source-control branches are distinct typed subjects. @status:spec/plan",
-      "line": 37,
+      "line": 38,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#DREAMER-NONEXECUTABLE"
     },
     {
@@ -29002,7 +29172,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Application requires an explicit Owner or charter-authorized live command over the exact prepared payload. The service checks the current base, authority, stop state, affected closure, economics, evidence applicability, and live jobs. It reconciles concurrent drift rather than overwriting it. A stale dream stays detached until revised; applicable proof and unaffected work survive. @status:spec/plan",
-      "line": 38,
+      "line": 39,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#DREAMER-EXACT-APPLICATION"
     },
     {
@@ -29011,7 +29181,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "When one prepared scope change requires both a charter amendment and an above-threshold economics decision, one authenticated Owner response may bind both exact revisions and their common effect envelope. An earlier request to explore or add an idea does not approve cost learned later, while one already reviewed envelope is not presented twice for equivalent confirmation. @status:spec/plan",
-      "line": 39,
+      "line": 40,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#DREAMER-COMBINED-OWNER-DECISION"
     },
     {
@@ -29020,7 +29190,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Removing or unzapping a goal records dispositions for its obligations, dependents, evidence, stage debt, artifacts, consumers, deferrals, and outstanding external effects. It cannot erase history or remove a prerequisite still used elsewhere. Achievement of an authorized smaller outcome is reported as revised success, not retrospective completion of the original outcome. @status:spec/plan",
-      "line": 40,
+      "line": 41,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#DREAMER-REMOVAL-CONSERVATION"
     },
     {
@@ -29029,7 +29199,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "6. Adaptation, economics, and stops",
-      "line": 43,
+      "line": 44,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#admission"
     },
     {
@@ -29038,7 +29208,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Every material live delta uses the adaptive review and change-economics contracts: compute known impact, assess closure completeness and new semantic links, preserve nonmonotonic fog, compare alternatives against the same baseline, and admit only the exact authorized effects. Baseline work is not repeatedly reauthorized, cumulative forecasts cannot be split into fresh allowances, and pure detached simulation remains non-authoritative. @status:spec/plan",
-      "line": 44,
+      "line": 45,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-ADAPTIVE-ECONOMICS"
     },
     {
@@ -29047,7 +29217,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "A selected executable live change whose expected elapsed time to a verified result is above the active threshold, or whose policy-relevant cost or impact is conservatively unknown, holds affected work and dependent starts. Work with complete proof of independence continues. Dormant forks, DreamBranches, rejected alternatives, and untrusted drafts create no hold. @status:spec/plan",
-      "line": 45,
+      "line": 46,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-HOLD-SCOPE"
     },
     {
@@ -29056,7 +29226,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "An Owner campaign stop pauses all new campaign work and safely drains in-flight operations regardless of a Dreamer, lowering, or economics state. Proposal preparation and surviving-result collection remain allowed, but no economics decision, branch application, route change, or packet render resumes product work. Resume requires the exact Owner control defined by the active pause contract. @status:spec/plan",
-      "line": 46,
+      "line": 47,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-OWNER-STOP-PRECEDENCE"
     },
     {
@@ -29065,7 +29235,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "7. Permanent references",
-      "line": 49,
+      "line": 50,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#relations"
     },
     {
@@ -29074,7 +29244,7 @@
       "doc_path": "flows/zap/ZAP-LOWERING-AND-DREAMER",
       "file": "vibevm/vibespecs/flows/zap/ZAP-LOWERING-AND-DREAMER.xml",
       "heading": "Intent, obligations, maturity, central acceptance, and Owner stops come from spec://org.vibevm.zap/zap/flows/zap/ZAP-METHODOLOGY#root. Adaptive outcome revision and proof reuse come from spec://org.vibevm.zap/zap/flows/zap/ZAP-ADAPTIVE-CYCLE#root. Economic admission comes from spec://org.vibevm.zap/zap/flows/zap/ZAP-CHANGE-ECONOMICS#root. Packet and host behavior comes from spec://org.vibevm.zap/zap/flows/zap/ZAP-AGENT-PROTOCOL#root. @status:spec/plan",
-      "line": 50,
+      "line": 51,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-LOWERING-AND-DREAMER#LOWERING-DREAMER-REFERENCES"
     },
     {
@@ -31050,14 +31220,14 @@
     },
     {
       "anchor": "root",
-      "content_hash": "sha256:db7b207ebdc37a2776d2eaa0752c6c34006b5af0212bb21773a3d70a9ffcf133",
+      "content_hash": "sha256:3a15755e41bdfa48b806336ca380711ccd14f5394f5cc1df627054aae56b6ec7",
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Rust domain usage guide",
       "line": 1,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#root",
       "kind": "guide",
-      "revision": 1
+      "revision": 3
     },
     {
       "anchor": "domain-state",
@@ -31610,12 +31780,23 @@
       "revision": 1
     },
     {
+      "anchor": "active-context-query",
+      "content_hash": "sha256:5345236a5183d5e165ca167f54ea6b5961825bcd2699751fab2b24202e73176f",
+      "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
+      "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
+      "heading": "Discover the active planning context",
+      "line": 959,
+      "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#active-context-query",
+      "kind": "guide",
+      "revision": 2
+    },
+    {
       "anchor": "portable-manifest",
       "content_hash": "sha256:b3f914db091139f584ee59611cb38868d35bb946301f35d6c0caa12055a3bb20",
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Seal a portable execution manifest with exact bindings",
-      "line": 959,
+      "line": 990,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#portable-manifest",
       "kind": "guide",
       "revision": 1
@@ -31626,7 +31807,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Separate required closure, export and archive publication",
-      "line": 981,
+      "line": 1012,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#bundle-publication",
       "kind": "guide",
       "revision": 1
@@ -31637,7 +31818,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Build an encounter delta without resetting operation history",
-      "line": 1001,
+      "line": 1032,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#offline-encounters",
       "kind": "guide",
       "revision": 1
@@ -31648,7 +31829,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Validate and classify the returned execution envelope",
-      "line": 1018,
+      "line": 1049,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#returned-bundle",
       "kind": "guide",
       "revision": 1
@@ -31659,7 +31840,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Preserve failed-approach counters across detached work",
-      "line": 1036,
+      "line": 1067,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#returned-approaches",
       "kind": "guide",
       "revision": 1
@@ -31670,7 +31851,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Bind reassessment and relowering to the returned delta",
-      "line": 1050,
+      "line": 1081,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#return-reassessment",
       "kind": "guide",
       "revision": 1
@@ -31681,7 +31862,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Start a hypothetical branch or an explicit scope request",
-      "line": 1067,
+      "line": 1098,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#dream-intent",
       "kind": "guide",
       "revision": 1
@@ -31692,7 +31873,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Persist factual discovery and Owner choices separately",
-      "line": 1090,
+      "line": 1121,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#dream-grill",
       "kind": "guide",
       "revision": 1
@@ -31703,7 +31884,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Retain assumptions, unknowns and alternatives",
-      "line": 1113,
+      "line": 1144,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#dream-assumptions",
       "kind": "guide",
       "revision": 1
@@ -31714,7 +31895,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Represent the hypothetical operation explicitly",
-      "line": 1129,
+      "line": 1160,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#dream-delta",
       "kind": "guide",
       "revision": 1
@@ -31725,7 +31906,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Conserve obligations and evidence when removing or replacing work",
-      "line": 1145,
+      "line": 1176,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#dream-removal",
       "kind": "guide",
       "revision": 1
@@ -31736,7 +31917,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Recalculate an isolated projection before application",
-      "line": 1165,
+      "line": 1196,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#dream-projection",
       "kind": "guide",
       "revision": 1
@@ -31747,7 +31928,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Apply only the exact authorized projection",
-      "line": 1187,
+      "line": 1218,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#dream-application",
       "kind": "guide",
       "revision": 1
@@ -31758,7 +31939,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Select the actual registered domain surface",
-      "line": 1204,
+      "line": 1235,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#domain-registration",
       "kind": "guide",
       "revision": 1
@@ -31769,7 +31950,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Existing focused examples",
-      "line": 1212,
+      "line": 1243,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#integration-examples",
       "kind": "guide",
       "revision": 1
@@ -31780,7 +31961,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Private implementation declarations",
-      "line": 1226,
+      "line": 1257,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#internal-boundaries",
       "kind": "guide",
       "revision": 1
@@ -31791,7 +31972,7 @@
       "doc_path": "flows/zap/ZAP-RUST-DOMAIN-GUIDE",
       "file": "vibevm/vibespecs/flows/zap/ZAP-RUST-DOMAIN-GUIDE.md",
       "heading": "Public type coverage",
-      "line": 1252,
+      "line": 1283,
       "uri": "spec://org.vibevm.zap/zap/flows/zap/ZAP-RUST-DOMAIN-GUIDE#remaining-coverage",
       "kind": "guide",
       "revision": 1

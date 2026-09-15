@@ -142,7 +142,8 @@ impl_stored_record!(
     StrategicRevisionId,
     strategic_revision_id,
     revision,
-    "zap.planning.strategy"
+    "zap.planning.strategy",
+    crate::basis_indexes::strategic_plan_rows
 );
 impl_stored_record!(
     LoweringRecord,

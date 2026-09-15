@@ -102,7 +102,10 @@ impl QuerySpec for BundleViewQuery {
 }
 
 pub(crate) fn query_set() -> Result<QuerySet, ZapError> {
-    QuerySet::single(BundleViewQuery)
+    QuerySet::compose([
+        QuerySet::single(BundleViewQuery)?,
+        QuerySet::single(super::active_context::ActiveContextQuery)?,
+    ])
 }
 
 fn missing_bundle() -> ZapError {

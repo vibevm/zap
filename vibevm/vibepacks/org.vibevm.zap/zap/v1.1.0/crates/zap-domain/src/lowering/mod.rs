@@ -1,3 +1,4 @@
+mod active_context;
 mod cells;
 mod model;
 pub mod offline;
@@ -7,6 +8,10 @@ mod queries;
 mod records;
 mod transitions;
 
+pub use active_context::{
+    ActiveContextInput, ActiveContextSnapshot, ActiveContextView, ActiveOutcomeRef,
+    AdoptedMilestonePlanGap, AdoptedMilestonePlanRef, CurrentStrategyRef,
+};
 pub use model::*;
 pub use offline::*;
 pub use packets::*;

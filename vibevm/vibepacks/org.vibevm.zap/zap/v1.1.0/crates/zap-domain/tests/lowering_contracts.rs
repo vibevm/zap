@@ -37,11 +37,19 @@ fn registered_lowering_and_bundle_surface_is_complete() -> Result<(), ZapError> 
         assert!(cells.kinds().any(|registered| registered.as_str() == kind));
     }
     zap_domain::route_set()?.validate_cells(&cells)?;
+    let queries = zap_domain::query_set()?;
+    for query in ["zap.planning.bundle", "zap.planning.active-context.v1"] {
+        assert!(
+            queries
+                .descriptors()
+                .iter()
+                .any(|row| row.id.as_str() == query)
+        );
+    }
     assert!(
-        zap_domain::query_set()?
-            .descriptors()
+        zap_domain::viewer_graph_index_families()?
             .iter()
-            .any(|row| row.id.as_str() == "zap.planning.bundle")
+            .any(|family| family.as_str() == "zap.planning.current-strategy.v1")
     );
     Ok(())
 }
