@@ -20,7 +20,7 @@ IDEA clients. Those presentations, additional agent-product implementations,
 distributed execution and a full RLM strategy remain later work. Their adapter,
 host, task/result and strategy interfaces are part of this delivery. The initial
 implementation/test product is Codex; implementation workers are native
-gpt-5.6-sol with high reasoning effort. No comparative model pilot is included.
+gpt-5.6-luna with high reasoning effort. No comparative model pilot is included.
 
 Explicit coordinator start is the initial default. Opening a window, switching
 projects and subscribing from a second client must not start a model or repeat
