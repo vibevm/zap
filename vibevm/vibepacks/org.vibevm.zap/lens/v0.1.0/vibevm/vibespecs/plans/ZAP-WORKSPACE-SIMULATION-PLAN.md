@@ -54,6 +54,12 @@ enough evidence to replay a failure without an LLM. Coverage gaps remain visible
 - Current execution is local-only. Remote execution, multi-user authentication,
   federation and distributed locking are future work, with explicit seams rather
   than claims of current support.
+- The longer-term goal is crowdsourced execution capacity from participants'
+  own computers and accounts. Resource contribution grants no merge authority.
+  Preserve assignment/artifact/evidence provenance and independent review;
+  a future trusted team-lead agent assists admission, while the server enforces
+  its authority. Git worktrees are not an isolation boundary for hostile code.
+  Contributor admission, sandboxing and resource scheduling are future work.
 - Integration does not alter the target until a reviewed candidate passes the
   target HEAD and clean-worktree checks under an exclusive owned-writer gate.
   A changed basis requires a fresh attempt. No automatic stash, reset, force-push
