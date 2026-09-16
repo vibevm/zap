@@ -76,6 +76,7 @@ const PRODUCT_RUNNERS: Readonly<Partial<Record<MockSimulationRunnerId, string>>>
   "execution-catalog.public-routing": "src/cells/execution-catalog/product-simulation.test.ts",
   "execution-catalog.managed-runtime":
     "src/cells/wayfinder-runtime/execution-catalog-runtime.test.ts",
+  "source-install.public-lifecycle": "tooling/source-install/product-simulation.js",
 };
 
 export async function runMockSimulations(
@@ -319,7 +320,8 @@ function evidence(runnerId: MockSimulationRunnerId): MockSimulationEvidenceKind 
     runnerId === "workspace.annotations-product" ||
     runnerId === "workspace.model-policy-product" ||
     runnerId === "provider-coordinator.public-projection" ||
-    runnerId === "execution-catalog.public-routing"
+    runnerId === "execution-catalog.public-routing" ||
+    runnerId === "source-install.public-lifecycle"
   )
     return "public_service";
   if (

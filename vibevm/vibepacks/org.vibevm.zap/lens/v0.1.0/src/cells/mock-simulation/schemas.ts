@@ -10,6 +10,7 @@ import {
   ExecutionCatalogProductSimulationSchema,
   ExecutionCatalogRuntimeSimulationSchema,
 } from "./execution-catalog-schema.ts";
+import { SourceInstallProductSimulationSchema } from "./source-install-schema.ts";
 
 export const MockSimulationRunnerIdSchema = z.enum([
   "model.reducer",
@@ -25,6 +26,7 @@ export const MockSimulationRunnerIdSchema = z.enum([
   "provider-coordinator.public-projection",
   "execution-catalog.public-routing",
   "execution-catalog.managed-runtime",
+  "source-install.public-lifecycle",
 ]);
 export type MockSimulationRunnerId = z.infer<typeof MockSimulationRunnerIdSchema>;
 
@@ -401,6 +403,7 @@ export const MockSimulationDocumentSchema = z.union([
   ProviderProjectionSimulationSchema,
   ExecutionCatalogProductSimulationSchema,
   ExecutionCatalogRuntimeSimulationSchema,
+  SourceInstallProductSimulationSchema,
 ]);
 export type MockSimulationDocument = z.infer<typeof MockSimulationDocumentSchema>;
 

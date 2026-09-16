@@ -33,6 +33,7 @@ test("corpus discovers indexed colocated scenarios and exposes honest coverage g
       "provider.addressed-turn-running-queue-ready",
       "execution-catalog.synthetic-cross-provider-routing",
       "execution-catalog.synthetic-cross-provider-runtime",
+      "source-install.bootstrap-build-lifecycle",
     ],
   );
   assert.equal(
@@ -112,6 +113,7 @@ test("discovery rejects unindexed and stale scenario files", () => {
     copy(source, root, "src/cells/provider-coordinators/running-projection.simulation.json");
     copy(source, root, "src/cells/execution-catalog/catalog-routing.simulation.json");
     copy(source, root, "src/cells/wayfinder-runtime/execution-catalog-runtime.simulation.json");
+    copy(source, root, "tooling/source-install/source-install.simulation.json");
     copy(
       source,
       root,

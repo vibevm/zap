@@ -940,6 +940,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/mock-simulation/source-install-schema.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/source-install-schema.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/model-policy-service/index.ts",
       "item_kind": "module",
       "line": 1,
@@ -5115,6 +5122,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/source-install-schema.ts",
+      "from_symbol": "src/cells/mock-simulation/source-install-schema.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#verification",
       "verb": "implements"
     },
     {
@@ -10187,6 +10202,159 @@
       "heading": "Implement the catalog, shared routing/dispatch integration and usable admin UI before spending live model tokens. Validate the actual browser UI and current deterministic corpus. Then use one tiny authorized GPT configuration and one tiny Claude configuration to check real selection/launch propagation, with a tiny project boot and no comparative model-quality campaign. Account/quota and protocol handshakes may be checked without inference. Preserve durable recovery notes throughout. Ten new proprietary agent drivers, full account-billing administration, remote multi-user federation and speculative exhaustive edge testing are outside this slice. @status:spec/plan",
       "line": 14,
       "uri": "spec://org.vibevm.zap/lens/PROP-015#delivery"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:7edb871044f971ed064d8c95933f2bc47a0ced043379f2e175276e5d0677921a",
+      "doc_path": "PROP-016",
+      "file": "vibevm/vibespecs/PROP-016.xml",
+      "heading": "Source installation through VibeVM",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#root"
+    },
+    {
+      "anchor": "installation",
+      "content_hash": "sha256:a612e4554dbeaef93ecb9616b62072fff81e28da74229f562db9110e9a7fcb85",
+      "doc_path": "PROP-016",
+      "file": "vibevm/vibespecs/PROP-016.xml",
+      "heading": "A source bootstrap creates a dedicated, explicitly marked Vibe consumer workspace under the selected user's settings root, normally ~/.vibe/opt/apps/zap. It installs the pinned Zap packages from an explicit local source registry through ordinary Vibe materialisation. The runtime must not depend on the original checkout after installation. Installation files are distinct from ~/.vibe/zap project state and provider account homes. @status:spec/plan",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#installation"
+    },
+    {
+      "anchor": "lifecycle",
+      "content_hash": "sha256:d2b7b18d7152481cf8b9779358c1e5151f65637782efce0e2f2155672f5df349",
+      "doc_path": "PROP-016",
+      "file": "vibevm/vibespecs/PROP-016.xml",
+      "heading": "The dedicated installer host owns the phase:build script and the package:static-file plus deploy:vibe-opt-launcher declarations. A dependency on Lens in an ordinary project must not activate its application installer. The build runs locked npm installation and the existing Node/browser/Electron build in the materialised Lens slot, and can build the existing Rust zap binary through Vibe's declared-binary dispatch. No install hook publishes user launchers; only the explicit deploy profile does so with Vibe receipts. @status:spec/plan",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#lifecycle"
+    },
+    {
+      "anchor": "payload",
+      "content_hash": "sha256:5aaef9acb8490fbdd16cf237cd5b838f1043efcb5e47ebd89ea69737cc65ad14",
+      "doc_path": "PROP-016",
+      "file": "vibevm/vibespecs/PROP-016.xml",
+      "heading": "Launchers address an immutable generated runtime payload retained inside the installer workspace, rather than the mutable development checkout or mutable build output. The generation binds source/package inputs, platform and relevant runtime identity. Preparation of a new generation does not replace files used by an existing process. Old generated payloads are retained as build cache; Vibe receipts own published launchers, not that entire cache. Successful deployment is required before reporting an installation as ready. @status:spec/plan",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#payload"
+    },
+    {
+      "anchor": "commands",
+      "content_hash": "sha256:386f55a9143e2b557c51b2ab4405f86242d98e796a9150d9243ef16abe5f84d4",
+      "doc_path": "PROP-016",
+      "file": "vibevm/vibespecs/PROP-016.xml",
+      "heading": "The source bootstrap provides install, update, status and uninstall operations, with an explicit settings-directory override for isolation and a local registry override. Help/status do not start agents. Node 24 and npm are build prerequisites; Rust/Cargo is required when installing the engine. The default installation includes Lens and the engine; an explicit Lens-only option may omit Rust. No model calls or binary-release publication form part of installation. Standard dependency downloads remain distinct from downloading a Zap binary release. @status:spec/plan",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#commands"
+    },
+    {
+      "anchor": "ownership",
+      "content_hash": "sha256:fa82442a98f049da0c09be820a8ce98243c5edf44a25d4d0dd5a367c2a93962c",
+      "doc_path": "PROP-016",
+      "file": "vibevm/vibespecs/PROP-016.xml",
+      "heading": "The bootstrap refuses unrelated or unmarked installation directories, executes programs with structured arguments, and confines temporary deletion or movement to verified installation-owned paths. Vibe deployment refuses unowned or modified launchers. Uninstall first invokes receipt-owned undeploy and preserves application/user state, account credentials and retained installation cache. PATH and machine-wide settings are not silently changed. A failed build or deploy cannot be labelled success or replace an already usable runtime generation silently. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#ownership"
+    },
+    {
+      "anchor": "verification",
+      "content_hash": "sha256:03bec59a83cfd8b1e5655f7d307bd9f8786d679e61b923cb13462a4a09bc93eb",
+      "doc_path": "PROP-016",
+      "file": "vibevm/vibespecs/PROP-016.xml",
+      "heading": "Colocated deterministic tests and a registered mock scenario cover bootstrap command construction, ownership refusal, paths with spaces, update/failure boundaries and data preservation. Root acceptance runs actual Vibe source materialisation, build, package and deploy under an isolated settings root, executes installed help and a browser startup without inference, verifies update/undeploy receipts, and demonstrates launch independence from the original checkout. Use the existing package gates without a new live model test. @status:spec/plan",
+      "line": 10,
+      "uri": "spec://org.vibevm.zap/lens/PROP-016#verification"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:6ec9db65588b395191583eab287f65244b8c245f559e1d6e4e9d2b4579f78044",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Install Zap from local source with Vibe",
+      "line": 1,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#root"
+    },
+    {
+      "anchor": "prerequisites",
+      "content_hash": "sha256:7cd8cb6aa3601e94cd4b720d669c24db7c2e2a53dd168da85ff57c07b1393e18",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Prerequisites",
+      "line": 12,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#prerequisites"
+    },
+    {
+      "anchor": "install",
+      "content_hash": "sha256:6c86d70cac154b45914ee4abfe5546722ad4afd8797cc9982bd4abd84f4777d1",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Install",
+      "line": 29,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#install"
+    },
+    {
+      "anchor": "management",
+      "content_hash": "sha256:cad1eb30a6c86f7f4764e541119d15526fc41910063785eb94320ed7a2f5b6d9",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Manage an installation after moving the checkout",
+      "line": 54,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#management"
+    },
+    {
+      "anchor": "status",
+      "content_hash": "sha256:99ea7c3b5de81c32279cd29caee1c68d452886727f9e13de4e0ed11db41ed3ed",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Inspect status without starting Zap",
+      "line": 82,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#status"
+    },
+    {
+      "anchor": "update",
+      "content_hash": "sha256:038ba3d2dcf2edff1d26b921ac9085fb1b461cd90d157d39a909b3a5f188b810",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Update transactionally",
+      "line": 98,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#update"
+    },
+    {
+      "anchor": "commands",
+      "content_hash": "sha256:4ed2c7609d233528e0f663adaba0288b5ea3692739720b71dec8d629790a348c",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Installed commands",
+      "line": 119,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#commands"
+    },
+    {
+      "anchor": "uninstall",
+      "content_hash": "sha256:c9b82684a347ebe9e2f84dad4fc384a67316e1d447950c100e803bb21e247d3c",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Uninstall launchers safely",
+      "line": 138,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#uninstall"
+    },
+    {
+      "anchor": "verification",
+      "content_hash": "sha256:a21b3ed44000b76d914d19d79266294645a6a7a7a3c7500889683fdd1e9a356f",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Isolated acceptance",
+      "line": 154,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#verification"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:890ccbc4545b937e8e1568a83fa73804343edf9d5bfa0a7878166ae91cd948e5",
+      "doc_path": "research/ZAP-SOURCE-INSTALL-ACCEPTANCE-2026-09-16",
+      "file": "vibevm/vibespecs/research/ZAP-SOURCE-INSTALL-ACCEPTANCE-2026-09-16.md",
+      "heading": "Vibe source installation acceptance, 2026-09-16",
+      "line": 1,
+      "uri": "spec://org.vibevm.zap/lens/research/ZAP-SOURCE-INSTALL-ACCEPTANCE-2026-09-16#root"
     }
   ],
   "suspects": [],

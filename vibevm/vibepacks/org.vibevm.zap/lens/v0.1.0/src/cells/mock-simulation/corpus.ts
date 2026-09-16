@@ -33,7 +33,10 @@ export function loadMockSimulationCorpus(
   const registry = readJson(resolve(root, "src/cells/mock-simulation/coverage.json"));
   const checkedRegistry = MockSimulationRegistrySchema.safeParse(registry);
   if (!checkedRegistry.success) return failure("invalid_registry", "coverage registry is invalid");
-  const discovered = discover(resolve(root, "src/cells"), root);
+  const discovered = [
+    ...discover(resolve(root, "src/cells"), root),
+    ...discover(resolve(root, "tooling"), root),
+  ].toSorted();
   const indexed = checkedRegistry.data.documents.map((entry) => normalized(entry.path));
   const unindexed = discovered.filter((path) => !indexed.includes(path));
   const missing = indexed.filter((path) => !discovered.includes(path));

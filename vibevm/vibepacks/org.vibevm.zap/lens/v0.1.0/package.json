@@ -1,6 +1,7 @@
 {
   "name": "@org.vibevm.zap/lens",
   "version": "0.1.0",
+  "description": "Zap Quick Lens local workspace, agent coordination, and Vibe source installer",
   "private": true,
   "type": "module",
   "files": [
@@ -8,6 +9,8 @@
     "integrations",
     "LICENSE.md",
     "README.md",
+    "tooling/install-source.mjs",
+    "tooling/source-install/*.mjs",
     "vibe.toml",
     "vibevm/vibespecs"
   ],

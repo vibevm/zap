@@ -3,7 +3,9 @@
 Start with the [first-run guide](vibevm/vibespecs/QUICK-START.md) to install a
 release, connect an existing agent account and add your first project. The
 [operator guide](vibevm/vibespecs/WAYFINDER-GUIDE.md) covers protected host
-settings and advanced integrations.
+settings and advanced integrations. To build a user-local application directly
+from a local Vibe registry, use the
+[source-install guide](vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md).
 
 `org.vibevm.zap/lens` is the shared client and agent-integration package for ZAP,
 presented to users as Zap Quick Lens.
@@ -67,6 +69,22 @@ The Node suite caps concurrency at four so Windows PTY and disposable-process
 fixtures do not saturate ConPTY resources; every assertion and timeout remains active.
 The compiled command entry is `dist/cli.js`; `dist/mcp.js` is the MCP stdio
 connector. An installed npm package also provides `codlens` and `codlens-mcp`.
+
+For a durable user-local source installation through Vibe, run
+`node tooling/install-source.mjs` with the local registry and settings root.
+The source installer materializes pinned packages into a dedicated marked host,
+builds an immutable runtime generation and deploys receipt-owned launchers. It
+does not modify `PATH` or provider credentials. See the
+[source-install guide](vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md) for install,
+update, status, uninstall and Lens-only commands.
+Use `--npm-registry <credential-free-http(s)-url>` only when the build must
+override the registry already selected by npm configuration.
+On Windows, the default engine build requires Visual Studio Build Tools with
+Desktop development with C++ and a Windows SDK; `--lens-only` omits that engine
+build. After moving the original checkout, status and uninstall remain
+available from the retained Lens slot under
+`<settings>/opt/apps/zap/vibevm/vibedeps/org.vibevm.zap.lens/0.1.0/tooling/install-source.mjs`.
+Updates still require `--registry` pointing at an existing local registry.
 
 ### Deterministic ZapMock gate
 
@@ -224,7 +242,7 @@ receipts are not relabelled as cleanup passes. See the
 [acceptance record](vibevm/vibespecs/research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md)
 for the exact evidence boundary.
 
-The zero-inference corpus currently contains 16 registered scenarios and keeps
+The zero-inference corpus currently contains 17 registered scenarios and keeps
 coverage gaps explicit. Real temporary-Git/loopback-HTTP tests and the corpus
 are component and product-runtime evidence. Multi-user identities,
 remote execution hosts, distributed writer leases, contributor admission and

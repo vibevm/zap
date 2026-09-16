@@ -25,6 +25,11 @@ npm run build:node
 npm run build:quicklens
 ```
 
+To install a durable user-local runtime from an explicit local Vibe registry,
+follow the [source-install guide](SOURCE-INSTALL-GUIDE.md). That workflow owns a
+separate marked installer host and immutable generated payload. It is distinct
+from building this checkout in place.
+
 `dist/wayfinder.js` is the Zap Wayfinder entry point. `dist/cli.js` and
 `dist/mcp.js` are the Codlens CLI and MCP connector. The package scripts are
 the source of truth for the current command names.

@@ -8,6 +8,10 @@ export {
   type ExecutionCatalogProductSimulation,
   type ExecutionCatalogRuntimeSimulation,
 } from "./execution-catalog-schema.ts";
+export {
+  SourceInstallProductSimulationSchema,
+  type SourceInstallProductSimulation,
+} from "./source-install-schema.ts";
 export type {
   MockSimulationEvidenceKind,
   MockSimulationRunInput,

@@ -80,6 +80,11 @@
       "scenarioId": "execution-catalog.synthetic-cross-provider-runtime",
       "path": "src/cells/wayfinder-runtime/execution-catalog-runtime.simulation.json",
       "runnerId": "execution-catalog.managed-runtime"
+    },
+    {
+      "scenarioId": "source-install.bootstrap-build-lifecycle",
+      "path": "tooling/source-install/source-install.simulation.json",
+      "runnerId": "source-install.public-lifecycle"
     }
   ],
   "featureInventory": [
@@ -93,7 +98,8 @@
     "auth.scope-isolation",
     "proxy.protected-launch",
     "repository.worktrees-fork-merge",
-    "execution-catalog.routing"
+    "execution-catalog.routing",
+    "source-install.lifecycle"
   ],
   "coverage": [
     {
@@ -509,6 +515,50 @@
         "repository.managed-isolated-writer-fence",
         "execution-catalog.synthetic-cross-provider-runtime"
       ]
+    },
+    {
+      "feature": "source-install.lifecycle",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.structured-argv",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.paths-with-spaces",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.registry-discovery-refusal",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.marker-ownership",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.transactional-failure",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.immutable-generation",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.status-read-only",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.uninstall-preserves-data",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.build-evidence-gate",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.npm-registry",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
     }
   ]
 }

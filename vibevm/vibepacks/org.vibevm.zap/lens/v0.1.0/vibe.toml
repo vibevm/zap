@@ -7,7 +7,7 @@ epoch = 1
 format = "normal"
 authors = ["Oleg Chirukhin"]
 license = "UPL-1.0"
-description = "User-local background communication broker and shared protocol for codlens, quicklens and gamelens"
+description = "Zap Quick Lens local workspace, agent coordination, and Vibe source installer"
 keywords = ["agents", "lens", "broker", "mcp", "typescript"]
 
 [compatibility]
