@@ -6,6 +6,38 @@ import { ReasoningEffortSchema } from "../model-policy/index.ts";
 import { ModelTierSchema } from "../model-policy/index.ts";
 import { ProviderCoordinatorProfileSchema } from "../provider-coordinators/index.ts";
 import { isAbsolute } from "node:path";
+import { AgentProductSchema, ExecutionCatalogIdSchema } from "../execution-catalog/index.ts";
+import { ExecutionHostIdSchema } from "../workspace-model/index.ts";
+
+const ProductBindingBaseSchema = z.object({
+  bindingId: ExecutionCatalogIdSchema,
+  hostId: ExecutionHostIdSchema,
+  displayName: z.string().trim().min(1).max(160),
+  enabled: z.boolean(),
+  setupGuidance: z.string().min(1).max(4_000),
+});
+export const ProductExecutionBindingSchema = z.discriminatedUnion("kind", [
+  ProductBindingBaseSchema.extend({
+    kind: z.literal("codex_home"),
+    agentProduct: z.literal("codex"),
+    homePath: z.string().min(1).max(32_768).refine(isAbsolute),
+  }).strict(),
+  ProductBindingBaseSchema.extend({
+    kind: z.literal("claude_config_dir"),
+    agentProduct: z.literal("claude_code"),
+    homePath: z.string().min(1).max(32_768).refine(isAbsolute),
+  }).strict(),
+  ProductBindingBaseSchema.extend({
+    kind: z.literal("environment_reference"),
+    agentProduct: AgentProductSchema.exclude(["codex", "zap_mock"]),
+    environmentRef: ExecutionCatalogIdSchema,
+  }).strict(),
+  ProductBindingBaseSchema.extend({
+    kind: z.literal("zap_mock_fixture"),
+    agentProduct: z.literal("zap_mock"),
+  }).strict(),
+]);
+export type ProductExecutionBinding = z.infer<typeof ProductExecutionBindingSchema>;
 
 export const ManagedWorkerTemplateSchema = z
   .object({
@@ -38,6 +70,7 @@ export const ProductLocalSettingsSchema = z
         z.string().min(1).max(32_768).refine(isAbsolute, "environment file must be absolute"),
       )
       .default({}),
+    executionBindings: z.array(ProductExecutionBindingSchema).max(64).default([]),
     managedWorkers: z.array(ManagedWorkerTemplateSchema).max(64).default([]),
     repositoryMergeIdentity: z
       .object({ name: z.string().min(1).max(200), email: z.email().max(320) })

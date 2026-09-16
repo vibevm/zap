@@ -83,3 +83,21 @@ test("one registered profile resolves a distinct credential file for each truste
   assert.equal(b.includes(encodedB), true);
   assert.match(a, /disabled_tools.*codlens_connect/);
 });
+
+test("documented Codex host context is passed as a host limit", () => {
+  const profile = CodexCoordinatorProfileSchema.parse({
+    profileId: "profile.context",
+    executablePath: resolve("codex.exe"),
+    requestTimeoutMs: 5_000,
+    accountBindingId: "binding.codex.context",
+    model: "gpt-test",
+    contextWindowTokens: 200_000,
+    approvalPolicy: "never",
+    sandbox: "workspace-write",
+  });
+  const parameters = modelParameters(profile.model, null, profile);
+  assert.deepEqual(parameters, {
+    model: "gpt-test",
+    config: { model_context_window: 200_000 },
+  });
+});

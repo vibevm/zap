@@ -5,6 +5,12 @@ import { ProjectObjectReferenceSchema } from "./object-reference.ts";
 import { ProjectIdSchema, RunIdSchema, TaskIdSchema, WorkContextIdSchema } from "./ids.ts";
 import { ModelSelectionSchema } from "./model-policy.ts";
 import {
+  ContextRequestSchema,
+  ExecutionSelectionSchema,
+  TaskSpecializationSchema,
+} from "../execution-catalog/index.ts";
+import { EffortRequestSchema } from "../model-policy/index.ts";
+import {
   ManagedWorkspaceAssignmentSchema,
   ManagedWorkspaceRequestSchema,
 } from "./workspace-assignment.ts";
@@ -24,12 +30,29 @@ export const ManagedWorkSelectionSchema = z.discriminatedUnion("mode", [
       reasonMarkdown: z.string().min(1).max(2_000),
     })
     .strict(),
+  z
+    .object({
+      mode: z.literal("catalog_policy"),
+      effort: EffortRequestSchema.default({ mode: "unspecified" }),
+      context: ContextRequestSchema.default({ mode: "default" }),
+    })
+    .strict(),
+  z
+    .object({
+      mode: z.literal("catalog_override"),
+      configurationId: z.string().min(3).max(160),
+      effort: EffortRequestSchema.default({ mode: "unspecified" }),
+      context: ContextRequestSchema.default({ mode: "default" }),
+      reasonMarkdown: z.string().trim().min(1).max(2_000),
+    })
+    .strict(),
 ]);
 export const ManagedWorkCreateCommandSchema = Scope.extend({
   operation: z.literal("managed-work.create.v1"),
   planId: ProjectPlanIdSchema.nullable().optional(),
   workspaceRequest: ManagedWorkspaceRequestSchema.optional(),
   selection: ManagedWorkSelectionSchema.default({ mode: "project_policy" }),
+  specialization: TaskSpecializationSchema.default("general"),
   goal: z.string().min(1).max(1_000_000),
   expectedResult: z.string().min(1).max(100_000),
   targetRefs: z.array(ProjectObjectReferenceSchema).max(256),
@@ -116,7 +139,9 @@ export const ManagedWorkViewSchema = z
     goal: z.string().min(1).max(1_000_000),
     expectedResult: z.string().min(1).max(100_000),
     targetRefs: z.array(ProjectObjectReferenceSchema).max(256),
+    specialization: TaskSpecializationSchema.default("general"),
     modelSelection: ModelSelectionSchema,
+    executionSelection: ExecutionSelectionSchema.nullable().default(null),
     managedControl: z
       .object({
         processEpoch: z.string().min(1).max(160),

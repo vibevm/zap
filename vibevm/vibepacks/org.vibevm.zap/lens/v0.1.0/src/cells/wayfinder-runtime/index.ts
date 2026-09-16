@@ -3,27 +3,14 @@
  */
 import { mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import type { AgentHost } from "../agent-runtime/index.ts";
-import {
-  CodexCoordinatorProfileSchema,
-  createNodeCodexProcessFactory,
-} from "../codex-coordinator/index.ts";
+import { CodexCoordinatorProfileSchema } from "../codex-coordinator/index.ts";
 import { unavailableDataSource } from "../quicklens-model/index.ts";
-import {
-  createClaudeStreamJsonTransportFactory,
-  createOpenCodeOwnedTransportFactory,
-  createProviderCoordinatorHost,
-  createQwenStreamJsonTransportFactory,
-} from "../provider-coordinators/index.ts";
 import {
   createDynamicWorkspacePort,
   createProductAppService,
   openProductAppRegistry,
 } from "../product-app/index.ts";
-import {
-  createCoordinatorAdapterRegistry,
-  createWorkspaceService,
-} from "../workspace-service/index.ts";
+import { createWorkspaceService } from "../workspace-service/index.ts";
 import { createWayfinderAnnotationBindings } from "./annotations.ts";
 import type { ManagedAgentBackend } from "../managed-work/index.ts";
 import { createModelPolicyService } from "../model-policy-service/index.ts";
@@ -43,11 +30,9 @@ import {
 } from "../workspace-planning/index.ts";
 import { openWayfinderWebRuntime, type WayfinderWebRuntime } from "./web.ts";
 import {
-  createCodexHost,
   createRuntimeRoutingBridge,
   disposeOwnedHosts,
   initializeRuntimePolicies,
-  type OwnedAgentHost,
 } from "./coordinator-runtime.ts";
 import type {
   WayfinderReceipt,
@@ -55,7 +40,7 @@ import type {
   WayfinderRuntime,
   WayfinderRuntimeOptions,
 } from "./types.ts";
-import { createProviderLaunchPreparation, prepareAgentScope } from "./product-agent.ts";
+import { prepareAgentScope } from "./product-agent.ts";
 import { openRuntimeAnnotations } from "./annotation-composition.ts";
 import { invalidConfig } from "./runtime-result.ts";
 import { createRuntimeTrustedContextProvider } from "./model-policy-wire.ts";
@@ -76,6 +61,13 @@ import { createRuntimeRepositoryWriterActivity } from "./repository-activity.ts"
 import { reconcileDetachedPlanningSources } from "./planning-recovery.ts";
 import { failure as transportFailure } from "../transport/index.ts";
 import { WayfinderRuntimeConfigSchema } from "./runtime-config.ts";
+import {
+  openConfiguredRuntimeExecutionCatalog,
+  seedConfiguredExecutionCatalog,
+} from "./execution-catalog-runtime.ts";
+import { createRuntimeCoordinatorHosts } from "./coordinator-host-composition.ts";
+import { createDeferredProductExecutionResolver } from "./catalog-coordinator.ts";
+import { knownRuntimeProfileIds, validateRuntimeProfileIds } from "./runtime-profiles.ts";
 export { loadWayfinderConfig, WayfinderRuntimeConfigSchema } from "./runtime-config.ts";
 export type { WayfinderRuntimeConfig } from "./runtime-config.ts";
 
@@ -86,15 +78,8 @@ export function createWayfinderRuntime(
   const parsed = WayfinderRuntimeConfigSchema.safeParse(rawConfig);
   if (!parsed.success) return invalidConfig("config schema is invalid");
   const config = parsed.data;
-  const providerProfileIds = new Set(
-    config.providerCoordinatorProfiles.map((profile) => profile.profileId),
-  );
-  const injectedProfileIds = options.hosts?.flatMap((host) => host.profileIds) ?? [];
-  if (
-    new Set(injectedProfileIds).size !== injectedProfileIds.length ||
-    injectedProfileIds.some((profileId) => providerProfileIds.has(profileId))
-  )
-    return invalidConfig("injected and configured provider profile IDs must be unique");
+  const profileError = validateRuntimeProfileIds(config, options);
+  if (profileError !== null) return invalidConfig(profileError);
   let managedController: ManagedRuntimeController | null = null;
   if (config.managedTerminals !== undefined && options.terminals === undefined) {
     const managed = createManagedRuntimeController(config.managedTerminals);
@@ -146,10 +131,26 @@ export function createWayfinderRuntime(
   }
   let repositoryRuntime: RuntimeRepositoryWorkspaces | null = null;
   const profiles = config.profiles.map((profile) => CodexCoordinatorProfileSchema.parse(profile));
-  const knownCoordinatorProfileIds = [
-    ...profiles.map((profile) => profile.profileId),
-    ...config.providerCoordinatorProfiles.map((profile) => profile.profileId),
-  ];
+  const executionRuntime = openConfiguredRuntimeExecutionCatalog({
+    config,
+    databasePath,
+    profiles,
+  });
+  if (!executionRuntime.ok) {
+    modelPolicyStore.close();
+    if (options.store === undefined) store.close();
+    return invalidConfig(executionRuntime.message);
+  }
+  const catalogCodexProfiles = executionRuntime.value.codexProfiles;
+  const catalogProviderProfiles = executionRuntime.value.providerProfiles;
+  const runtimeProductProviders = executionRuntime.value.productProviders;
+  const accountIsolation = executionRuntime.value.runtime.accounts;
+  const executionCatalogStore = executionRuntime.value.runtime.store;
+  const executionCatalog = executionRuntime.value.runtime.service;
+  const productCatalogCaller = executionRuntime.value.runtime.productCaller;
+  const knownCoordinatorProfileIds = knownRuntimeProfileIds(config, profiles);
+  for (const profile of config.managedAgents)
+    if (profile.provider === "zap_mock") knownCoordinatorProfileIds.push(profile.profileId);
   let agentFoundation: WayfinderAgentFoundation | null = null;
   if (config.agentGateway !== undefined) {
     const openedAgent = openWayfinderAgentFoundation(
@@ -158,6 +159,7 @@ export function createWayfinderRuntime(
       planningController?.feature,
     );
     if (!openedAgent.ok) {
+      executionCatalogStore.close();
       modelPolicyStore.close();
       if (options.store === undefined) store.close();
       return invalidConfig(openedAgent.message);
@@ -166,6 +168,7 @@ export function createWayfinderRuntime(
     const nativeWork = agentFoundation.bindNativeWork(annotationBindings.attachments);
     if (!nativeWork.ok) {
       void agentFoundation.close();
+      executionCatalogStore.close();
       modelPolicyStore.close();
       if (options.store === undefined) store.close();
       return invalidConfig(nativeWork.message);
@@ -179,11 +182,13 @@ export function createWayfinderRuntime(
     managedWork: () => managedBackendBinding.backend,
     terminals: () => options.terminals ?? managedController?.service,
   });
+  const productExecution = createDeferredProductExecutionResolver();
   let repositoryManaged: ReturnType<typeof createRepositoryResolutionComposition> | null = null;
   const registry = openProductAppRegistry(
     resolve(config.state.productRegistryPath ?? `${databasePath}.projects.json`),
   );
   if (!registry.ok) {
+    executionCatalogStore.close();
     modelPolicyStore.close();
     if (options.store === undefined) store.close();
     return invalidConfig(registry.message);
@@ -191,7 +196,11 @@ export function createWayfinderRuntime(
   const product = createProductAppService({
     registry: registry.value,
     workspaceStore: store,
-    providers: config.productProviders,
+    providers: runtimeProductProviders,
+    additionalProviders: () => runtimeProductProviders,
+    executionCatalog,
+    executionCatalogCaller: productCatalogCaller,
+    executionConfigurations: productExecution,
     prepareRegistration: (registration) =>
       prepareAgentScope(
         agentFoundation,
@@ -200,14 +209,15 @@ export function createWayfinderRuntime(
         modelPolicyStore,
         knownCoordinatorProfileIds,
         managedWorkRuntime?.backend ?? options.managedWork,
-        config.productProviders,
+        runtimeProductProviders,
         config.managedWorkerProfiles,
-        config.providerCoordinatorProfiles,
+        catalogProviderProfiles,
         resolve(`${databasePath}.managed-mcp`),
         config.proxy,
       ),
   });
   if (!product.ok || !product.value.hydrate().ok) {
+    executionCatalogStore.close();
     modelPolicyStore.close();
     if (options.store === undefined) store.close();
     return invalidConfig("product project registry could not be hydrated");
@@ -219,6 +229,7 @@ export function createWayfinderRuntime(
     config,
   );
   if (!initializedPolicies.ok) {
+    executionCatalogStore.close();
     modelPolicyStore.close();
     if (options.store === undefined) store.close();
     return invalidConfig("configured model policy initialization failed");
@@ -239,6 +250,7 @@ export function createWayfinderRuntime(
       writerActivity: repositoryWriterActivity,
     });
     if (!openedRepository.ok) {
+      executionCatalogStore.close();
       modelPolicyStore.close();
       if (options.store === undefined) store.close();
       return invalidConfig(openedRepository.message);
@@ -272,6 +284,7 @@ export function createWayfinderRuntime(
     });
     if (!bound.ok) {
       repositoryRuntime?.close();
+      executionCatalogStore.close();
       modelPolicyStore.close();
       if (options.store === undefined) store.close();
       return invalidConfig(bound.message);
@@ -283,6 +296,7 @@ export function createWayfinderRuntime(
       if (config.managedAgents.length === 0) {
         managedWorkRuntime = null;
       } else {
+        executionCatalogStore.close();
         modelPolicyStore.close();
         if (options.store === undefined) store.close();
         return invalidConfig("managed agent profiles require managed terminals and agent broker");
@@ -294,6 +308,8 @@ export function createWayfinderRuntime(
         terminals,
         bindings: agentFoundation.managedActors,
         policyStore: modelPolicyStore,
+        accounts: accountIsolation,
+        executionCatalog: { service: executionCatalog, hostId: config.executionHostId },
         routingProvider,
         proxyPolicy: config.proxy,
         workspaceStore: store,
@@ -309,6 +325,7 @@ export function createWayfinderRuntime(
       });
       if (!managed.ok) {
         void agentFoundation.close();
+        executionCatalogStore.close();
         modelPolicyStore.close();
         if (options.store === undefined) store.close();
         return invalidConfig(managed.message);
@@ -321,50 +338,32 @@ export function createWayfinderRuntime(
   if (agentFoundation !== null && activeManagedBackend !== undefined) {
     const bound = agentFoundation.bindManagedWork(activeManagedBackend);
     if (!bound.ok) {
+      executionCatalogStore.close();
       modelPolicyStore.close();
       if (options.store === undefined) store.close();
       return invalidConfig(bound.message);
     }
   }
-  const ownedProcessFactory =
-    options.processFactory ?? createNodeCodexProcessFactory({ proxyPolicy: config.proxy });
-  const ownedHosts: readonly OwnedAgentHost[] =
-    options.hosts === undefined
-      ? profiles.map((profile) => createCodexHost(profile, ownedProcessFactory))
-      : [];
-  const providerLaunchPreparation = createProviderLaunchPreparation({
+  const coordinatorHosts = createRuntimeCoordinatorHosts({
+    config,
+    options,
+    databasePath,
+    accounts: accountIsolation,
     foundation: agentFoundation,
-    environment: options.managedEnvironment,
-    mcpRoot: resolve(`${databasePath}.provider-mcp`),
+    profiles,
+    codexTemplates: catalogCodexProfiles,
+    providerTemplates: catalogProviderProfiles,
+    knownProfileIds: knownCoordinatorProfileIds,
+    catalog: executionCatalog,
+    catalogCaller: productCatalogCaller,
+    retainProductProfile(profile) {
+      if (!runtimeProductProviders.some((candidate) => candidate.profileId === profile.profileId))
+        runtimeProductProviders.push(profile);
+    },
   });
-  const providerHosts = config.providerCoordinatorProfiles.map((profile) =>
-    createProviderCoordinatorHost({
-      hostId: `host.provider.${profile.profileId}`,
-      profile,
-      transportFactory:
-        profile.provider === "claude_code"
-          ? createClaudeStreamJsonTransportFactory({
-              proxyPolicy: config.proxy,
-              prepareLaunch: providerLaunchPreparation,
-            })
-          : profile.provider === "opencode"
-            ? createOpenCodeOwnedTransportFactory({
-                proxyPolicy: config.proxy,
-                prepareLaunch: providerLaunchPreparation,
-              })
-            : createQwenStreamJsonTransportFactory({
-                proxyPolicy: config.proxy,
-                prepareLaunch: providerLaunchPreparation,
-              }),
-    }),
-  );
-  const hosts: readonly AgentHost[] =
-    options.hosts === undefined
-      ? [...ownedHosts, ...providerHosts]
-      : [...options.hosts, ...providerHosts];
-  const registrations = hosts.flatMap((host) =>
-    host.profileIds.map((profileRef) => ({ profileRef, host })),
-  );
+  const adapterRegistry = coordinatorHosts.adapters;
+  const ownedHosts = coordinatorHosts.ownedHosts;
+  productExecution.bind(coordinatorHosts.resolveProductExecution);
   const modelPolicy = createModelPolicyService({
     store: modelPolicyStore,
     trustedContext: createRuntimeTrustedContextProvider(routingProvider),
@@ -383,6 +382,7 @@ export function createWayfinderRuntime(
       : { restoreIntent: options.annotationRestoreIntent }),
   });
   if (!annotations.ok) {
+    executionCatalogStore.close();
     modelPolicyStore.close();
     if (options.store === undefined) store.close();
     return invalidConfig(annotations.message);
@@ -411,6 +411,7 @@ export function createWayfinderRuntime(
     const bound = agentFoundation.bindRepositoryWork(repositoryFeature);
     if (!bound.ok) {
       repositoryRuntime?.close();
+      executionCatalogStore.close();
       modelPolicyStore.close();
       if (options.store === undefined) store.close();
       return invalidConfig(bound.message);
@@ -418,9 +419,10 @@ export function createWayfinderRuntime(
   }
   const service = createWorkspaceService({
     store,
-    adapters: createCoordinatorAdapterRegistry(registrations),
+    adapters: adapterRegistry,
     coordinatorRouting,
     modelPolicy,
+    executionCatalog,
     terminals: options.terminals ?? managedController?.service,
     interactions: agentFoundation?.interactions,
     ownedCoordinatorAgents: agentFoundation?.ownedCoordinators,
@@ -455,7 +457,19 @@ export function createWayfinderRuntime(
           ? { ok: true as const, value: null }
           : await agentFoundation.start();
       if (!agentStarted.ok) return invalidConfig("agent gateway could not bind");
+      const seededCatalog = await seedConfiguredExecutionCatalog({
+        service: executionCatalog,
+        caller: productCatalogCaller,
+        codexProfiles: config.profiles,
+        providerProfiles: config.providerCoordinatorProfiles,
+        managedProfiles: config.managedAgents,
+      });
+      if (!seededCatalog.ok) return invalidConfig(seededCatalog.message);
+      const unavailableCatalogProjects = await coordinatorHosts.restoreProductProfiles(
+        registry.value.entries(),
+      );
       for (const registration of [...config.projects, ...product.value.registrations()]) {
+        if (unavailableCatalogProjects.has(registration.projectId)) continue;
         const prepared = await prepareAgentScope(
           agentFoundation,
           profiles,
@@ -463,9 +477,9 @@ export function createWayfinderRuntime(
           modelPolicyStore,
           knownCoordinatorProfileIds,
           managedWorkRuntime?.backend ?? options.managedWork,
-          config.productProviders,
+          runtimeProductProviders,
           config.managedWorkerProfiles,
-          config.providerCoordinatorProfiles,
+          catalogProviderProfiles,
           resolve(`${databasePath}.managed-mcp`),
           config.proxy,
         );
@@ -491,6 +505,7 @@ export function createWayfinderRuntime(
         allowedOrigins: config.gateway.allowedOrigins,
         multiSession: true,
         productSource: product.value,
+        productCatalogAdministrator: true,
         workspaceSource: (identity) =>
           createDynamicWorkspacePort({
             service,
@@ -498,6 +513,7 @@ export function createWayfinderRuntime(
             baselineProjectIds: initialProjectIds,
             clientId: identity.clientId,
             principalId: `principal.wayfinder.${identity.clientId}`,
+            catalogAdministrator: true,
           }),
       });
       if (!opened.ok) {
@@ -567,6 +583,7 @@ export function createWayfinderRuntime(
       receipt = null;
       service.close();
       annotations.value.runtime.close();
+      executionCatalogStore.close();
       modelPolicyStore.close();
       repositoryRuntime?.close();
       disposeOwnedHosts(ownedHosts);
@@ -576,22 +593,4 @@ export function createWayfinderRuntime(
   return { ok: true, value: runtime };
 }
 
-export {
-  createManagedRuntimeController,
-  ManagedRuntimeConfigSchema,
-  openConfiguredManagedRuntime,
-} from "./managed.ts";
-export type {
-  ConfiguredManagedTerminalService,
-  ManagedRuntimeConfig,
-  ManagedRuntimeController,
-  ManagedWorkerLaunchRequest,
-} from "./managed.ts";
-export { acquireWayfinderOwner, requestRunningOwnerTicket } from "./owner.ts";
-export type { OwnerResult, WayfinderOwnerLease } from "./owner.ts";
-export type {
-  WayfinderReceipt,
-  WayfinderResult,
-  WayfinderRuntime,
-  WayfinderRuntimeOptions,
-} from "./types.ts";
+export * from "./public.ts";

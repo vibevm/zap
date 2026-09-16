@@ -16,6 +16,7 @@ import type {
   ProviderLaunchPreparationPort,
 } from "./index.ts";
 import { openCodeHttpTransport } from "./http.ts";
+import { isolatedExecutionEnvironment } from "../execution-accounts/index.ts";
 
 export interface OpenCodeDaemonProcess {
   readonly pid: number;
@@ -168,8 +169,13 @@ class OpenCodeOwnedTransport implements ProviderCoordinatorTransport {
     const port = await this.#options.reservePort();
     const username = "zap";
     const password = randomBytes(32).toString("base64url");
+    const preparedEnvironment = prepared?.value.environment ?? {};
+    const ambient =
+      this.#profile.accountBindingId === undefined
+        ? { ...process.env, ...preparedEnvironment }
+        : isolatedExecutionEnvironment(process.env, preparedEnvironment);
     const proxy = resolveProxyEnvironment({
-      ambient: { ...process.env, ...(prepared?.value.environment ?? {}) },
+      ambient,
       ...(this.#options.proxyPolicy === undefined ? {} : { global: this.#options.proxyPolicy }),
       ...(this.#profile.proxy === undefined ? {} : { profile: this.#profile.proxy }),
     }).environment;

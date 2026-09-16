@@ -40,6 +40,7 @@ export interface QuicklensGatewayOptions {
   readonly maximumBodyBytes?: number;
   readonly workspaceSource?: WorkspaceSourceFactory;
   readonly productSource?: ProductSetupPort;
+  readonly productCatalogAdministrator?: boolean;
   readonly multiSession?: boolean;
   readonly maximumSessions?: number;
   readonly pairingTicketTtlMs?: number;
@@ -222,7 +223,12 @@ export function createQuicklensGateway(
       path === "/v1/invalidations"
         ? invalidationPage(body.value, invalidations, invalidationSequence)
         : path.startsWith("/v1/product/")
-          ? await productGatewayOperation(path, body.value, options.productSource)
+          ? await productGatewayOperation(
+              path,
+              body.value,
+              options.productSource,
+              options.productCatalogAdministrator ?? false,
+            )
           : path.startsWith("/v1/workspace/")
             ? await workspaceOperation(
                 path,

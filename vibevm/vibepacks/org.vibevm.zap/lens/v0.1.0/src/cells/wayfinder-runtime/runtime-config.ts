@@ -7,7 +7,11 @@ import { CoordinatorRoutingConfigSchema } from "../coordinator-routing/index.ts"
 import { ManagedAgentProfileSchema } from "../managed-work/index.ts";
 import { ProxyPolicySchema } from "../proxy-policy/index.ts";
 import { ProductProviderProfileSchema } from "../workspace-model/index.ts";
-import { ManagedWorkerTemplateSchema } from "../product-app/index.ts";
+import { ExecutionHostIdSchema } from "../workspace-model/index.ts";
+import {
+  ManagedWorkerTemplateSchema,
+  ProductExecutionBindingSchema,
+} from "../product-app/index.ts";
 import { ProviderCoordinatorProfileSchema } from "../provider-coordinators/index.ts";
 import { TrustedProjectRegistrationSchema } from "../workspace-store/index.ts";
 import { WorkspacePlanningRuntimeConfigSchema } from "../workspace-planning/index.ts";
@@ -29,6 +33,22 @@ const GatewaySchema = z
     allowedOrigins: z.array(z.string().min(1)).min(1).max(16),
   })
   .strict();
+const ExecutionLaunchTemplateSchema = z.discriminatedUnion("agentProduct", [
+  z
+    .object({
+      templateId: z.string().min(3).max(160),
+      agentProduct: z.literal("codex"),
+      profile: CodexCoordinatorProfileSchema,
+    })
+    .strict(),
+  z
+    .object({
+      templateId: z.string().min(3).max(160),
+      agentProduct: z.literal("claude_code"),
+      profile: ProviderCoordinatorProfileSchema,
+    })
+    .strict(),
+]);
 
 export const WayfinderRuntimeConfigSchema = z
   .object({
@@ -37,6 +57,7 @@ export const WayfinderRuntimeConfigSchema = z
       .object({
         databasePath: AbsolutePathSchema,
         modelPolicyDatabasePath: AbsolutePathSchema.optional(),
+        executionCatalogDatabasePath: AbsolutePathSchema.optional(),
         annotationsDatabasePath: AbsolutePathSchema.optional(),
         productRegistryPath: AbsolutePathSchema.optional(),
       })
@@ -45,11 +66,16 @@ export const WayfinderRuntimeConfigSchema = z
     agentGateway: WayfinderAgentGatewayConfigSchema.optional(),
     managedTerminals: ManagedRuntimeConfigSchema.optional(),
     managedAgents: z.array(ManagedAgentProfileSchema).max(256).default([]),
+    executionHostId: ExecutionHostIdSchema.default(
+      ExecutionHostIdSchema.parse("host.execution.local"),
+    ),
     planning: WorkspacePlanningRuntimeConfigSchema.optional(),
     profiles: z.array(CodexCoordinatorProfileSchema).max(32).default([]),
     providerCoordinatorProfiles: z.array(ProviderCoordinatorProfileSchema).max(32).default([]),
     productProviders: z.array(ProductProviderProfileSchema).max(64).default([]),
     managedWorkerProfiles: z.array(ManagedWorkerTemplateSchema).max(64).default([]),
+    executionBindings: z.array(ProductExecutionBindingSchema).max(64).default([]),
+    executionLaunchTemplates: z.array(ExecutionLaunchTemplateSchema).max(64).default([]),
     repositoryWorkspaces: RuntimeRepositoryWorkspaceConfigSchema.optional(),
     proxy: ProxyPolicySchema.default({ mode: "inherit" }),
     projects: z.array(TrustedProjectRegistrationSchema).max(256).default([]),

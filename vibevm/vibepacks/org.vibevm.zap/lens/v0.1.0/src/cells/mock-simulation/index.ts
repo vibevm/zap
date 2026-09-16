@@ -2,6 +2,12 @@
 export { defaultMockSimulationRoot, loadMockSimulationCorpus } from "./corpus.ts";
 export type { MockCorpusResult, MockSimulationCorpus } from "./corpus.ts";
 export { runMockSimulations } from "./runner.ts";
+export {
+  ExecutionCatalogProductSimulationSchema,
+  ExecutionCatalogRuntimeSimulationSchema,
+  type ExecutionCatalogProductSimulation,
+  type ExecutionCatalogRuntimeSimulation,
+} from "./execution-catalog-schema.ts";
 export type {
   MockSimulationEvidenceKind,
   MockSimulationRunInput,

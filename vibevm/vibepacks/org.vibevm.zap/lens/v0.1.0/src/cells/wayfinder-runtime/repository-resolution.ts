@@ -72,6 +72,7 @@ export function createRuntimeRepositoryResolution(input: {
               expectedIntegrationRevision: prepared.request.expectedRevision,
             },
             selection: { mode: "project_policy" },
+            specialization: "backend",
             goal: `Resolve the recorded conflicts for integration ${prepared.integration.integrationId}.`,
             expectedResult:
               "Commit the conflict resolution in the assigned integration worktree and report the result for human review.",

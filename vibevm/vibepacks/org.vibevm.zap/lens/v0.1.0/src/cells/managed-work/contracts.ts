@@ -5,6 +5,7 @@ import type { ManagedAgentProfile } from "./providers.ts";
 import type { ManagedSessionControlPort } from "./control.ts";
 import { WorkPacketSchema } from "../agent-runtime/index.ts";
 import { ModelSelectionSchema } from "../model-policy/index.ts";
+import { ExecutionSelectionSchema, TaskSpecializationSchema } from "../execution-catalog/index.ts";
 import { ActorIdSchema } from "../protocol/index.ts";
 import {
   AgentSessionIdSchema,
@@ -29,6 +30,7 @@ export const ManagedWorkRequestSchema = z
     planId: ProjectPlanIdSchema.nullable().default(null),
     workspaceRequest: ManagedWorkspaceRequestSchema.default({ mode: "inherit" }),
     selection: ManagedWorkSelectionSchema.default({ mode: "project_policy" }),
+    specialization: TaskSpecializationSchema.default("general"),
     goal: WorkPacketSchema.shape.goal,
     expectedResult: WorkPacketSchema.shape.expectedResult,
     targetRefs: z.array(ProjectObjectReferenceSchema).max(256),
@@ -85,6 +87,7 @@ export const ManagedWorkClaimSchema = z
     packet: WorkPacketSchema,
     targetRefs: z.array(ProjectObjectReferenceSchema).max(256),
     modelSelection: ModelSelectionSchema,
+    executionSelection: ExecutionSelectionSchema.nullable().default(null),
     managedControl: z
       .object({
         processEpoch: z.string().min(1).max(160),

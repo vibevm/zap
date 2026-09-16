@@ -6,6 +6,10 @@ import {
   ZapMockStateSchema,
 } from "../mock-model/index.ts";
 import { RepositoryGitSimulationSchema } from "../repository-workspaces/index.ts";
+import {
+  ExecutionCatalogProductSimulationSchema,
+  ExecutionCatalogRuntimeSimulationSchema,
+} from "./execution-catalog-schema.ts";
 
 export const MockSimulationRunnerIdSchema = z.enum([
   "model.reducer",
@@ -19,6 +23,8 @@ export const MockSimulationRunnerIdSchema = z.enum([
   "wayfinder.repository-product",
   "wayfinder.repository-managed-product",
   "provider-coordinator.public-projection",
+  "execution-catalog.public-routing",
+  "execution-catalog.managed-runtime",
 ]);
 export type MockSimulationRunnerId = z.infer<typeof MockSimulationRunnerIdSchema>;
 
@@ -393,6 +399,8 @@ export const MockSimulationDocumentSchema = z.union([
   RepositoryProductSimulationSchema,
   RepositoryManagedProductSimulationSchema,
   ProviderProjectionSimulationSchema,
+  ExecutionCatalogProductSimulationSchema,
+  ExecutionCatalogRuntimeSimulationSchema,
 ]);
 export type MockSimulationDocument = z.infer<typeof MockSimulationDocumentSchema>;
 

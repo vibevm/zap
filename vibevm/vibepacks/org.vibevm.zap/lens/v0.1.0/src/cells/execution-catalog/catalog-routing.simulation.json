@@ -1,0 +1,466 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "execution_catalog_product",
+  "scenarioId": "execution-catalog.synthetic-cross-provider-routing",
+  "runnerId": "execution-catalog.public-routing",
+  "seed": "seed.execution-catalog-routing-1",
+  "tags": ["execution-catalog", "routing", "quota", "personas", "zero-llm"],
+  "coverage": [
+    "execution-catalog.routing",
+    "execution-catalog.ten-family-routing",
+    "execution-catalog.same-provider-accounts",
+    "execution-catalog.economy-quality",
+    "execution-catalog.quota-preference",
+    "execution-catalog.name-cas-reopen",
+    "execution-catalog.revocation-pinning-isolation"
+  ],
+  "inputs": {
+    "now": "2026-09-16T12:00:00.000Z",
+    "projectId": "project.catalog.synthetic",
+    "contextId": "context.catalog.synthetic",
+    "foreignProjectId": "project.catalog.foreign",
+    "connections": [
+      {
+        "connectionId": "connection.mock.codex-a",
+        "accountName": "Synthetic Codex account A",
+        "agentProduct": "zap_mock",
+        "usage": {
+          "state": "fresh",
+          "remainingPercent": 8,
+          "bucketId": "bucket.codex-a"
+        },
+        "emulatedAgentProduct": "codex"
+      },
+      {
+        "connectionId": "connection.mock.codex-b",
+        "accountName": "Synthetic Codex account B",
+        "agentProduct": "zap_mock",
+        "usage": {
+          "state": "fresh",
+          "remainingPercent": 64,
+          "bucketId": "bucket.codex-b"
+        },
+        "emulatedAgentProduct": "codex"
+      },
+      {
+        "connectionId": "connection.mock.claude",
+        "accountName": "Synthetic Claude account",
+        "agentProduct": "zap_mock",
+        "usage": {
+          "state": "stale",
+          "remainingPercent": 2,
+          "bucketId": "bucket.claude"
+        },
+        "emulatedAgentProduct": "claude_code"
+      },
+      {
+        "connectionId": "connection.mock.opencode",
+        "accountName": "Synthetic OpenCode account",
+        "agentProduct": "zap_mock",
+        "usage": {
+          "state": "fresh",
+          "remainingPercent": 75,
+          "bucketId": "bucket.opencode"
+        },
+        "emulatedAgentProduct": "opencode"
+      },
+      {
+        "connectionId": "connection.mock.qwen",
+        "accountName": "Synthetic Qwen account",
+        "agentProduct": "zap_mock",
+        "usage": {
+          "state": "unknown",
+          "remainingPercent": null,
+          "bucketId": "bucket.qwen"
+        },
+        "emulatedAgentProduct": "qwen_code"
+      },
+      {
+        "connectionId": "connection.mock.image",
+        "accountName": "Synthetic Sol image account",
+        "agentProduct": "zap_mock",
+        "usage": {
+          "state": "unsupported",
+          "remainingPercent": null,
+          "bucketId": "bucket.image"
+        },
+        "emulatedAgentProduct": "zap_mock"
+      }
+    ],
+    "personas": [
+      {
+        "configurationId": "configuration.mock.gpt-a",
+        "connectionId": "connection.mock.codex-a",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.openai",
+        "modelFamilyId": "family.synthetic.gpt",
+        "modelId": "synthetic/gpt-general-a",
+        "efforts": ["low", "high"],
+        "contexts": [32000, 128000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "general",
+            "suitability": 90,
+            "quality": 98,
+            "economy": 25,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "codex"
+      },
+      {
+        "configurationId": "configuration.mock.gpt-b",
+        "connectionId": "connection.mock.codex-b",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.openai",
+        "modelFamilyId": "family.synthetic.gpt",
+        "modelId": "synthetic/gpt-general-b",
+        "efforts": ["low", "high"],
+        "contexts": [32000, 128000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "general",
+            "suitability": 89,
+            "quality": 94,
+            "economy": 30,
+            "order": 2
+          }
+        ],
+        "emulatedAgentProduct": "codex"
+      },
+      {
+        "configurationId": "configuration.mock.claude",
+        "connectionId": "connection.mock.claude",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.anthropic",
+        "modelFamilyId": "family.synthetic.claude",
+        "modelId": "synthetic/claude-interface",
+        "efforts": ["default"],
+        "contexts": [64000],
+        "modalities": ["text", "image_input"],
+        "scores": [
+          {
+            "specialization": "architecture",
+            "suitability": 98,
+            "quality": 96,
+            "economy": 45,
+            "order": 1
+          },
+          {
+            "specialization": "web_ui",
+            "suitability": 100,
+            "quality": 100,
+            "economy": 40,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "claude_code"
+      },
+      {
+        "configurationId": "configuration.mock.gemini",
+        "connectionId": "connection.mock.opencode",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.google",
+        "modelFamilyId": "family.synthetic.gemini",
+        "modelId": "synthetic/gemini-automation",
+        "efforts": ["default"],
+        "contexts": [128000],
+        "modalities": ["text", "image_input"],
+        "scores": [
+          {
+            "specialization": "automation",
+            "suitability": 98,
+            "quality": 90,
+            "economy": 80,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "opencode"
+      },
+      {
+        "configurationId": "configuration.mock.qwen",
+        "connectionId": "connection.mock.qwen",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.alibaba",
+        "modelFamilyId": "family.synthetic.qwen",
+        "modelId": "synthetic/qwen-testing",
+        "efforts": ["default"],
+        "contexts": [32000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "general",
+            "suitability": 90,
+            "quality": 60,
+            "economy": 99,
+            "order": 1
+          },
+          {
+            "specialization": "testing",
+            "suitability": 99,
+            "quality": 85,
+            "economy": 95,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "qwen_code"
+      },
+      {
+        "configurationId": "configuration.mock.llama",
+        "connectionId": "connection.mock.opencode",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.meta",
+        "modelFamilyId": "family.synthetic.llama",
+        "modelId": "synthetic/llama-data",
+        "efforts": ["default"],
+        "contexts": [64000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "data_analysis",
+            "suitability": 99,
+            "quality": 88,
+            "economy": 90,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "opencode"
+      },
+      {
+        "configurationId": "configuration.mock.deepseek",
+        "connectionId": "connection.mock.opencode",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.deepseek",
+        "modelFamilyId": "family.synthetic.deepseek",
+        "modelId": "synthetic/deepseek-backend",
+        "efforts": ["default"],
+        "contexts": [64000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "backend",
+            "suitability": 99,
+            "quality": 90,
+            "economy": 92,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "opencode"
+      },
+      {
+        "configurationId": "configuration.mock.mistral",
+        "connectionId": "connection.mock.opencode",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.mistral",
+        "modelFamilyId": "family.synthetic.mistral",
+        "modelId": "synthetic/mistral-review",
+        "efforts": ["default"],
+        "contexts": [32000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "code_review",
+            "suitability": 99,
+            "quality": 91,
+            "economy": 89,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "opencode"
+      },
+      {
+        "configurationId": "configuration.mock.grok",
+        "connectionId": "connection.mock.opencode",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.xai",
+        "modelFamilyId": "family.synthetic.grok",
+        "modelId": "synthetic/grok-research",
+        "efforts": ["default"],
+        "contexts": [64000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "research",
+            "suitability": 99,
+            "quality": 93,
+            "economy": 70,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "opencode"
+      },
+      {
+        "configurationId": "configuration.mock.command",
+        "connectionId": "connection.mock.opencode",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.cohere",
+        "modelFamilyId": "family.synthetic.command",
+        "modelId": "synthetic/command-docs",
+        "efforts": ["default"],
+        "contexts": [32000],
+        "modalities": ["text"],
+        "scores": [
+          {
+            "specialization": "documentation",
+            "suitability": 99,
+            "quality": 86,
+            "economy": 94,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "opencode"
+      },
+      {
+        "configurationId": "configuration.mock.image",
+        "connectionId": "connection.mock.image",
+        "agentProduct": "zap_mock",
+        "modelVendorId": "vendor.synthetic.openai",
+        "modelFamilyId": "family.synthetic.sol",
+        "modelId": "synthetic/gpt-5.6-sol-controller",
+        "imageToolModelId": "synthetic/gpt-image-tool",
+        "efforts": ["high"],
+        "contexts": [128000],
+        "modalities": ["text", "image_output"],
+        "scores": [
+          {
+            "specialization": "image_generation",
+            "suitability": 100,
+            "quality": 100,
+            "economy": 65,
+            "order": 1
+          }
+        ],
+        "emulatedAgentProduct": "zap_mock"
+      }
+    ],
+    "routeCases": [
+      {
+        "caseId": "general.economy",
+        "specialization": "general",
+        "weight": 0,
+        "quotaEnabled": false,
+        "expectedConfigurationId": "configuration.mock.qwen"
+      },
+      {
+        "caseId": "general.balanced",
+        "specialization": "general",
+        "weight": 50,
+        "quotaEnabled": false,
+        "expectedConfigurationId": "configuration.mock.qwen"
+      },
+      {
+        "caseId": "general.quality",
+        "specialization": "general",
+        "weight": 100,
+        "quotaEnabled": false,
+        "expectedConfigurationId": "configuration.mock.gpt-a"
+      },
+      {
+        "caseId": "general.low-quota",
+        "specialization": "general",
+        "weight": 100,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.gpt-b"
+      },
+      {
+        "caseId": "architecture",
+        "specialization": "architecture",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.claude"
+      },
+      {
+        "caseId": "backend",
+        "specialization": "backend",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.deepseek"
+      },
+      {
+        "caseId": "web-ui",
+        "specialization": "web_ui",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.claude"
+      },
+      {
+        "caseId": "testing",
+        "specialization": "testing",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.qwen"
+      },
+      {
+        "caseId": "review",
+        "specialization": "code_review",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.mistral"
+      },
+      {
+        "caseId": "research",
+        "specialization": "research",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.grok"
+      },
+      {
+        "caseId": "docs",
+        "specialization": "documentation",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.command"
+      },
+      {
+        "caseId": "data",
+        "specialization": "data_analysis",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.llama"
+      },
+      {
+        "caseId": "image",
+        "specialization": "image_generation",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.image"
+      },
+      {
+        "caseId": "automation",
+        "specialization": "automation",
+        "weight": 50,
+        "quotaEnabled": true,
+        "expectedConfigurationId": "configuration.mock.gemini"
+      }
+    ],
+    "rename": {
+      "configurationId": "configuration.mock.gpt-b",
+      "displayName": "Northstar"
+    }
+  },
+  "expected": {
+    "uniqueFamilyCount": 10,
+    "sameAgentAccountCount": 2,
+    "generatedNamesUnique": true,
+    "renamedDisplayName": "Northstar",
+    "staleQuotaNotLow": true,
+    "unknownQuotaNotZero": true,
+    "staleRevisionRefused": true,
+    "replayStable": true,
+    "coldReopenStable": true,
+    "revokedFutureDispatchRefused": true,
+    "pinnedSelectionPreserved": true,
+    "foreignProjectRefused": true,
+    "unsupportedEffortRefused": true,
+    "unsupportedContextRefused": true,
+    "imageControllerModelId": "synthetic/gpt-5.6-sol-controller",
+    "imageToolModelId": "synthetic/gpt-image-tool",
+    "imageArtifactRef": "artifact.synthetic.image-1",
+    "recordingDispatchCount": 14,
+    "zeroLlmInference": true,
+    "materializedAgentProduct": "zap_mock",
+    "emulatedIdentitySeparate": true
+  }
+}

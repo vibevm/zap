@@ -7,6 +7,9 @@ import { ModelTierSchema, type ModelSelection } from "../model-policy/index.ts";
 import { ProxyPolicySchema, resolveProxyEnvironment } from "../proxy-policy/index.ts";
 import { ZAP_MCP_SERVER_NAME, zapPreauthorizedToolNames } from "../protocol/index.ts";
 import { qwenZapMcpPermissionArguments } from "../provider-coordinators/index.ts";
+import { ExecutionCatalogIdSchema } from "../execution-catalog/index.ts";
+import { ExecutionHostIdSchema } from "../workspace-model/index.ts";
+import { isolatedExecutionEnvironment } from "../execution-accounts/index.ts";
 
 const AbsolutePathSchema = z.string().min(1).max(32_000).refine(isAbsolute);
 export const ManagedAgentProfileSchema = z
@@ -22,6 +25,9 @@ export const ManagedAgentProfileSchema = z
     modelId: z.string().min(1).max(256),
     effort: z.string().min(1).max(64).nullable(),
     effortSupported: z.boolean().default(false),
+    contextWindowTokens: z.number().int().positive().max(10_000_000).optional(),
+    accountBindingId: ExecutionCatalogIdSchema.optional(),
+    executionHostId: ExecutionHostIdSchema.optional(),
     environmentRef: z.string().min(3).max(512).nullable(),
     mcpConfigPath: AbsolutePathSchema,
     mcpCommandPath: AbsolutePathSchema.optional(),
@@ -130,7 +136,10 @@ function driver(
       const model = selection.modelId;
       const effort = effectiveEffort(selection);
       const proxyResolution = resolveProxyEnvironment({
-        ambient: { ...process.env, ...environment },
+        ambient:
+          profile.accountBindingId === undefined
+            ? { ...process.env, ...environment }
+            : isolatedExecutionEnvironment(process.env, environment),
         ...(globalProxy === undefined ? {} : { global: globalProxy }),
         ...(profile.proxy === undefined ? {} : { profile: profile.proxy }),
       });
@@ -148,6 +157,9 @@ function driver(
               ...(effort === null
                 ? []
                 : ["-c", `model_reasoning_effort=${JSON.stringify(effort)}`]),
+              ...(profile.contextWindowTokens === undefined
+                ? []
+                : ["-c", `model_context_window=${String(profile.contextWindowTokens)}`]),
               ...codexMcpOverrides(profile.mcpConfigPath, trustedZapMcp),
               instructions,
             ]

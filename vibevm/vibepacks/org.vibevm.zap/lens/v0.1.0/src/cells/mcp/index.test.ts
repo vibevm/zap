@@ -398,6 +398,7 @@ test("official SDK discovers typed managed tools and preserves the assigned sess
       profileId: "profile.codex.managed",
       reasonMarkdown: "Exercise the exact managed MCP fixture profile.",
     },
+    specialization: "general",
     goal: "Inspect the explicit work target",
     expectedResult: "A typed report",
     workspace: {

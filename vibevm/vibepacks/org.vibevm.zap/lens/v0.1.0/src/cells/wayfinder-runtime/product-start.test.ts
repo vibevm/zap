@@ -199,6 +199,7 @@ test("normal start registers tiered workers and two clients observe the project"
     projectId: registered.value.project.projectId,
     contextId: registered.value.project.contextId,
     selection: { mode: "project_policy" },
+    specialization: "general",
     goal: "Prepare a no-model policy-selected worker",
     expectedResult: "Pinned managed selection",
     targetRefs: [],

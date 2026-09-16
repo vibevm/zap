@@ -204,7 +204,9 @@ export function managedWorkView(claim: ManagedWorkClaim) {
     goal: claim.packet.goal,
     expectedResult: claim.packet.expectedResult,
     targetRefs: claim.targetRefs,
+    specialization: claim.packet.specialization,
     modelSelection: claim.modelSelection,
+    executionSelection: claim.executionSelection,
     managedControl:
       claim.managedControl === null
         ? null

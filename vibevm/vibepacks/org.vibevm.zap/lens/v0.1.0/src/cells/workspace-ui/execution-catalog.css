@@ -1,0 +1,214 @@
+.execution-catalog-panel > summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.execution-catalog-panel[open] > summary {
+  margin-bottom: 18px;
+}
+
+.execution-catalog-panel > section {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.execution-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+  gap: 12px;
+}
+
+.execution-catalog-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface-soft);
+}
+
+.execution-name {
+  font-size: 0.82rem;
+}
+
+.execution-name input {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.execution-metadata {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.execution-metadata div {
+  min-width: 0;
+  padding: 8px;
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.execution-metadata dt {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.execution-metadata dd {
+  overflow-wrap: anywhere;
+  margin: 4px 0 0;
+}
+
+.execution-toggle,
+.execution-choice-set label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.execution-toggle input[type="checkbox"],
+.execution-choice-set input[type="checkbox"] {
+  width: auto;
+  flex: none;
+}
+
+.execution-choice-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.execution-choice-set legend {
+  padding: 0 5px;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.execution-choice-set small {
+  flex-basis: 100%;
+}
+
+.execution-usage-list {
+  display: grid;
+  gap: 7px;
+}
+
+.execution-usage {
+  display: grid;
+  gap: 2px;
+  padding-left: 9px;
+  border-left: 3px solid var(--accent-text);
+}
+
+.execution-usage.stale {
+  border-left-color: var(--accent);
+}
+
+.execution-usage small {
+  color: var(--muted);
+}
+
+.execution-preferences {
+  padding: 14px;
+  border-radius: 13px;
+  background: var(--surface-soft);
+}
+
+.execution-preferences input[type="range"] {
+  width: 100%;
+}
+
+.execution-actions,
+.execution-preview-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px;
+}
+
+.execution-preview-fields > * {
+  min-width: 180px;
+  flex: 1;
+}
+
+.execution-preview-result {
+  display: grid;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+
+.execution-preview-result ul {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.execution-score-editor > summary,
+.execution-reference-table > summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.execution-score-table,
+.execution-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.execution-score-table fieldset,
+.execution-reference-grid article {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.execution-score-table label {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) 80px;
+  align-items: center;
+  gap: 8px;
+}
+
+.execution-score-table input {
+  width: 100%;
+}
+
+.execution-reference-grid span,
+.execution-reference-grid small,
+.execution-reference-grid p {
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+
+.execution-reference-grid small,
+.execution-reference-grid p {
+  color: var(--muted);
+}
+
+.execution-reference-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

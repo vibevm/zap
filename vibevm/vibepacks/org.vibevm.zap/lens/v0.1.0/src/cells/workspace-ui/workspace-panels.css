@@ -133,6 +133,16 @@
   gap: 0.8rem;
 }
 
+.product-setup-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.workspace-body.setup-open .project-rail,
+.workspace-body.setup-open .activity-panel {
+  position: static;
+}
+
 .product-setup input,
 .product-setup select {
   width: 100%;

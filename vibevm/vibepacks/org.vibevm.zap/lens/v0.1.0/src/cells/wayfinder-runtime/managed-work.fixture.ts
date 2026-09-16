@@ -99,7 +99,26 @@ export function scriptedTerminalService() {
 }
 
 export function selectionPort(): ManagedSelectionPort {
-  return { resolve: () => Promise.resolve({ ok: true, value: selection() }) };
+  return {
+    resolve: (_access, _request, profiles) => {
+      const profile = profiles[0];
+      return Promise.resolve(
+        profile === undefined
+          ? {
+              ok: false as const,
+              error: { code: "unavailable" as const, message: "fixture profile is unavailable" },
+            }
+          : {
+              ok: true as const,
+              value: {
+                profile,
+                modelSelection: selection(),
+                executionSelection: null,
+              },
+            },
+      );
+    },
+  };
 }
 
 function selection() {

@@ -7,6 +7,7 @@ import {
   type NoSerialize,
   type QRL,
 } from "@qwik.dev/core";
+import { TaskSpecializationSchema } from "../execution-catalog/index.ts";
 import {
   readRepositoryWorkspace,
   workspaceRequestId,
@@ -42,7 +43,8 @@ export const ManagedWorkPanel = component$<{
   const selectedRunId = useSignal<string | null>(null);
   const goal = useSignal("");
   const expectedResult = useSignal("");
-  const selectionMode = useSignal("project_policy");
+  const specialization = useSignal<(typeof TaskSpecializationSchema.options)[number]>("general");
+  const selectionMode = useSignal("catalog_policy");
   const overrideReason = useSignal("");
   const targetDomain = useSignal<"semantic_object" | "work_task">("work_task");
   const targetRefs = useSignal("");
@@ -167,7 +169,8 @@ export const ManagedWorkPanel = component$<{
             value={selectionMode.value}
             onChange$={(_, element) => (selectionMode.value = element.value)}
           >
-            <option value="project_policy">Project policy · recommended</option>
+            <option value="catalog_policy">Shared execution catalog · recommended</option>
+            <option value="project_policy">Legacy project policy</option>
             {profiles.value.map((profile) => (
               <option
                 key={profile.profileId}
@@ -178,9 +181,14 @@ export const ManagedWorkPanel = component$<{
               </option>
             ))}
           </select>
-          {selectionMode.value === "project_policy" ? (
+          {selectionMode.value === "catalog_policy" ? (
             <p class="workspace-muted">
-              The current saved project policy selects the model when this new run is prepared.
+              The shared server resolver selects an allowed account, agent, model, effort and
+              context for this task type when the run is prepared.
+            </p>
+          ) : selectionMode.value === "project_policy" ? (
+            <p class="workspace-muted">
+              The saved legacy project policy selects the model when this run is prepared.
             </p>
           ) : (
             <>
@@ -195,6 +203,22 @@ export const ManagedWorkPanel = component$<{
               />
             </>
           )}
+          <label class="field-label" for="managed-work-specialization">
+            Task type
+          </label>
+          <select
+            id="managed-work-specialization"
+            value={specialization.value}
+            onChange$={(_, element) =>
+              (specialization.value = TaskSpecializationSchema.parse(element.value))
+            }
+          >
+            {TaskSpecializationSchema.options.map((value) => (
+              <option key={value} value={value} selected={value === specialization.value}>
+                {value.replaceAll("_", " ")}
+              </option>
+            ))}
+          </select>
           <label class="field-label" for="managed-work-workspace-mode">
             Worker workspace
           </label>
@@ -316,7 +340,7 @@ export const ManagedWorkPanel = component$<{
               busy.value ||
               goal.value.trim() === "" ||
               expectedResult.value.trim() === "" ||
-              (selectionMode.value !== "project_policy" && overrideReason.value.trim() === "")
+              (selectionMode.value.startsWith("profile:") && overrideReason.value.trim() === "")
             }
             onClick$={async () => {
               const port = props.port;
@@ -333,13 +357,20 @@ export const ManagedWorkPanel = component$<{
                     ? isolatedWorkspace(repository.value, parentWorktreeId.value)
                     : { mode: "inherit" },
                 selection:
-                  selectionMode.value === "project_policy"
-                    ? { mode: "project_policy" }
-                    : {
-                        mode: "profile_override",
-                        profileId: selectionMode.value.slice("profile:".length),
-                        reasonMarkdown: overrideReason.value.trim(),
-                      },
+                  selectionMode.value === "catalog_policy"
+                    ? {
+                        mode: "catalog_policy",
+                        effort: { mode: "unspecified" },
+                        context: { mode: "default" },
+                      }
+                    : selectionMode.value === "project_policy"
+                      ? { mode: "project_policy" }
+                      : {
+                          mode: "profile_override",
+                          profileId: selectionMode.value.slice("profile:".length),
+                          reasonMarkdown: overrideReason.value.trim(),
+                        },
+                specialization: specialization.value,
                 goal: goal.value.trim(),
                 expectedResult: expectedResult.value.trim(),
                 targetRefs: targetRefs.value

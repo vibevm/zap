@@ -14,6 +14,7 @@ import {
   ProjectObjectReferenceSchema,
   RunIdSchema,
 } from "../workspace-model/index.ts";
+import { TaskSpecializationSchema } from "../execution-catalog/index.ts";
 import type { AdapterSessionId } from "../transport/index.ts";
 import {
   GitObjectIdSchema,
@@ -26,7 +27,12 @@ import {
 export const ManagedAgentCreateInputSchema = z
   .object({
     clientRequestId: ClientRequestIdSchema,
-    selection: ManagedWorkSelectionSchema.default({ mode: "project_policy" }),
+    selection: ManagedWorkSelectionSchema.default({
+      mode: "catalog_policy",
+      effort: { mode: "unspecified" },
+      context: { mode: "default" },
+    }),
+    specialization: TaskSpecializationSchema.default("general"),
     workspace: ManagedWorkspaceRequestSchema.default({ mode: "inherit" }),
     goal: z.string().min(1).max(1_000_000),
     expectedResult: z.string().min(1).max(100_000),

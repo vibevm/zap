@@ -70,6 +70,16 @@
       "scenarioId": "provider.addressed-turn-running-queue-ready",
       "path": "src/cells/provider-coordinators/running-projection.simulation.json",
       "runnerId": "provider-coordinator.public-projection"
+    },
+    {
+      "scenarioId": "execution-catalog.synthetic-cross-provider-routing",
+      "path": "src/cells/execution-catalog/catalog-routing.simulation.json",
+      "runnerId": "execution-catalog.public-routing"
+    },
+    {
+      "scenarioId": "execution-catalog.synthetic-cross-provider-runtime",
+      "path": "src/cells/wayfinder-runtime/execution-catalog-runtime.simulation.json",
+      "runnerId": "execution-catalog.managed-runtime"
     }
   ],
   "featureInventory": [
@@ -82,15 +92,34 @@
     "terminal.native-managed-control",
     "auth.scope-isolation",
     "proxy.protected-launch",
-    "repository.worktrees-fork-merge"
+    "repository.worktrees-fork-merge",
+    "execution-catalog.routing"
   ],
   "coverage": [
-    { "feature": "model.ready-echo", "scenarioIds": ["model.full-lifecycle"] },
-    { "feature": "model.busy-gate", "scenarioIds": ["model.full-lifecycle"] },
-    { "feature": "question.idle-late-answer-ack", "scenarioIds": ["model.full-lifecycle"] },
-    { "feature": "managed.report-effect", "scenarioIds": ["model.full-lifecycle"] },
-    { "feature": "lifecycle.pause-continue-restart", "scenarioIds": ["model.full-lifecycle"] },
-    { "feature": "delivery.duplicate-uncertain", "scenarioIds": ["model.full-lifecycle"] },
+    {
+      "feature": "model.ready-echo",
+      "scenarioIds": ["model.full-lifecycle"]
+    },
+    {
+      "feature": "model.busy-gate",
+      "scenarioIds": ["model.full-lifecycle"]
+    },
+    {
+      "feature": "question.idle-late-answer-ack",
+      "scenarioIds": ["model.full-lifecycle"]
+    },
+    {
+      "feature": "managed.report-effect",
+      "scenarioIds": ["model.full-lifecycle"]
+    },
+    {
+      "feature": "lifecycle.pause-continue-restart",
+      "scenarioIds": ["model.full-lifecycle"]
+    },
+    {
+      "feature": "delivery.duplicate-uncertain",
+      "scenarioIds": ["model.full-lifecycle"]
+    },
     {
       "feature": "managed.real-pty",
       "scenarioIds": ["managed.question-pause-answer-report-review"]
@@ -118,17 +147,6 @@
     {
       "feature": "managed.report-review",
       "scenarioIds": ["managed.question-pause-answer-report-review"]
-    },
-    {
-      "feature": "workspace.operation.managed-work.create.v1",
-      "scenarioIds": ["managed.question-pause-answer-report-review"]
-    },
-    {
-      "feature": "workspace.operation.managed-work.start.v1",
-      "scenarioIds": [
-        "managed.question-pause-answer-report-review",
-        "repository.managed-isolated-writer-fence"
-      ]
     },
     {
       "feature": "workspace.operation.managed-work.get.v1",
@@ -444,6 +462,53 @@
     {
       "feature": "workspace.operation.session.list.v1",
       "scenarioIds": ["provider.addressed-turn-running-queue-ready"]
+    },
+    {
+      "feature": "execution-catalog.ten-family-routing",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-routing"]
+    },
+    {
+      "feature": "execution-catalog.same-provider-accounts",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-routing"]
+    },
+    {
+      "feature": "execution-catalog.economy-quality",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-routing"]
+    },
+    {
+      "feature": "execution-catalog.quota-preference",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-routing"]
+    },
+    {
+      "feature": "execution-catalog.name-cas-reopen",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-routing"]
+    },
+    {
+      "feature": "execution-catalog.revocation-pinning-isolation",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-routing"]
+    },
+    {
+      "feature": "execution-catalog.routing",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-routing"]
+    },
+    {
+      "feature": "execution-catalog.managed-runtime-dispatch",
+      "scenarioIds": ["execution-catalog.synthetic-cross-provider-runtime"]
+    },
+    {
+      "feature": "workspace.operation.managed-work.create.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "execution-catalog.synthetic-cross-provider-runtime"
+      ]
+    },
+    {
+      "feature": "workspace.operation.managed-work.start.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "repository.managed-isolated-writer-fence",
+        "execution-catalog.synthetic-cross-provider-runtime"
+      ]
     }
   ]
 }

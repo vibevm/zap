@@ -203,8 +203,10 @@ const ManagedWorkCard = component$<{
   card: Extract<PortfolioCard, { kind: "managed_work" }>;
 }>((props) => {
   const work = props.card.work;
+  const executionName = work.executionSelection?.configurationName ?? "Legacy execution profile";
   return (
     <>
+      <p class="eyebrow">{executionName}</p>
       <h2>{work.goal}</h2>
       <span class={`coordinator-state state-${work.state}`}>{work.state.replaceAll("_", " ")}</span>
       <p>{work.expectedResult}</p>
@@ -214,12 +216,19 @@ const ManagedWorkCard = component$<{
           <dd>{props.card.entity}</dd>
         </div>
         <div>
-          <dt>Provider</dt>
-          <dd>{work.provider.replaceAll("_", " ")}</dd>
+          <dt>Task type</dt>
+          <dd>{work.specialization.replaceAll("_", " ")}</dd>
         </div>
         <div>
-          <dt>Profile</dt>
-          <dd>{work.profileId}</dd>
+          <dt>Agent · provider</dt>
+          <dd>
+            {(work.executionSelection?.agentProduct ?? work.provider).replaceAll("_", " ")} ·{" "}
+            {work.executionSelection?.providerId ?? work.provider.replaceAll("_", " ")}
+          </dd>
+        </div>
+        <div>
+          <dt>Model</dt>
+          <dd>{work.executionSelection?.modelId ?? work.modelSelection.modelId}</dd>
         </div>
       </dl>
       {work.report === null ? null : <p>{work.report.summaryMarkdown}</p>}

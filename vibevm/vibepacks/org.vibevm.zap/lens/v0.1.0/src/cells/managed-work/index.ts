@@ -27,6 +27,6 @@ export type {
   ManagedActorBindingPort,
   ManagedParentPort,
   ManagedSelectionPort,
-} from "./backend.ts";
+} from "./backend-ports.ts";
 export { openManagedWorkStore } from "./store.ts";
 export type { ManagedWorkStore } from "./store.ts";

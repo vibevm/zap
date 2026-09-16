@@ -9,7 +9,7 @@ import type {
   ManagedWorkClaim,
   ManagedWorkResult,
 } from "./contracts.ts";
-import type { ManagedActorBindingPort } from "./backend.ts";
+import type { ManagedActorBindingPort } from "./backend-ports.ts";
 import type { ManagedControlProvisioner } from "./control.ts";
 import type {
   ManagedAgentProfile,
@@ -19,6 +19,8 @@ import type {
 import { ManagedAgentProfileSchema } from "./providers.ts";
 import type { ManagedWorkStore } from "./store.ts";
 import { resolveManagedWorkspace } from "./workspace-backend.ts";
+import { resolveManagedProviderEnvironment } from "./provider-account.ts";
+import type { ExecutionAccountIsolationPort } from "../execution-accounts/index.ts";
 import type { ManagedWorkspaceProvisioningPort } from "./workspace.ts";
 
 export async function resumeManagedWork(input: {
@@ -28,6 +30,7 @@ export async function resumeManagedWork(input: {
   readonly profile: ManagedAgentProfile;
   readonly driver: ManagedProviderDriver;
   readonly environment: ProtectedEnvironmentPort;
+  readonly accounts?: ExecutionAccountIsolationPort;
   readonly bindings: ManagedActorBindingPort;
   readonly control: ManagedControlProvisioner;
   readonly terminals: ManagedTerminalServicePort;
@@ -62,7 +65,11 @@ export async function resumeManagedWork(input: {
     );
   const admitted = input.execution.canStart(input.access, input.claim);
   if (!admitted.ok) return admitted;
-  const environment = await input.environment.resolve(input.profile.environmentRef);
+  const environment = await resolveManagedProviderEnvironment(
+    input.profile,
+    input.environment,
+    input.accounts,
+  );
   if (!environment.ok) return fail("unavailable", environment.message);
   const activated = await input.bindings.activate({
     runId: input.claim.runId,

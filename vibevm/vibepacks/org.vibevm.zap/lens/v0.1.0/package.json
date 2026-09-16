@@ -74,6 +74,22 @@
       "types": "./dist/cells/zap-client/index.d.ts",
       "import": "./dist/cells/zap-client/index.js"
     },
+    "./execution-catalog": {
+      "types": "./dist/cells/execution-catalog/index.d.ts",
+      "import": "./dist/cells/execution-catalog/index.js"
+    },
+    "./execution-catalog-store": {
+      "types": "./dist/cells/execution-catalog-store/index.d.ts",
+      "import": "./dist/cells/execution-catalog-store/index.js"
+    },
+    "./execution-catalog-service": {
+      "types": "./dist/cells/execution-catalog-service/index.d.ts",
+      "import": "./dist/cells/execution-catalog-service/index.js"
+    },
+    "./execution-accounts": {
+      "types": "./dist/cells/execution-accounts/index.d.ts",
+      "import": "./dist/cells/execution-accounts/index.js"
+    },
     "./workspace-model": {
       "types": "./dist/cells/workspace-model/index.d.ts",
       "import": "./dist/cells/workspace-model/index.js"

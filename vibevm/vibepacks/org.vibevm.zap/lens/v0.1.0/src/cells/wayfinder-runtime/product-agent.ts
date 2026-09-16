@@ -15,6 +15,7 @@ import type { ProviderCoordinatorProfile } from "../provider-coordinators/index.
 import type { ProviderLaunchPreparationPort } from "../provider-coordinators/index.ts";
 import type { ProxyPolicy } from "../proxy-policy/index.ts";
 import type { ProtectedEnvironmentPort } from "../managed-work/index.ts";
+import type { ExecutionAccountIsolationPort } from "../execution-accounts/index.ts";
 import type { TrustedProjectRegistration } from "../workspace-store/index.ts";
 import type { WayfinderAgentFoundation } from "./agent.ts";
 import { AdapterSessionIdSchema } from "../transport/index.ts";
@@ -196,6 +197,7 @@ function mcpEntrypoint(): string {
 export function createProviderLaunchPreparation(options: {
   readonly foundation: WayfinderAgentFoundation | null;
   readonly environment: ProtectedEnvironmentPort | undefined;
+  readonly accounts?: ExecutionAccountIsolationPort;
   readonly mcpRoot: string;
 }): ProviderLaunchPreparationPort {
   return {
@@ -214,6 +216,22 @@ export function createProviderLaunchPreparation(options: {
         profile.environmentRef !== undefined
       )
         return providerPolicyFailure("protected environment resolver is not configured");
+      const account =
+        profile.accountBindingId === undefined
+          ? { ok: true as const, value: { environment: {}, environmentRef: null } }
+          : options.accounts === undefined || profile.executionHostId === undefined
+            ? providerPolicyFailure("provider account binding has no trusted host resolver")
+            : await options.accounts.resolve({
+                bindingId: profile.accountBindingId,
+                hostId: profile.executionHostId,
+                agentProduct: profile.provider,
+              });
+      if (!account.ok) return providerPolicyFailure(account.error.message);
+      if (
+        account.value.environmentRef !== null &&
+        account.value.environmentRef !== profile.environmentRef
+      )
+        return providerPolicyFailure("provider environment does not match its account binding");
       const environment: Awaited<ReturnType<ProtectedEnvironmentPort["resolve"]>> =
         options.environment === undefined
           ? { ok: true, value: {} }
@@ -238,7 +256,11 @@ export function createProviderLaunchPreparation(options: {
         ? {
             ok: true,
             value: {
-              environment: { ...environment.value, ...prepared.value.environment },
+              environment: {
+                ...environment.value,
+                ...account.value.environment,
+                ...prepared.value.environment,
+              },
               mcpConfigPath: prepared.value.mcpConfigPath,
             },
           }

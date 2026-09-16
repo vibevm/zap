@@ -1,0 +1,27 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "execution_catalog_runtime",
+  "scenarioId": "execution-catalog.synthetic-cross-provider-runtime",
+  "runnerId": "execution-catalog.managed-runtime",
+  "seed": "seed.execution-catalog-runtime-1",
+  "tags": ["execution-catalog", "managed-runtime", "zap-mock", "zero-llm"],
+  "coverage": [
+    "execution-catalog.managed-runtime-dispatch",
+    "workspace.operation.managed-work.create.v1",
+    "workspace.operation.managed-work.start.v1"
+  ],
+  "inputs": {
+    "bindingDisplayName": "Synthetic ZapMock account",
+    "specialization": "general",
+    "goal": "Prove the catalog launches the deterministic managed worker.",
+    "expectedResult": "The real ZapMock process asks its typed question over MCP."
+  },
+  "expected": {
+    "provider": "zap_mock",
+    "modelId": "zap-mock/deterministic-v1",
+    "modelFamilyId": "zap_mock",
+    "questionPrompt": "Choose the product-gate path",
+    "selectionPinned": true,
+    "zeroLlmInference": true
+  }
+}

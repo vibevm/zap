@@ -1,5 +1,4 @@
 /** Durable managed-agent PTY backend. @scope spec://org.vibevm.zap/lens/PROP-010#managed-interaction */
-import type { ModelSelection } from "../model-policy/index.ts";
 import type { ManagedTerminalServicePort } from "../managed-terminal-service/index.ts";
 import { ActorIdSchema, DecimalSchema } from "../protocol/index.ts";
 import {
@@ -17,7 +16,6 @@ import {
   type ManagedAgentBackend,
   type ManagedExecutionFencePort,
   type ManagedWorkClaim,
-  type ManagedWorkRequest,
   type ManagedWorkResult,
   type WorkAttachmentPort,
 } from "./contracts.ts";
@@ -33,71 +31,23 @@ import type { ManagedWorkStore } from "./store.ts";
 import { resumeManagedWork } from "./resume.ts";
 import { attachmentTargets, managedInstructions, writePacketFile } from "./packet.ts";
 import { prepareManagedWorkspace, resolveManagedWorkspace } from "./workspace-backend.ts";
+import { resolveManagedProviderEnvironment } from "./provider-account.ts";
+import type {
+  ManagedActorBindingPort,
+  ManagedParentPort,
+  ManagedSelectionPort,
+} from "./backend-ports.ts";
 import {
   createLegacyManagedWorkspaceProvisioningPort,
   type ManagedWorkspaceProvisioningPort,
 } from "./workspace.ts";
-
-export interface ManagedActorBindingPort {
-  prepare(input: {
-    readonly request: ManagedWorkRequest;
-    readonly taskId: string;
-    readonly runId: string;
-    readonly attemptId: string;
-    readonly requesterActorId: string | null;
-    readonly mcpConfigPath: string;
-    readonly provider: ManagedAgentProfile["provider"];
-    readonly mcpCommandPath: string | undefined;
-    readonly mcpArgs: readonly string[] | undefined;
-  }): Promise<
-    ManagedWorkResult<{
-      readonly actorId: string;
-      readonly adapterSessionId: string;
-      readonly mcpConfigPath: string;
-      readonly environment: Readonly<Record<string, string>>;
-    }>
-  >;
-  activate(input: {
-    readonly runId: string;
-    readonly actorId: string;
-    readonly adapterSessionId: string;
-    readonly mcpConfigPath: string;
-    readonly provider: ManagedAgentProfile["provider"];
-    readonly mcpCommandPath: string | undefined;
-    readonly mcpArgs: readonly string[] | undefined;
-  }): Promise<
-    ManagedWorkResult<{
-      readonly mcpConfigPath: string;
-      readonly environment: Readonly<Record<string, string>>;
-    }>
-  >;
-}
-export interface ManagedSelectionPort {
-  resolve(
-    access: WorkspaceAccessContext,
-    request: ManagedWorkRequest,
-    profiles: readonly ManagedAgentProfile[],
-    identity: { readonly runId: string; readonly attemptId: string },
-  ): Promise<ManagedWorkResult<ModelSelection>>;
-}
-export interface ManagedParentPort {
-  validate(
-    access: WorkspaceAccessContext,
-    request: ManagedWorkRequest,
-  ): ManagedWorkResult<{
-    readonly parentTaskId: string | null;
-    readonly parentRunId: string | null;
-    readonly parentActorId: string | null;
-    readonly depth: number;
-  }>;
-}
-
 export function createManagedAgentBackend(options: {
   readonly store: ManagedWorkStore;
   readonly terminals: ManagedTerminalServicePort;
   readonly profiles: readonly ManagedAgentProfile[];
   readonly drivers: ReadonlyMap<ManagedAgentProfile["provider"], ManagedProviderDriver>;
   readonly environment: ProtectedEnvironmentPort;
+  readonly accounts?: Parameters<typeof resolveManagedProviderEnvironment>[2];
   readonly bindings: ManagedActorBindingPort;
   readonly selections: ManagedSelectionPort;
   readonly parents: ManagedParentPort;
@@ -109,6 +59,8 @@ export function createManagedAgentBackend(options: {
   readonly clock?: () => Date;
 }): ManagedAgentBackend {
   const clock = options.clock ?? (() => new Date());
+  const providerEnvironment = options.environment;
+  const accountIsolation = options.accounts;
   const workspaces =
     options.workspaces ??
     createLegacyManagedWorkspaceProvisioningPort({
@@ -210,13 +162,19 @@ export function createManagedAgentBackend(options: {
           attemptId,
         });
         if (!selection.ok) return selection;
-        const profile = profiles.get(selection.value.profileId);
+        const profile = selection.value.profile;
         if (
-          profile === undefined ||
           profile.projectId !== request.data.projectId ||
           profile.contextId !== request.data.contextId
         )
           return fail("forbidden", "selected model policy profile is outside work scope");
+        const registeredProfile = profiles.get(profile.profileId);
+        if (
+          registeredProfile !== undefined &&
+          JSON.stringify(registeredProfile) !== JSON.stringify(profile)
+        )
+          return fail("conflict", "selected profile identity has different trusted content");
+        profiles.set(profile.profileId, profile);
         if (
           !profile.capabilities.installed ||
           !profile.capabilities.launchable ||
@@ -271,6 +229,7 @@ export function createManagedAgentBackend(options: {
             planId: request.data.planId,
             workspaceAssignment: workspace.value,
             goal: request.data.goal,
+            specialization: request.data.specialization,
             contextRefs: request.data.contextRefs,
             expectedResult: request.data.expectedResult,
             targetRefs: request.data.targetRefs,
@@ -282,7 +241,8 @@ export function createManagedAgentBackend(options: {
             routing: { preferredProduct: profile.provider, executionMode: "managed" },
           },
           targetRefs: request.data.targetRefs,
-          modelSelection: selection.value,
+          modelSelection: selection.value.modelSelection,
+          executionSelection: selection.value.executionSelection,
           state: "prepared",
           processExit: null,
           report: null,
@@ -301,6 +261,8 @@ export function createManagedAgentBackend(options: {
         return fail("conflict", "managed work is not at the prepared revision");
       const execution = options.execution.canStart(access, loaded.value);
       if (!execution.ok) return execution;
+      const selected = await options.selections.revalidate?.(access, loaded.value);
+      if (selected !== undefined && !selected.ok) return selected;
       const profile = profiles.get(loaded.value.profileId);
       const driver = profile === undefined ? undefined : options.drivers.get(profile.provider);
       if (profile === undefined || driver === undefined)
@@ -317,7 +279,11 @@ export function createManagedAgentBackend(options: {
         return notes.ok
           ? fail("unavailable", "declared work target is waiting for attachment resolution")
           : notes;
-      const env = await options.environment.resolve(profile.environmentRef);
+      const env = await resolveManagedProviderEnvironment(
+        profile,
+        providerEnvironment,
+        accountIsolation,
+      );
       if (!env.ok) return fail("unavailable", env.message);
       const activated = await options.bindings.activate({
         runId,
@@ -461,6 +427,8 @@ export function createManagedAgentBackend(options: {
       const driver = profile === undefined ? undefined : options.drivers.get(profile.provider);
       if (profile === undefined || driver === undefined)
         return fail("unavailable", "managed provider resume driver is unavailable");
+      const selected = await options.selections.revalidate?.(access, claim.value);
+      if (selected !== undefined && !selected.ok) return selected;
       return resumeManagedWork({
         access,
         claim: claim.value,
@@ -468,6 +436,7 @@ export function createManagedAgentBackend(options: {
         profile,
         driver,
         environment: options.environment,
+        ...(options.accounts === undefined ? {} : { accounts: options.accounts }),
         bindings: options.bindings,
         control: options.control,
         workspaces,
@@ -576,7 +545,6 @@ function fail(
 ): ManagedWorkResult<never> {
   return { ok: false, error: { code, message } };
 }
-
 async function acquirePreparationLock(
   locks: Map<string, Promise<void>>,
   key: string,

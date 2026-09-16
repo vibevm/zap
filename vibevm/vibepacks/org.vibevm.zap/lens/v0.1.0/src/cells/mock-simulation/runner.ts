@@ -73,6 +73,9 @@ const PRODUCT_RUNNERS: Readonly<Partial<Record<MockSimulationRunnerId, string>>>
   "wayfinder.repository-managed-product":
     "src/cells/wayfinder-runtime/repository-managed-product.test.ts",
   "provider-coordinator.public-projection": "src/cells/provider-coordinators/index.test.ts",
+  "execution-catalog.public-routing": "src/cells/execution-catalog/product-simulation.test.ts",
+  "execution-catalog.managed-runtime":
+    "src/cells/wayfinder-runtime/execution-catalog-runtime.test.ts",
 };
 
 export async function runMockSimulations(
@@ -315,7 +318,8 @@ function evidence(runnerId: MockSimulationRunnerId): MockSimulationEvidenceKind 
   if (
     runnerId === "workspace.annotations-product" ||
     runnerId === "workspace.model-policy-product" ||
-    runnerId === "provider-coordinator.public-projection"
+    runnerId === "provider-coordinator.public-projection" ||
+    runnerId === "execution-catalog.public-routing"
   )
     return "public_service";
   if (
@@ -323,6 +327,7 @@ function evidence(runnerId: MockSimulationRunnerId): MockSimulationEvidenceKind 
     runnerId === "wayfinder.repository-managed-product"
   )
     return "public_runtime";
+  if (runnerId === "execution-catalog.managed-runtime") return "public_runtime";
   return runnerId === "repository.git" ? "repository_git" : "coordinator_http";
 }
 

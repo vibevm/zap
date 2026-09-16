@@ -19,6 +19,7 @@ import type { OwnedLineProcess } from "./claude.ts";
 import { qwenZapMcpPermissionArguments } from "./qwen-permissions.ts";
 import { StreamControlClient, streamHostControlRequest } from "./stream-control.ts";
 import { providerStderrDiagnostic, type ProviderProcessDiagnostic } from "./process-diagnostic.ts";
+import { isolatedExecutionEnvironment } from "../execution-accounts/index.ts";
 
 export interface QwenProcessFactory {
   spawn(input: {
@@ -105,8 +106,13 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
       return failure("unsupported", "installed Qwen stream CLI has no verified effort argument");
     const prepared = await this.#prepareLaunch?.prepare({ profile: this.#profile, scope });
     if (prepared !== undefined && !prepared.ok) return prepared;
+    const preparedEnvironment = prepared?.value.environment ?? {};
+    const ambient =
+      this.#profile.accountBindingId === undefined
+        ? { ...process.env, ...preparedEnvironment }
+        : isolatedExecutionEnvironment(process.env, preparedEnvironment);
     const resolved = resolveProxyEnvironment({
-      ambient: { ...process.env, ...(prepared?.value.environment ?? {}) },
+      ambient,
       ...(this.#proxyPolicy === undefined ? {} : { global: this.#proxyPolicy }),
       ...(this.#profile.proxy === undefined ? {} : { profile: this.#profile.proxy }),
     });

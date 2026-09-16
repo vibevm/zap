@@ -56,7 +56,7 @@ export function addManagedWorkNodes(
       selectable: true,
     });
     graph.addNode(runKey, {
-      label: `${work.provider} run`,
+      label: work.executionSelection?.configurationName ?? `${work.provider} run`,
       x: origin.x + 7.8,
       y,
       size: 7,

@@ -88,6 +88,7 @@ export async function openWayfinderWebRuntime(
         actorId: null,
         clientId: ClientIdSchema.parse(`client.web.${sessionId.slice(0, 32)}`),
         authorizedProjectIds: parsed.data.trustedProjectIds,
+        catalogAdministrator: parsed.data.role === "owner",
       });
       const authorization: WorkspaceServiceAuthorization = {
         access,

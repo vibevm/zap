@@ -200,6 +200,7 @@ function request(name: string) {
     planId: null,
     workspaceRequest: { mode: "inherit" as const },
     selection: { mode: "project_policy" as const },
+    specialization: "backend" as const,
     goal: `Run ${name} worker`,
     expectedResult: "Policy-selected worker report",
     targetRefs: [],

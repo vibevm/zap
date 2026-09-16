@@ -26,6 +26,9 @@ export const ManagedWorkDetail = component$<{
   const active = ["launching", "running", "waiting_for_user", "uncertain"].includes(work.state);
   return (
     <article class="managed-work-detail">
+      <p class="eyebrow">
+        {work.executionSelection?.configurationName ?? "Legacy execution profile"}
+      </p>
       <div>
         <strong>{work.goal}</strong>
         <span class={`coordinator-state state-${work.state}`}>
@@ -34,6 +37,16 @@ export const ManagedWorkDetail = component$<{
       </div>
       <p>{work.expectedResult}</p>
       <dl class="canvas-facts">
+        {work.executionSelection === null ? null : (
+          <div>
+            <dt>Execution choice</dt>
+            <dd>{work.executionSelection.configurationName}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Task type</dt>
+          <dd>{work.specialization.replaceAll("_", " ")}</dd>
+        </div>
         <div>
           <dt>Provider</dt>
           <dd>{work.provider.replaceAll("_", " ")}</dd>

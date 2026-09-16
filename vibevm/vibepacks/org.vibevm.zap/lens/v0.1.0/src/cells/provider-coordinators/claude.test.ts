@@ -32,6 +32,8 @@ test("Claude stream transport owns a scripted child, decodes init, and fences li
     modelId: "fixture-small",
     effort: "low",
     endpoint: null,
+    accountBindingId: "binding.claude.fixture",
+    executionHostId: ExecutionHostIdSchema.parse("host.claude.fixture"),
     argumentPrefix: ["C:/fixture/claude-entry.js"],
     environmentRef: "environment.claude.fixture",
     mcpConfigPath: "C:/fixture/claude-mcp-base.json",
@@ -43,7 +45,10 @@ test("Claude stream transport owns a scripted child, decodes init, and fences li
         Promise.resolve({
           ok: true,
           value: {
-            environment: { SYNTHETIC_CLAUDE_AUTH: "available" },
+            environment: {
+              SYNTHETIC_CLAUDE_AUTH: "available",
+              CLAUDE_CONFIG_DIR: "C:/fixture/claude-account",
+            },
             mcpConfigPath: "C:/fixture/claude-mcp-prepared.json",
           },
         }),
@@ -108,6 +113,7 @@ test("Claude stream transport owns a scripted child, decodes init, and fences li
     /codlens_plan_apply/,
   );
   assert.equal(children[0]?.environment["SYNTHETIC_CLAUDE_AUTH"], "available");
+  assert.equal(children[0]?.environment["CLAUDE_CONFIG_DIR"], "C:/fixture/claude-account");
   assert.equal(children[0]?.cwd, "C:/fixture");
   assert.equal(children[0]?.writes.length, 2);
   const events: Array<{ readonly kind?: string; readonly data?: unknown }> = [];

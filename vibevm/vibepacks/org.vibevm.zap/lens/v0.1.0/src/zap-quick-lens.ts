@@ -8,6 +8,7 @@ import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 import { z } from "zod";
 import { CredentialSchema } from "./cells/protocol/index.ts";
+import { ExecutionHostIdSchema } from "./cells/workspace-model/index.ts";
 import { createNativeManagedProviderControlAdapters } from "./cells/managed-work/index.ts";
 import {
   discoverLocalProductProviders,
@@ -168,7 +169,9 @@ async function defaultConfig(
   origin: string,
   settings: ProductLocalSettings,
 ): Promise<WayfinderRuntimeConfig> {
-  const providers = await discoverLocalProductProviders(settings);
+  const providers = await discoverLocalProductProviders(settings, {
+    hostId: "host.execution.local",
+  });
   return {
     version: 1,
     state: { databasePath },
@@ -196,10 +199,13 @@ async function defaultConfig(
       outputHistoryLimit: 2_000,
     },
     managedAgents: [],
+    executionHostId: ExecutionHostIdSchema.parse("host.execution.local"),
     profiles: [...providers.coordinatorProfiles],
     providerCoordinatorProfiles: [...providers.providerCoordinatorProfiles],
     productProviders: [...providers.productProviders],
     managedWorkerProfiles: [...providers.managedWorkers],
+    executionBindings: mergeBindings(providers.executionBindings, settings.executionBindings),
+    executionLaunchTemplates: [...providers.launchTemplates],
     repositoryWorkspaces: repositoryConfig(settings),
     proxy: settings.proxy,
     projects: [],
@@ -220,6 +226,7 @@ function advancedConfig(
       allowedOrigins: [...new Set([...loaded.gateway.allowedOrigins, origin, "quicklens://app"])],
     },
     proxy: settings.proxy,
+    executionBindings: mergeBindings(loaded.executionBindings, settings.executionBindings),
     repositoryWorkspaces: loaded.repositoryWorkspaces ?? repositoryConfig(settings),
   };
 }
@@ -232,6 +239,15 @@ function repositoryConfig(
     mergeIdentity: settings.repositoryMergeIdentity,
     testProfiles: ["repository.consistency"],
   };
+}
+
+function mergeBindings(
+  discovered: readonly ProductLocalSettings["executionBindings"][number][],
+  configured: readonly ProductLocalSettings["executionBindings"][number][],
+): ProductLocalSettings["executionBindings"] {
+  const merged = new Map(discovered.map((binding) => [binding.bindingId, binding]));
+  for (const binding of configured) merged.set(binding.bindingId, binding);
+  return [...merged.values()].sort((left, right) => left.bindingId.localeCompare(right.bindingId));
 }
 
 function rendererRoot(): string {

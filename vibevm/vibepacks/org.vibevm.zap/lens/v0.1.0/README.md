@@ -1,5 +1,10 @@
 # Zap Quick Lens
 
+Start with the [first-run guide](vibevm/vibespecs/QUICK-START.md) to install a
+release, connect an existing agent account and add your first project. The
+[operator guide](vibevm/vibespecs/WAYFINDER-GUIDE.md) covers protected host
+settings and advanced integrations.
+
 `org.vibevm.zap/lens` is the shared client and agent-integration package for ZAP,
 presented to users as Zap Quick Lens.
 Its npm identity is `@org.vibevm.zap/lens`. Product entry points share one
@@ -159,8 +164,9 @@ Managed workers and native provider children are different execution paths.
 Managed work has a durable task/run, Lens-owned terminal, explicit model-policy
 selection, bounded packet, typed report and human review. Native children remain
 owned by their provider and expose only the controls and identity evidence that
-provider supplies. Managed worker defaults come from protected policy tier
-bindings; a caller may use an explicit registered-profile override only with an
+provider supplies. Legacy managed requests use protected policy tier bindings;
+new specialized work uses the shared named execution catalog. A caller may use
+an explicit registered-profile override only with an
 explicit reason. Neither path treats terminal output or process exit as an
 accepted result.
 
@@ -218,7 +224,7 @@ receipts are not relabelled as cleanup passes. See the
 [acceptance record](vibevm/vibespecs/research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md)
 for the exact evidence boundary.
 
-The zero-inference corpus currently contains 14 registered scenarios and keeps
+The zero-inference corpus currently contains 16 registered scenarios and keeps
 coverage gaps explicit. Real temporary-Git/loopback-HTTP tests and the corpus
 are component and product-runtime evidence. Multi-user identities,
 remote execution hosts, distributed writer leases, contributor admission and
@@ -393,6 +399,12 @@ Contracts: [communication](vibevm/vibespecs/PROP-001.xml),
 License: [UPL-1.0](LICENSE.md). Author: Oleg Chirukhin.
 
 ## Operator guide
+
+The [execution catalog guide](vibevm/vibespecs/EXECUTION-CATALOG-GUIDE.md) covers
+named account/model configurations, task specialization, the economy/quality
+slider, selected subscription meters and additional protected account homes.
+The [catalog acceptance record](vibevm/vibespecs/research/ZAP-EXECUTION-CATALOG-ACCEPTANCE-2026-09-16.md)
+records actual browser, mock-runtime and bounded Luna/Haiku evidence.
 
 The current local Zap Wayfinder, Zap Quick Lens, Codlens, project/context,
 channel-separation, lifecycle, model-policy and protected-web guidance lives

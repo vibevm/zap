@@ -42,6 +42,9 @@ export function modelParameters(
   const credentialFile = lensCredentialFile(profile, agentScope);
   const config = {
     ...(effort === undefined || effort === null ? {} : { model_reasoning_effort: effort }),
+    ...(profile.contextWindowTokens === undefined
+      ? {}
+      : { model_context_window: profile.contextWindowTokens }),
     ...(profile.lensMcp === undefined ||
     agentScope === undefined ||
     agentScope === null ||
@@ -222,6 +225,9 @@ export function processProfile(profile: CodexCoordinatorProfile): CodexProcessPr
   return {
     executablePath: profile.executablePath,
     requestTimeoutMs: profile.requestTimeoutMs,
+    ...(profile.accountBindingId === undefined
+      ? {}
+      : { accountBindingId: profile.accountBindingId }),
     ...(profile.proxy === undefined ? {} : { proxy: profile.proxy }),
   };
 }
@@ -293,6 +299,7 @@ export function coordinatorBootstrap(
     ...(lensMcpAvailable
       ? [
           "Send user clarification through /ZapAskUserQuestion and post a short ordinary-text notice after publishing. Do not poll for the answer or treat a normal answer as an approval.",
+          "For managed delegation, inspect the available managed work profiles, declare the task specialization explicitly, and use catalog_policy unless the human intentionally requested a named catalog override. Never substitute another account, premium model, effort, or context when the catalog reports no eligible configuration.",
         ]
       : []),
     connection,

@@ -12,17 +12,22 @@ import { readManagedWork } from "./managed-work.ts";
 import type { AnnotationService } from "../workspace-annotations/index.ts";
 import type { AnnotationReadRequest } from "../workspace-model/index.ts";
 import { workspaceFailure } from "./errors.ts";
+import type { ExecutionCatalogService } from "../execution-catalog-service/index.ts";
+import { isExecutionCatalogRead, readExecutionCatalog } from "./execution-catalog.ts";
 
 export function readWorkspace(
   store: WorkspaceStore,
   planning: WorkspacePlanningFeature | undefined,
   terminals: WorkspaceManagedTerminalPort | undefined,
   modelPolicy: ModelPolicyService | undefined,
+  executionCatalog: ExecutionCatalogService | undefined,
   managedWork: ManagedAgentBackend | undefined,
   annotations: AnnotationService | undefined,
   access: WorkspaceAccessContext,
   request: Parameters<WorkspaceClientPort["read"]>[0],
 ): ReturnType<WorkspaceClientPort["read"]> {
+  if (isExecutionCatalogRead(request))
+    return readExecutionCatalog(executionCatalog, access, request);
   if (isAnnotationRead(request))
     return annotations === undefined
       ? workspaceFailure("unsupported_operation", "annotation service is not configured")

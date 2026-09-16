@@ -13,6 +13,7 @@ test("managed provider launch uses the pinned selection rather than mutable prof
     cwd: "C:/Windows",
     modelId: "profile-model-must-not-win",
     effort: "high",
+    contextWindowTokens: 200_000,
     environmentRef: null,
     mcpConfigPath: "C:/temp/wayfinder-mcp.json",
     capabilities: {
@@ -74,6 +75,7 @@ test("managed provider launch uses the pinned selection rather than mutable prof
   assert.equal(launch.args.includes("selection-model-wins"), true);
   assert.equal(launch.args.includes("profile-model-must-not-win"), false);
   assert.equal(launch.args.includes('model_reasoning_effort="low"'), true);
+  assert.equal(launch.args.includes("model_context_window=200000"), true);
   assert.equal(launch.cwd, "C:/fixture/worktree");
   assert.equal(launch.env["SYNTHETIC_MANAGED_ENV"], "preserved");
   assert.equal(launch.env["HTTPS_PROXY"], undefined);

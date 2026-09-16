@@ -19,6 +19,7 @@ import type { ProxyPolicy } from "../proxy-policy/index.ts";
 import { ZAP_MCP_SERVER_NAME, zapPreauthorizedToolNames } from "../protocol/index.ts";
 import { StreamControlClient, streamHostControlRequest } from "./stream-control.ts";
 import { providerStderrDiagnostic, type ProviderProcessDiagnostic } from "./process-diagnostic.ts";
+import { isolatedExecutionEnvironment } from "../execution-accounts/index.ts";
 
 export interface OwnedLineProcess {
   readonly pid: number;
@@ -142,8 +143,13 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
               .join(","),
           ]),
     ];
+    const preparedEnvironment = prepared?.value.environment ?? {};
+    const ambient =
+      this.#profile.accountBindingId === undefined
+        ? { ...process.env, ...preparedEnvironment }
+        : isolatedExecutionEnvironment(process.env, preparedEnvironment);
     const environment = resolveProxyEnvironment({
-      ambient: { ...process.env, ...(prepared?.value.environment ?? {}) },
+      ambient,
       ...(this.#proxyPolicy === undefined ? {} : { global: this.#proxyPolicy }),
       ...(this.#profile.proxy === undefined ? {} : { profile: this.#profile.proxy }),
     }).environment;

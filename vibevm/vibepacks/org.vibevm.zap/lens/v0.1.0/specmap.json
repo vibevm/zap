@@ -240,6 +240,174 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/execution-accounts/adapter-evidence.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/adapter-evidence.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-accounts/codex.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/codex.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-accounts/configuration.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/configuration.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-accounts/context.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/context.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-accounts/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-accounts/isolation.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/isolation.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-accounts/materialize.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/materialize.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-accounts/types.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-accounts/types.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-service/helpers.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-service/helpers.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-service/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-service/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-service/service.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-service/service.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-service/types.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-service/types.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-store/database.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-store/database.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-store/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-store/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-store/store.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-store/store.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog-store/types.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog-store/types.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/index.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/index.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/naming.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/naming.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/product-simulation.support.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/product-simulation.support.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/product-simulation.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/product-simulation.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/reference-models.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/reference-models.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/resolver.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/resolver.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/execution-catalog/types.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/execution-catalog/types.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/host-adapters/capabilities.ts",
       "item_kind": "module",
       "line": 1,
@@ -436,6 +604,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/managed-work/backend-ports.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/backend-ports.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/managed-work/backend.ts",
       "item_kind": "module",
       "line": 1,
@@ -538,6 +713,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/managed-work/packet.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/provider-account.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/provider-account.ts"
     },
     {
       "crate_name": "src",
@@ -706,6 +888,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/mock-simulation/corpus.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/execution-catalog-schema.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/execution-catalog-schema.ts"
     },
     {
       "crate_name": "src",
@@ -1154,6 +1343,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/provider-coordinators/qwen.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/provider-coordinators/result.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/provider-coordinators/result.ts"
     },
     {
       "crate_name": "src",
@@ -1801,6 +1997,20 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/catalog-coordinator.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/catalog-coordinator.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/coordinator-host-composition.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/coordinator-host-composition.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/wayfinder-runtime/coordinator-mcp.ts",
       "item_kind": "module",
       "line": 1,
@@ -1822,6 +2032,48 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/execution-catalog-reopen.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/execution-catalog-reopen.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/execution-catalog-runtime.support.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/execution-catalog-runtime.support.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/execution-catalog-runtime.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/execution-catalog-runtime.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/execution-catalog-runtime.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/execution-catalog-runtime.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/execution-catalog-usage.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/execution-catalog-usage.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/execution-catalog.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/execution-catalog.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/wayfinder-runtime/index.ts",
       "item_kind": "module",
       "line": 2,
@@ -1833,6 +2085,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/wayfinder-runtime/managed-agent.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/managed-catalog-selection.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/managed-catalog-selection.ts"
     },
     {
       "crate_name": "src",
@@ -1854,6 +2113,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/wayfinder-runtime/managed-environment.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/managed-selection.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/managed-selection.ts"
     },
     {
       "crate_name": "src",
@@ -2018,6 +2284,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/public.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/public.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/wayfinder-runtime/repository-activity.ts",
       "item_kind": "module",
       "line": 1,
@@ -2106,6 +2379,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/wayfinder-runtime/runtime-config.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/runtime-profiles.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/runtime-profiles.ts"
     },
     {
       "crate_name": "src",
@@ -2249,6 +2529,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-client/execution-catalog.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-client/execution-catalog.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-client/http.test.ts",
       "item_kind": "module",
       "line": 1,
@@ -2281,6 +2568,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-client/planning.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-client/product-execution-catalog.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-client/product-execution-catalog.ts"
     },
     {
       "crate_name": "src",
@@ -2375,6 +2669,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-model/access.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-model/access.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-model/annotations.ts",
       "item_kind": "module",
       "line": 1,
@@ -2393,6 +2694,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-model/event-ingest.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-model/execution-catalog.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-model/execution-catalog.ts"
     },
     {
       "crate_name": "src",
@@ -2585,6 +2893,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-service/execution-catalog.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/execution-catalog.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-service/factory.ts",
       "item_kind": "module",
       "line": 1,
@@ -2610,6 +2925,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-service/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/interaction-dispatch.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/interaction-dispatch.ts"
     },
     {
       "crate_name": "src",
@@ -2998,6 +3320,34 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-ui/execution-catalog-fields.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/execution-catalog-fields.tsx"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-ui/execution-catalog-panel.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/execution-catalog-panel.tsx"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-ui/execution-catalog-reference.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/execution-catalog-reference.tsx"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-ui/execution-settings-panel.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/execution-settings-panel.tsx"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-ui/index.tsx",
       "item_kind": "module",
       "line": 1,
@@ -3037,6 +3387,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-ui/model-policy-panel.tsx"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-ui/product-execution-catalog-admin.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/product-execution-catalog-admin.tsx"
     },
     {
       "crate_name": "src",
@@ -3887,6 +4244,198 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/execution-accounts/adapter-evidence.ts",
+      "from_symbol": "src/cells/execution-accounts/adapter-evidence.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-accounts/codex.ts",
+      "from_symbol": "src/cells/execution-accounts/codex.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#subscription",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-accounts/configuration.ts",
+      "from_symbol": "src/cells/execution-accounts/configuration.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-accounts/context.ts",
+      "from_symbol": "src/cells/execution-accounts/context.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#context",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-accounts/index.ts",
+      "from_symbol": "src/cells/execution-accounts/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-accounts/isolation.ts",
+      "from_symbol": "src/cells/execution-accounts/isolation.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-accounts/materialize.ts",
+      "from_symbol": "src/cells/execution-accounts/materialize.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#execution",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-accounts/types.ts",
+      "from_symbol": "src/cells/execution-accounts/types.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-service/helpers.ts",
+      "from_symbol": "src/cells/execution-catalog-service/helpers.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-service/index.ts",
+      "from_symbol": "src/cells/execution-catalog-service/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-service/service.ts",
+      "from_symbol": "src/cells/execution-catalog-service/service.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-service/types.ts",
+      "from_symbol": "src/cells/execution-catalog-service/types.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-store/database.ts",
+      "from_symbol": "src/cells/execution-catalog-store/database.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-store/index.ts",
+      "from_symbol": "src/cells/execution-catalog-store/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-store/store.ts",
+      "from_symbol": "src/cells/execution-catalog-store/store.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog-store/types.ts",
+      "from_symbol": "src/cells/execution-catalog-store/types.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/index.test.ts",
+      "from_symbol": "src/cells/execution-catalog/index.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/index.ts",
+      "from_symbol": "src/cells/execution-catalog/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/naming.ts",
+      "from_symbol": "src/cells/execution-catalog/naming.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/product-simulation.support.ts",
+      "from_symbol": "src/cells/execution-catalog/product-simulation.support.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#mock",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/product-simulation.test.ts",
+      "from_symbol": "src/cells/execution-catalog/product-simulation.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#mock",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/reference-models.ts",
+      "from_symbol": "src/cells/execution-catalog/reference-models.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#recommendations",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/resolver.ts",
+      "from_symbol": "src/cells/execution-catalog/resolver.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/execution-catalog/types.ts",
+      "from_symbol": "src/cells/execution-catalog/types.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/host-adapters/capabilities.ts",
       "from_symbol": "src/cells/host-adapters/capabilities.ts",
       "line": 1,
@@ -4120,6 +4669,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/managed-work/backend-ports.ts",
+      "from_symbol": "src/cells/managed-work/backend-ports.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/managed-work/backend.ts",
       "from_symbol": "src/cells/managed-work/backend.ts",
       "line": 1,
@@ -4277,6 +4834,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/provider-account.ts",
+      "from_symbol": "src/cells/managed-work/provider-account.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#execution",
       "verb": "implements"
     },
     {
@@ -4494,6 +5059,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/execution-catalog-schema.ts",
+      "from_symbol": "src/cells/mock-simulation/execution-catalog-schema.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#mock",
       "verb": "implements"
     },
     {
@@ -5039,6 +5612,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/provider-coordinators/result.ts",
+      "from_symbol": "src/cells/provider-coordinators/result.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-006#root",
       "verb": "implements"
     },
     {
@@ -5901,6 +6482,22 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/wayfinder-runtime/catalog-coordinator.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/catalog-coordinator.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#execution",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/coordinator-host-composition.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/coordinator-host-composition.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#execution",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/wayfinder-runtime/coordinator-mcp.ts",
       "from_symbol": "src/cells/wayfinder-runtime/coordinator-mcp.ts",
       "line": 1,
@@ -5925,6 +6522,54 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/wayfinder-runtime/execution-catalog-reopen.test.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/execution-catalog-reopen.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#mock",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/execution-catalog-runtime.support.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/execution-catalog-runtime.support.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#mock",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/execution-catalog-runtime.test.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/execution-catalog-runtime.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#mock",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/execution-catalog-runtime.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/execution-catalog-runtime.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/execution-catalog-usage.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/execution-catalog-usage.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#subscription",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/execution-catalog.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/execution-catalog.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/wayfinder-runtime/index.ts",
       "from_symbol": "src/cells/wayfinder-runtime/index.ts",
       "line": 1,
@@ -5946,6 +6591,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-catalog-selection.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-catalog-selection.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#execution",
       "verb": "implements"
     },
     {
@@ -5986,6 +6639,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-selection.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-selection.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#execution",
       "verb": "implements"
     },
     {
@@ -6173,6 +6834,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/wayfinder-runtime/public.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/public.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/wayfinder-runtime/repository-activity.ts",
       "from_symbol": "src/cells/wayfinder-runtime/repository-activity.ts",
       "line": 1,
@@ -6274,6 +6943,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/runtime-profiles.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/runtime-profiles.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
       "verb": "implements"
     },
     {
@@ -6461,6 +7138,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-client/execution-catalog.ts",
+      "from_symbol": "src/cells/workspace-client/execution-catalog.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-client/http.test.ts",
       "from_symbol": "src/cells/workspace-client/http.test.ts",
       "line": 1,
@@ -6507,6 +7192,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-002#plan-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-client/product-execution-catalog.ts",
+      "from_symbol": "src/cells/workspace-client/product-execution-catalog.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
       "verb": "implements"
     },
     {
@@ -6614,6 +7307,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-model/access.ts",
+      "from_symbol": "src/cells/workspace-model/access.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-model/annotations.ts",
       "from_symbol": "src/cells/workspace-model/annotations.ts",
       "line": 1,
@@ -6635,6 +7336,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-005#shared-code",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-model/execution-catalog.ts",
+      "from_symbol": "src/cells/workspace-model/execution-catalog.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
       "verb": "implements"
     },
     {
@@ -6862,6 +7571,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-service/execution-catalog.ts",
+      "from_symbol": "src/cells/workspace-service/execution-catalog.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-service/factory.ts",
       "from_symbol": "src/cells/workspace-service/factory.ts",
       "line": 1,
@@ -6891,6 +7608,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-service/interaction-dispatch.ts",
+      "from_symbol": "src/cells/workspace-service/interaction-dispatch.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#human-questions",
       "verb": "implements"
     },
     {
@@ -7351,6 +8076,38 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-ui/execution-catalog-fields.tsx",
+      "from_symbol": "src/cells/workspace-ui/execution-catalog-fields.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-ui/execution-catalog-panel.tsx",
+      "from_symbol": "src/cells/workspace-ui/execution-catalog-panel.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-ui/execution-catalog-reference.tsx",
+      "from_symbol": "src/cells/workspace-ui/execution-catalog-reference.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-ui/execution-settings-panel.tsx",
+      "from_symbol": "src/cells/workspace-ui/execution-settings-panel.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-ui/index.tsx",
       "from_symbol": "src/cells/workspace-ui/index.tsx",
       "line": 1,
@@ -7396,6 +8153,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-008#policy-interface",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-ui/product-execution-catalog-admin.tsx",
+      "from_symbol": "src/cells/workspace-ui/product-execution-catalog-admin.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog",
       "verb": "implements"
     },
     {
@@ -9323,6 +10088,105 @@
       "heading": "Colocated deterministic scenarios use real Git in small disposable repositories and ZapMockAgent executors. Cover two top-level plans in one repository, inherited and isolated workers, preparation before agent launch, scoped file changes, clean integration, an actual conflict and resolution, stale or dirty target refusal, restart reconciliation and graph assignment/fork/join projection. The original checkout and other contexts remain unchanged by child work. No provider inference or developer credentials are required. Mock success does not establish vendor-specific native-worktree capabilities. @status:spec/plan",
       "line": 14,
       "uri": "spec://org.vibevm.zap/lens/PROP-014#verification"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:77fee22a0a57fa8e28976261715cd7b88f343324bc7d9eb1727ec8b4f56fc637",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Named execution catalog and task specialization",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#root"
+    },
+    {
+      "anchor": "identity",
+      "content_hash": "sha256:fcb78fa3cb0c2979aaa96393c57602e3230ede44f2b5a401b14173ac269ac62d",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Separate the human principal, execution host, provider account/connection, agent product, model family, exact model, and named execution configuration. A configuration binds one authorized connection, model and allowed effort/context choices. Names are generated deterministically without inference, are editable, and never serve as identity. The interface presents the name first, then account/agent/provider/model/effort/context. An account label alone does not establish a different login; launches use the selected protected auth binding. @status:spec/plan",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#identity"
+    },
+    {
+      "anchor": "catalog",
+      "content_hash": "sha256:f650398b8344340bc096a9e2b54151ea5d86c2fef7285d4f31ee0a961c9dc01a",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Zap Wayfinder owns a durable catalog shared by all Lens clients. The owner can add, rename, enable/disable and inspect authorized connections/configurations, allowed model choices, effort values and context presets. Browser commands refer to server-registered launch/auth bindings rather than accepting arbitrary executables, environment contents or credentials. Existing protected settings seed compatible entries; additional Codex and Claude accounts can use distinct protected auth/config homes and non-Codex profiles can use protected environment bindings. Configuration and catalog mutation require server-derived administration authority, expected revision and idempotency identity, with attributable history. Catalog reference data never enables a model/account by itself. @status:spec/plan",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#catalog"
+    },
+    {
+      "anchor": "specializations",
+      "content_hash": "sha256:3acf44142bf12a000c3d6c450b353e7e5e3925c56e9b81fab86f3ec803b642f1",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Task specialization is independent of ZAP WorkType, task purpose and model size tier. Initial specializations are general, architecture, backend, web_ui, testing, code_review, research, documentation, data_analysis, image_generation and automation. New task requests and work records carry the explicit specialization and requirements; titles are not used as an implicit classifier. A project can dispatch different tasks to different authorized agents/accounts/models. Existing four-tier policies and recorded selections remain compatible; the new catalog removes the four-bindings ceiling for specialized routing. @status:spec/plan",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#specializations"
+    },
+    {
+      "anchor": "recommendations",
+      "content_hash": "sha256:7bcfad83375fc4a851acf5d48c0e1ce1515e76792efb551968337a91e86e7dce",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Ship editable, dated reference entries for roughly ten common model families, with exact model identifiers where verified, official source links, documented capability facts, and qualitative task-fit/economic presets. This is a curated starting point, not a measured popularity ranking or a claim of universal superiority. Owner preference gives Claude prominence for web interfaces and gpt-5.6-sol prominence as the controller for image-generation tasks when its connected execution path provides an image-generation tool. The underlying image tool model remains a separate capability and setting. Reference models that lack an installed/configured compatible execution path remain visibly unavailable. A text controller model and an image-generation tool model are distinct; an image-model identifier must never be passed as a coding CLI's conversation model. @status:spec/plan",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#recommendations"
+    },
+    {
+      "anchor": "ranking",
+      "content_hash": "sha256:5390110e5bf7398d82677570ad8eca34bdee2b081b49167d4a52acde6df4699a",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "The shared deterministic resolver first filters authorization, enabled state, actual launch binding, execution mode, required modality/tools, effort and context compatibility. It then applies editable task priorities and an economy-to-quality preference from 0 to 100, default 50. The score uses explicit heuristic suitability/economic data and explains the selected and excluded candidates; it is not a fabricated price prediction. A manual override is explicit and recorded. There is no silent upgrade to an unapproved model, account or effort. Native children retain host constraints; crossing to another agent/account is a managed dispatch only when that execution mode is allowed. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#ranking"
+    },
+    {
+      "anchor": "context",
+      "content_hash": "sha256:9c9d5ff6c3963d52ee6826bfba3cbe36059972bd191f567e481fed9c6be66e06",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Distinguish documented maximum context, user-allowed presets, requested context, applied host configuration and actual observation. Capability states include configurable, fixed/inherited, unsupported and unknown. Presets must fit both model and adapter limits. A budget or compaction setting does not enlarge a model's context window. Unsupported arbitrary context/effort overrides are refused or shown as provider-controlled before launch, never silently ignored. Codex's documented model_context_window is a host configuration limit; Claude long-context model variants and other provider settings require their own evidence. @status:spec/plan",
+      "line": 10,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#context"
+    },
+    {
+      "anchor": "subscription",
+      "content_hash": "sha256:fd9378e6617b32d1dbfea90511265870d8d046bf5b4e0a3016bdb88a0cd46045",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Catalog settings include a remaining-subscription deprioritization toggle and configurable percentage threshold, initially 10 percent when enabled. Fresh applicable quota observations below the threshold lower priority without revoking permission or silently changing a running selection. Usage snapshots retain account binding, provider/bucket identity, units, window/reset time, source and observation time. Exact remaining tokens are displayed only when the source actually supplies them; percentages, token consumption and API credit balances are different quantities. Unknown, unsupported and stale observations remain explicit, not zero. Codex uses its authenticated account/rateLimits/read interface, preferring the multi-bucket result; no earned reset, purchase or notification is performed. Quota refresh is read-only, bounded and rate-limited, with no model polling. Selected bucket applicability is explicit rather than guessed from labels. Freshness defaults to five minutes, configurable by trusted service policy. @status:spec/plan",
+      "line": 11,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#subscription"
+    },
+    {
+      "anchor": "execution",
+      "content_hash": "sha256:0eea7f05778f4b59a711a42f2d35e564df7bc78e0f9cb3b1d3535a2b8e1eebd3",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Selections record catalog/routing revision, specialization, friendly configuration name, account/launch binding, actual agent/model, requested and applied effort/context, ranking explanation and relevant usage basis. Shared preview and actual dispatch use the same resolver. Changing preferences affects new selections; existing runs retain their exact assignment. Disabling a configuration/connection prevents new dispatch through it, including a new process resume, while preserving history and existing files. It does not silently migrate an active conversation to another account or model. Account, cwd/worktree, model and control epoch remain independent identities. @status:spec/plan",
+      "line": 12,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#execution"
+    },
+    {
+      "anchor": "mock",
+      "content_hash": "sha256:b19c8c457fcfdd3c6c3f2df4124485edfc163300259c708cc6932e0f0afc3405",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "ZapMock may advertise synthetic personas representing different model families, accounts, capabilities, context limits and quota windows, while the actual provider remains zap_mock and all evidence remains explicitly synthetic. A trusted test host may explicitly register a synthetic binding with no credential, home or environment authority; ordinary account discovery never creates one. Its process continues to run zap-mock/deterministic-v1, independently of emulated model metadata. Colocated replayable scenarios exercise the real catalog store/service/resolver and recording or mock-process dispatch: ten-family choices, two accounts of one provider, task routing, slider endpoints, low/fresh versus stale/unknown quota, capability refusal, renaming, revocation, CAS/replay, restart, project isolation and pinned existing selections. They do not read real credentials or call models. @status:spec/plan",
+      "line": 13,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#mock"
+    },
+    {
+      "anchor": "delivery",
+      "content_hash": "sha256:c741bfb97e89e190b0e52a9fa57e63ebf7f926697104350e9ee078d60d6711f0",
+      "doc_path": "PROP-015",
+      "file": "vibevm/vibespecs/PROP-015.xml",
+      "heading": "Implement the catalog, shared routing/dispatch integration and usable admin UI before spending live model tokens. Validate the actual browser UI and current deterministic corpus. Then use one tiny authorized GPT configuration and one tiny Claude configuration to check real selection/launch propagation, with a tiny project boot and no comparative model-quality campaign. Account/quota and protocol handshakes may be checked without inference. Preserve durable recovery notes throughout. Ten new proprietary agent drivers, full account-billing administration, remote multi-user federation and speculative exhaustive edge testing are outside this slice. @status:spec/plan",
+      "line": 14,
+      "uri": "spec://org.vibevm.zap/lens/PROP-015#delivery"
     }
   ],
   "suspects": [],

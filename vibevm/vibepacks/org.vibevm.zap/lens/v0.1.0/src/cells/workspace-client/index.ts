@@ -367,3 +367,20 @@ export {
   type IntegrationDiffView,
   type RepositoryWorkspaceView,
 } from "./repository.ts";
+export {
+  createWorkspaceExecutionConfiguration,
+  createWorkspaceExecutionConnection,
+  previewWorkspaceExecutionCatalog,
+  refreshWorkspaceExecutionUsage,
+  readWorkspaceExecutionCatalog,
+  saveWorkspaceExecutionCatalog,
+  type ExecutionCatalogWorkspaceView,
+} from "./execution-catalog.ts";
+export {
+  createProductExecutionConfiguration,
+  createProductExecutionConnection,
+  readProductExecutionCatalog,
+  refreshProductExecutionUsage,
+  saveProductExecutionCatalog,
+  type ProductExecutionCatalogView,
+} from "./product-execution-catalog.ts";

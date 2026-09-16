@@ -5,6 +5,7 @@
  * @scope spec://org.vibevm.zap/lens/PROP-009#project-lifecycle
  */
 import { z } from "zod";
+import { TaskSpecializationSchema } from "../execution-catalog/index.ts";
 import {
   ActorIdSchema,
   ConversationIdSchema,
@@ -356,6 +357,7 @@ export const WorkPacketSchema = z
     planId: ProjectPlanIdSchema.nullable().default(null),
     workspaceAssignment: ManagedWorkspaceAssignmentSchema.nullable().default(null),
     goal: z.string().min(1).max(1_000_000),
+    specialization: TaskSpecializationSchema.default("general"),
     contextRefs: z.array(ArtifactRefIdSchema).max(1_000),
     expectedResult: z.string().min(1).max(100_000),
     targetRefs: z.array(ProjectObjectReferenceSchema).max(256).default([]),

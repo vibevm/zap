@@ -21,12 +21,15 @@ import {
   type HostRequestAnswer,
 } from "../agent-runtime/index.ts";
 import { ExecutionHostIdSchema, NativeRefSchema } from "../workspace-model/index.ts";
+import { ExecutionCatalogIdSchema } from "../execution-catalog/index.ts";
 import { ProxyPolicySchema } from "../proxy-policy/index.ts";
 import { normalizeProviderEvent } from "./events.ts";
-
+import {
+  guardedProviderTransportCall as transportCall,
+  providerFailure as failure,
+} from "./result.ts";
 export const ProviderCoordinatorIdSchema = z.enum(["claude_code", "opencode", "qwen_code"]);
 export type ProviderCoordinatorId = z.infer<typeof ProviderCoordinatorIdSchema>;
-
 export const ProviderCoordinatorProfileSchema = z
   .object({
     profileId: z.string().min(3).max(160),
@@ -40,6 +43,8 @@ export const ProviderCoordinatorProfileSchema = z
     endpoint: z.url().nullable(),
     proxy: ProxyPolicySchema.optional(),
     argumentPrefix: z.array(z.string().max(32_768)).max(32).optional(),
+    accountBindingId: ExecutionCatalogIdSchema.optional(),
+    executionHostId: ExecutionHostIdSchema.optional(),
     environmentRef: z.string().min(3).max(512).nullable().optional(),
     mcpConfigPath: z.string().min(1).max(32_768).nullable().optional(),
     mcpCommandPath: z.string().min(1).max(32_768).optional(),
@@ -229,7 +234,7 @@ export function createProviderCoordinatorAdapter(input: {
     capabilities,
     lifecycleCapabilities,
     async start(startInput) {
-      const started = await input.transport.start({ scope: startInput });
+      const started = await transportCall(() => input.transport.start({ scope: startInput }));
       if (!started.ok) return started;
       scope = startInput;
       current = started.value;
@@ -253,7 +258,7 @@ export function createProviderCoordinatorAdapter(input: {
       return { ok: true, value: descriptor };
     },
     async resume(resumeInput) {
-      const resumed = await input.transport.resume({ scope: resumeInput });
+      const resumed = await transportCall(() => input.transport.resume({ scope: resumeInput }));
       if (!resumed.ok) return resumed;
       scope = resumeInput;
       current = resumed.value;
@@ -577,15 +582,6 @@ function resumeInputFor(
   };
 }
 type ProviderResult<T> = AgentRuntimeResult<T>;
-function failure(
-  code: "busy" | "invalid_input" | "unsupported" | "not_found" | "protocol_error" | "stale_epoch",
-  message: string,
-): AgentRuntimeResult<never> {
-  return {
-    ok: false,
-    error: { code, message, retry: code === "protocol_error" ? "after_reconcile" : "never" },
-  };
-}
 
 export { createClaudeStreamJsonTransportFactory } from "./claude.ts";
 export type { ClaudeProcessFactory, OwnedLineProcess } from "./claude.ts";

@@ -5,13 +5,10 @@ import {
   listWorkspaceProjects,
   readAgentOutput,
   readProjectWorkspace,
-  readWorkspaceModelPolicy,
-  readWorkspaceModelPolicyHistory,
   readWorkspaceChat,
   readWorkspaceHistory,
   workspaceRequestId,
   type ProjectWorkspaceView,
-  type ModelPolicyWorkspaceView,
 } from "../workspace-client/index.ts";
 import {
   WorkContextIdSchema,
@@ -26,7 +23,7 @@ import { ChatPanel } from "./chat-panel.tsx";
 import { CoordinatorControls } from "./coordinator-controls.tsx";
 import { ProjectRail } from "./project-navigation.tsx";
 import { ProductSetup } from "./product-setup.tsx";
-import { ModelPolicyPanel } from "./model-policy-panel.tsx";
+import { ExecutionSettingsPanel } from "./execution-settings-panel.tsx";
 import { ManagedTerminalWorkspace } from "./managed-terminal-workspace.tsx";
 import { ManagedWorkPanel } from "./managed-work-panel.tsx";
 import { WorkspaceHeader } from "./workspace-header.tsx";
@@ -75,8 +72,6 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
   const theme = useSignal<"light" | "dark">("light");
   const coordinatorMessage = useSignal<string | null>(null);
   const coordinatorStarting = useSignal(false);
-  const modelPolicy = useSignal<ModelPolicyWorkspaceView | null>(null);
-  const modelPolicyError = useSignal<string | null>(null);
   const focusEpoch = useSignal(0),
     canvasRefreshEpoch = useSignal(0),
     setupOpen = useSignal(false);
@@ -163,34 +158,6 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
       } else chatError.value = result.error.message;
     },
   );
-  const loadModelPolicy = $(
-    async (projectId: ProjectId, contextId: WorkContextId, epoch: number) => {
-      const port = props.port;
-      if (port === undefined) return;
-      const [policy, history] = await Promise.all([
-        readWorkspaceModelPolicy(port, projectId, contextId),
-        readWorkspaceModelPolicyHistory(port, projectId, contextId),
-      ]);
-      if (
-        focusEpoch.value !== epoch ||
-        selectedProjectId.value !== projectId ||
-        selectedContextId.value !== contextId
-      )
-        return;
-      if (!policy.ok) {
-        modelPolicy.value = null;
-        modelPolicyError.value = policy.error.message;
-        return;
-      }
-      if (!history.ok) {
-        modelPolicy.value = { policy: policy.value, versions: [], changes: [] };
-        modelPolicyError.value = history.error.message;
-        return;
-      }
-      modelPolicy.value = { policy: policy.value, ...history.value };
-      modelPolicyError.value = null;
-    },
-  );
   const loadProject = $(
     async (projectId: ProjectId, preferred?: WorkContextId, preserveInspection = false) => {
       const port = props.port;
@@ -236,7 +203,6 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
       }
       globalError.value = null;
       await loadChat(result.value, contextId, epoch);
-      await loadModelPolicy(projectId, contextId, epoch);
     },
   );
   const loadProjects = $(async () => {
@@ -325,7 +291,14 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
           window.localStorage.setItem("quicklens.theme", theme.value);
         })}
       />
-      <div class="workspace-body">
+      <div
+        class={
+          "workspace-body" +
+          (props.product !== undefined && (projects.value.length === 0 || setupOpen.value)
+            ? " setup-open"
+            : "")
+        }
+      >
         <ProjectRail
           projects={projects.value}
           selectedProjectId={selectedProjectId.value}
@@ -485,21 +458,16 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
                     view={projectView.value}
                     selectedActorId={selectedActorId.value}
                   />
-                  <ModelPolicyPanel
-                    key={`${selectedProjectId.value}:${selectedContextId.value}`}
-                    view={modelPolicy.value}
-                    unavailableReason={modelPolicyError.value}
+                  <ExecutionSettingsPanel
+                    key={
+                      "execution-settings:" +
+                      selectedProjectId.value +
+                      ":" +
+                      selectedContextId.value
+                    }
                     port={props.port}
                     projectId={selectedProjectId.value}
                     contextId={selectedContextId.value}
-                    onSaved$={$(() => {
-                      if (selectedProjectId.value !== null && selectedContextId.value !== null)
-                        void loadModelPolicy(
-                          selectedProjectId.value,
-                          selectedContextId.value,
-                          focusEpoch.value,
-                        );
-                    })}
                   />
                 </>
               ) : tab.value === "chat" ? (

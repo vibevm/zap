@@ -10,6 +10,7 @@ import { access } from "node:fs/promises";
 import { constants } from "node:fs";
 import { basename, delimiter, dirname, isAbsolute, join, resolve } from "node:path";
 import { z } from "zod";
+import { ExecutionCatalogIdSchema } from "../execution-catalog/index.ts";
 import {
   resolveProxyEnvironment,
   ProxyPolicySchema,
@@ -64,6 +65,7 @@ export const CodexProcessProfileSchema = z
   .object({
     executablePath: z.string().min(1),
     requestTimeoutMs: z.number().int().min(1_000).max(300_000).default(30_000),
+    accountBindingId: ExecutionCatalogIdSchema.optional(),
     proxy: ProxyPolicySchema.optional(),
   })
   .strict();

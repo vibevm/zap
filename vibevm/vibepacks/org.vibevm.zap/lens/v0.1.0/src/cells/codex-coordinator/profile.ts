@@ -11,6 +11,21 @@ import { CodexProcessProfileSchema } from "./process.ts";
 export const CodexCoordinatorProfileSchema = CodexProcessProfileSchema.extend({
   profileId: z.string().min(1).max(160),
   model: z.string().min(1).max(256),
+  contextWindowTokens: z.number().int().positive().max(10_000_000).optional(),
+  observedModelCapabilities: z
+    .array(
+      z
+        .object({
+          modelId: z.string().min(1).max(256),
+          displayName: z.string().min(1).max(256),
+          supportedEfforts: z.array(ReasoningEffortSchema).max(16),
+          defaultEffort: ReasoningEffortSchema.nullable(),
+        })
+        .strict(),
+    )
+    .max(256)
+    .optional(),
+  capabilityObservedAt: z.iso.datetime().optional(),
   effort: ReasoningEffortSchema.nullable().optional(),
   approvalPolicy: z.enum(["untrusted", "on-request", "never"]),
   sandbox: z.enum(["read-only", "workspace-write", "danger-full-access"]),

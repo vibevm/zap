@@ -11,13 +11,14 @@ export async function productGatewayOperation(
   path: string,
   value: unknown,
   source: ProductSetupPort | undefined,
+  catalogAdministrator: boolean,
 ): Promise<ProductSetupResult<ProductSetupResponse>> {
   if (source === undefined) return failure("unavailable", "Product setup is not configured");
   if (path !== "/v1/product/request")
     return failure("not_found", "Product setup route is unavailable");
   const request = ProductSetupRequestSchema.safeParse(value);
   if (!request.success) return failure("invalid_input", "Product setup request is invalid");
-  const response = await source.request(request.data);
+  const response = await source.request(request.data, { catalogAdministrator });
   if (!response.ok) return response;
   const parsed = ProductSetupResponseSchema.safeParse(response.value);
   return parsed.success
@@ -26,7 +27,14 @@ export async function productGatewayOperation(
 }
 
 function failure(
-  code: "invalid_input" | "not_found" | "conflict" | "unavailable",
+  code:
+    | "invalid_input"
+    | "not_found"
+    | "conflict"
+    | "forbidden"
+    | "stale_revision"
+    | "idempotency_conflict"
+    | "unavailable",
   message: string,
 ): ProductSetupResult<never> {
   return { ok: false, error: { code, message } };

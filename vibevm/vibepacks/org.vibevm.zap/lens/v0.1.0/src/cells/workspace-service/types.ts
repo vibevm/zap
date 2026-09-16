@@ -30,6 +30,7 @@ import {
 import type { ManagedWakeDelivery, WorkspaceStore } from "../workspace-store/index.ts";
 import type { ManagedAgentBackend } from "../managed-work/index.ts";
 import type { ModelPolicyService } from "../model-policy-service/index.ts";
+import type { ExecutionCatalogService } from "../execution-catalog-service/index.ts";
 import type {
   CoordinatorRoutingResult,
   CoordinatorRoutingResultValue,
@@ -67,6 +68,12 @@ export const WORKSPACE_SERVICE_ACTIONS = [
   "project.stop.v1",
   "project.continue.v1",
   "model-policy.update.v1",
+  "execution-catalog.connection.upsert.v1",
+  "execution-catalog.connection.create.v1",
+  "execution-catalog.configuration.upsert.v1",
+  "execution-catalog.configuration.create.v1",
+  "execution-catalog.preferences.update.v1",
+  "execution-catalog.usage.refresh.v1",
   "managed-work.create.v1",
   "managed-work.start.v1",
   "managed-work.stop.v1",
@@ -102,6 +109,11 @@ export interface CoordinatorAdapterRegistration {
 }
 
 export interface CoordinatorAdapterRegistry {
+  register?(
+    registration: CoordinatorAdapterRegistration,
+  ):
+    | { readonly ok: true; readonly value: null }
+    | { readonly ok: false; readonly error: AgentRuntimeError };
   resolve(profileRef: string): Promise<
     | {
         readonly ok: true;
@@ -115,6 +127,7 @@ export interface WorkspaceServiceOptions {
   readonly store: WorkspaceStore;
   readonly adapters: CoordinatorAdapterRegistry;
   readonly modelPolicy?: ModelPolicyService;
+  readonly executionCatalog?: ExecutionCatalogService;
   readonly coordinatorRouting?: CoordinatorRoutingBridge | undefined;
   readonly interactions?: WorkspaceInteractionFeature | undefined;
   readonly terminals?: WorkspaceManagedTerminalPort | undefined;
@@ -302,6 +315,22 @@ export function createCoordinatorAdapterRegistry(
     registrations.map((registration) => [registration.profileRef, registration]),
   );
   return {
+    register(registration) {
+      const current = byRef.get(registration.profileRef);
+      if (current !== undefined)
+        return current.host === registration.host
+          ? { ok: true, value: null }
+          : {
+              ok: false,
+              error: {
+                code: "already_exists",
+                message: "coordinator profile is already registered to another host",
+                retry: "never",
+              },
+            };
+      byRef.set(registration.profileRef, registration);
+      return { ok: true, value: null };
+    },
     async resolve(profileRef) {
       const registration = byRef.get(profileRef);
       if (registration === undefined) {

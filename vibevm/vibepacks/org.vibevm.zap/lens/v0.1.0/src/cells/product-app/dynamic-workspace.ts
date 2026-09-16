@@ -19,6 +19,7 @@ export function createDynamicWorkspacePort(options: {
   readonly product: ProductAppService;
   readonly clientId: string;
   readonly principalId: string;
+  readonly catalogAdministrator?: boolean;
   readonly baselineProjectIds?: readonly ProjectId[];
   readonly allowedActions?: readonly WorkspaceServiceAction[];
 }): WorkspaceClientPort {
@@ -36,6 +37,7 @@ export function createDynamicWorkspacePort(options: {
         actorId: null,
         clientId: ClientIdSchema.parse(options.clientId),
         authorizedProjectIds: projectIds,
+        catalogAdministrator: options.catalogAdministrator ?? false,
       }),
       allowedActions: options.allowedActions ?? WORKSPACE_SERVICE_ACTIONS,
     });

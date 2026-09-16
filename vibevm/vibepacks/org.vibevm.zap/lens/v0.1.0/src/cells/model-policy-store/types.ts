@@ -58,6 +58,7 @@ export const ModelPolicyStoreAccessSchema = z
     actorId: ActorIdSchema.nullable(),
     clientId: ClientIdSchema,
     authorizedProjectIds: z.array(ProjectIdSchema).min(1).max(256),
+    catalogAdministrator: z.boolean().optional(),
   })
   .strict();
 export type ModelPolicyStoreAccess = z.infer<typeof ModelPolicyStoreAccessSchema>;

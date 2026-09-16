@@ -6,8 +6,9 @@ import { join } from "node:path";
 import test from "node:test";
 import { CoordinatorStartInputSchema } from "../agent-runtime/index.ts";
 import { ActorIdSchema } from "../protocol/index.ts";
-import { AgentSessionIdSchema } from "../workspace-model/index.ts";
+import { AgentSessionIdSchema, ExecutionHostIdSchema } from "../workspace-model/index.ts";
 import { createProtectedEnvironmentResolver } from "../product-app/index.ts";
+import { createExecutionAccountIsolation } from "../execution-accounts/index.ts";
 import { ProviderCoordinatorProfileSchema } from "../provider-coordinators/index.ts";
 import { openWorkspaceStore } from "../workspace-store/index.ts";
 import { trustedRegistration } from "./annotations.test-support.ts";
@@ -63,16 +64,33 @@ test("protected environment and exact actor scope prepare a non-Codex MCP launch
       modelId: "synthetic-model",
       effort: null,
       endpoint: null,
+      accountBindingId: "binding.qwen.synthetic",
+      executionHostId: "host.provider.qwen",
       environmentRef: "environment.qwen.synthetic",
       mcpConfigPath: join(root, "mcp", "qwen.json"),
       mcpCommandPath: process.execPath,
       mcpArgs: ["dist/mcp.js"],
     });
+    const accounts = createExecutionAccountIsolation([
+      {
+        bindingId: "binding.qwen.synthetic",
+        hostId: ExecutionHostIdSchema.parse("host.provider.qwen"),
+        displayName: "Synthetic Qwen account",
+        enabled: true,
+        setupGuidance: "Configure the synthetic protected environment reference.",
+        kind: "environment_reference",
+        agentProduct: "qwen_code",
+        environmentRef: "environment.qwen.synthetic",
+      },
+    ]);
+    assert.equal(accounts.ok, true);
+    if (!accounts.ok) return;
     const preparation = createProviderLaunchPreparation({
       foundation: foundation.value,
       environment: createProtectedEnvironmentResolver({
         "environment.qwen.synthetic": environmentPath,
       }),
+      accounts: accounts.value,
       mcpRoot: join(root, "fallback-mcp"),
     });
     const prepared = await preparation.prepare({

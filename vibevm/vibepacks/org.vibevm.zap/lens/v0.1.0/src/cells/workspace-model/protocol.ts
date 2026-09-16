@@ -5,10 +5,7 @@ import {
   ClientRequestIdSchema,
   ConversationIdSchema,
   DecimalSchema,
-  JsonValueSchema,
   MessageIdSchema,
-  PrincipalIdSchema,
-  type Result,
 } from "../protocol/index.ts";
 import { QuicklensSnapshotSchema } from "../quicklens-model/index.ts";
 import {
@@ -25,7 +22,6 @@ import {
 } from "./entities.ts";
 import {
   AgentSessionIdSchema,
-  ClientIdSchema,
   ProjectIdSchema,
   QuestionGroupIdSchema,
   WorkContextIdSchema,
@@ -81,41 +77,18 @@ import {
   RepositoryWorkspaceReadRequestSchemas,
   RepositoryWorkspaceReadResponseSchemas,
 } from "./repository-workspaces.ts";
-
-export const WorkspaceErrorCodeSchema = z.enum([
-  "invalid_input",
-  "unauthorized",
-  "forbidden",
-  "not_found",
-  "conflict",
-  "stale_revision",
-  "idempotency_conflict",
-  "unavailable",
-  "unsupported_operation",
-  "storage_failure",
-  "closed",
-]);
-export const WorkspaceErrorSchema = z
-  .object({
-    code: WorkspaceErrorCodeSchema,
-    message: z.string().startsWith("violates REQ spec://"),
-    details: z.record(z.string(), JsonValueSchema).optional(),
-  })
-  .strict();
-export type WorkspaceError = z.infer<typeof WorkspaceErrorSchema>;
-export type WorkspaceResult<T> = Result<T, WorkspaceError>;
-export type Awaitable<T> = T | Promise<T>;
-export const WorkspaceAccessContextSchema = z
-  .object({
-    principalId: PrincipalIdSchema,
-    actorId: ActorIdSchema.nullable(),
-    clientId: ClientIdSchema,
-    authorizedProjectIds: z.array(ProjectIdSchema).min(1).max(256),
-  })
-  .strict();
-export type WorkspaceAccessContext = z.infer<typeof WorkspaceAccessContextSchema>;
-export const WorkspaceCommandContextSchema = WorkspaceAccessContextSchema;
-export type WorkspaceCommandContext = WorkspaceAccessContext;
+import {
+  ExecutionCatalogCommandRequestSchemas,
+  ExecutionCatalogCommandResponseSchemas,
+  ExecutionCatalogReadRequestSchemas,
+  ExecutionCatalogReadResponseSchemas,
+} from "./execution-catalog.ts";
+import {
+  type Awaitable,
+  type WorkspaceAccessContext,
+  type WorkspaceCommandContext,
+  type WorkspaceResult,
+} from "./access.ts";
 
 export const HistoryScopeSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("all_authorized") }).strict(),
@@ -215,6 +188,7 @@ export const ProjectSnapshotStateSchema = z.discriminatedUnion("state", [
 ]);
 export type ProjectSnapshotState = z.infer<typeof ProjectSnapshotStateSchema>;
 export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
+  ...ExecutionCatalogReadRequestSchemas,
   ...AnnotationReadRequestSchemas,
   z.object({ operation: z.literal("project.list.v1") }).strict(),
   z
@@ -344,6 +318,7 @@ export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
 ]);
 export type WorkspaceReadRequest = z.infer<typeof WorkspaceReadRequestSchema>;
 export const WorkspaceReadResponseSchema = z.discriminatedUnion("operation", [
+  ...ExecutionCatalogReadResponseSchemas,
   ...AnnotationReadResponseSchemas,
   z
     .object({ operation: z.literal("project.list.v1"), projects: z.array(ProjectDescriptorSchema) })
@@ -432,6 +407,7 @@ const ProjectLifecycleCommandSchema = ScopedRequestSchema.extend({
   reasonMarkdown: z.string().min(1).max(8_000),
 });
 export const WorkspaceCommandRequestSchema = z.discriminatedUnion("operation", [
+  ...ExecutionCatalogCommandRequestSchemas,
   ...AnnotationCommandRequestSchemas,
   ...WorkspacePlanCommandRequestSchemas,
   ScopedRequestSchema.extend({
@@ -500,6 +476,7 @@ const PendingActionSchema = z
   })
   .strict();
 export const WorkspaceCommandResponseSchema = z.discriminatedUnion("operation", [
+  ...ExecutionCatalogCommandResponseSchemas,
   ...AnnotationCommandResponseSchemas,
   ...WorkspacePlanCommandResponseSchemas,
   z.object({ operation: z.literal("chat.post.v1"), message: ChatMessageSchema }).strict(),

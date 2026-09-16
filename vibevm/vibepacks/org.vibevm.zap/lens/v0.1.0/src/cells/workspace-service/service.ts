@@ -34,6 +34,7 @@ import { startWorkspace, type Launch, type LaunchActions } from "./launch.ts";
 import { controlProject, settleLifecycleEvent } from "./control.ts";
 import { dispatchNextChat, observeChatReply, postCoordinatorChat } from "./chat.ts";
 import { updateModelPolicy } from "./model-policy.ts";
+import { commandExecutionCatalog, isExecutionCatalogCommand } from "./execution-catalog.ts";
 import { updateWorkspaceState } from "./service-state.ts";
 import { commandTerminal, startManagedTerminal } from "./terminal.ts";
 import { notifyOwnedAnswer } from "./answer-notice.ts";
@@ -54,11 +55,13 @@ import {
   repositoryCommand,
   repositoryRead,
 } from "./repository-routing.ts";
+import { interactionDispatch } from "./interaction-dispatch.ts";
 
 export class InProcessWorkspaceService implements WorkspaceService {
   readonly #store: WorkspaceStore;
   readonly #adapters: WorkspaceServiceOptions["adapters"];
   readonly #modelPolicy: WorkspaceServiceOptions["modelPolicy"];
+  readonly #executionCatalog: WorkspaceServiceOptions["executionCatalog"];
   readonly #coordinatorRouting: WorkspaceServiceOptions["coordinatorRouting"];
   readonly #interactions: WorkspaceServiceOptions["interactions"];
   readonly #terminals: WorkspaceServiceOptions["terminals"];
@@ -86,6 +89,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
     this.#store = options.store;
     this.#adapters = options.adapters;
     this.#modelPolicy = options.modelPolicy;
+    this.#executionCatalog = options.executionCatalog;
     this.#coordinatorRouting = options.coordinatorRouting;
     this.#interactions = options.interactions;
     this.#terminals = options.terminals;
@@ -177,6 +181,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
       this.#planning,
       this.#terminals,
       this.#modelPolicy,
+      this.#executionCatalog,
       this.#managedWork,
       this.#annotations,
       access,
@@ -252,9 +257,10 @@ export class InProcessWorkspaceService implements WorkspaceService {
         request,
       );
     }
-    if (request.operation === "model-policy.update.v1") {
+    if (request.operation === "model-policy.update.v1")
       return updateModelPolicy(this.#modelPolicy, access, request);
-    }
+    if (isExecutionCatalogCommand(request))
+      return commandExecutionCatalog(this.#executionCatalog, access, request);
     if (request.operation.startsWith("managed-work.")) {
       return commandManagedWork(this.#managedWork, this.#store, access, request);
     }
@@ -579,18 +585,6 @@ export class InProcessWorkspaceService implements WorkspaceService {
   }
 
   #interactionDispatch(projectId: string, contextId: string) {
-    const launch = [...this.#launches.values()].find(
-      (candidate) => candidate.projectId === projectId && candidate.contextId === contextId,
-    );
-    if (launch === undefined) return null;
-    const execution = this.#store.readProjectExecution(launch.projectId, launch.contextId);
-    return {
-      projectId: launch.projectId,
-      contextId: launch.contextId,
-      coordinatorSessionId: launch.scope.coordinatorSessionId,
-      adapter: launch.adapter,
-      processEpoch: launch.processEpoch,
-      executionEnabled: execution.ok && execution.value.state === "running",
-    };
+    return interactionDispatch(this.#launches.values(), this.#store, projectId, contextId);
   }
 }
