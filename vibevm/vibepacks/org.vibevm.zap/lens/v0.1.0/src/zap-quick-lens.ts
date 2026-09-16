@@ -8,6 +8,7 @@ import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 import { z } from "zod";
 import { CredentialSchema } from "./cells/protocol/index.ts";
+import { createNativeManagedProviderControlAdapters } from "./cells/managed-work/index.ts";
 import {
   discoverLocalProductProviders,
   createProtectedEnvironmentResolver,
@@ -28,13 +29,14 @@ import {
 } from "./cells/wayfinder-runtime/index.ts";
 
 const arguments_ = process.argv.slice(2);
-const advancedPath = option("--config");
-const stateDirectory = resolve(option("--state-dir") ?? join(homedir(), ".vibe", "zap"));
-const presentation = arguments_.includes("--electron") ? "electron" : "browser";
-const shouldOpen = !arguments_.includes("--no-open");
-await main();
+if (arguments_.includes("--help") || arguments_.includes("-h")) printHelp();
+else await main();
 
 async function main(): Promise<void> {
+  const advancedPath = option("--config");
+  const stateDirectory = resolve(option("--state-dir") ?? join(homedir(), ".vibe", "zap"));
+  const presentation = arguments_.includes("--electron") ? "electron" : "browser";
+  const shouldOpen = !arguments_.includes("--no-open");
   const settings = await loadProductLocalSettings(join(stateDirectory, "settings.json"));
   if (!settings.ok) {
     fail(settings.message, 2);
@@ -72,6 +74,23 @@ async function main(): Promise<void> {
   );
 }
 
+function printHelp(): void {
+  console.log(
+    [
+      "Zap Quick Lens",
+      "",
+      "Usage: zap-quick-lens [options]",
+      "",
+      "Options:",
+      "  --state-dir <path>  Store settings and workspace state under this directory",
+      "  --config <path>     Load an advanced Wayfinder runtime configuration",
+      "  --electron          Open the Electron client instead of the browser client",
+      "  --no-open           Start or attach without opening a client window",
+      "  -h, --help          Show this help and exit",
+    ].join("\n"),
+  );
+}
+
 async function startNewOwner(
   database: string,
   stateRoot: string,
@@ -100,6 +119,9 @@ async function startNewOwner(
       : advancedConfig(configured, ui.value.origin, settings);
   const created = createWayfinderRuntime(config, {
     managedEnvironment: createProtectedEnvironmentResolver(settings.environmentFiles),
+    managedControlAdapters: createNativeManagedProviderControlAdapters({
+      directory: join(stateRoot, "managed-control"),
+    }),
   });
   if (!created.ok) {
     await closeOwner(undefined, ui.value, owner.value);
@@ -178,6 +200,7 @@ async function defaultConfig(
     providerCoordinatorProfiles: [...providers.providerCoordinatorProfiles],
     productProviders: [...providers.productProviders],
     managedWorkerProfiles: [...providers.managedWorkers],
+    repositoryWorkspaces: repositoryConfig(settings),
     proxy: settings.proxy,
     projects: [],
     modelPolicies: [],
@@ -197,6 +220,17 @@ function advancedConfig(
       allowedOrigins: [...new Set([...loaded.gateway.allowedOrigins, origin, "quicklens://app"])],
     },
     proxy: settings.proxy,
+    repositoryWorkspaces: loaded.repositoryWorkspaces ?? repositoryConfig(settings),
+  };
+}
+
+function repositoryConfig(
+  settings: ProductLocalSettings,
+): NonNullable<WayfinderRuntimeConfig["repositoryWorkspaces"]> {
+  return {
+    executionHostId: "host.repository.local",
+    mergeIdentity: settings.repositoryMergeIdentity,
+    testProfiles: ["repository.consistency"],
   };
 }
 

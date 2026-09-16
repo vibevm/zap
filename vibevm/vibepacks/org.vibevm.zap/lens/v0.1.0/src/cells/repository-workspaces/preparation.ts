@@ -174,7 +174,10 @@ export async function prepareChildWorktree(
     input.expectedParentHead,
   );
   if (!checked.ok) return checked;
-  if (parent?.record.planId !== input.planId)
+  if (
+    parent?.record.planId !== input.planId &&
+    !(parent?.record.kind === "registered" && plan.rootWorktreeId === parent.record.worktreeId)
+  )
     return fail("invalid_input", "parent workspace does not belong to the requested plan");
   const clean = await requireClean(runtime, parent.directory);
   if (!clean.ok) return clean;

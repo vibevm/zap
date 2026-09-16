@@ -7,11 +7,15 @@ import {
   type ManagedActorBindingPort,
   type ManagedAgentBackend,
   type ManagedAgentProfile,
+  type ManagedExecutionFencePort,
   type ManagedWorkStore,
   type WorkAttachmentPort,
   type ManagedParentPort,
   type ManagedSelectionPort,
   type ManagedWorkResult,
+  type ManagedWorkspaceProvisioningPort,
+  type ManagedProviderControlAdapter,
+  type ManagedSessionControlPort,
   type ProtectedEnvironmentPort,
 } from "../managed-work/index.ts";
 import type { ManagedTerminalServicePort } from "../managed-terminal-service/index.ts";
@@ -37,9 +41,12 @@ import {
   type AnnotationTargetResolver,
   type AnnotationStore,
 } from "../workspace-annotations/index.ts";
+import { createManagedControlComposition } from "./managed-control-composition.ts";
+import { createDefaultManagedEnvironment } from "./managed-environment.ts";
 
 export interface ConfiguredManagedWorkRuntime {
   readonly backend: ManagedAgentBackend;
+  readonly control: ManagedSessionControlPort;
   readonly store: ManagedWorkStore;
   close(): void;
 }
@@ -57,12 +64,24 @@ export function openConfiguredManagedWorkRuntime(input: {
   readonly proxyPolicy?: ProxyPolicy;
   readonly environment?: ProtectedEnvironmentPort;
   readonly workspaceStore: WorkspaceStore;
+  readonly controlAdapters?: readonly ManagedProviderControlAdapter[];
+  readonly workspaces?: ManagedWorkspaceProvisioningPort;
+  readonly canOpenWriter?: (
+    access: Parameters<ManagedExecutionFencePort["canStart"]>[0],
+    projectId: string,
+    contextId: string,
+  ) => ManagedWorkResult<null>;
 }):
   | { readonly ok: true; readonly value: ConfiguredManagedWorkRuntime }
   | { readonly ok: false; readonly message: string } {
   const opened = openManagedWorkStore(input.databasePath);
   if (!opened.ok) return { ok: false, message: opened.error.message };
   const store = opened.value;
+  const control = createManagedControlComposition({
+    terminals: input.terminals,
+    directory: `${input.databasePath}.control`,
+    adapters: input.controlAdapters ?? [],
+  });
   const backend = createManagedAgentBackend({
     store,
     terminals: input.terminals,
@@ -70,7 +89,7 @@ export function openConfiguredManagedWorkRuntime(input: {
     drivers: createManagedProviderDrivers(
       input.proxyPolicy === undefined ? {} : { proxyPolicy: input.proxyPolicy },
     ),
-    environment: input.environment ?? protectedEnvironment(),
+    environment: input.environment ?? createDefaultManagedEnvironment(),
     bindings: input.bindings,
     selections: selectionPort(input.policyStore, input.routingProvider, store),
     parents: parentPort(store, input.workspaceStore),
@@ -86,6 +105,12 @@ export function openConfiguredManagedWorkRuntime(input: {
           })),
     execution: {
       canStart(access, claim) {
+        const writer = input.canOpenWriter?.(
+          access,
+          claim.packet.projectId,
+          claim.packet.contextId,
+        );
+        if (writer !== undefined && !writer.ok) return writer;
         const execution = input.workspaceStore.readProjectExecution(
           claim.packet.projectId,
           claim.packet.contextId,
@@ -104,30 +129,20 @@ export function openConfiguredManagedWorkRuntime(input: {
             };
       },
     },
+    control,
+    ...(input.workspaces === undefined ? {} : { workspaces: input.workspaces }),
     id: (kind) => `${kind}.${randomUUID().replaceAll("-", "")}`,
   });
   return {
     ok: true,
     value: {
       backend,
+      control,
       store,
       close() {
+        control.close();
         store.close();
       },
-    },
-  };
-}
-
-function protectedEnvironment() {
-  return {
-    async resolve(reference: string | null) {
-      await Promise.resolve();
-      return reference === null
-        ? { ok: true as const, value: {} }
-        : {
-            ok: false as const,
-            message: "managed environment references require a trusted runtime provider",
-          };
     },
   };
 }
@@ -512,7 +527,7 @@ function capabilityFor(profile: ManagedAgentProfile) {
 }
 
 function effortCapability(profile: ManagedAgentProfile): EffortCapability {
-  if (profile.provider === "opencode" || profile.provider === "qwen_code")
+  if (["opencode", "qwen_code", "zap_mock"].includes(profile.provider))
     return { mode: "unsupported" };
   const effort = ReasoningEffortSchema.safeParse(profile.effort);
   return profile.effortSupported && effort.success

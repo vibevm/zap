@@ -133,11 +133,16 @@ class OpenCodeOwnedTransport implements ProviderCoordinatorTransport {
     return this.#inner.respond(input);
   }
 
+  pause(input: { readonly session: ProviderCoordinatorSession }) {
+    if (this.#inner === undefined) return Promise.resolve(unavailable());
+    return this.#inner.pause(input);
+  }
+
   async stop(input: { readonly session: ProviderCoordinatorSession }) {
     const stopped = this.#inner === undefined ? unavailable() : await this.#inner.stop(input);
     this.#inner?.close();
     this.#inner = undefined;
-    this.#stopDaemon();
+    this.#daemon?.kill();
     return stopped;
   }
 
@@ -149,7 +154,7 @@ class OpenCodeOwnedTransport implements ProviderCoordinatorTransport {
   close() {
     this.#inner?.close();
     this.#inner = undefined;
-    this.#stopDaemon();
+    this.#disposeDaemon();
     this.#listeners.clear();
   }
 
@@ -197,6 +202,11 @@ class OpenCodeOwnedTransport implements ProviderCoordinatorTransport {
     });
     this.#daemon = daemon;
     this.#unsubscribeExit = daemon.onExit(() => {
+      this.#daemon = undefined;
+      this.#unsubscribeExit?.();
+      this.#unsubscribeExit = undefined;
+      this.#inner?.close();
+      this.#inner = undefined;
       for (const listener of this.#listeners) listener({ type: "process_exited", exitCode: null });
     });
     const endpoint = `http://127.0.0.1:${String(port)}`;
@@ -223,11 +233,11 @@ class OpenCodeOwnedTransport implements ProviderCoordinatorTransport {
       }
       await delay(50);
     }
-    this.#stopDaemon();
+    this.#disposeDaemon();
     return failure("transport_lost", "owned OpenCode server did not become ready");
   }
 
-  #stopDaemon(): void {
+  #disposeDaemon(): void {
     this.#unsubscribeInner?.();
     this.#unsubscribeInner = undefined;
     this.#unsubscribeExit?.();

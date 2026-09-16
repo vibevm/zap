@@ -16,6 +16,10 @@ import type {
   ProjectId,
   WorkContextId,
   WorkspaceResult,
+  WorkspaceReadRequest,
+  WorkspaceReadResponse,
+  WorkspaceCommandRequest,
+  WorkspaceCommandResponse,
 } from "../workspace-model/index.ts";
 import {
   ActorIdSchema,
@@ -23,7 +27,7 @@ import {
   type ConversationId,
   type WorkspaceId,
 } from "../protocol/index.ts";
-import type { WorkspaceStore } from "../workspace-store/index.ts";
+import type { ManagedWakeDelivery, WorkspaceStore } from "../workspace-store/index.ts";
 import type { ManagedAgentBackend } from "../managed-work/index.ts";
 import type { ModelPolicyService } from "../model-policy-service/index.ts";
 import type {
@@ -66,6 +70,7 @@ export const WORKSPACE_SERVICE_ACTIONS = [
   "managed-work.create.v1",
   "managed-work.start.v1",
   "managed-work.stop.v1",
+  "managed-work.continue.v1",
   "managed-work.interrupt.v1",
   "managed-work.report.v1",
   "managed-work.review.v1",
@@ -76,6 +81,13 @@ export const WORKSPACE_SERVICE_ACTIONS = [
   "annotation.note.relink.v1",
   "annotation.note.send.v1",
   "annotation.object.restore.intent.v1",
+  "plan.workspace.prepare.v1",
+  "worktree.prepare.v1",
+  "integration.prepare.v1",
+  "integration.test.v1",
+  "integration.review.v1",
+  "integration.resolution.prepare.v1",
+  "integration.promote.v1",
 ] as const;
 export type WorkspaceServiceAction = (typeof WORKSPACE_SERVICE_ACTIONS)[number];
 
@@ -110,8 +122,108 @@ export interface WorkspaceServiceOptions {
   readonly planning?: WorkspacePlanningFeature | undefined;
   readonly annotations?: AnnotationService | undefined;
   readonly managedWork?: ManagedAgentBackend | undefined;
+  readonly managedWake?: ManagedWakePort | undefined;
+  readonly repositoryWorkspaces?: RepositoryWorkspaceFeature | undefined;
   readonly clock?: () => Date;
   readonly idFactory?: (kind: string) => string;
+}
+
+export type RepositoryWorkspaceReadRequest = Extract<
+  WorkspaceReadRequest,
+  {
+    operation:
+      | "repository.get.v1"
+      | "plan.workspace.list.v1"
+      | "plan.workspace.get.v1"
+      | "worktree.list.v1"
+      | "worktree.get.v1"
+      | "integration.list.v1"
+      | "integration.get.v1"
+      | "integration.diff.v1";
+  }
+>;
+export type RepositoryWorkspaceCommandRequest = Extract<
+  WorkspaceCommandRequest,
+  {
+    operation:
+      | "plan.workspace.prepare.v1"
+      | "worktree.prepare.v1"
+      | "integration.prepare.v1"
+      | "integration.test.v1"
+      | "integration.review.v1"
+      | "integration.resolution.prepare.v1"
+      | "integration.promote.v1";
+  }
+>;
+export interface RepositoryWorkspaceFeature {
+  read(
+    access: WorkspaceAccessContext,
+    request: RepositoryWorkspaceReadRequest,
+  ): Promise<WorkspaceResult<WorkspaceReadResponse>>;
+  command(
+    access: WorkspaceAccessContext,
+    request: RepositoryWorkspaceCommandRequest,
+  ): Promise<WorkspaceResult<WorkspaceCommandResponse>>;
+  canOpenWriter(
+    access: WorkspaceAccessContext,
+    projectId: ProjectId,
+    contextId: WorkContextId,
+  ): WorkspaceResult<null>;
+}
+
+export type ManagedWakeObservation = "settled" | "requested" | "unsupported" | "uncertain";
+
+/**
+ * Planning-owned managed work control. The implementation must report settled
+ * only after its owned worker/lease state is observed idle or stopped. Its
+ * events are wake hints; the durable chat queue remains the source of truth.
+ */
+export interface ManagedWakePort {
+  pauseOwned(
+    access: WorkspaceAccessContext,
+    projectId: ProjectId,
+    contextId: WorkContextId,
+  ): Promise<ManagedWakeObservation>;
+  stopOwned(
+    access: WorkspaceAccessContext,
+    projectId: ProjectId,
+    contextId: WorkContextId,
+  ): Promise<"settled" | "uncertain">;
+  continueOwned(
+    access: WorkspaceAccessContext,
+    projectId: ProjectId,
+    contextId: WorkContextId,
+  ): Promise<"settled" | "unsupported" | "uncertain">;
+  resolveRecipient(input: {
+    readonly projectId: ProjectId;
+    readonly contextId: WorkContextId;
+    readonly actorId: ActorId;
+  }): Promise<ManagedWakeTarget | null>;
+  offerWake(input: {
+    readonly notice: ManagedWakeDelivery;
+    readonly leaseId: string;
+  }): Promise<"host_accepted" | "uncertain" | "busy" | "refused">;
+  subscribe(listener: (event: ManagedWakeEvent) => void): () => void;
+}
+
+export interface ManagedWakeTarget {
+  readonly actorId: ActorId;
+  readonly runId: string;
+  readonly attemptId: string;
+  readonly adapterSessionId: string;
+  readonly processEpoch: string | null;
+  readonly leaseId: string | null;
+}
+
+export interface ManagedWakeEvent {
+  readonly projectId: ProjectId;
+  readonly contextId: WorkContextId;
+  readonly actorId: ActorId | null;
+  readonly state: "busy" | "idle" | "pausing" | "paused" | "stopped";
+  readonly wakeEligible: boolean;
+  readonly action: "wake" | "pause" | "stop" | "continue";
+  readonly processEpoch: string | null;
+  readonly leaseId: string | null;
 }
 
 export const OwnedCoordinatorAgentBindingSchema = z

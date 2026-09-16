@@ -3,11 +3,12 @@ import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { zapPreauthorizedToolNames } from "../protocol/index.ts";
 
 export function writeManagedMcpConfig(input: {
   readonly basePath: string;
   readonly runId: string;
-  readonly provider: "codex" | "claude_code" | "opencode" | "qwen_code";
+  readonly provider: "codex" | "claude_code" | "opencode" | "qwen_code" | "zap_mock";
   readonly commandPath: string;
   readonly args: readonly string[];
   readonly brokerUrl: string;
@@ -45,6 +46,7 @@ export function writeManagedMcpConfig(input: {
                 enabled: true,
               },
             },
+            permission: opencodeZapPermissions(),
           }
         : { mcpServers: { "zap-wayfinder": server } };
     writeFileSync(
@@ -88,6 +90,15 @@ export function writeManagedMcpConfig(input: {
       "managed MCP configuration could not be provisioned",
     );
   }
+}
+
+function opencodeZapPermissions(): Record<string, "allow" | "ask"> {
+  const entries: Array<readonly [string, "allow" | "ask"]> = [["*", "ask"]];
+  for (const tool of zapPreauthorizedToolNames(true)) {
+    entries.push([`zap-wayfinder_${tool}`, "allow"]);
+    entries.push([`zap_wayfinder_${tool}`, "allow"]);
+  }
+  return Object.fromEntries(entries);
 }
 
 export function defaultMcpLaunch(

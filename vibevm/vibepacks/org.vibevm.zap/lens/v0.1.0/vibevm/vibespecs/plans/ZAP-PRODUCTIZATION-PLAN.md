@@ -23,30 +23,51 @@ inbox wait, but the product does not claim universal wake behavior.
 
 Qwen Code completed the real managed question, browser answer, delivery
 acknowledgement and typed-report flow through an HTTP proxy; human review
-succeeded after Wayfinder restart. Not all four providers have completed a
-current real-model end-to-end run. Provider Pause is unsupported where no
-verified primitive exists. The final delivery boundary and evidence are in the
+succeeded after Wayfinder restart. The later bounded coordinator flow completed
+on Codex, Claude Code, Qwen Code and OpenCode. Codex and Claude observed live
+Stop; Qwen and OpenCode retain cleanup failures in their historical receipts,
+followed by focused public proof of the exact shared raw-exit Stop repair. The
+final delivery boundary and evidence are in the
 [acceptance record](../research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md).
+
+One registered Git project can now add independent top-level development-plan
+contexts without replacing its default checkout. Each plan has an owned root
+worktree, conversation, coordinator launch binding and protected cwd. Managed
+workers can receive recorded isolated-child assignments. Integration uses a
+separate checkout with bounded diff, registered test evidence, human review and
+target-HEAD/writer-lease promotion; conflicts become explicitly authorized
+managed resolution work. Exact plan/worktree/integration objects support notes
+and recoverable source snapshots.
+
+Ordinary startup enables the local repository host and a narrowly labelled Git
+consistency profile. Git author identity remains protected and optional until a
+commit must be created. A plan may remain planning-source pending while
+coordination continues. Dynamic source attachment is exact-context and
+active-ZAP-identity checked; if its protected config is not restored after
+restart, public state becomes unavailable/pending and requires trusted
+reconnection.
 
 ## Delivery and acceptance
 
-| Slice | User-visible outcome | Acceptance boundary |
-| --- | --- | --- |
-| Local start and project setup | Open Zap, add an existing project, choose an available agent and explicitly start development. | A clean local workspace opens without invented sample projects or manually authored protocol IDs. Adding a project does not launch a model. Another client sees the registration and can reconnect to the same service. |
-| Agent products | Codex, Claude Code, OpenCode and Qwen Code have real registered provider drivers and truthful capabilities. | Installed/configured/authenticated/exercised states are distinct. Supported conversation and managed paths are exercised with available inexpensive profiles; unavailable account setup is actionable rather than hidden behind a nominal provider label. |
-| Agent networking | Choose a shared proxy or a profile-specific inherited, direct or explicit route. | Every owned agent/provider process receives the effective policy, native children inherit it where supported, local control traffic bypasses it and TLS stays verified. No global environment mutation, credential disclosure or silent direct/provider fallback. |
-| Managed work | Delegate a bounded task, inspect its real agent terminal, answer questions, receive a report and review it. | Durable launch claim precedes spawn; server identities and model selection are preserved. Human control fences automation. Closing a viewer does not kill work. Process exit is separate from report and acceptance. |
-| Questions for people | Understand who is asking, why and in which project; answer ordinary rich question groups comfortably. | Choices, descriptions, custom/text/multiple answers, limits, drafts, cancel/amendment, deadlines and accessible feedback work. Drafts do not cross question revisions or silently overwrite another client. Cancellation and delivery states reflect the actual recipient path. |
-| One project map | Several project regions and their work appear in one pan/zoom canvas. | Exact scoped selection opens the right card or terminal; layout indicates decomposition/dependencies, and unavailable or partial data remains visible. Camera/collapse state survives refresh. No cross-project authority or edges are invented. |
-| Anchored notes | Capture a note or future instruction against an exact graph element without disturbing current work. | Passive notes do not dispatch. The next declared matching work boundary receives the eligible instruction version; offer, read and acknowledgement are distinct. Unknown native task binding remains waiting rather than guessed. |
-| Recoverable Trash | Find removed elements and their notes, inspect the former context and restore/relink deliberately. | Soft archive suppresses deferred delivery and preserves history. Partial data, filters or temporary disconnect never mean deletion. Restoring annotations does not revive an old plan; object restoration uses the ordinary planning proposal path. |
-| Runnable delivery | The same shared server serves browser and Electron, with clear setup/recovery states. | Focused real user-flow checks, required repository gates, an installed-package check and an account-independent checkpoint. No redundant broad/model comparison campaign. |
+| Slice                         | User-visible outcome                                                                                                     | Acceptance boundary                                                                                                                                                                                                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local start and project setup | Open Zap, add an existing project, choose an available agent and explicitly start development.                           | A clean local workspace opens without invented sample projects or manually authored protocol IDs. Adding a project does not launch a model. Another client sees the registration and can reconnect to the same service.                                                         |
+| Agent products                | Codex, Claude Code, OpenCode and Qwen Code have real registered provider drivers and truthful capabilities.              | Installed/configured/authenticated/exercised states are distinct. Supported conversation and managed paths are exercised with available inexpensive profiles; unavailable account setup is actionable rather than hidden behind a nominal provider label.                       |
+| Agent networking              | Choose a shared proxy or a profile-specific inherited, direct or explicit route.                                         | Every owned agent/provider process receives the effective policy, native children inherit it where supported, local control traffic bypasses it and TLS stays verified. No global environment mutation, credential disclosure or silent direct/provider fallback.               |
+| Managed work                  | Delegate a bounded task, inspect its real agent terminal, answer questions, receive a report and review it.              | Durable launch claim precedes spawn; server identities and model selection are preserved. Human control fences automation. Closing a viewer does not kill work. Process exit is separate from report and acceptance.                                                            |
+| Questions for people          | Understand who is asking, why and in which project; answer ordinary rich question groups comfortably.                    | Choices, descriptions, custom/text/multiple answers, limits, drafts, cancel/amendment, deadlines and accessible feedback work. Drafts do not cross question revisions or silently overwrite another client. Cancellation and delivery states reflect the actual recipient path. |
+| One project map               | Several project regions and their work appear in one pan/zoom canvas.                                                    | Exact scoped selection opens the right card or terminal; layout indicates decomposition/dependencies, and unavailable or partial data remains visible. Camera/collapse state survives refresh. No cross-project authority or edges are invented.                                |
+| Parallel plan workspaces      | Add several development plans to one Git project, delegate in isolated children and review integration before promotion. | The original checkout stays registered; each new plan/context has exact cwd and identities. Reads expose freshly observed committed heads. Integration diff/test/review/promotion are separate, target writers are fenced, and conflicts use an authorized resolution task.     |
+| Anchored notes                | Capture a note or future instruction against an exact graph element without disturbing current work.                     | Passive notes do not dispatch. The next declared matching work boundary receives the eligible instruction version; offer, read and acknowledgement are distinct. Unknown native task binding remains waiting rather than guessed.                                               |
+| Recoverable Trash             | Find removed elements and their notes, inspect the former context and restore/relink deliberately.                       | Soft archive suppresses deferred delivery and preserves history. Partial data, filters or temporary disconnect never mean deletion. Restoring annotations does not revive an old plan; object restoration uses the ordinary planning proposal path.                             |
+| Runnable delivery             | The same shared server serves browser and Electron, with clear setup/recovery states.                                    | Focused real user-flow checks, required repository gates, an installed-package check and an account-independent checkpoint. No redundant broad/model comparison campaign.                                                                                                       |
 
 ## Shared contracts and ownership
 
 `ProjectObjectReference` is the common identity for a project, semantic object,
-semantic relationship, agent, work task or run. It contains project ID, context
-ID, reference domain and exact source reference. Display labels, camera positions,
+semantic relationship, agent, work task, work run, development plan workspace,
+repository worktree or integration. It contains project ID, context ID,
+reference domain and exact source reference. Display labels, camera positions,
 captured source basis and snapshots are separate data. This avoids note routing
 or graph selection by visual similarity.
 
@@ -87,6 +108,13 @@ configured. Setup must not fabricate a campaign, adopt a discovered legacy plan,
 or treat a terminal process as an agent task. Existing planning sources attach
 through the accepted protected ZAP interface.
 
+Provider-native children keep provider-owned lifecycle and cwd capabilities;
+the product does not promise isolated worktrees for every native child. The
+general isolated-cwd contract belongs to managed work. Deterministic ZapMock,
+real temporary-Git and authenticated loopback-HTTP results are component and
+local runtime evidence, not substitutes for current live acceptance of every
+provider's Pause/background-wake behavior.
+
 The current workspace canvas lays out authorized projects together while every
 node and edge retains project/context identity. Notes and deferred instructions
 anchor through `ProjectObjectReference`; managed starts add their exact task/run
@@ -96,10 +124,12 @@ proposal, never a direct resurrection.
 
 ## Deferred scope
 
-Full RLM strategy execution, authenticated remote execution hosts, Gamelens,
-native VS Code/IDEA shells and real public-tunnel deployment remain separate
-future implementations. The unified canvas and the four priority agent products
-are no longer deferred by this productization request.
+Full RLM strategy execution, authenticated remote execution hosts, distributed
+writer leases, multi-user merge authority, contributor admission, crowdsourced
+computers/accounts, Gamelens, native VS Code/IDEA shells and real public-tunnel
+deployment remain separate future implementations. The unified canvas and the
+four priority provider adapters and their main bounded live flows are present;
+future remote and crowd execution are not implied by that local evidence.
 
 Execution assignments, in-progress evidence, process ownership and the next
 unfinished step are maintained in the user-local productization recovery plan.

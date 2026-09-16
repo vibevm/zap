@@ -1,0 +1,33 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "workspace_store",
+  "scenarioId": "store.additive-plan-context",
+  "runnerId": "workspace.store-plan-context",
+  "seed": "seed.store-plan-context",
+  "tags": ["store", "context", "plan", "backward-compatibility"],
+  "coverage": [
+    "store.additive-plan-context",
+    "store.default-context-backcompat",
+    "store.context-launch-isolation",
+    "store.context-coordinator-isolation",
+    "store.registration-digest-backcompat"
+  ],
+  "inputs": {
+    "baseProjectId": "project.plan-context",
+    "baseContextId": "context.plan-context.main",
+    "planId": "plan.workspace.fixture",
+    "planContextId": "context.plan-context.parallel",
+    "repositoryId": "repository.fixture",
+    "rootWorktreeId": "worktree.plan.fixture"
+  },
+  "expected": {
+    "contextCount": 2,
+    "defaultContextPreserved": true,
+    "exactContextLaunches": true,
+    "contextScopedCoordinator": true,
+    "idempotentReplay": true,
+    "legacyDigestStable": true,
+    "productCatalogRehydrates": true,
+    "zeroLlmInference": true
+  }
+}

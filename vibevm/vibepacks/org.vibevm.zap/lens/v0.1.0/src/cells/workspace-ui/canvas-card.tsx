@@ -1,7 +1,7 @@
 /** Scoped inspector for unified-canvas selections. @scope spec://org.vibevm.zap/lens/PROP-010#unified-canvas */
 import { component$, type QRL } from "@qwik.dev/core";
 import type { PortfolioCard } from "../quicklens-graph/index.ts";
-import type { ProjectId, ProjectObjectReference } from "../workspace-model/index.ts";
+import type { ProjectId, ProjectObjectReference, WorkContextId } from "../workspace-model/index.ts";
 
 export interface CanvasAnnotationSummary {
   readonly noteCount: number;
@@ -13,8 +13,8 @@ export const CanvasCard = component$<{
   readonly card: PortfolioCard | null;
   readonly collapsed: boolean;
   readonly annotations?: CanvasAnnotationSummary | undefined;
-  readonly onOpenProject$: QRL<(projectId: ProjectId) => void>;
-  readonly onOpenQuestions$: QRL<(projectId: ProjectId) => void>;
+  readonly onOpenProject$: QRL<(projectId: ProjectId, contextId: WorkContextId) => void>;
+  readonly onOpenQuestions$: QRL<(projectId: ProjectId, contextId: WorkContextId) => void>;
   readonly onToggleCollapse$: QRL<() => void>;
   readonly onOpenNotes$?: QRL<(reference: ProjectObjectReference) => void> | undefined;
   readonly onOpenTrash$?: QRL<(projectId: ProjectId) => void> | undefined;
@@ -38,6 +38,12 @@ export const CanvasCard = component$<{
         <SemanticCard card={card} />
       ) : card.kind === "managed_work" ? (
         <ManagedWorkCard card={card} />
+      ) : card.kind === "plan_workspace" ? (
+        <PlanWorkspaceCard card={card} />
+      ) : card.kind === "worktree" ? (
+        <WorktreeCard card={card} />
+      ) : card.kind === "integration" ? (
+        <IntegrationCard card={card} />
       ) : (
         <AgentCard card={card} />
       )}
@@ -47,11 +53,17 @@ export const CanvasCard = component$<{
         <span>{card.reference.contextId}</span>
       </p>
       <div class="execution-actions">
-        <button class="button secondary" onClick$={() => props.onOpenProject$(projectId)}>
+        <button
+          class="button secondary"
+          onClick$={() => props.onOpenProject$(projectId, card.reference.contextId)}
+        >
           Open project
         </button>
         {card.kind === "project" ? (
-          <button class="button secondary" onClick$={() => props.onOpenQuestions$(projectId)}>
+          <button
+            class="button secondary"
+            onClick$={() => props.onOpenQuestions$(projectId, card.reference.contextId)}
+          >
             Open questions
           </button>
         ) : null}
@@ -214,3 +226,178 @@ const ManagedWorkCard = component$<{
     </>
   );
 });
+
+const PlanWorkspaceCard = component$<{
+  card: Extract<PortfolioCard, { kind: "plan_workspace" }>;
+}>((props) => {
+  const plan = props.card.plan;
+  return (
+    <>
+      <h2>{plan.displayName}</h2>
+      <span class={`coordinator-state state-${plan.state}`}>{plan.state}</span>
+      <p>
+        {plan.algorithmBinding.state === "bound"
+          ? "Algorithm plan connected"
+          : "Ready to create or connect an algorithm plan"}
+      </p>
+      <dl class="canvas-facts">
+        <div>
+          <dt>Context</dt>
+          <dd>{contextName(props.card)}</dd>
+        </div>
+        <div>
+          <dt>Workspace</dt>
+          <dd>{plan.state}</dd>
+        </div>
+        <div>
+          <dt>Execution host</dt>
+          <dd>{friendlyIdentity(plan.executionHostId)}</dd>
+        </div>
+        <div>
+          <dt>Updated by</dt>
+          <dd>{friendlyIdentity(plan.lastUpdatedByPrincipalId)}</dd>
+        </div>
+      </dl>
+    </>
+  );
+});
+
+const WorktreeCard = component$<{ card: Extract<PortfolioCard, { kind: "worktree" }> }>((props) => {
+  const worktree = props.card.worktree;
+  const plan =
+    props.card.project.repository.state === "ready"
+      ? props.card.project.repository.value.plans.find((item) => item.planId === worktree.planId)
+      : undefined;
+  const activeAssignments = worktree.assignments.filter(
+    (assignment) => assignment.releasedAt === null,
+  );
+  return (
+    <>
+      <h2>{branchName(worktree.branchRef)}</h2>
+      <span class={`coordinator-state state-${worktree.state}`}>{worktree.state}</span>
+      <p>
+        {plan === undefined ? "" : `${plan.displayName} · `}
+        {worktree.kind.replaceAll("_", " ")} workspace
+      </p>
+      <dl class="canvas-facts">
+        <div>
+          <dt>Basis</dt>
+          <dd>{shortCommit(worktree.basisCommit)}</dd>
+        </div>
+        <div>
+          <dt>Current head</dt>
+          <dd>{shortCommit(worktree.headCommit)}</dd>
+        </div>
+        <div>
+          <dt>Responsibility</dt>
+          <dd>{assignmentSummary(activeAssignments)}</dd>
+        </div>
+        <div>
+          <dt>Execution host</dt>
+          <dd>{friendlyIdentity(worktree.executionHostId)}</dd>
+        </div>
+      </dl>
+    </>
+  );
+});
+
+const IntegrationCard = component$<{
+  card: Extract<PortfolioCard, { kind: "integration" }>;
+}>((props) => {
+  const integration = props.card.integration;
+  return (
+    <>
+      <h2>
+        {integration.conflictPaths.length > 0 ? "Conflict resolution" : "Integration candidate"}
+      </h2>
+      <span class={`coordinator-state state-${integration.state}`}>{integration.state}</span>
+      <p>
+        {integration.conflictPaths.length > 0
+          ? `${String(integration.conflictPaths.length)} path(s) need an explicit resolution task.`
+          : integration.candidateCommit === null
+            ? "Candidate is still preparing."
+            : `Candidate ${shortCommit(integration.candidateCommit)}`}
+      </p>
+      <dl class="canvas-facts">
+        <div>
+          <dt>Configured check</dt>
+          <dd>
+            {integration.testEvidence === null
+              ? "Not run"
+              : integration.testEvidence.passed
+                ? "Passed"
+                : "Failed"}
+          </dd>
+        </div>
+        <div>
+          <dt>Semantic review</dt>
+          <dd>
+            {integration.review === null
+              ? "Awaiting review"
+              : integration.review.accepted
+                ? "Accepted"
+                : "Rejected"}
+          </dd>
+        </div>
+        <div>
+          <dt>Reviewer</dt>
+          <dd>
+            {integration.review === null
+              ? "Unassigned"
+              : friendlyIdentity(integration.review.reviewerPrincipalId)}
+          </dd>
+        </div>
+        <div>
+          <dt>Check runner</dt>
+          <dd>
+            {integration.testEvidence === null
+              ? "Unassigned"
+              : friendlyIdentity(integration.testEvidence.runnerAuthorityId)}
+          </dd>
+        </div>
+      </dl>
+      {integration.conflictPaths.length === 0 ? null : (
+        <details class="workspace-notice">
+          <summary>Conflicting paths</summary>
+          <ul>
+            {integration.conflictPaths.map((path) => (
+              <li key={path}>{path}</li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </>
+  );
+});
+
+function contextName(card: Extract<PortfolioCard, { kind: "plan_workspace" }>): string {
+  return (
+    card.project.view.contexts.find((context) => context.contextId === card.reference.contextId)
+      ?.displayName ?? "Plan context"
+  );
+}
+function branchName(value: string): string {
+  return value.split("/").at(-1) ?? value;
+}
+function shortCommit(value: string): string {
+  return value.slice(0, 10);
+}
+function friendlyIdentity(value: string): string {
+  return value.split(/[.:/]/).at(-1) ?? value;
+}
+function assignmentSummary(
+  assignments: readonly Extract<
+    PortfolioCard,
+    { kind: "worktree" }
+  >["worktree"]["assignments"][number][],
+): string {
+  if (assignments.length === 0) return "Unassigned";
+  const labels = assignments.map((assignment) =>
+    assignment.actorId === null
+      ? assignment.taskId === null
+        ? "Unassigned attempt"
+        : `Task ${friendlyIdentity(assignment.taskId)}`
+      : `Agent ${friendlyIdentity(assignment.actorId)}`,
+  );
+  return labels.join(", ");
+}

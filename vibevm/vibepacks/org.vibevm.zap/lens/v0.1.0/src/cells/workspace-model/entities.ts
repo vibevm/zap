@@ -22,6 +22,12 @@ import {
   TerminalLeaseIdSchema,
   WorkContextIdSchema,
 } from "./ids.ts";
+import {
+  ProjectPlanIdSchema,
+  RepositoryIdSchema,
+  RepositoryWorktreeIdSchema,
+} from "../repository-model/index.ts";
+import { ManagedWorkspaceAssignmentSchema } from "./workspace-assignment.ts";
 
 export const ActionAvailabilitySchema = z.discriminatedUnion("state", [
   z.object({ state: z.literal("available") }).strict(),
@@ -70,6 +76,9 @@ export const WorkContextDescriptorSchema = z
     revisionBinding: z.string().max(512).nullable(),
     planning: PlanningBindingSchema,
     coordinatorConversationId: ConversationIdSchema,
+    planId: ProjectPlanIdSchema.nullable().default(null),
+    repositoryId: RepositoryIdSchema.nullable().default(null),
+    rootWorktreeId: RepositoryWorktreeIdSchema.nullable().default(null),
     revision: DecimalSchema,
     createdAt: z.iso.datetime(),
     updatedAt: z.iso.datetime(),
@@ -198,6 +207,8 @@ export const AgentDescriptorSchema = z
     sessionId: AgentSessionIdSchema,
     projectId: ProjectIdSchema,
     contextId: WorkContextIdSchema,
+    planId: ProjectPlanIdSchema.nullable().default(null),
+    workspaceAssignment: ManagedWorkspaceAssignmentSchema.nullable().default(null),
     role: z.enum(["coordinator", "worker"]),
     parentActorId: ActorIdSchema.nullable(),
     displayName: z.string().min(1).max(256),

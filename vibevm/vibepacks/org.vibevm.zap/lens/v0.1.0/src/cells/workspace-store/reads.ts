@@ -33,6 +33,7 @@ import type { WorkspaceState } from "./state.ts";
 
 const JsonRowSchema = z.object({ public_json: z.string() });
 const ProjectRowSchema = JsonRowSchema.extend({ coordinator_launch_options_json: z.string() });
+const LaunchOptionsRowSchema = z.object({ launch_options_json: z.string() });
 
 export function readWorkspace(
   state: WorkspaceState,
@@ -59,6 +60,8 @@ export function readWorkspace(
         [request.projectId],
       );
       if (row === null) return failure("not_found", "project does not exist");
+      const project = state.parse(row.public_json, ProjectDescriptorSchema);
+      const selectedContextId = request.contextId ?? project.defaultContextId;
       const contexts = state.database
         .all(
           "SELECT public_json FROM workspace_contexts WHERE project_id = ? ORDER BY context_id LIMIT 256",
@@ -67,22 +70,33 @@ export function readWorkspace(
         )
         .map((item) => state.parse(item.public_json, WorkContextDescriptorSchema));
       const session = state.database.get(
-        "SELECT public_json FROM workspace_sessions WHERE project_id = ? ORDER BY rowid DESC LIMIT 1",
+        `SELECT public_json FROM workspace_sessions
+         WHERE project_id = ? AND context_id = ? ORDER BY rowid DESC LIMIT 1`,
         JsonRowSchema,
-        [request.projectId],
+        [request.projectId, selectedContextId],
       );
+      const launchOptions = state.database.get(
+        `SELECT launch_options_json FROM workspace_context_launch_options
+         WHERE project_id = ? AND context_id = ?`,
+        LaunchOptionsRowSchema,
+        [request.projectId, selectedContextId],
+      );
+      if (!contexts.some((context) => context.contextId === selectedContextId))
+        return failure("not_found", "selected project context does not exist");
+      if (launchOptions === null)
+        return failure("not_found", "selected project context launch choices do not exist");
       return {
         ok: true,
         value: {
           operation: request.operation,
           detail: ProjectDetailSchema.parse({
-            project: state.parse(row.public_json, ProjectDescriptorSchema),
+            project,
             contexts,
             coordinator:
               session === null ? null : state.parse(session.public_json, CoordinatorSessionSchema),
             coordinatorLaunchOptions: z
               .array(CoordinatorLaunchOptionSchema)
-              .parse(JSON.parse(row.coordinator_launch_options_json)),
+              .parse(JSON.parse(launchOptions.launch_options_json)),
           }),
         },
       };

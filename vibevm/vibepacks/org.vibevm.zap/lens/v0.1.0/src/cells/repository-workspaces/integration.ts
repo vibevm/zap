@@ -26,6 +26,7 @@ import {
   type RepositoryWorkspaceRuntime,
 } from "./runtime.ts";
 import type { ProtectedBinding, ProtectedRepository, ProtectedWorktree } from "./store.ts";
+import { publicIntegration } from "./integration-read.ts";
 
 export async function prepareIntegration(
   runtime: RepositoryWorkspaceRuntime,
@@ -56,8 +57,8 @@ export async function prepareIntegration(
       worktreeId,
       repositoryId: basis.value.repository.record.repositoryId,
       executionHostId: runtime.executionHostId,
-      projectId: basis.value.target.record.projectId,
-      contextId: basis.value.target.record.contextId,
+      projectId: basis.value.plan.projectId,
+      contextId: basis.value.plan.contextId,
       planId: input.planId,
       kind: "integration",
       parentWorktreeId: input.targetWorktreeId,
@@ -318,7 +319,7 @@ async function validateIntegrationBasis(
   const repository = runtime.store.getRepository(source.record.repositoryId);
   const binding = runtime.store.getBinding(target.record.projectId);
   return repository !== null && binding !== null
-    ? { ok: true as const, value: { source, target, repository, binding } }
+    ? { ok: true as const, value: { source, target, repository, binding, plan } }
     : fail("unavailable", "integration repository binding is unavailable");
 }
 
@@ -588,13 +589,4 @@ async function isAncestor(
     args: ["merge-base", "--is-ancestor", ancestor, descendant],
   });
   return result.exitCode === 0;
-}
-function publicIntegration(
-  runtime: RepositoryWorkspaceRuntime,
-  id: string,
-): RepositoryWorkspaceResult<IntegrationAttempt> {
-  const integration = runtime.store.getIntegration(id);
-  return integration === null
-    ? fail("unavailable", "completed integration is unavailable")
-    : { ok: true, value: integration };
 }

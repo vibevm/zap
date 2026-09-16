@@ -75,6 +75,12 @@ import {
   AnnotationReadRequestSchemas,
   AnnotationReadResponseSchemas,
 } from "./annotations.ts";
+import {
+  RepositoryWorkspaceCommandRequestSchemas,
+  RepositoryWorkspaceCommandResponseSchemas,
+  RepositoryWorkspaceReadRequestSchemas,
+  RepositoryWorkspaceReadResponseSchemas,
+} from "./repository-workspaces.ts";
 
 export const WorkspaceErrorCodeSchema = z.enum([
   "invalid_input",
@@ -99,7 +105,6 @@ export const WorkspaceErrorSchema = z
 export type WorkspaceError = z.infer<typeof WorkspaceErrorSchema>;
 export type WorkspaceResult<T> = Result<T, WorkspaceError>;
 export type Awaitable<T> = T | Promise<T>;
-
 export const WorkspaceAccessContextSchema = z
   .object({
     principalId: PrincipalIdSchema,
@@ -209,11 +214,16 @@ export const ProjectSnapshotStateSchema = z.discriminatedUnion("state", [
     .strict(),
 ]);
 export type ProjectSnapshotState = z.infer<typeof ProjectSnapshotStateSchema>;
-
 export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
   ...AnnotationReadRequestSchemas,
   z.object({ operation: z.literal("project.list.v1") }).strict(),
-  z.object({ operation: z.literal("project.get.v1"), projectId: ProjectIdSchema }).strict(),
+  z
+    .object({
+      operation: z.literal("project.get.v1"),
+      projectId: ProjectIdSchema,
+      contextId: WorkContextIdSchema.optional(),
+    })
+    .strict(),
   z
     .object({
       operation: z.literal("project.snapshot.v1"),
@@ -320,6 +330,7 @@ export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
     .strict(),
   ...TerminalReadRequestSchemas,
   ...ManagedWorkReadRequestSchemas,
+  ...RepositoryWorkspaceReadRequestSchemas,
   ModelPolicyGetInputSchema.extend({ operation: z.literal("model-policy.get.v1") }).strict(),
   ModelPolicyPreviewInputSchema.extend({
     operation: z.literal("model-policy.preview.v1"),
@@ -332,7 +343,6 @@ export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
   }).strict(),
 ]);
 export type WorkspaceReadRequest = z.infer<typeof WorkspaceReadRequestSchema>;
-
 export const WorkspaceReadResponseSchema = z.discriminatedUnion("operation", [
   ...AnnotationReadResponseSchemas,
   z
@@ -385,6 +395,7 @@ export const WorkspaceReadResponseSchema = z.discriminatedUnion("operation", [
   z.object({ operation: z.literal("agent.output.page.v1"), page: AgentOutputPageSchema }).strict(),
   ...TerminalReadResponseSchemas,
   ...ManagedWorkReadResponseSchemas,
+  ...RepositoryWorkspaceReadResponseSchemas,
   z
     .object({ operation: z.literal("model-policy.get.v1"), policy: StoredModelPolicyViewSchema })
     .strict(),
@@ -416,7 +427,7 @@ const ScopedRequestSchema = z.object({
   contextId: WorkContextIdSchema,
 });
 const ProjectLifecycleCommandSchema = ScopedRequestSchema.extend({
-  sessionId: AgentSessionIdSchema,
+  sessionId: AgentSessionIdSchema.nullable(),
   expectedRevision: DecimalSchema,
   reasonMarkdown: z.string().min(1).max(8_000),
 });
@@ -478,9 +489,9 @@ export const WorkspaceCommandRequestSchema = z.discriminatedUnion("operation", [
   ModelPolicyUpdateInputSchema.extend({ operation: z.literal("model-policy.update.v1") }).strict(),
   ...TerminalCommandSchemas,
   ...ManagedWorkCommandSchemas,
+  ...RepositoryWorkspaceCommandRequestSchemas,
 ]);
 export type WorkspaceCommandRequest = z.infer<typeof WorkspaceCommandRequestSchema>;
-
 const PendingActionSchema = z
   .object({
     requestId: z.string().min(3).max(160),
@@ -534,6 +545,7 @@ export const WorkspaceCommandResponseSchema = z.discriminatedUnion("operation", 
     .strict(),
   ...TerminalCommandResponseSchemas,
   ...ManagedWorkCommandResponseSchemas,
+  ...RepositoryWorkspaceCommandResponseSchemas,
 ]);
 export type WorkspaceCommandResponse = z.infer<typeof WorkspaceCommandResponseSchema>;
 

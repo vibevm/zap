@@ -1,7 +1,7 @@
 /** Default map with an optional compact project grid. @scope spec://org.vibevm.zap/lens/PROP-010#unified-canvas */
-import { component$, useSignal, type NoSerialize, type QRL } from "@qwik.dev/core";
+import { $, component$, useSignal, type NoSerialize, type QRL } from "@qwik.dev/core";
 import type { ProjectWorkspaceView, WorkspaceClientPort } from "../workspace-client/index.ts";
-import type { ProjectDescriptor, ProjectId } from "../workspace-model/index.ts";
+import type { ProjectDescriptor, ProjectId, WorkContextId } from "../workspace-model/index.ts";
 import { ProjectBoard } from "./project-navigation.tsx";
 import { WorkspaceCanvas } from "./workspace-canvas.tsx";
 
@@ -11,8 +11,8 @@ export const WorkspacePortfolio = component$<{
   readonly views: Readonly<Record<string, ProjectWorkspaceView | undefined>>;
   readonly theme: "light" | "dark";
   readonly refreshEpoch: number;
-  readonly onOpenProject$: QRL<(projectId: ProjectId) => void>;
-  readonly onOpenQuestions$: QRL<(projectId: ProjectId) => void>;
+  readonly onOpenProject$: QRL<(projectId: ProjectId, contextId: WorkContextId) => void>;
+  readonly onOpenQuestions$: QRL<(projectId: ProjectId, contextId: WorkContextId) => void>;
 }>((props) => {
   const view = useSignal<"map" | "grid">("map");
   return (
@@ -44,7 +44,11 @@ export const WorkspacePortfolio = component$<{
         <ProjectBoard
           projects={props.projects}
           views={props.views}
-          onOpen$={props.onOpenProject$}
+          onOpen$={$(async (projectId) => {
+            const project = props.projects.find((candidate) => candidate.projectId === projectId);
+            if (project !== undefined)
+              await props.onOpenProject$(projectId, project.defaultContextId);
+          })}
         />
       )}
     </section>

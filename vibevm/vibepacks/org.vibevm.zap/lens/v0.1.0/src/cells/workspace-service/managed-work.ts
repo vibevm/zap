@@ -87,6 +87,8 @@ export async function commandManagedWork(
       parentTaskId: raw.parentTaskId ?? null,
       parentRunId: raw.parentRunId ?? null,
       projectedParentActorId: access.actorId,
+      planId: raw.planId ?? null,
+      workspaceRequest: raw.workspaceRequest ?? { mode: "inherit" },
       sourceBasisRef: raw.sourceBasisRef ?? `lens.user.${raw.clientRequestId}`,
       planRevision: raw.planRevision ?? null,
       depth: raw.depth ?? 0,
@@ -99,6 +101,7 @@ export async function commandManagedWork(
   if (
     request.operation !== "managed-work.start.v1" &&
     request.operation !== "managed-work.stop.v1" &&
+    request.operation !== "managed-work.continue.v1" &&
     request.operation !== "managed-work.interrupt.v1" &&
     request.operation !== "managed-work.report.v1" &&
     request.operation !== "managed-work.review.v1"
@@ -115,17 +118,21 @@ export async function commandManagedWork(
       ? await backend.start(access, request.runId, request.expectedRevision)
       : request.operation === "managed-work.stop.v1"
         ? await backend.stop(access, request.runId, request.expectedRevision)
-        : request.operation === "managed-work.interrupt.v1"
-          ? await backend.interrupt(access, request.runId, request.expectedRevision)
-          : request.operation === "managed-work.report.v1"
-            ? await backend.report(access, request.runId, request.expectedRevision, {
-                summaryMarkdown: request.summaryMarkdown,
-                artifactRefs: request.artifactRefs.map((value) => ArtifactRefIdSchema.parse(value)),
-              })
-            : await backend.review(access, request.runId, request.expectedRevision, {
-                disposition: request.disposition,
-                commentMarkdown: request.commentMarkdown,
-              });
+        : request.operation === "managed-work.continue.v1"
+          ? await backend.continueRun(access, request.runId, request.expectedRevision)
+          : request.operation === "managed-work.interrupt.v1"
+            ? await backend.interrupt(access, request.runId, request.expectedRevision)
+            : request.operation === "managed-work.report.v1"
+              ? await backend.report(access, request.runId, request.expectedRevision, {
+                  summaryMarkdown: request.summaryMarkdown,
+                  artifactRefs: request.artifactRefs.map((value) =>
+                    ArtifactRefIdSchema.parse(value),
+                  ),
+                })
+              : await backend.review(access, request.runId, request.expectedRevision, {
+                  disposition: request.disposition,
+                  commentMarkdown: request.commentMarkdown,
+                });
   return result.ok
     ? projectManagedWorkClaim(store, request.operation, result.value)
     : managedFailure(result);
@@ -141,6 +148,8 @@ export function projectManagedWorkClaim(
     sessionId: claim.sessionId,
     projectId: claim.packet.projectId,
     contextId: claim.packet.contextId,
+    planId: claim.packet.planId,
+    workspaceAssignment: claim.packet.workspaceAssignment,
     role: "worker",
     parentActorId: claim.parentActorId === null ? null : ActorIdSchema.parse(claim.parentActorId),
     displayName: claim.packet.goal.slice(0, 256),
@@ -188,12 +197,23 @@ export function managedWorkView(claim: ManagedWorkClaim) {
     terminalId: claim.terminalId,
     projectId: claim.packet.projectId,
     contextId: claim.packet.contextId,
+    planId: claim.packet.planId,
+    workspaceAssignment: claim.packet.workspaceAssignment,
     provider: claim.provider,
     profileId: claim.profileId,
     goal: claim.packet.goal,
     expectedResult: claim.packet.expectedResult,
     targetRefs: claim.targetRefs,
     modelSelection: claim.modelSelection,
+    managedControl:
+      claim.managedControl === null
+        ? null
+        : {
+            ...claim.managedControl,
+            automationControlEpoch: DecimalSchema.parse(
+              claim.managedControl.automationControlEpoch,
+            ),
+          },
     state: claim.state,
     processExit: claim.processExit,
     report: claim.report,

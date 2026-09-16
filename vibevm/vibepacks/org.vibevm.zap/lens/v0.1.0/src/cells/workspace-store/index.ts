@@ -13,6 +13,10 @@ export type {
   ChatDispatchClaim,
   ChatDispatchSettlement,
   ObservedChatReply,
+  ManagedWakeNotice,
+  ManagedWakeClaim,
+  ManagedWakeSettlement,
+  ManagedWakeDelivery,
   ObservedAgentOutput,
   NativeQuestionRecordInput,
   NativeApprovalRecordInput,
@@ -23,6 +27,10 @@ export type {
   AgentScopeResolution,
   TrustedProjectLaunch,
   TrustedProjectRegistration,
+  TrustedPlanContextRegistration,
+  RegisteredPlanContext,
+  ExistingContextPlanBinding,
+  ExistingContextPlanningBinding,
   WorkspaceStore,
 } from "./types.ts";
 export {
@@ -33,6 +41,10 @@ export {
   ChatDispatchClaimSchema,
   ChatDispatchSettlementSchema,
   ObservedChatReplySchema,
+  ManagedWakeNoticeSchema,
+  ManagedWakeClaimSchema,
+  ManagedWakeSettlementSchema,
+  ManagedWakeDeliverySchema,
   ObservedAgentOutputSchema,
   AgentScopeResolutionSchema,
   NativeQuestionRecordInputSchema,
@@ -43,6 +55,10 @@ export {
   AgentQuestionRecordInputSchema,
   TrustedProjectLaunchSchema,
   TrustedProjectRegistrationSchema,
+  TrustedPlanContextRegistrationSchema,
+  RegisteredPlanContextSchema,
+  ExistingContextPlanBindingSchema,
+  ExistingContextPlanningBindingSchema,
 } from "./types.ts";
 
 export function openWorkspaceStore(

@@ -21,6 +21,7 @@ import {
   createCodlensMcpServer,
   type AgentPlanProposalPort,
   type ManagedWorkAgentPort,
+  type RepositoryWorkspaceAgentPort,
 } from "./index.ts";
 
 const principalToken = CredentialSchema.parse("principal-token-0000000000000001");
@@ -297,6 +298,23 @@ test("official SDK discovers typed managed tools and preserves the assigned sess
     report: async () => ({ ok: true, value: null }),
     acknowledgeAttachment: async () => ({ ok: true, value: null }),
   };
+  const repositoryCalls: unknown[] = [];
+  const repository: RepositoryWorkspaceAgentPort = {
+    planList: async (_session, input) => {
+      repositoryCalls.push(input);
+      return { ok: true, value: [] };
+    },
+    worktreeList: async () => ({ ok: true, value: [] }),
+    worktreeGet: async () => ({ ok: true, value: {} }),
+    integrationList: async () => ({ ok: true, value: [] }),
+    integrationGet: async () => ({ ok: true, value: {} }),
+    integrationDiff: async () => ({ ok: true, value: {} }),
+    integrationPrepare: async (_session, input) => {
+      repositoryCalls.push(input);
+      return { ok: true, value: { state: "candidate" } };
+    },
+    integrationTest: async () => ({ ok: true, value: { state: "tested" } }),
+  };
   const server = createCodlensMcpServer({
     agent: createLocalAgentTransport({
       broker: fakeBroker(),
@@ -304,6 +322,7 @@ test("official SDK discovers typed managed tools and preserves the assigned sess
       adapterSessionIdFactory: () => "adapter.session.managed.0001",
     }),
     managedWork: managed,
+    repositoryWork: repository,
   });
   const client = new Client({ name: "codlens-managed-test", version: "1.0.0" });
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -329,6 +348,7 @@ test("official SDK discovers typed managed tools and preserves the assigned sess
     "codlens_managed_work_report",
     "codlens_managed_work_attachment_ack",
   ]);
+  assert.equal(tools.tools.filter((tool) => tool.name.startsWith("codlens_repository_")).length, 8);
   parseSuccess(
     await client.callTool({
       name: "codlens_managed_work_profiles",
@@ -350,6 +370,11 @@ test("official SDK discovers typed managed tools and preserves the assigned sess
             },
             goal: "Inspect the explicit work target",
             expectedResult: "A typed report",
+            workspace: {
+              mode: "isolated_child",
+              parentWorktreeId: "worktree.plan.fixture",
+              expectedParentHead: "0123456789012345678901234567890123456789",
+            },
             targetRefs: [
               {
                 projectId: "project.managed",
@@ -375,6 +400,11 @@ test("official SDK discovers typed managed tools and preserves the assigned sess
     },
     goal: "Inspect the explicit work target",
     expectedResult: "A typed report",
+    workspace: {
+      mode: "isolated_child",
+      parentWorktreeId: "worktree.plan.fixture",
+      expectedParentHead: "0123456789012345678901234567890123456789",
+    },
     targetRefs: [
       {
         projectId: "project.managed",
@@ -387,6 +417,22 @@ test("official SDK discovers typed managed tools and preserves the assigned sess
     planRevision: null,
     budgets: { maximumTurns: 64, wallTimeMs: 3_600_000 },
   });
+  parseSuccess(
+    await client.callTool({
+      name: "codlens_repository_integration_prepare",
+      arguments: {
+        adapterSessionId: connected.adapterSessionId,
+        input: {
+          clientRequestId: "request.integration.prepare",
+          sourceWorktreeId: "worktree.source.fixture",
+          targetWorktreeId: "worktree.target.fixture",
+          expectedSourceHead: "1111111111111111111111111111111111111111",
+          expectedTargetHead: "2222222222222222222222222222222222222222",
+        },
+      },
+    }),
+  );
+  assert.equal(repositoryCalls.length, 1);
   await client.close();
   await server.close();
 });

@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { ManagedProviderIdSchema, type ManagedProviderCapabilities } from "./provider-types.ts";
 import type { ManagedAgentProfile } from "./providers.ts";
+import type { ManagedSessionControlPort } from "./control.ts";
 import { WorkPacketSchema } from "../agent-runtime/index.ts";
 import { ModelSelectionSchema } from "../model-policy/index.ts";
 import { ActorIdSchema } from "../protocol/index.ts";
@@ -10,6 +11,8 @@ import {
   ArtifactRefIdSchema,
   AttemptIdSchema,
   ManagedWorkSelectionSchema,
+  ManagedWorkspaceRequestSchema,
+  ProjectPlanIdSchema,
   ProjectObjectReferenceSchema,
   RunIdSchema,
   TaskIdSchema,
@@ -23,6 +26,8 @@ export const ManagedWorkRequestSchema = z
     clientRequestId: z.string().min(3).max(160),
     projectId: WorkPacketSchema.shape.projectId,
     contextId: WorkPacketSchema.shape.contextId,
+    planId: ProjectPlanIdSchema.nullable().default(null),
+    workspaceRequest: ManagedWorkspaceRequestSchema.default({ mode: "inherit" }),
     selection: ManagedWorkSelectionSchema.default({ mode: "project_policy" }),
     goal: WorkPacketSchema.shape.goal,
     expectedResult: WorkPacketSchema.shape.expectedResult,
@@ -38,6 +43,12 @@ export const ManagedWorkRequestSchema = z
   })
   .strict()
   .superRefine((request, context) => {
+    if (request.planId === null && request.workspaceRequest.mode !== "inherit")
+      context.addIssue({
+        code: "custom",
+        path: ["workspaceRequest"],
+        message: "repository workspace requests require a project plan",
+      });
     if (
       request.targetRefs.some(
         (target) =>
@@ -74,11 +85,34 @@ export const ManagedWorkClaimSchema = z
     packet: WorkPacketSchema,
     targetRefs: z.array(ProjectObjectReferenceSchema).max(256),
     modelSelection: ModelSelectionSchema,
+    managedControl: z
+      .object({
+        processEpoch: z.string().min(1).max(160),
+        readiness: z.enum([
+          "starting",
+          "idle",
+          "busy",
+          "permission_required",
+          "interrupting",
+          "stopped",
+          "unknown",
+        ]),
+        providerSessionId: z.string().min(1).max(512).nullable(),
+        providerTurnId: z.string().min(1).max(512).nullable(),
+        observationId: z.string().min(3).max(160),
+        automationControlEpoch: z.string().regex(/^(0|[1-9][0-9]*)$/),
+        pauseRequested: z.boolean().default(false),
+        continuation: z.enum(["live", "restart_from_saved_session", "unavailable"]),
+      })
+      .strict()
+      .nullable()
+      .default(null),
     state: z.enum([
       "prepared",
       "launching",
       "running",
       "waiting_for_user",
+      "paused",
       "reported",
       "accepted",
       "follow_up_required",
@@ -145,6 +179,7 @@ export interface ManagedExecutionFencePort {
 
 export interface ManagedAgentBackend {
   readonly capabilities: readonly ManagedProviderCapabilities[];
+  readonly control: ManagedSessionControlPort;
   registerProfile(profile: ManagedAgentProfile): ManagedWorkResult<ManagedAgentProfile>;
   prepare(
     access: WorkspaceAccessContext,
@@ -175,6 +210,11 @@ export interface ManagedAgentBackend {
     expectedRevision: string,
   ): Promise<ManagedWorkResult<ManagedWorkClaim>>;
   stop(
+    access: WorkspaceAccessContext,
+    runId: ManagedWorkClaim["runId"],
+    expectedRevision: string,
+  ): Promise<ManagedWorkResult<ManagedWorkClaim>>;
+  continueRun(
     access: WorkspaceAccessContext,
     runId: ManagedWorkClaim["runId"],
     expectedRevision: string,

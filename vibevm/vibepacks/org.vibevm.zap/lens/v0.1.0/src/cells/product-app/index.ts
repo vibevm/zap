@@ -13,13 +13,16 @@ export { discoverLocalProductProviders, type LocalProductProviders } from "./pro
 export { createProtectedEnvironmentResolver } from "./environment.ts";
 export {
   openProductAppRegistry,
+  planRegistrationOf,
   registrationOf,
   type ProductAppRegistry,
   type ProductProjectEntry,
+  type ProductPlanContextEntry,
   type ProductStoreResult,
 } from "./store.ts";
 export type {
   ProductProject,
+  ProductPlanContext,
   ProductProjectRegistrationRequest,
   ProductProviderProfile,
   ProductSetupPort,

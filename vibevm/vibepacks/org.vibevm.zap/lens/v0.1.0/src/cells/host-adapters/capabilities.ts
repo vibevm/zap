@@ -123,5 +123,24 @@ export function getHostCapabilities(
           "daemon control covers sessions it owns; ACP-driven peer inboxes refuse inbound messages",
         ],
       };
+    case "zap_mock":
+      return {
+        host,
+        safePointContext: "supported",
+        idleWake: "conditional",
+        activeTurnSteering: "conditional",
+        existingSessionAttach: "conditional",
+        inputPaths: [
+          {
+            kind: "managed_server",
+            availability: "conditional",
+            idleWake: true,
+            activeTurnSteering: true,
+          },
+        ],
+        limitations: [
+          "ZapMock is an explicit deterministic test product and proves no vendor capability",
+        ],
+      };
   }
 }

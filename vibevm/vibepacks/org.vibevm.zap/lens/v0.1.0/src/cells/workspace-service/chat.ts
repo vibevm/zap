@@ -106,8 +106,8 @@ export function observeChatReply(
 ): WorkspaceResult<ChatMessage | null> {
   if (
     event.kind !== "item_completed" ||
-    event.nativeTurnId === null ||
     event.nativeItemId === null ||
+    (event.nativeTurnId === null && (event.transportCorrelation ?? null) === null) ||
     actor?.role !== "coordinator"
   ) {
     return { ok: true, value: null };
@@ -116,13 +116,15 @@ export function observeChatReply(
   if (reply.success && reply.data.phase === "commentary") return { ok: true, value: null };
   const body = reply.success ? (reply.data.bodyMarkdown ?? reply.data.text) : undefined;
   if (body === undefined) return { ok: true, value: null };
+  const correlation = event.transportCorrelation ?? null;
   return actions.store.appendObservedChatReply({
-    sourceEventId: `chat-reply:${event.nativeThreadId ?? "root"}:${event.nativeTurnId}:${event.nativeItemId}`,
+    sourceEventId: `chat-reply:${event.nativeThreadId ?? "root"}:${event.nativeTurnId ?? correlation?.clientMessageId ?? "transport"}:${event.nativeItemId}`,
     projectId: launch.projectId,
     contextId: launch.contextId,
     sessionId: launch.scope.coordinatorSessionId,
     processEpoch: event.processEpoch,
     nativeTurnId: event.nativeTurnId,
+    transportCorrelation: correlation,
     actorId: actor.actorId,
     bodyMarkdown: body,
     occurredAt: actions.clock().toISOString(),

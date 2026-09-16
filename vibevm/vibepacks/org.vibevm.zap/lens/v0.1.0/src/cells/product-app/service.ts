@@ -21,14 +21,17 @@ import {
 } from "../workspace-model/index.ts";
 import type { WorkspaceStore } from "../workspace-store/index.ts";
 import {
+  type TrustedPlanContextRegistration,
   TrustedProjectRegistrationSchema,
   type TrustedProjectRegistration,
 } from "../workspace-store/index.ts";
-import type { ProductAppRegistry, ProductProjectEntry } from "./store.ts";
+import type { ProductAppRegistry, ProductPlanContextEntry, ProductProjectEntry } from "./store.ts";
 
 export interface ProductAppService extends ProductSetupPort {
   projectIds(): readonly ProjectId[];
   registrations(): readonly TrustedProjectRegistration[];
+  planRegistrations(): readonly TrustedPlanContextRegistration[];
+  registerPlanContext(entry: ProductPlanContextEntry): Promise<ProductSetupResult<null>>;
   hydrate(): ProductSetupResult<null>;
 }
 
@@ -40,6 +43,9 @@ export function createProductAppService(options: {
   readonly prepareRegistration?: (
     registration: TrustedProjectRegistration,
   ) => Promise<ProductSetupResult<null>>;
+  readonly preparePlanContext?: (
+    registration: TrustedPlanContextRegistration,
+  ) => Promise<ProductSetupResult<null>>;
 }): ProductSetupResult<ProductAppService> {
   const providers = ProductProviderProfileSchema.array().max(64).safeParse(options.providers);
   if (!providers.success) return fail("invalid_input", "provider catalog is invalid");
@@ -48,6 +54,10 @@ export function createProductAppService(options: {
     for (const entry of options.registry.entries()) {
       const registered = options.workspaceStore.registerProject(entry.registration);
       if (!registered.ok) return fail("unavailable", registered.error.message);
+      for (const plan of entry.plans) {
+        const added = options.workspaceStore.registerPlanContext(plan.registration);
+        if (!added.ok) return fail("unavailable", added.error.message);
+      }
     }
     return { ok: true, value: null };
   };
@@ -56,6 +66,16 @@ export function createProductAppService(options: {
     value: {
       projectIds: () => options.registry.entries().map((entry) => entry.project.projectId),
       registrations: () => options.registry.entries().map((entry) => entry.registration),
+      planRegistrations: () =>
+        options.registry.entries().flatMap((entry) => entry.plans.map((plan) => plan.registration)),
+      async registerPlanContext(entry) {
+        const saved = options.registry.putPlan(entry.registration.projectId, entry);
+        if (!saved.ok) return fail("unavailable", saved.message);
+        const registered = options.workspaceStore.registerPlanContext(saved.value.registration);
+        if (!registered.ok) return fail("unavailable", registered.error.message);
+        const prepared = await options.preparePlanContext?.(saved.value.registration);
+        return prepared === undefined || prepared.ok ? { ok: true, value: null } : prepared;
+      },
       hydrate,
       request: async (raw) => {
         const request = ProductSetupRequestSchema.safeParse(raw);
@@ -178,7 +198,7 @@ function buildEntry(
     ],
     protected: { cwd: directoryPath, launchProfileRef: profile.profileId },
   });
-  return { project, registration, requestDigest: digest(input) };
+  return { project, registration, requestDigest: digest(input), plans: [] };
 }
 
 async function canonicalDirectory(path: string): Promise<ProductSetupResult<string>> {

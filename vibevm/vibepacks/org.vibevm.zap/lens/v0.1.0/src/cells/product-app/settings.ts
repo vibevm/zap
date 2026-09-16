@@ -27,6 +27,7 @@ export const ProductLocalSettingsSchema = z
       .object({
         modelId: z.string().min(1).max(256).default("gpt-5.6-luna"),
         effort: ReasoningEffortSchema.default("low"),
+        proxy: ProxyPolicySchema.optional(),
       })
       .strict()
       .optional(),
@@ -38,6 +39,11 @@ export const ProductLocalSettingsSchema = z
       )
       .default({}),
     managedWorkers: z.array(ManagedWorkerTemplateSchema).max(64).default([]),
+    repositoryMergeIdentity: z
+      .object({ name: z.string().min(1).max(200), email: z.email().max(320) })
+      .strict()
+      .nullable()
+      .default(null),
   })
   .strict()
   .superRefine((settings, context) => {

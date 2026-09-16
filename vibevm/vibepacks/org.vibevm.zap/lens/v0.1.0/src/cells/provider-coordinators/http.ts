@@ -15,7 +15,7 @@ import { AgentSessionIdSchema } from "../workspace-model/index.ts";
 import { z } from "zod";
 import { JsonValueSchema } from "../protocol/index.ts";
 import { resolveProxyEnvironment, type ProxyPolicy } from "../proxy-policy/index.ts";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 export interface ProviderHttpOptions {
   readonly fetchImpl?: typeof fetch;
@@ -67,6 +67,9 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
   readonly #listeners = new Set<(raw: unknown) => void>();
   #session: ProviderCoordinatorSession | undefined;
   #eventAbort: AbortController | undefined;
+  #activity: "idle" | "busy" | "unknown" = "unknown";
+  #assistantText = "";
+  #assistantMessageId: string | null = null;
 
   constructor(
     profile: ProviderCoordinatorProfile,
@@ -94,7 +97,6 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
     if (effort !== null)
       return failure("unsupported", "OpenCode server has no verified effort request field");
     const response = await this.call("/session", "POST", {
-      parentID: null,
       title: this.#profile.profileId,
     });
     if (!response.ok) return response;
@@ -109,6 +111,7 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
       modelId: input.scope.modelId ?? this.#profile.modelId,
       effort,
     };
+    this.#activity = "idle";
     this.#startOpenCodeEvents();
     if (input.scope.bootstrapText !== "") {
       const bootstrapped = await this.prompt(
@@ -116,6 +119,7 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
         `bootstrap:${input.scope.coordinatorSessionId}`,
       );
       if (!bootstrapped.ok) return bootstrapped;
+      this.#activity = "busy";
     }
     return { ok: true as const, value: this.#session };
   }
@@ -139,6 +143,8 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
       modelId: input.scope.modelId ?? this.#profile.modelId,
       effort,
     };
+    const status = await this.#status(id);
+    this.#activity = status ?? "unknown";
     this.#startOpenCodeEvents();
     return { ok: true as const, value: this.#session };
   }
@@ -169,14 +175,18 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
   }) {
     if (this.#session?.nativeSessionId !== input.session.nativeSessionId)
       return failure("not_found", "provider session is not active");
-    return this.prompt(input.text, input.clientMessageId);
+    const sent = await this.prompt(input.text, input.clientMessageId);
+    if (sent.ok) this.#activity = "busy";
+    return sent;
   }
 
   async prompt(text: string, clientMessageId = "") {
     const path = `/session/${encodeURIComponent(this.#session?.nativeSessionId ?? "")}/prompt_async`;
+    const model = openCodeModel(this.#session?.modelId ?? this.#profile.modelId);
+    if (model === undefined)
+      return failure("invalid_input", "OpenCode model must use provider/model format");
     const response = await this.call(path, "POST", {
-      messageID: clientMessageId,
-      model: this.#session?.modelId ?? this.#profile.modelId,
+      model,
       parts: [{ type: "text", text }],
     });
     if (!response.ok) return response;
@@ -222,6 +232,28 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
     );
   }
 
+  async pause(input: { readonly session: ProviderCoordinatorSession }) {
+    if (this.#session?.nativeSessionId !== input.session.nativeSessionId)
+      return failure("not_found", "OpenCode session is not active");
+    if (this.#activity === "idle")
+      return { ok: true as const, value: { observation: "settled" as const } };
+    const observed = await this.#status(input.session.nativeSessionId);
+    if (observed === "idle") {
+      this.#activity = "idle";
+      return { ok: true as const, value: { observation: "settled" as const } };
+    }
+    const interrupted = await this.call(
+      `/session/${encodeURIComponent(input.session.nativeSessionId)}/abort`,
+      "POST",
+      undefined,
+    );
+    if (!interrupted.ok) return interrupted;
+    const accepted = z.boolean().safeParse(interrupted.value);
+    return accepted.success && accepted.data
+      ? { ok: true as const, value: { observation: "requested" as const } }
+      : { ok: true as const, value: { observation: "uncertain" as const } };
+  }
+
   async stop(input: { readonly session: ProviderCoordinatorSession }) {
     return this.interrupt({ session: input.session, nativeTurnId: "stop" });
   }
@@ -236,6 +268,7 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
     this.#eventAbort = undefined;
     this.#listeners.clear();
     this.#session = undefined;
+    this.#activity = "unknown";
   }
 
   #startOpenCodeEvents(): void {
@@ -274,8 +307,7 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
             if (data === undefined || data === "") continue;
             try {
               const raw: unknown = JSON.parse(data);
-              const observed = publicOpenCodeEvent(raw, this.#session?.nativeSessionId);
-              if (observed !== null) for (const listener of this.#listeners) listener(observed);
+              this.#observeOpenCodeEvent(raw);
             } catch {
               for (const listener of this.#listeners)
                 listener({ type: "provider_event", eventType: "invalid_sse_json" });
@@ -300,14 +332,93 @@ class HttpSessionTransport implements ProviderCoordinatorTransport {
         },
       );
       const text = await response.text();
-      const raw: unknown = text === "" ? null : JSON.parse(text);
+      let raw: unknown = null;
+      if (text !== "") {
+        try {
+          raw = JSON.parse(text);
+        } catch {
+          return response.ok
+            ? failure("protocol_error", "provider HTTP returned invalid JSON")
+            : failure("protocol_error", safeHttpFailure(response.status, text, null));
+        }
+      }
       return response.ok
         ? { ok: true as const, value: raw }
-        : failure("protocol_error", `provider HTTP returned ${String(response.status)}`);
+        : failure("protocol_error", safeHttpFailure(response.status, text, raw));
     } catch {
       return failure("transport_lost", "provider loopback HTTP request failed");
     }
   }
+
+  async #status(sessionId: string): Promise<"idle" | "busy" | "unknown" | undefined> {
+    const result = await this.call("/session/status", "GET", undefined);
+    if (!result.ok) return undefined;
+    const statuses = z
+      .record(
+        z.string(),
+        z.discriminatedUnion("type", [
+          z.object({ type: z.literal("idle") }).loose(),
+          z.object({ type: z.literal("busy") }).loose(),
+          z.object({ type: z.literal("retry") }).loose(),
+        ]),
+      )
+      .safeParse(result.value);
+    const status = statuses.success ? statuses.data[sessionId] : undefined;
+    return status?.type === "idle" ? "idle" : status === undefined ? undefined : "busy";
+  }
+
+  #observeOpenCodeEvent(raw: unknown): void {
+    const text = openCodeText(raw);
+    if (text !== undefined) {
+      this.#assistantMessageId = text.messageId;
+      this.#assistantText = text.append ? this.#assistantText + text.text : text.text;
+    }
+    const observed = publicOpenCodeEvent(raw, this.#session?.nativeSessionId);
+    if (observed === null) return;
+    const event = z
+      .looseObject({ kind: z.string(), data: z.unknown().optional() })
+      .safeParse(observed);
+    if (event.success && event.data.kind === "session_status") {
+      const status = z.looseObject({ type: z.string() }).safeParse(event.data.data);
+      if (status.success) this.#activity = status.data.type === "idle" ? "idle" : "busy";
+    }
+    if (event.success && event.data.kind === "turn_completed") {
+      if (this.#assistantMessageId !== null && this.#assistantText !== "")
+        for (const listener of this.#listeners)
+          listener({
+            kind: "item_completed",
+            nativeItemId: this.#assistantMessageId,
+            data: { type: "agentMessage", phase: "final_answer", text: this.#assistantText },
+          });
+      this.#assistantMessageId = null;
+      this.#assistantText = "";
+      this.#activity = "idle";
+    }
+    for (const listener of this.#listeners) listener(observed);
+  }
+}
+
+function safeHttpFailure(status: number, text: string, raw: unknown): string {
+  const parsed = z
+    .looseObject({
+      _tag: z.enum(["BadRequest", "InvalidRequestError"]).optional(),
+      kind: z.string().optional(),
+      field: z.string().optional(),
+    })
+    .safeParse(raw);
+  const details = parsed.success
+    ? [parsed.data._tag, safeToken(parsed.data.kind), safeToken(parsed.data.field)].filter(
+        (value): value is string => value !== undefined,
+      )
+    : [];
+  const bytes = Buffer.byteLength(text);
+  const digest = createHash("sha256").update(text).digest("hex");
+  const classification = details.length === 0 ? "unclassified" : details.join("/");
+  return `provider HTTP returned ${String(status)} (${classification}; detail sha256=${digest} bytes=${String(bytes)})`;
+}
+
+function safeToken(value: string | undefined): string | undefined {
+  return value !== undefined && /^[A-Za-z0-9_.:-]{1,80}$/u.test(value) ? value : undefined;
 }
 
 function reconnectDelay(signal: AbortSignal): Promise<void> {
@@ -340,14 +451,71 @@ function publicOpenCodeEvent(raw: unknown, sessionId: string | undefined): unkno
   if (sessionId !== undefined && observedSession !== undefined && observedSession !== sessionId)
     return null;
   if (
+    eventType === "message.part.delta" &&
+    properties.success &&
+    typeof properties.data["messageID"] === "string" &&
+    typeof properties.data["delta"] === "string"
+  )
+    return {
+      kind: "message_delta",
+      nativeItemId: properties.data["messageID"],
+      data: { text: properties.data["delta"] },
+    };
+  if (
     eventType === "message.part.updated" &&
     part.success &&
     part.data["type"] === "text" &&
     typeof part.data["text"] === "string"
   )
-    return { type: "text", session_id: observedSession, text: part.data["text"] };
-  if (eventType === "session.idle") return { type: "turn.completed", session_id: observedSession };
+    return {
+      kind: "message_delta",
+      nativeItemId:
+        typeof part.data["messageID"] === "string"
+          ? part.data["messageID"]
+          : typeof part.data["id"] === "string"
+            ? part.data["id"]
+            : null,
+      data: { text: part.data["text"] },
+    };
+  if (eventType === "session.status" && properties.success)
+    return { kind: "session_status", data: properties.data["status"] ?? {} };
+  if (eventType === "session.idle") return { kind: "turn_completed", data: { status: "idle" } };
   return { type: "provider_event", eventType, session_id: observedSession ?? null };
+}
+
+function openCodeText(
+  raw: unknown,
+): { readonly messageId: string; readonly text: string; readonly append: boolean } | undefined {
+  const event = z
+    .looseObject({
+      type: z.enum(["message.part.updated", "message.part.delta"]),
+      properties: z.record(z.string(), z.unknown()),
+    })
+    .safeParse(raw);
+  if (!event.success) return undefined;
+  if (event.data.type === "message.part.delta") {
+    const messageId = event.data.properties["messageID"];
+    const delta = event.data.properties["delta"];
+    return typeof messageId === "string" && typeof delta === "string"
+      ? { messageId, text: delta, append: true }
+      : undefined;
+  }
+  const part = z.record(z.string(), z.unknown()).safeParse(event.data.properties["part"]);
+  if (!part.success || part.data["type"] !== "text" || typeof part.data["text"] !== "string")
+    return undefined;
+  const messageId = part.data["messageID"];
+  return typeof messageId === "string"
+    ? { messageId, text: part.data["text"], append: false }
+    : undefined;
+}
+
+function openCodeModel(
+  modelId: string,
+): { readonly providerID: string; readonly modelID: string } | undefined {
+  const separator = modelId.indexOf("/");
+  return separator > 0 && separator < modelId.length - 1
+    ? { providerID: modelId.slice(0, separator), modelID: modelId.slice(separator + 1) }
+    : undefined;
 }
 
 function stringValue(value: unknown, key: string): string | undefined {
@@ -365,7 +533,7 @@ function selectedEffort(
 }
 
 function failure(
-  code: "not_found" | "protocol_error" | "unsupported" | "transport_lost",
+  code: "invalid_input" | "not_found" | "protocol_error" | "unsupported" | "transport_lost",
   message: string,
 ) {
   return {

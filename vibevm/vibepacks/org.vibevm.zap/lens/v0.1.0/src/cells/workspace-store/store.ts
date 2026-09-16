@@ -1,6 +1,4 @@
 /** Durable workspace-store composition. @scope spec://org.vibevm.zap/lens/PROP-005#server-ownership */
-import { createHash } from "node:crypto";
-import { isAbsolute, resolve } from "node:path";
 import { z } from "zod";
 import { DecimalSchema } from "../protocol/index.ts";
 import * as claims from "./claims.ts";
@@ -10,10 +8,6 @@ import {
   AgentOutputItemSchema,
   AgentRelationshipSchema,
   CoordinatorSessionSchema,
-  CoordinatorLaunchOptionSchema,
-  ProjectDescriptorSchema,
-  ProjectDetailSchema,
-  WorkContextDescriptorSchema,
   WorkspaceAccessContextSchema,
   WorkspaceCommandContextSchema,
   WorkspaceEventIngestSchema,
@@ -36,20 +30,15 @@ import {
 import { commandWorkspace } from "./commands.ts";
 import * as execution from "./execution.ts";
 import * as launchRead from "./launch-read.ts";
+import * as registration from "./registration.ts";
 import * as scope from "./scope.ts";
-import { WorkspaceInteractionStoreFacade } from "./interaction-facade.ts";
+import { ManagedWakeStoreFacade } from "./managed-wake-facade.ts";
 import { failure } from "./errors.ts";
 import { eventsWorkspace, readWorkspace } from "./reads.ts";
 import { WorkspaceState } from "./state.ts";
-import {
-  MaxSequenceSchema,
-  OutputSourceSchema,
-  ProjectRowSchema,
-  ScopeRowSchema,
-} from "./store-model.ts";
+import { MaxSequenceSchema, OutputSourceSchema, ScopeRowSchema } from "./store-model.ts";
 import {
   ObservedAgentOutputSchema,
-  TrustedProjectRegistrationSchema,
   type OpenWorkspaceStoreOptions,
   type CoordinatorLaunchClaim,
   type CoordinatorLaunchClaimInput,
@@ -61,13 +50,13 @@ import {
   type ObservedAgentOutput,
   type TrustedProjectLaunch,
   type TrustedProjectRegistration,
+  type TrustedPlanContextRegistration,
+  type ExistingContextPlanBinding,
+  type ExistingContextPlanningBinding,
   type WorkspaceStore,
 } from "./types.ts";
 
-export class SqliteWorkspaceStore
-  extends WorkspaceInteractionStoreFacade
-  implements WorkspaceStore
-{
+export class SqliteWorkspaceStore extends ManagedWakeStoreFacade implements WorkspaceStore {
   readonly #state: WorkspaceState;
 
   constructor(options: OpenWorkspaceStoreOptions) {
@@ -78,162 +67,25 @@ export class SqliteWorkspaceStore
   protected interactionState(): WorkspaceState {
     return this.#state;
   }
+  protected wakeState(): WorkspaceState {
+    return this.#state;
+  }
+  protected wakeClosed(): boolean {
+    return this.#state.closed;
+  }
 
   registerProject(rawInput: TrustedProjectRegistration) {
-    if (this.#state.closed) return failure("closed", "workspace store is closed");
-    const parsed = TrustedProjectRegistrationSchema.safeParse(rawInput);
-    if (!parsed.success || !isAbsolute(parsed.data.protected.cwd)) {
-      return failure("invalid_input", "trusted project registration requires an absolute cwd");
-    }
-    const input = {
-      ...parsed.data,
-      protected: { ...parsed.data.protected, cwd: resolve(parsed.data.protected.cwd) },
-    };
-    try {
-      return this.#state.database.transaction(() => this.#registerProject(input));
-    } catch {
-      return failure("storage_failure", "project registration transaction failed");
-    }
+    return registration.registerProject(this.#state, rawInput);
   }
-
-  #registerProject(
-    input: TrustedProjectRegistration,
-  ): WorkspaceResult<z.infer<typeof ProjectDetailSchema>> {
-    const publicContext = { ...input.context };
-    delete publicContext.brokerScope;
-    const digest = createHash("sha256")
-      .update(JSON.stringify({ ...input, context: publicContext }))
-      .digest("hex");
-    const existing = this.#state.database.get(
-      `SELECT public_json, coordinator_launch_options_json, request_digest
-       FROM workspace_projects WHERE registration_id = ?`,
-      ProjectRowSchema,
-      [input.registrationId],
-    );
-    if (existing !== null) {
-      if (existing.request_digest !== digest) {
-        return failure("idempotency_conflict", "project registration identity changed content");
-      }
-      const context = scope.context(this.#state, input.projectId, input.context.contextId);
-      if (context === null)
-        return failure("storage_failure", "registered project context is missing");
-      if (input.context.brokerScope !== undefined) {
-        const mapped = scope.registerAgentScope(
-          this.#state,
-          input.context.brokerScope,
-          input.projectId,
-          input.context.contextId,
-        );
-        if (!mapped.ok) return mapped;
-      }
-      execution.initializeProjectExecution(
-        this.#state,
-        input.projectId,
-        input.context.contextId,
-        this.#state.now(),
-      );
-      return {
-        ok: true,
-        value: ProjectDetailSchema.parse({
-          project: this.#state.parse(existing.public_json, ProjectDescriptorSchema),
-          contexts: [context],
-          coordinator: null,
-          coordinatorLaunchOptions: z
-            .array(CoordinatorLaunchOptionSchema)
-            .parse(JSON.parse(existing.coordinator_launch_options_json)),
-        }),
-      };
-    }
-    if (this.#state.projectExists(input.projectId)) {
-      return failure("conflict", "project identity already exists under another registration");
-    }
-    const now = this.#state.now();
-    const project = ProjectDescriptorSchema.parse({
-      projectId: input.projectId,
-      displayName: input.displayName,
-      repositoryRootRefs: input.repositoryRootRefs,
-      defaultContextId: input.context.contextId,
-      actions: input.actions,
-      revision: DecimalSchema.parse("1"),
-      createdAt: now,
-      updatedAt: now,
-    });
-    const context = WorkContextDescriptorSchema.parse({
-      contextId: input.context.contextId,
-      displayName: input.context.displayName,
-      workspaceRef: input.context.workspaceRef,
-      branchLabel: input.context.branchLabel,
-      revisionBinding: input.context.revisionBinding,
-      planning: input.context.planning,
-      coordinatorConversationId: input.context.coordinatorConversationId,
-      projectId: input.projectId,
-      revision: DecimalSchema.parse("1"),
-      createdAt: now,
-      updatedAt: now,
-    });
-    this.#state.database.run(
-      `INSERT INTO workspace_projects(
-         project_id, public_json, coordinator_launch_options_json, default_context_id,
-         protected_cwd, protected_profile_ref, registration_id, request_digest
-       ) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        project.projectId,
-        this.#state.json(project),
-        this.#state.json(input.coordinatorLaunchOptions),
-        project.defaultContextId,
-        input.protected.cwd,
-        input.protected.launchProfileRef,
-        input.registrationId,
-        digest,
-      ],
-    );
-    this.#state.database.run(
-      `INSERT INTO workspace_contexts(
-         context_id, project_id, public_json, protected_cwd, protected_profile_ref
-       ) VALUES(?, ?, ?, ?, ?)`,
-      [
-        context.contextId,
-        context.projectId,
-        this.#state.json(context),
-        input.protected.cwd,
-        input.protected.launchProfileRef,
-      ],
-    );
-    if (input.context.brokerScope !== undefined) {
-      const mapped = scope.registerAgentScope(
-        this.#state,
-        input.context.brokerScope,
-        project.projectId,
-        context.contextId,
-      );
-      if (!mapped.ok) return mapped;
-    }
-    execution.initializeProjectExecution(this.#state, project.projectId, context.contextId, now);
-    this.#state.appendHistory({
-      projectId: project.projectId,
-      contextId: context.contextId,
-      kind: "project.registered",
-      source: "lens",
-      actorId: null,
-      occurrenceAt: now,
-      sourceEventId: `registration:${input.registrationId}`,
-      sourceSequence: null,
-      correlationId: project.projectId,
-      causationId: null,
-      planProvenance: null,
-      payload: { projectId: project.projectId, contextId: context.contextId },
-    });
-    return {
-      ok: true,
-      value: ProjectDetailSchema.parse({
-        project,
-        contexts: [context],
-        coordinator: null,
-        coordinatorLaunchOptions: input.coordinatorLaunchOptions,
-      }),
-    };
+  registerPlanContext(rawInput: TrustedPlanContextRegistration) {
+    return registration.registerPlanContext(this.#state, rawInput);
   }
-
+  bindExistingContextPlan(rawInput: ExistingContextPlanBinding) {
+    return registration.bindExistingContextPlan(this.#state, rawInput);
+  }
+  bindExistingContextPlanning(rawInput: ExistingContextPlanningBinding) {
+    return registration.bindExistingContextPlanning(this.#state, rawInput);
+  }
   resolveProjectLaunch(
     projectId: ProjectId,
     contextId: WorkContextId,
@@ -315,7 +167,6 @@ export class SqliteWorkspaceStore
       updatedAt,
     );
   }
-
   read(access: Parameters<WorkspaceStore["read"]>[0], rawRequest: WorkspaceReadRequest) {
     if (this.#state.closed) return failure("closed", "workspace store is closed");
     const context = WorkspaceAccessContextSchema.safeParse(access);

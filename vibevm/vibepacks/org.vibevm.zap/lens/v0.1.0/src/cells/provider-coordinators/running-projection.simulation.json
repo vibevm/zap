@@ -1,0 +1,36 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "provider_projection",
+  "scenarioId": "provider.addressed-turn-running-queue-ready",
+  "runnerId": "provider-coordinator.public-projection",
+  "seed": "seed.provider-running-projection-1",
+  "tags": ["provider", "public-service", "running", "queue", "zero-llm"],
+  "coverage": [
+    "provider.addressed-turn-public-state",
+    "workspace.operation.session.start.v1",
+    "workspace.operation.chat.post.v1",
+    "workspace.operation.session.list.v1"
+  ],
+  "inputs": {
+    "provider": "qwen_code",
+    "firstMessage": "Provider turn first",
+    "secondMessage": "Provider turn second",
+    "intermediateText": "Intermediate provider progress",
+    "firstReply": "First provider answer",
+    "secondReply": "Second provider answer",
+    "firstClientRequestId": "request.provider-public.chat.first",
+    "secondClientRequestId": "request.provider-public.chat.second"
+  },
+  "expected": {
+    "acceptedNativeTurnId": null,
+    "firstState": "running",
+    "sendCountWhileBusy": 1,
+    "stateAfterQueuedDispatch": "running",
+    "finalState": "ready",
+    "exactTransportCorrelation": true,
+    "intermediateMessageBoundaryKeepsRunning": true,
+    "repeatedCompletionsRetained": true,
+    "assistantReplies": ["First provider answer", "Second provider answer"],
+    "zeroLlmInference": true
+  }
+}

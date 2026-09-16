@@ -1,0 +1,41 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "repository_product",
+  "scenarioId": "repository.public-two-plan-integration",
+  "runnerId": "wayfinder.repository-product",
+  "seed": "seed.repository-public-product-1",
+  "tags": ["repository", "public-runtime", "http", "integration", "zero-llm"],
+  "coverage": [
+    "repository.public-runtime-two-plan-integration",
+    "repository.worktrees-fork-merge",
+    "workspace.operation.repository.get.v1",
+    "workspace.operation.plan.workspace.prepare.v1",
+    "workspace.operation.worktree.get.v1",
+    "workspace.operation.worktree.list.v1",
+    "workspace.operation.worktree.prepare.v1",
+    "workspace.operation.integration.prepare.v1",
+    "workspace.operation.integration.diff.v1",
+    "workspace.operation.integration.test.v1",
+    "workspace.operation.integration.review.v1",
+    "workspace.operation.integration.promote.v1"
+  ],
+  "inputs": {
+    "planDisplayNames": ["Plan A", "Plan B"],
+    "noteTitle": "Plan workspace note",
+    "noteBodyMarkdown": "Bound to the exact prepared worktree.",
+    "changePath": "feature.txt",
+    "changeContent": "parallel plan result\n",
+    "testProfileId": "repository.consistency",
+    "reviewRationale": "The bounded diff and consistency check match the fixture expectation."
+  },
+  "expected": {
+    "planCount": 2,
+    "crossContextErrorCode": "not_found",
+    "noteTargetDomain": "worktree",
+    "integrationStateAfterPrepare": "candidate",
+    "integrationStateAfterPromote": "promoted",
+    "diffIncludesDeclaredChange": true,
+    "exactContextReads": true,
+    "zeroLlmInference": true
+  }
+}

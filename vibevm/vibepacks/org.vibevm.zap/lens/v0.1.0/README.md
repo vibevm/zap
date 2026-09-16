@@ -58,8 +58,39 @@ npm run verify
 ```
 
 `verify` checks formatting, strict types, tests, lint and the production build.
+The Node suite caps concurrency at four so Windows PTY and disposable-process
+fixtures do not saturate ConPTY resources; every assertion and timeout remains active.
 The compiled command entry is `dist/cli.js`; `dist/mcp.js` is the MCP stdio
 connector. An installed npm package also provides `codlens` and `codlens-mcp`.
+
+### Deterministic ZapMock gate
+
+`zap-mock-agent` is a deliberate synthetic test agent with identity
+`zap-mock/deterministic-v1`. It uses no provider credentials, remote inference,
+or provider fallback. Run the bounded no-model gate with:
+
+```text
+npm run test:mock
+npm run simulate:mock -- --list
+npm run simulate:mock -- --id model.full-lifecycle --repeat 3 --seed review-seed
+npm run simulate:mock -- --coverage
+zap-mock-agent --help
+```
+
+The simulation runner is a developer-source command. `--id` and `--tag` select
+known colocated scenarios, `--repeat` derives replayable iteration seeds, and
+`--all` executes every registered runner. Unknown selections fail. Passing
+registered scenarios and complete feature coverage are separate results:
+coverage gaps stay visible, and only `--require-complete-coverage` turns them
+into a failing gate. Scenario data selects a fixed registered test entry; it is
+never an arbitrary command string.
+
+The managed process form accepts generated local files and an inline
+`--assignment` JSON object. Its `--tick` and `--open-gate` controls advance
+logical model state; they do not sleep or poll a model. Mock evidence proves
+Zap API, queue, lifecycle, question, inbox and acknowledgement behavior. It
+does not prove compatibility with Codex, Claude Code, OpenCode or Qwen Code;
+those require the separate explicitly selected real-provider checks.
 
 ### Zap Quick Lens renderer
 
@@ -84,14 +115,26 @@ Protected local settings are read from `~/.vibe/zap/settings.json`:
   "version": 1,
   "uiPort": 4174,
   "proxy": { "mode": "inherit" },
-  "coordinatorDefaults": { "modelId": "your-installed-model-id", "effort": "low" }
+  "coordinatorDefaults": { "modelId": "your-installed-model-id", "effort": "low" },
+  "repositoryMergeIdentity": null
 }
 ```
+
+Ordinary startup enables the stable local repository execution host and the
+bounded `repository.consistency` test profile. A null merge identity still
+allows repository discovery, plan worktree preparation and reads; an operation
+that must create a Git commit refuses until a protected name and email are
+configured. Zap does not invent a bot author.
 
 `proxy.mode` may be `inherit`, `direct`, or `explicit`; explicit proxy URLs may
 not contain credentials. One shared policy applies to owned Codex, Claude Code,
 OpenCode and Qwen Code launches and to managed workers unless a protected
 provider profile supplies a narrower override. A generic explicit example is:
+
+Omit `coordinatorDefaults.proxy` to keep Codex on that shared policy, or set it
+to a protected `inherit`, `direct`, or `explicit` proxy policy to override only
+the local Codex coordinator. Other provider profiles retain their own existing
+proxy override field.
 
 ```json
 {
@@ -129,14 +172,58 @@ or deferred instructions. Archived notes and removed objects remain in
 recoverable Trash; restoring a removed object creates an ordinary planning
 intent rather than reviving an old plan.
 
-Current limitations remain material: provider adapters do not claim Pause when
-the provider has no suspension primitive; Stop is the owned-process termination
-path. All four provider families are implemented, but they have not all passed
-a real-model end-to-end run in the current acceptance cycle. Qwen Code was
-verified through an HTTP proxy with a real human-question, browser-answer,
-delivery-acknowledgement and typed-report flow, followed by browser review after
-Wayfinder restart. See the [acceptance record](vibevm/vibespecs/research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md)
-for evidence and the remaining provider limits.
+### Parallel plans and repository workspaces
+
+One registered Git project can hold several top-level development-plan
+contexts. **New plan** observes the selected checkout HEAD, prepares an owned
+root worktree, and registers a new context with its own conversation,
+coordinator launch choices, protected cwd and pending algorithm-source binding.
+The original registered checkout remains the default context. Reading it for
+repository work metadata-adopts a plan envelope in place; it does not move the
+checkout or restart its coordinator.
+
+Managed work can request an isolated child worktree. The server records the
+plan, parent, basis commit, execution host, actor/task/run assignment and exact
+cwd before launch. Resume returns to that same worktree and preserves dirty
+edits. Provider-native children remain provider-owned: Lens does not claim that
+every native child can be assigned a separate cwd. A native coordinator started
+for a prepared top-level plan uses that context's protected root worktree when
+its provider supports the configured cwd.
+
+Integration uses a separate owned checkout. The source plan owns the
+integration artifact and conflict-resolution task even when the recorded target
+is the original checkout in another context. The target context independently
+controls promotion through the owned-writer gate. Candidate preparation,
+bounded diff, registered test evidence, human review and promotion are distinct
+records. Conflicts create a managed resolution task; no automatic stash, reset,
+force-push or silent overwrite is used. Notes can bind directly to exact plan,
+worktree and integration objects and retain their source snapshot.
+
+A newly prepared plan may coordinate and run work while its planning source is
+pending. Trusted source attachment verifies that context's broker scope, active
+ZAP store/campaign/base/revision and worktree-local workflow/specification
+paths before binding. Dynamically supplied protected source configuration is
+not persisted by this slice. After restart, an unrestored source is shown as
+unavailable and its algorithm binding returns to pending until trusted
+reconnection; parent planning authority is never copied into the new context.
+
+Current limitations remain material. Codex with Luna and Claude Code with Haiku
+completed the bounded question, idle/active Pause, late-answer wake,
+same-conversation Continue and Stop flow. Qwen Code with a free model and
+OpenCode completed the same main question/pause/wake/context/bootstrap flow.
+Their live receipts retained cleanup failures because the exit subscription was
+removed before the owned exit reached common lifecycle projection. The shared
+fix is covered by four focused public no-model lifecycle tests; those historical
+receipts are not relabelled as cleanup passes. See the
+[acceptance record](vibevm/vibespecs/research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md)
+for the exact evidence boundary.
+
+The zero-inference corpus currently contains 14 registered scenarios and keeps
+coverage gaps explicit. Real temporary-Git/loopback-HTTP tests and the corpus
+are component and product-runtime evidence. Multi-user identities,
+remote execution hosts, distributed writer leases, contributor admission and
+crowdsourced machines/accounts are future architecture, not implemented
+features of this local release.
 
 Build the one Qwik 2 renderer and both platform shells:
 

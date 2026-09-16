@@ -1,0 +1,38 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "model_policy_product",
+  "scenarioId": "model-policy.selection-history-isolation",
+  "runnerId": "workspace.model-policy-product",
+  "seed": "seed.model-policy-product-1",
+  "tags": ["model-policy", "selection", "history", "isolation", "zero-llm"],
+  "coverage": [
+    "model-policy.selection-history",
+    "model-policy.project-isolation",
+    "workspace.operation.model-policy.get.v1",
+    "workspace.operation.model-policy.update.v1",
+    "workspace.operation.model-policy.preview.v1",
+    "workspace.operation.model-policy.history.v1",
+    "workspace.operation.model-selection.get.v1"
+  ],
+  "inputs": {
+    "projectId": "project.policy.product",
+    "contextId": "context.policy.product",
+    "otherProjectId": "project.policy.other",
+    "otherContextId": "context.policy.other",
+    "runId": "run.policy.product",
+    "attemptId": "attempt.policy.product",
+    "selectionRef": "selection.policy.product",
+    "policyId": "policy.product",
+    "profileId": "codex.small",
+    "modelId": "gpt-5.6-luna",
+    "effort": "low"
+  },
+  "expected": {
+    "selectedPolicyRevision": "2",
+    "selectedModelId": "gpt-5.6-luna",
+    "historyRevisions": ["1", "2", "3"],
+    "selectionRemainsPinned": true,
+    "foreignProjectRefused": true,
+    "zeroLlmInference": true
+  }
+}

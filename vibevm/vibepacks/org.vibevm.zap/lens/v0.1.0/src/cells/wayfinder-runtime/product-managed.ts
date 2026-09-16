@@ -75,7 +75,7 @@ export function registerProductManagedProfiles(input: {
         mcpConfigPath: join(input.mcpRoot, `${templateKey}.json`),
         mcpCommandPath: process.execPath,
         mcpArgs: [mcpEntrypoint()],
-        proxy: provider?.proxy ?? input.globalProxy,
+        proxy: effectiveManagedProxy(codex, provider, input.globalProxy),
         capabilities: {
           provider: product.provider,
           observedVersion: null,
@@ -98,11 +98,19 @@ export function registerProductManagedProfiles(input: {
       profileId: registered.value.profileId,
       tier: registered.value.tier,
       modelId: registered.value.modelId,
-      provider: registered.value.provider,
+      provider: product.provider,
       effort: template.effort,
     });
   }
   return { ok: true, value: projected };
+}
+
+export function effectiveManagedProxy(
+  codex: Pick<CodexCoordinatorProfile, "proxy"> | undefined,
+  provider: Pick<ProviderCoordinatorProfile, "proxy"> | undefined,
+  globalProxy: ProxyPolicy,
+): ProxyPolicy {
+  return codex?.proxy ?? provider?.proxy ?? globalProxy;
 }
 
 function mcpEntrypoint(): string {

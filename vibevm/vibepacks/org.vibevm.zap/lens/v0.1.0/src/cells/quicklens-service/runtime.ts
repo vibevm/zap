@@ -87,6 +87,15 @@ export interface QuicklensRuntime {
 export interface QuicklensSourceRuntime {
   readonly source: LiveQuicklensDataSource;
   readonly workflow: ReturnType<typeof createLivePlanWorkflow>;
+  activeBinding(): Promise<
+    QuicklensResult<{
+      readonly storeId: string;
+      readonly campaignId: string;
+      readonly baseId: string;
+      readonly snapshotRevision: string;
+      readonly adoptedPlanKey: { readonly outcomeId: string; readonly generation: number } | null;
+    }>
+  >;
   createAgentPlanning(agent: AgentTransportPort): ReturnType<typeof createAgentPlanProposalPort>;
   close(): void;
 }
@@ -179,6 +188,29 @@ async function openSource(
     value: {
       source: source.value,
       workflow: common.value.workflow,
+      async activeBinding() {
+        const active = await reader.value.activeContext();
+        if (!active.ok) return failure(`ZAP ${active.error.kind}`);
+        const item = active.value.items[0];
+        if (item === undefined) return failure("ZAP active context is unavailable");
+        const adopted = item.adopted_milestone_plan;
+        const generation = adopted.state === "present" ? Number(adopted.plan_key.generation) : null;
+        if (generation !== null && !Number.isSafeInteger(generation))
+          return failure("ZAP adopted plan generation exceeds the safe public range");
+        return {
+          ok: true,
+          value: {
+            storeId: item.snapshot.store_id,
+            campaignId: item.snapshot.campaign_id,
+            baseId: item.snapshot.base_id,
+            snapshotRevision: active.value.revision.toString(),
+            adoptedPlanKey:
+              adopted.state === "present" && generation !== null
+                ? { outcomeId: adopted.plan_key.outcome_id, generation }
+                : null,
+          },
+        };
+      },
       createAgentPlanning: (agent) =>
         createAgentPlanProposalPort(
           common.value.workflow,

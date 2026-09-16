@@ -10,8 +10,17 @@ import {
   NativeWorkAttachmentAckInputSchema,
   NativeWorkBeforeInputSchema,
   NativeWorkReadInputSchema,
+  RepositoryIntegrationDiffAgentInputSchema,
+  RepositoryIntegrationGetAgentInputSchema,
+  RepositoryIntegrationListAgentInputSchema,
+  RepositoryIntegrationPrepareAgentInputSchema,
+  RepositoryIntegrationTestAgentInputSchema,
+  RepositoryPlanListAgentInputSchema,
+  RepositoryWorktreeGetAgentInputSchema,
+  RepositoryWorktreeListAgentInputSchema,
   type ManagedWorkAgentPort,
   type NativeWorkAgentPort,
+  type RepositoryWorkspaceAgentPort,
 } from "../managed-work/index.ts";
 import type { Result } from "../protocol/index.ts";
 import { AdapterSessionIdSchema } from "../transport/index.ts";
@@ -29,18 +38,124 @@ const ManagedAckToolInputSchema = sessionInput(ManagedAgentAttachmentAckInputSch
 const NativeBeforeToolInputSchema = sessionInput(NativeWorkBeforeInputSchema);
 const NativeReadToolInputSchema = sessionInput(NativeWorkReadInputSchema);
 const NativeAckToolInputSchema = sessionInput(NativeWorkAttachmentAckInputSchema);
+const RepositoryPlanListToolInputSchema = sessionInput(RepositoryPlanListAgentInputSchema);
+const RepositoryWorktreeListToolInputSchema = sessionInput(RepositoryWorktreeListAgentInputSchema);
+const RepositoryWorktreeGetToolInputSchema = sessionInput(RepositoryWorktreeGetAgentInputSchema);
+const RepositoryIntegrationListToolInputSchema = sessionInput(
+  RepositoryIntegrationListAgentInputSchema,
+);
+const RepositoryIntegrationGetToolInputSchema = sessionInput(
+  RepositoryIntegrationGetAgentInputSchema,
+);
+const RepositoryIntegrationDiffToolInputSchema = sessionInput(
+  RepositoryIntegrationDiffAgentInputSchema,
+);
+const RepositoryIntegrationPrepareToolInputSchema = sessionInput(
+  RepositoryIntegrationPrepareAgentInputSchema,
+);
+const RepositoryIntegrationTestToolInputSchema = sessionInput(
+  RepositoryIntegrationTestAgentInputSchema,
+);
 
 export function registerWorkTools(
   server: McpServer,
   options: {
     readonly managedWork?: ManagedWorkAgentPort;
     readonly nativeWork?: NativeWorkAgentPort;
+    readonly repositoryWork?: RepositoryWorkspaceAgentPort;
   },
 ): void {
   const managed = options.managedWork;
   if (managed !== undefined) registerManagedTools(server, managed);
   const native = options.nativeWork;
   if (native !== undefined) registerNativeTools(server, native);
+  const repository = options.repositoryWork;
+  if (repository !== undefined) registerRepositoryTools(server, repository);
+}
+
+function registerRepositoryTools(
+  server: McpServer,
+  repository: RepositoryWorkspaceAgentPort,
+): void {
+  const readOnly = { readOnlyHint: true };
+  server.registerTool(
+    "codlens_repository_plan_list",
+    {
+      description: "List plans in this exact coordinator project.",
+      inputSchema: RepositoryPlanListToolInputSchema,
+      annotations: readOnly,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.planList(adapterSessionId, input)),
+  );
+  server.registerTool(
+    "codlens_repository_worktree_list",
+    {
+      description: "List worktrees for one plan in this coordinator context.",
+      inputSchema: RepositoryWorktreeListToolInputSchema,
+      annotations: readOnly,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.worktreeList(adapterSessionId, input)),
+  );
+  server.registerTool(
+    "codlens_repository_worktree_get",
+    {
+      description: "Read one worktree in this coordinator context.",
+      inputSchema: RepositoryWorktreeGetToolInputSchema,
+      annotations: readOnly,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.worktreeGet(adapterSessionId, input)),
+  );
+  server.registerTool(
+    "codlens_repository_integration_list",
+    {
+      description: "List integrations for one plan in this coordinator context.",
+      inputSchema: RepositoryIntegrationListToolInputSchema,
+      annotations: readOnly,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.integrationList(adapterSessionId, input)),
+  );
+  server.registerTool(
+    "codlens_repository_integration_get",
+    {
+      description: "Read one integration in this coordinator context.",
+      inputSchema: RepositoryIntegrationGetToolInputSchema,
+      annotations: readOnly,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.integrationGet(adapterSessionId, input)),
+  );
+  server.registerTool(
+    "codlens_repository_integration_diff",
+    {
+      description: "Read a bounded untrusted-text diff for one exact integration candidate.",
+      inputSchema: RepositoryIntegrationDiffToolInputSchema,
+      annotations: readOnly,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.integrationDiff(adapterSessionId, input)),
+  );
+  server.registerTool(
+    "codlens_repository_integration_prepare",
+    {
+      description: "Prepare an integration from exact source and target commits.",
+      inputSchema: RepositoryIntegrationPrepareToolInputSchema,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.integrationPrepare(adapterSessionId, input)),
+  );
+  server.registerTool(
+    "codlens_repository_integration_test",
+    {
+      description: "Run one registered test profile for an exact integration revision.",
+      inputSchema: RepositoryIntegrationTestToolInputSchema,
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await repository.integrationTest(adapterSessionId, input)),
+  );
 }
 
 function registerManagedTools(server: McpServer, managed: ManagedWorkAgentPort): void {

@@ -1,4 +1,5 @@
 /** Codex public event and native-child normalization. @scope spec://org.vibevm.zap/lens/PROP-005#history */
+import { createHash } from "node:crypto";
 import type { z } from "zod";
 import {
   jsonValue,
@@ -132,7 +133,10 @@ export class CodexEventRouter {
     }
   }
 
-  exited(worker: WorkerState, code: number | null): void {
+  exited(
+    worker: WorkerState,
+    exit: { readonly code: number | null; readonly diagnostic: string },
+  ): void {
     if (this.#workers.get(worker.ownerCoordinatorSessionId) !== worker) return;
     const session = this.#sessions.get(worker.ownerCoordinatorSessionId);
     if (session === undefined) {
@@ -146,9 +150,17 @@ export class CodexEventRouter {
     session.lifecycle = stopping ? "stopped" : "uncertain";
     session.stopObservation = stopping ? "settled" : "uncertain";
     session.descriptor = { ...session.descriptor, state: stopping ? "stopped" : "failed" };
-    this.emit(session, worker, stopping ? "session_stopped" : "process_exited", null, null, null, {
-      code,
-    });
+    this.emit(
+      session,
+      worker,
+      stopping ? "session_stopped" : "process_exited",
+      null,
+      null,
+      null,
+      stopping
+        ? { code: exit.code }
+        : { code: exit.code, diagnostic: exitDiagnostic(exit.diagnostic) },
+    );
     this.#workers.delete(worker.ownerCoordinatorSessionId);
   }
 
@@ -200,6 +212,52 @@ export class CodexEventRouter {
       return;
     }
     const isCoordinatorThread = threadId === session.descriptor.nativeThreadRef.value;
+    if (notification.method === "error") {
+      const params = notification.params;
+      const active = isCoordinatorThread
+        ? session.activeTurnId === params.turnId
+        : session.childActiveTurns.get(threadId) === params.turnId;
+      if (!active) {
+        this.emit(session, worker, "host_event_unmapped", threadId, params.turnId, null, {
+          method: "error",
+          coverage: "stale_turn_diagnostic",
+          error: {
+            message: params.error.message,
+            codexErrorInfo: params.error.codexErrorInfo,
+          },
+          willRetry: params.willRetry,
+          threadId: params.threadId,
+          turnId: params.turnId,
+        });
+        return;
+      }
+      const terminal = !params.willRetry && active;
+      if (terminal) {
+        if (isCoordinatorThread) {
+          session.activeTurnId = null;
+          if (session.lifecycle === "active") {
+            session.descriptor = { ...session.descriptor, state: "failed" };
+          }
+        } else {
+          session.childActiveTurns.delete(threadId);
+        }
+        session.pauseTargets.delete(pauseTargetKey(threadId, params.turnId));
+      }
+      this.emit(session, worker, "session_status", threadId, params.turnId, null, {
+        status: terminal
+          ? { type: "systemError" }
+          : { type: "active", activeFlags: [params.willRetry ? "retrying" : "staleError"] },
+        error: {
+          message: params.error.message,
+          codexErrorInfo: params.error.codexErrorInfo,
+        },
+        willRetry: params.willRetry,
+        threadId: params.threadId,
+        turnId: params.turnId,
+        terminal,
+      });
+      return;
+    }
     if (notification.method === "thread/started") {
       if (!isCoordinatorThread && notification.params.thread.parentThreadId !== null) {
         this.#recordChild(session, worker, notification.params.thread);
@@ -366,6 +424,34 @@ export class CodexEventRouter {
     }
     return undefined;
   }
+}
+
+function exitDiagnostic(diagnostic: string): {
+  readonly category: "authentication" | "network" | "rate_limit" | "configuration" | "unknown";
+  readonly digest: string;
+  readonly bytes: number;
+} | null {
+  const trimmed = diagnostic.trim();
+  if (trimmed.length === 0) return null;
+  const lower = trimmed.toLowerCase();
+  const category =
+    lower.includes("unauthorized") || lower.includes("authentication") || lower.includes("401")
+      ? "authentication"
+      : lower.includes("rate limit") || lower.includes("429")
+        ? "rate_limit"
+        : lower.includes("proxy") ||
+            lower.includes("connect") ||
+            lower.includes("network") ||
+            lower.includes("dns")
+          ? "network"
+          : lower.includes("config") || lower.includes("invalid")
+            ? "configuration"
+            : "unknown";
+  return {
+    category,
+    digest: createHash("sha256").update(trimmed).digest("hex"),
+    bytes: Buffer.byteLength(trimmed, "utf8"),
+  };
 }
 
 function pauseTargetKey(threadId: string, turnId: string): string {

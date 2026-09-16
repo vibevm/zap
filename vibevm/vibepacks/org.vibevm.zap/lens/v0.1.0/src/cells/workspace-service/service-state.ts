@@ -28,22 +28,11 @@ export function updateWorkspaceState(input: {
   else if (event.kind === "session_stopped") state = "stopped";
   else if (event.kind === "session_continued") state = "ready";
   else if (event.kind === "turn_started" && isRoot) state = "running";
-  else if (event.kind === "turn_completed" && isRoot) state = "ready";
-  else if (event.kind === "session_started" || event.kind === "session_resumed") state = "ready";
+  else if (event.kind === "turn_completed" && isRoot) {
+    state = rootTurnCompletionState(event.data);
+  } else if (event.kind === "session_started" || event.kind === "session_resumed") state = "ready";
   else if (event.kind === "session_status" && isRoot) {
-    const status = z.looseObject({ status: z.unknown() }).safeParse(event.data);
-    if (status.success) {
-      const parsed = HostStatusSchema.safeParse(status.data.status);
-      if (parsed.success) {
-        if (typeof parsed.data === "string") state = parsed.data;
-        else if (parsed.data.type === "systemError") state = "failed";
-        else if (parsed.data.type === "active")
-          state = parsed.data.activeFlags?.includes("waitingOnApproval")
-            ? "waiting_for_user"
-            : "running";
-        else state = parsed.data.type === "closed" ? "stopped" : "ready";
-      }
-    }
+    state = rootSessionStatusState(event.data);
   }
   if (state !== null && isRoot) {
     launch.descriptor = {
@@ -80,4 +69,23 @@ export function updateWorkspaceState(input: {
       input.store.upsertAgent(updated);
     }
   }
+}
+
+export function rootTurnCompletionState(data: unknown): "ready" | "failed" {
+  const completed = z
+    .looseObject({ status: z.enum(["completed", "interrupted", "failed"]) })
+    .safeParse(data);
+  return completed.success && completed.data.status === "failed" ? "failed" : "ready";
+}
+
+export function rootSessionStatusState(data: unknown): LaunchState | null {
+  const status = z.looseObject({ status: z.unknown() }).safeParse(data);
+  if (!status.success) return null;
+  const parsed = HostStatusSchema.safeParse(status.data.status);
+  if (!parsed.success) return null;
+  if (typeof parsed.data === "string") return parsed.data;
+  if (parsed.data.type === "systemError") return "failed";
+  if (parsed.data.type === "active")
+    return parsed.data.activeFlags?.includes("waitingOnApproval") ? "waiting_for_user" : "running";
+  return parsed.data.type === "closed" ? "stopped" : "ready";
 }

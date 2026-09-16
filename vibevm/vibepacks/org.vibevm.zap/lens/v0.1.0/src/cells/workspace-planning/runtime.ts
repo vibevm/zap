@@ -1,5 +1,5 @@
 /** Lazy per-context ZAP planning runtime. @scope spec://org.vibevm.zap/lens/PROP-002#plan-control */
-import { isAbsolute } from "node:path";
+import { isAbsolute, relative, resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import {
@@ -24,10 +24,21 @@ import type {
   WorkspacePlanningSourceObserver,
 } from "./types.ts";
 import type { PlanOperationResult, QuicklensSnapshot } from "../quicklens-model/index.ts";
+import { AlgorithmBindingSchema, type AlgorithmBinding } from "../repository-model/index.ts";
 import { auditAgentPlanning } from "./agent.ts";
 import { recordSourceChange } from "./source-events.ts";
 
-type WorkspacePlanResponse = Extract<WorkspaceCommandResponse, { operation: `plan.${string}` }>;
+type WorkspacePlanResponse = Extract<
+  WorkspaceCommandResponse,
+  {
+    operation:
+      | "plan.intent.v1"
+      | "plan.preview.v1"
+      | "plan.apply.v1"
+      | "plan.reconcile.v1"
+      | "plan.decide.v1";
+  }
+>;
 
 const ContextConfigSchema = z
   .object({
@@ -39,7 +50,7 @@ const ContextConfigSchema = z
 export const WorkspacePlanningRuntimeConfigSchema = z
   .object({
     configDirectory: z.string().min(1).refine(isAbsolute),
-    contexts: z.array(ContextConfigSchema).min(1).max(256),
+    contexts: z.array(ContextConfigSchema).max(256).default([]),
   })
   .strict()
   .superRefine((config, context) => {
@@ -55,9 +66,12 @@ export type WorkspacePlanningRuntimeConfig = z.infer<typeof WorkspacePlanningRun
 
 export interface WorkspacePlanningController {
   readonly feature: WorkspacePlanningFeature;
+  attach(input: WorkspacePlanningAttachment): Promise<WorkspaceResult<AlgorithmBinding>>;
+  attached(projectId: string, contextId: string): boolean;
   start(): Promise<WorkspaceResult<null>>;
   close(): void;
 }
+export type WorkspacePlanningAttachment = z.infer<typeof ContextConfigSchema>;
 
 export function createWorkspacePlanningController(
   raw: unknown,
@@ -68,6 +82,9 @@ export function createWorkspacePlanningController(
   if (!config.success) return failure("invalid_input", "planning runtime configuration is invalid");
   const contexts = new Map<string, QuicklensSourceRuntime>();
   const snapshots = new Map<string, QuicklensSnapshot>();
+  const bindings = new Map<string, AlgorithmBinding>();
+  const configurations = new Map<string, string>();
+  const identityOwners = new Map<string, string>();
   const unsubscribers: (() => void)[] = [];
   const feature: WorkspacePlanningFeature = {
     async snapshot(access, projectId, contextId) {
@@ -139,67 +156,170 @@ export function createWorkspacePlanningController(
       snapshots.clear();
     },
   };
+  const attachOne = async (
+    raw: WorkspacePlanningAttachment,
+    requireContextPaths: boolean,
+  ): Promise<WorkspaceResult<AlgorithmBinding>> => {
+    const entry = ContextConfigSchema.safeParse(raw);
+    if (!entry.success) return failure("invalid_input", "planning attachment is invalid");
+    const contextKey = key(entry.data.projectId, entry.data.contextId);
+    const configuration = createHash("sha256")
+      .update(JSON.stringify(entry.data.source))
+      .digest("hex");
+    const prior = bindings.get(contextKey);
+    if (prior !== undefined)
+      return configurations.get(contextKey) === configuration
+        ? { ok: true, value: prior }
+        : failure("conflict", "planning context is already attached to another source");
+    const scope = store.resolveAgentScope(
+      entry.data.source.workspaceId,
+      entry.data.source.conversationId,
+    );
+    if (
+      !scope.ok ||
+      scope.value.projectId !== entry.data.projectId ||
+      scope.value.contextId !== entry.data.contextId
+    )
+      return failure("conflict", "planning broker scope does not match registered project context");
+    if (requireContextPaths && !contextPathsMatch(store, config.data.configDirectory, entry.data))
+      return failure(
+        "conflict",
+        "planning specifications and workflow state must resolve inside the selected worktree",
+      );
+    const opened = await openQuicklensSourceRuntime(entry.data.source, {
+      configDirectory: config.data.configDirectory,
+    });
+    if (!opened.ok) return failure("unavailable", opened.error.message);
+    const identity = await opened.value.activeBinding();
+    const initial = await opened.value.source.read({ signal: new AbortController().signal });
+    if (!identity.ok || !initial.ok) {
+      opened.value.close();
+      return failure("unavailable", "planning source identity could not be observed");
+    }
+    const binding = bindPlanningSourceIdentity(identity.value, initial.value);
+    if (!binding.ok) {
+      opened.value.close();
+      return binding;
+    }
+    const claimed = claimPlanningSourceIdentity(identityOwners, contextKey, binding.value);
+    if (!claimed.ok) {
+      opened.value.close();
+      return claimed;
+    }
+    contexts.set(contextKey, opened.value);
+    snapshots.set(contextKey, initial.value);
+    bindings.set(contextKey, binding.value);
+    configurations.set(contextKey, configuration);
+    sourceObserver?.observe({
+      projectId: entry.data.projectId,
+      contextId: entry.data.contextId,
+      reason: "initial authoritative planning snapshot",
+      snapshot: initial.value,
+    });
+    unsubscribers.push(
+      opened.value.source.subscribe?.((reason) => {
+        void refreshSource(
+          store,
+          entry.data.projectId,
+          entry.data.contextId,
+          reason,
+          opened.value,
+          snapshots,
+          sourceObserver,
+        );
+      }) ?? (() => undefined),
+    );
+    return binding;
+  };
   return {
     ok: true,
     value: {
       feature,
+      attach: (input) => attachOne(input, true),
+      attached: (projectId, contextId) => contexts.has(key(projectId, contextId)),
       async start() {
-        if (contexts.size > 0) return { ok: true, value: null };
         for (const entry of config.data.contexts) {
-          const scope = store.resolveAgentScope(
-            entry.source.workspaceId,
-            entry.source.conversationId,
-          );
-          if (
-            !scope.ok ||
-            scope.value.projectId !== entry.projectId ||
-            scope.value.contextId !== entry.contextId
-          ) {
+          const attached = await attachOne(entry, false);
+          if (!attached.ok) {
             feature.close();
-            return failure(
-              "conflict",
-              "planning broker scope does not match registered project context",
-            );
+            return attached;
           }
-          const opened = await openQuicklensSourceRuntime(entry.source, {
-            configDirectory: config.data.configDirectory,
-          });
-          if (!opened.ok) {
-            feature.close();
-            return failure("unavailable", opened.error.message);
-          }
-          contexts.set(key(entry.projectId, entry.contextId), opened.value);
-          const contextKey = key(entry.projectId, entry.contextId);
-          const initial = await opened.value.source.read({ signal: new AbortController().signal });
-          if (initial.ok) {
-            snapshots.set(contextKey, initial.value);
-            sourceObserver?.observe({
-              projectId: entry.projectId,
-              contextId: entry.contextId,
-              reason: "initial authoritative planning snapshot",
-              snapshot: initial.value,
-            });
-          }
-          unsubscribers.push(
-            opened.value.source.subscribe?.((reason) => {
-              void refreshSource(
-                store,
-                entry.projectId,
-                entry.contextId,
-                reason,
-                opened.value,
-                snapshots,
-                sourceObserver,
-              );
-            }) ?? (() => undefined),
-          );
         }
         return { ok: true, value: null };
       },
       close: () => {
         feature.close();
+        bindings.clear();
+        configurations.clear();
+        identityOwners.clear();
       },
     },
+  };
+}
+
+export function claimPlanningSourceIdentity(
+  owners: Map<string, string>,
+  contextKey: string,
+  binding: AlgorithmBinding,
+): WorkspaceResult<null> {
+  if (binding.state !== "bound")
+    return failure("invalid_input", "planning source identity is not bound");
+  const identity = JSON.stringify([
+    binding.storeId,
+    binding.campaignId,
+    binding.baseId,
+    binding.adoptedPlanKey,
+  ]);
+  const owner = owners.get(identity);
+  if (owner !== undefined && owner !== contextKey)
+    return failure("conflict", "planning source identity is already attached to another plan");
+  owners.set(identity, contextKey);
+  return { ok: true, value: null };
+}
+
+function contextPathsMatch(
+  store: WorkspaceStore,
+  configDirectory: string,
+  entry: WorkspacePlanningAttachment,
+): boolean {
+  const launch = store.resolveProjectLaunch(entry.projectId, entry.contextId);
+  if (!launch.ok) return false;
+  const root = resolve(launch.value.cwd);
+  const paths = [
+    resolve(configDirectory, entry.source.workflowDatabasePath),
+    ...entry.source.specifications.map((specification) =>
+      resolve(configDirectory, specification.root),
+    ),
+  ];
+  return paths.every((path) => {
+    const child = relative(root, path);
+    return child === "" || (!child.startsWith("..") && !isAbsolute(child));
+  });
+}
+
+export function bindPlanningSourceIdentity(
+  identity: {
+    readonly storeId: string;
+    readonly campaignId: string;
+    readonly baseId: string;
+    readonly snapshotRevision: string;
+    readonly adoptedPlanKey: { readonly outcomeId: string; readonly generation: number } | null;
+  },
+  snapshot: QuicklensSnapshot,
+): WorkspaceResult<AlgorithmBinding> {
+  const basis = snapshot.plan?.basis;
+  if (
+    snapshot.sourceMode !== "live" ||
+    snapshot.phase !== "ready" ||
+    basis === undefined ||
+    basis.storeRef !== `store:${identity.storeId}` ||
+    basis.baseRef !== `base:${identity.baseId}` ||
+    basis.revision !== identity.snapshotRevision
+  )
+    return failure("conflict", "planning source is not authoritative for its active ZAP context");
+  return {
+    ok: true,
+    value: AlgorithmBindingSchema.parse({ state: "bound", ...identity }),
   };
 }
 

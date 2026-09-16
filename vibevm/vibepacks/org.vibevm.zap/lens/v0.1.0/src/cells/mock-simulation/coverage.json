@@ -1,0 +1,449 @@
+{
+  "protocol": "zap-mock-coverage/1",
+  "documents": [
+    {
+      "scenarioId": "model.full-lifecycle",
+      "path": "src/cells/mock-model/full-lifecycle.simulation.json",
+      "runnerId": "model.reducer"
+    },
+    {
+      "scenarioId": "managed.question-pause-answer-report-review",
+      "path": "src/cells/wayfinder-runtime/mock-managed.simulation.json",
+      "runnerId": "wayfinder.mock-managed"
+    },
+    {
+      "scenarioId": "coordinator.question-pause-answer-continue",
+      "path": "src/cells/mock-agent/question-http.simulation.json",
+      "runnerId": "coordinator_http"
+    },
+    {
+      "scenarioId": "store.additive-plan-context",
+      "path": "src/cells/workspace-store/plan-context.simulation.json",
+      "runnerId": "workspace.store-plan-context"
+    },
+    {
+      "scenarioId": "repository.two-plans-child-clean-integration",
+      "path": "src/cells/repository-workspaces/scenarios/two-plans-clean.simulation.json",
+      "runnerId": "repository.git"
+    },
+    {
+      "scenarioId": "repository.conflict-resolution-promotion",
+      "path": "src/cells/repository-workspaces/scenarios/conflict-resolution.simulation.json",
+      "runnerId": "repository.git"
+    },
+    {
+      "scenarioId": "repository.stale-and-dirty-target-refusal",
+      "path": "src/cells/repository-workspaces/scenarios/stale-dirty-refusal.simulation.json",
+      "runnerId": "repository.git"
+    },
+    {
+      "scenarioId": "repository.restart-idempotent-reconcile",
+      "path": "src/cells/repository-workspaces/scenarios/restart-reconcile.simulation.json",
+      "runnerId": "repository.git"
+    },
+    {
+      "scenarioId": "same-project.parallel-plans.fork-merge-assignment",
+      "path": "src/cells/quicklens-graph/portfolio-repository.simulation.json",
+      "runnerId": "quicklens.portfolio-repository"
+    },
+    {
+      "scenarioId": "annotations.deferred-trash-restore",
+      "path": "src/cells/workspace-annotations/deferred-trash-restore.simulation.json",
+      "runnerId": "workspace.annotations-product"
+    },
+    {
+      "scenarioId": "model-policy.selection-history-isolation",
+      "path": "src/cells/model-policy-service/selection-history-isolation.simulation.json",
+      "runnerId": "workspace.model-policy-product"
+    },
+    {
+      "scenarioId": "repository.public-two-plan-integration",
+      "path": "src/cells/wayfinder-runtime/repository-product.simulation.json",
+      "runnerId": "wayfinder.repository-product"
+    },
+    {
+      "scenarioId": "repository.managed-isolated-writer-fence",
+      "path": "src/cells/wayfinder-runtime/repository-managed-product.simulation.json",
+      "runnerId": "wayfinder.repository-managed-product"
+    },
+    {
+      "scenarioId": "provider.addressed-turn-running-queue-ready",
+      "path": "src/cells/provider-coordinators/running-projection.simulation.json",
+      "runnerId": "provider-coordinator.public-projection"
+    }
+  ],
+  "featureInventory": [
+    "product.setup-registration",
+    "product.multi-project-canvas",
+    "annotations.notes-trash-restore",
+    "planning.plan-control",
+    "model-policy.selection-history",
+    "chat.history-background-delivery",
+    "terminal.native-managed-control",
+    "auth.scope-isolation",
+    "proxy.protected-launch",
+    "repository.worktrees-fork-merge"
+  ],
+  "coverage": [
+    { "feature": "model.ready-echo", "scenarioIds": ["model.full-lifecycle"] },
+    { "feature": "model.busy-gate", "scenarioIds": ["model.full-lifecycle"] },
+    { "feature": "question.idle-late-answer-ack", "scenarioIds": ["model.full-lifecycle"] },
+    { "feature": "managed.report-effect", "scenarioIds": ["model.full-lifecycle"] },
+    { "feature": "lifecycle.pause-continue-restart", "scenarioIds": ["model.full-lifecycle"] },
+    { "feature": "delivery.duplicate-uncertain", "scenarioIds": ["model.full-lifecycle"] },
+    {
+      "feature": "managed.real-pty",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "managed.generated-mcp",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "question.late-answer",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "lifecycle.pause-without-coordinator",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "lifecycle.continue",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "inbox.ack",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "managed.report-review",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "workspace.operation.managed-work.create.v1",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "workspace.operation.managed-work.start.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "repository.managed-isolated-writer-fence"
+      ]
+    },
+    {
+      "feature": "workspace.operation.managed-work.get.v1",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "workspace.operation.managed-work.review.v1",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "workspace.operation.agent.network.v1",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "workspace.operation.terminal.list.v1",
+      "scenarioIds": ["managed.question-pause-answer-report-review"]
+    },
+    {
+      "feature": "coordinator.http-question-lifecycle",
+      "scenarioIds": ["coordinator.question-pause-answer-continue"]
+    },
+    {
+      "feature": "question.coordinator-late-answer",
+      "scenarioIds": ["coordinator.question-pause-answer-continue"]
+    },
+    {
+      "feature": "lifecycle.coordinator-pause-continue",
+      "scenarioIds": ["coordinator.question-pause-answer-continue"]
+    },
+    {
+      "feature": "coordinator.same-session",
+      "scenarioIds": ["coordinator.question-pause-answer-continue"]
+    },
+    {
+      "feature": "inbox.coordinator-ack",
+      "scenarioIds": ["coordinator.question-pause-answer-continue"]
+    },
+    {
+      "feature": "workspace.operation.session.start.v1",
+      "scenarioIds": [
+        "coordinator.question-pause-answer-continue",
+        "provider.addressed-turn-running-queue-ready"
+      ]
+    },
+    {
+      "feature": "workspace.operation.chat.post.v1",
+      "scenarioIds": [
+        "coordinator.question-pause-answer-continue",
+        "provider.addressed-turn-running-queue-ready"
+      ]
+    },
+    {
+      "feature": "workspace.operation.chat.page.v1",
+      "scenarioIds": ["coordinator.question-pause-answer-continue"]
+    },
+    {
+      "feature": "workspace.operation.question.list.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "coordinator.question-pause-answer-continue"
+      ]
+    },
+    {
+      "feature": "workspace.operation.question.answer.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "coordinator.question-pause-answer-continue"
+      ]
+    },
+    {
+      "feature": "workspace.operation.project.execution.get.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "coordinator.question-pause-answer-continue"
+      ]
+    },
+    {
+      "feature": "workspace.operation.project.pause.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "coordinator.question-pause-answer-continue",
+        "repository.managed-isolated-writer-fence"
+      ]
+    },
+    {
+      "feature": "workspace.operation.project.continue.v1",
+      "scenarioIds": [
+        "managed.question-pause-answer-report-review",
+        "coordinator.question-pause-answer-continue",
+        "repository.managed-isolated-writer-fence"
+      ]
+    },
+    {
+      "feature": "store.additive-plan-context",
+      "scenarioIds": ["store.additive-plan-context"]
+    },
+    {
+      "feature": "store.default-context-backcompat",
+      "scenarioIds": ["store.additive-plan-context"]
+    },
+    {
+      "feature": "store.context-launch-isolation",
+      "scenarioIds": ["store.additive-plan-context"]
+    },
+    {
+      "feature": "store.context-coordinator-isolation",
+      "scenarioIds": ["store.additive-plan-context"]
+    },
+    {
+      "feature": "store.registration-digest-backcompat",
+      "scenarioIds": ["store.additive-plan-context"]
+    },
+    {
+      "feature": "repository.git-worktree-integration",
+      "scenarioIds": [
+        "repository.two-plans-child-clean-integration",
+        "repository.conflict-resolution-promotion",
+        "repository.stale-and-dirty-target-refusal",
+        "repository.restart-idempotent-reconcile"
+      ]
+    },
+    {
+      "feature": "repository.two-top-level-plans",
+      "scenarioIds": ["repository.two-plans-child-clean-integration"]
+    },
+    {
+      "feature": "repository.child-worktree",
+      "scenarioIds": ["repository.two-plans-child-clean-integration"]
+    },
+    {
+      "feature": "integration.clean-promotion",
+      "scenarioIds": ["repository.two-plans-child-clean-integration"]
+    },
+    {
+      "feature": "integration.actual-conflict",
+      "scenarioIds": ["repository.conflict-resolution-promotion"]
+    },
+    {
+      "feature": "integration.bounded-resolution",
+      "scenarioIds": ["repository.conflict-resolution-promotion"]
+    },
+    {
+      "feature": "integration.semantic-review",
+      "scenarioIds": ["repository.conflict-resolution-promotion"]
+    },
+    {
+      "feature": "integration.target-head-cas",
+      "scenarioIds": ["repository.stale-and-dirty-target-refusal"]
+    },
+    {
+      "feature": "integration.dirty-target-refusal",
+      "scenarioIds": ["repository.stale-and-dirty-target-refusal"]
+    },
+    {
+      "feature": "integration.no-overwrite",
+      "scenarioIds": ["repository.stale-and-dirty-target-refusal"]
+    },
+    {
+      "feature": "preparation.intent-before-io",
+      "scenarioIds": ["repository.restart-idempotent-reconcile"]
+    },
+    {
+      "feature": "preparation.exact-request-retry",
+      "scenarioIds": ["repository.restart-idempotent-reconcile"]
+    },
+    {
+      "feature": "recovery.durable-reopen",
+      "scenarioIds": ["repository.restart-idempotent-reconcile"]
+    },
+    {
+      "feature": "canvas.context-qualified-keys",
+      "scenarioIds": ["same-project.parallel-plans.fork-merge-assignment"]
+    },
+    {
+      "feature": "canvas.shared-repository-root",
+      "scenarioIds": ["same-project.parallel-plans.fork-merge-assignment"]
+    },
+    {
+      "feature": "canvas.worker-assignment",
+      "scenarioIds": ["same-project.parallel-plans.fork-merge-assignment"]
+    },
+    {
+      "feature": "canvas.repository-fork-merge",
+      "scenarioIds": ["same-project.parallel-plans.fork-merge-assignment"]
+    },
+    {
+      "feature": "canvas.integration-conflict",
+      "scenarioIds": ["same-project.parallel-plans.fork-merge-assignment"]
+    },
+    {
+      "feature": "annotations.notes-trash-restore",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "annotations.deferred-delivery-ack",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "workspace.operation.annotation.note.create.v1",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "workspace.operation.annotation.note.get.v1",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "workspace.operation.annotation.note.list.v1",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "workspace.operation.annotation.note.archive.v1",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "workspace.operation.annotation.note.restore.v1",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "workspace.operation.annotation.trash.list.v1",
+      "scenarioIds": ["annotations.deferred-trash-restore"]
+    },
+    {
+      "feature": "model-policy.selection-history",
+      "scenarioIds": ["model-policy.selection-history-isolation"]
+    },
+    {
+      "feature": "model-policy.project-isolation",
+      "scenarioIds": ["model-policy.selection-history-isolation"]
+    },
+    {
+      "feature": "workspace.operation.model-policy.get.v1",
+      "scenarioIds": ["model-policy.selection-history-isolation"]
+    },
+    {
+      "feature": "workspace.operation.model-policy.update.v1",
+      "scenarioIds": ["model-policy.selection-history-isolation"]
+    },
+    {
+      "feature": "workspace.operation.model-policy.preview.v1",
+      "scenarioIds": ["model-policy.selection-history-isolation"]
+    },
+    {
+      "feature": "workspace.operation.model-policy.history.v1",
+      "scenarioIds": ["model-policy.selection-history-isolation"]
+    },
+    {
+      "feature": "workspace.operation.model-selection.get.v1",
+      "scenarioIds": ["model-policy.selection-history-isolation"]
+    },
+    {
+      "feature": "repository.public-runtime-two-plan-integration",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "repository.worktrees-fork-merge",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.repository.get.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.plan.workspace.prepare.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.worktree.get.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.worktree.list.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.worktree.prepare.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.integration.prepare.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.integration.diff.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.integration.test.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.integration.review.v1",
+      "scenarioIds": ["repository.public-two-plan-integration"]
+    },
+    {
+      "feature": "workspace.operation.integration.promote.v1",
+      "scenarioIds": [
+        "repository.public-two-plan-integration",
+        "repository.managed-isolated-writer-fence"
+      ]
+    },
+    {
+      "feature": "repository.managed-isolated-writer-fence",
+      "scenarioIds": ["repository.managed-isolated-writer-fence"]
+    },
+    {
+      "feature": "workspace.operation.managed-work.report.v1",
+      "scenarioIds": ["repository.managed-isolated-writer-fence"]
+    },
+    {
+      "feature": "provider.addressed-turn-public-state",
+      "scenarioIds": ["provider.addressed-turn-running-queue-ready"]
+    },
+    {
+      "feature": "workspace.operation.session.list.v1",
+      "scenarioIds": ["provider.addressed-turn-running-queue-ready"]
+    }
+  ]
+}

@@ -236,6 +236,18 @@ export interface IntegrationDiff {
   readonly unifiedText: string;
   readonly truncated: boolean;
 }
+export interface RepositoryWriterLeaseView {
+  readonly leaseId: string;
+  readonly epoch: string;
+  readonly target: {
+    readonly repositoryId: string;
+    readonly executionHostId: string;
+    readonly planId: string;
+    readonly targetWorktreeId: string;
+    readonly expectedHead: string;
+    readonly operationId: string;
+  };
+}
 
 export interface RepositoryWorkspaceService {
   registerRepository(
@@ -297,6 +309,7 @@ export interface RepositoryWorkspaceService {
   readIntegrationDiff(
     input: IntegrationDiffRequest,
   ): Promise<RepositoryWorkspaceResult<IntegrationDiff>>;
+  currentWriterLease(targetWorktreeId: string): RepositoryWriterLeaseView | null;
   close(): void;
 }
 

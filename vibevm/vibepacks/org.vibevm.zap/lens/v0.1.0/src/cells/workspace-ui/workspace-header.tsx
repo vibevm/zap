@@ -32,7 +32,11 @@ export const WorkspaceHeader = component$<{
           onChange$={(_, element) => props.onContext$(element.value)}
         >
           {props.contexts.map((context) => (
-            <option key={context.contextId} value={context.contextId}>
+            <option
+              key={context.contextId}
+              value={context.contextId}
+              selected={context.contextId === props.selectedContextId}
+            >
               {context.displayName}
             </option>
           ))}

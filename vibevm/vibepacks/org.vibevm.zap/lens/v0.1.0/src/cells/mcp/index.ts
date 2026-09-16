@@ -30,7 +30,11 @@ import {
   type AgentTransportPort,
 } from "../transport/index.ts";
 import { AgentQuestionInputSchema } from "../workspace-interaction/index.ts";
-import type { ManagedWorkAgentPort, NativeWorkAgentPort } from "../managed-work/index.ts";
+import type {
+  ManagedWorkAgentPort,
+  NativeWorkAgentPort,
+  RepositoryWorkspaceAgentPort,
+} from "../managed-work/index.ts";
 import { registerWorkTools } from "./work-tools.ts";
 
 export const MCP_PROTOCOL_REVISION = "2025-11-25";
@@ -115,7 +119,11 @@ const PlanPreparationToolInputSchema = z
     request: z.record(z.string(), z.unknown()),
   })
   .strict();
-export type { ManagedWorkAgentPort, NativeWorkAgentPort } from "../managed-work/index.ts";
+export type {
+  ManagedWorkAgentPort,
+  NativeWorkAgentPort,
+  RepositoryWorkspaceAgentPort,
+} from "../managed-work/index.ts";
 
 export interface AgentPlanProposalPort {
   register(
@@ -173,6 +181,7 @@ export interface CodlensMcpOptions {
   readonly planProposal?: AgentPlanProposalPort;
   readonly managedWork?: ManagedWorkAgentPort;
   readonly nativeWork?: NativeWorkAgentPort;
+  readonly repositoryWork?: RepositoryWorkspaceAgentPort;
 }
 
 /**

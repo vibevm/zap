@@ -168,7 +168,7 @@ function requestOnce(
     return failure("conflict", "project lifecycle request targets a different coordinator");
   }
   const action = actionOf(request.operation);
-  if (!allowedTransition(current.value.state, action)) {
+  if (!allowedTransition(current.value.state, action, request.sessionId)) {
     return failure("conflict", `project state ${current.value.state} does not allow ${action}`);
   }
   const revision = BigInt(current.value.revision) + 1n;
@@ -284,7 +284,14 @@ function settleOnce(
   const pauseUnsettled = input.action === "pause" && input.observation !== "settled";
   const updated = ProjectExecutionStateSchema.parse({
     ...current.value,
-    state: pauseUnsettled ? "pausing" : input.observation === "uncertain" ? "uncertain" : stable,
+    state:
+      input.observation === "settled"
+        ? stable
+        : input.observation === "uncertain"
+          ? "uncertain"
+          : pauseUnsettled && current.value.sessionId !== null
+            ? "pausing"
+            : pending.previousState,
     processEpoch: input.processEpoch ?? current.value.processEpoch,
     pendingAction:
       pauseUnsettled || input.observation === "uncertain"
@@ -368,9 +375,18 @@ function transitionState(action: "pause" | "stop" | "continue") {
 function settledState(action: "pause" | "stop" | "continue") {
   return action === "pause" ? "paused" : action === "stop" ? "stopped" : "running";
 }
-function allowedTransition(state: ProjectExecutionState["state"], action: string): boolean {
-  if (action === "pause") return state === "running";
-  if (action === "stop") return ["running", "pausing", "paused", "uncertain"].includes(state);
+function allowedTransition(
+  state: ProjectExecutionState["state"],
+  action: string,
+  sessionId: ProjectExecutionState["sessionId"],
+): boolean {
+  if (action === "pause")
+    return state === "running" || (state === "uninitialized" && sessionId === null);
+  if (action === "stop")
+    return (
+      ["running", "pausing", "paused", "uncertain"].includes(state) ||
+      (state === "uninitialized" && sessionId === null)
+    );
   return state === "paused" || state === "stopped";
 }
 function settledStateMatches(

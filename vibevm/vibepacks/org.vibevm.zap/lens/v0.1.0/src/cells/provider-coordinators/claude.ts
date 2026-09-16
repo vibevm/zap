@@ -17,11 +17,14 @@ import type {
 import { resolveProxyEnvironment } from "../proxy-policy/index.ts";
 import type { ProxyPolicy } from "../proxy-policy/index.ts";
 import { ZAP_MCP_SERVER_NAME, zapPreauthorizedToolNames } from "../protocol/index.ts";
+import { StreamControlClient, streamHostControlRequest } from "./stream-control.ts";
+import { providerStderrDiagnostic, type ProviderProcessDiagnostic } from "./process-diagnostic.ts";
 
 export interface OwnedLineProcess {
   readonly pid: number;
   write(input: string): void;
   onLine(listener: (line: string) => void): () => void;
+  onDiagnostic(listener: (diagnostic: ProviderProcessDiagnostic) => void): () => void;
   onExit(listener: (code: number | null) => void): () => void;
   kill(): void;
 }
@@ -67,9 +70,14 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
   readonly #prepareLaunch: ProviderLaunchPreparationPort | undefined;
   readonly #listeners = new Set<(raw: unknown) => void>();
   readonly #history: unknown[] = [];
+  readonly #control = new StreamControlClient();
+  readonly #activeChildren = new Set<string>();
+  #pendingRootCompletion: unknown;
   #process: OwnedLineProcess | undefined;
   #session: ProviderCoordinatorSession | undefined;
+  #activity: "idle" | "busy" | "unknown" = "unknown";
   #unsubscribeLine: (() => void) | undefined;
+  #unsubscribeDiagnostic: (() => void) | undefined;
   #unsubscribeExit: (() => void) | undefined;
 
   constructor(
@@ -104,6 +112,7 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
     const prepared = await this.#prepareLaunch?.prepare({ profile: this.#profile, scope });
     if (prepared !== undefined && !prepared.ok) return prepared;
     const mcpConfigPath = prepared?.value.mcpConfigPath ?? this.#profile.mcpConfigPath;
+    const requestedSessionId = resumeId ?? randomUUID();
     const args = [
       ...(this.#profile.argumentPrefix ?? []),
       "--print",
@@ -112,15 +121,18 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
       "--output-format",
       "stream-json",
       "--verbose",
+      "--setting-sources",
+      "",
       "--model",
       scope.modelId ?? this.#profile.modelId,
       ...(selectedEffort(scope, this.#profile) === null
         ? []
         : ["--effort", selectedEffort(scope, this.#profile) ?? ""]),
       ...(resumeId === undefined ? [] : ["--resume", resumeId]),
+      ...(resumeId === undefined ? ["--session-id", requestedSessionId] : []),
       ...(mcpConfigPath === undefined || mcpConfigPath === null
         ? []
-        : ["--mcp-config", mcpConfigPath]),
+        : ["--strict-mcp-config", "--mcp-config", mcpConfigPath]),
       ...(prepared === undefined
         ? []
         : [
@@ -147,106 +159,32 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
       environment: processEnvironment,
     });
     this.#process = childProcess;
+    this.#activeChildren.clear();
+    this.#pendingRootCompletion = undefined;
     const processEpoch = `claude:${String(childProcess.pid)}:${randomUUID()}`;
     this.#observeProcess(childProcess);
-    if (resumeId !== undefined) {
-      const resumed: ProviderCoordinatorSession = {
-        coordinatorSessionId: scope.coordinatorSessionId,
-        nativeSessionId: resumeId,
-        nativeThreadId: resumeId,
-        processEpoch,
-        modelId: scope.modelId ?? this.#profile.modelId,
-        effort: selectedEffort(scope, this.#profile),
-      };
-      this.#session = resumed;
-      return { ok: true as const, value: resumed };
-    }
-    const initPromise = this.#waitForInit(childProcess);
-    if (bootstrap !== undefined && !this.#writeUser(bootstrap))
-      return failure("transport_lost", "Claude input stream rejected bootstrap delivery");
-    const init = await initPromise;
-    if (!init.ok) {
+    const initialized = await this.#control.request(childProcess, "initialize", this.#timeoutMs);
+    if (!initialized.ok) {
       childProcess.kill();
       this.#process = undefined;
-      return init;
+      return initialized;
     }
     const started: ProviderCoordinatorSession = {
       coordinatorSessionId: scope.coordinatorSessionId,
-      nativeSessionId: init.value.sessionId,
-      nativeThreadId: init.value.threadId,
+      nativeSessionId: requestedSessionId,
+      nativeThreadId: requestedSessionId,
       processEpoch,
       modelId: scope.modelId ?? this.#profile.modelId,
       effort: selectedEffort(scope, this.#profile),
     };
     this.#session = started;
+    this.#activity = "idle";
+    if (bootstrap !== undefined) {
+      if (!this.#writeUser(bootstrap))
+        return failure("transport_lost", "Claude input stream rejected bootstrap delivery");
+      this.#activity = "busy";
+    }
     return { ok: true as const, value: started };
-  }
-
-  async #waitForInit(process: OwnedLineProcess): Promise<
-    | {
-        readonly ok: true;
-        readonly value: { readonly sessionId: string; readonly threadId: string };
-      }
-    | {
-        readonly ok: false;
-        readonly error: {
-          readonly code: "transport_lost" | "protocol_error";
-          readonly message: string;
-          readonly retry: "after_reconcile";
-        };
-      }
-  > {
-    return new Promise((resolve) => {
-      let settled = false;
-      const finish = (result: Parameters<typeof resolve>[0]) => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timer);
-        resolve(result);
-      };
-      const unsubscribe = process.onLine((line) => {
-        const raw: unknown = parseJson(line);
-        const system = InitSchema.safeParse(raw);
-        if (!system.success || system.data.subtype !== "init") return;
-        const sessionId = system.data.session_id;
-        if (sessionId === undefined) {
-          finish({
-            ok: false,
-            error: {
-              code: "protocol_error",
-              message: "Claude init omitted session_id",
-              retry: "after_reconcile",
-            },
-          });
-          return;
-        }
-        finish({ ok: true, value: { sessionId, threadId: system.data.thread_id ?? sessionId } });
-      });
-      const unsubscribeExit = process.onExit((code) => {
-        unsubscribe();
-        unsubscribeExit();
-        finish({
-          ok: false,
-          error: {
-            code: "transport_lost",
-            message: `Claude process exited before init (${String(code)})`,
-            retry: "after_reconcile",
-          },
-        });
-      });
-      const timer = setTimeout(() => {
-        unsubscribe();
-        unsubscribeExit();
-        finish({
-          ok: false,
-          error: {
-            code: "transport_lost",
-            message: "Claude init timed out",
-            retry: "after_reconcile",
-          },
-        });
-      }, this.#timeoutMs);
-    });
   }
 
   history(session: ProviderCoordinatorSession) {
@@ -274,6 +212,7 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
       return Promise.resolve(failure("not_found", "Claude session is not active"));
     if (!this.#writeUser(input.text))
       return Promise.resolve(failure("transport_lost", "Claude input stream rejected delivery"));
+    this.#activity = "busy";
     return Promise.resolve({
       ok: true as const,
       value: {
@@ -294,18 +233,37 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
     void input.nativeTurnId;
     if (!this.#process)
       return Promise.resolve(failure("not_found", "Claude process is not active"));
-    this.#process.kill();
-    return Promise.resolve({ ok: true as const, value: null });
+    return this.#control
+      .request(this.#process, "interrupt", this.#timeoutMs)
+      .then((result) => (result.ok ? { ok: true as const, value: null } : result));
   }
 
   respond(input: {
     readonly session: ProviderCoordinatorSession;
     readonly answer: HostRequestAnswer;
   }) {
-    void input;
+    if (
+      this.#session?.nativeSessionId !== input.session.nativeSessionId ||
+      this.#session.processEpoch !== input.answer.processEpoch ||
+      !this.#process
+    )
+      return Promise.resolve(failure("not_found", "Claude permission session is not active"));
     return Promise.resolve(
-      failure("unsupported", "Claude permission response mapping is not enabled in this adapter"),
+      this.#control.respond(this.#process, String(input.answer.requestId), input.answer.answer).ok
+        ? { ok: true as const, value: null }
+        : failure("transport_lost", "Claude permission response was not written"),
     );
+  }
+
+  async pause(input: { readonly session: ProviderCoordinatorSession }) {
+    if (this.#session?.nativeSessionId !== input.session.nativeSessionId || !this.#process)
+      return failure("not_found", "Claude session is not active");
+    if (this.#activity === "idle")
+      return { ok: true as const, value: { observation: "settled" as const } };
+    const interrupted = await this.#control.request(this.#process, "interrupt", this.#timeoutMs);
+    return interrupted.ok
+      ? { ok: true as const, value: { observation: "requested" as const } }
+      : interrupted;
   }
 
   stop() {
@@ -321,7 +279,9 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
   }
 
   close() {
+    this.#control.close();
     this.#unsubscribeLine?.();
+    this.#unsubscribeDiagnostic?.();
     this.#unsubscribeExit?.();
     this.#process?.kill();
     this.#process = undefined;
@@ -330,14 +290,45 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
   }
 
   #observeProcess(process: OwnedLineProcess): void {
-    this.#unsubscribeLine = process.onLine((line) => {
-      const raw: unknown = parseJson(line);
-      const observed = publicClaudeEvent(raw);
+    this.#unsubscribeDiagnostic = process.onDiagnostic((diagnostic) => {
+      const observed = { type: "process_diagnostic", ...diagnostic };
       this.#history.push(observed);
       for (const listener of this.#listeners) listener(observed);
     });
+    this.#unsubscribeLine = process.onLine((line) => {
+      const raw: unknown = parseJson(line);
+      if (this.#control.handle(raw)) return;
+      const childrenBefore = this.#activeChildren.size;
+      const nextActivity = streamActivity(raw, this.#activeChildren);
+      let observed = publicClaudeEvent(raw);
+      if (rootCompletion(raw) && this.#activeChildren.size > 0) {
+        this.#pendingRootCompletion = observed;
+        observed = {
+          kind: "session_status",
+          data: { type: "busy", reason: "native_children_active" },
+        };
+      }
+      if (nextActivity !== undefined) this.#activity = nextActivity;
+      this.#history.push(observed);
+      for (const listener of this.#listeners) listener(observed);
+      if (
+        childrenBefore > 0 &&
+        this.#activeChildren.size === 0 &&
+        this.#pendingRootCompletion !== undefined
+      ) {
+        const completion = this.#pendingRootCompletion;
+        this.#pendingRootCompletion = undefined;
+        this.#activity = "idle";
+        this.#history.push(completion);
+        for (const listener of this.#listeners) listener(completion);
+      }
+    });
     this.#unsubscribeExit = process.onExit((code) => {
+      this.#control.close();
       this.#process = undefined;
+      this.#activeChildren.clear();
+      this.#pendingRootCompletion = undefined;
+      this.#activity = "unknown";
       for (const listener of this.#listeners) listener({ type: "process_exited", exitCode: code });
     });
   }
@@ -346,7 +337,12 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
     if (this.#process === undefined) return false;
     try {
       this.#process.write(
-        `${JSON.stringify({ type: "user", message: { role: "user", content: text } })}\n`,
+        `${JSON.stringify({
+          type: "user",
+          session_id: this.#session?.nativeSessionId,
+          message: { role: "user", content: text },
+          parent_tool_use_id: null,
+        })}\n`,
       );
       return true;
     } catch {
@@ -354,13 +350,6 @@ class ClaudeStreamJsonTransport implements ProviderCoordinatorTransport {
     }
   }
 }
-
-const InitSchema = z.looseObject({
-  type: z.string().optional(),
-  subtype: z.string().optional(),
-  session_id: z.string().optional(),
-  thread_id: z.string().optional(),
-});
 
 function selectedEffort(
   scope: CoordinatorStartInput | CoordinatorResumeInput,
@@ -383,6 +372,16 @@ function publicClaudeEvent(raw: unknown): unknown {
   const type = typeof record.data["type"] === "string" ? record.data["type"] : "unknown";
   const sessionId =
     typeof record.data["session_id"] === "string" ? record.data["session_id"] : null;
+  const parentToolUseId =
+    typeof record.data["parent_tool_use_id"] === "string"
+      ? record.data["parent_tool_use_id"]
+      : null;
+  if (parentToolUseId !== null)
+    return {
+      kind: type === "stream_event" ? "native_child_observed" : "native_message_observed",
+      nativeItemId: parentToolUseId,
+      data: { parentToolUseId, type, sessionId },
+    };
   if (type === "stream_event") {
     const event = z.record(z.string(), z.unknown()).safeParse(record.data["event"]);
     const delta = event.success
@@ -400,6 +399,11 @@ function publicClaudeEvent(raw: unknown): unknown {
         session_id: sessionId,
         event: { type: "content_block_delta", delta: { text: delta.data["text"] } },
       };
+    if (
+      event.success &&
+      (event.data["type"] === "message_start" || event.data["type"] === "message_stop")
+    )
+      return { type, session_id: sessionId, event: { type: event.data["type"] } };
   }
   if (type === "assistant") {
     const message = z.record(z.string(), z.unknown()).safeParse(record.data["message"]);
@@ -414,15 +418,37 @@ function publicClaudeEvent(raw: unknown): unknown {
               : [];
           })
         : [];
-    return { type, session_id: sessionId, message: { role: "assistant", content } };
+    return {
+      kind: "item_completed",
+      nativeItemId: typeof record.data["uuid"] === "string" ? record.data["uuid"] : null,
+      data: {
+        type: "agentMessage",
+        phase: "final_answer",
+        text: content.map((part) => part.text).join("\n"),
+      },
+    };
   }
   if (type === "result")
     return {
-      type,
-      session_id: sessionId,
-      subtype: typeof record.data["subtype"] === "string" ? record.data["subtype"] : "unknown",
-      is_error: record.data["is_error"] === true,
-      result: typeof record.data["result"] === "string" ? record.data["result"] : null,
+      kind: "turn_completed",
+      data: {
+        status: record.data["is_error"] === true ? "failed" : "completed",
+        subtype: typeof record.data["subtype"] === "string" ? record.data["subtype"] : "unknown",
+      },
+    };
+  const control = streamHostControlRequest(raw);
+  if (control !== undefined)
+    return {
+      kind: "host_request_pending",
+      nativeItemId:
+        typeof control.request["tool_use_id"] === "string"
+          ? control.request["tool_use_id"]
+          : control.requestId,
+      data: {
+        requestId: control.requestId,
+        kind: "permission_approval",
+        body: control.request,
+      },
     };
   return {
     type: "provider_event",
@@ -430,6 +456,40 @@ function publicClaudeEvent(raw: unknown): unknown {
     session_id: sessionId,
     subtype: typeof record.data["subtype"] === "string" ? record.data["subtype"] : null,
   };
+}
+
+function streamActivity(raw: unknown, activeChildren: Set<string>): "idle" | "busy" | undefined {
+  const parsed = z
+    .looseObject({
+      type: z.string(),
+      event: z.unknown().optional(),
+      parent_tool_use_id: z.string().nullable().optional(),
+    })
+    .safeParse(raw);
+  if (!parsed.success) return undefined;
+  const parent = parsed.data.parent_tool_use_id;
+  if (typeof parent === "string") {
+    const event = z.looseObject({ type: z.string() }).safeParse(parsed.data.event);
+    if (parsed.data.type === "result" || (event.success && event.data.type === "message_stop"))
+      activeChildren.delete(parent);
+    else activeChildren.add(parent);
+    return undefined;
+  }
+  if (parsed.data.type === "assistant") return "busy";
+  if (parsed.data.type === "result") return activeChildren.size === 0 ? "idle" : "busy";
+  return undefined;
+}
+
+function rootCompletion(raw: unknown): boolean {
+  const parsed = z
+    .looseObject({
+      type: z.string(),
+      event: z.unknown().optional(),
+      parent_tool_use_id: z.string().nullable().optional(),
+    })
+    .safeParse(raw);
+  if (!parsed.success || typeof parsed.data.parent_tool_use_id === "string") return false;
+  return parsed.data.type === "result";
 }
 
 function nodeProcessFactory(): ClaudeProcessFactory {
@@ -447,6 +507,7 @@ function nodeProcessFactory(): ClaudeProcessFactory {
 
 function ownedNodeProcess(child: ChildProcessWithoutNullStreams): OwnedLineProcess {
   const lineListeners = new Set<(line: string) => void>();
+  const diagnosticListeners = new Set<(diagnostic: ProviderProcessDiagnostic) => void>();
   const exitListeners = new Set<(code: number | null) => void>();
   let buffer = "";
   child.stdout.on("data", (chunk: Buffer | string) => {
@@ -454,6 +515,10 @@ function ownedNodeProcess(child: ChildProcessWithoutNullStreams): OwnedLineProce
     const lines = buffer.split(/\r?\n/);
     buffer = lines.pop() ?? "";
     for (const line of lines) for (const listener of lineListeners) listener(line);
+  });
+  child.stderr.on("data", (chunk: Buffer | string) => {
+    const diagnostic = providerStderrDiagnostic(chunk);
+    for (const listener of diagnosticListeners) listener(diagnostic);
   });
   child.on("exit", (code) => {
     for (const listener of exitListeners) listener(code);
@@ -466,6 +531,10 @@ function ownedNodeProcess(child: ChildProcessWithoutNullStreams): OwnedLineProce
     onLine(listener) {
       lineListeners.add(listener);
       return () => lineListeners.delete(listener);
+    },
+    onDiagnostic(listener) {
+      diagnosticListeners.add(listener);
+      return () => diagnosticListeners.delete(listener);
     },
     onExit(listener) {
       exitListeners.add(listener);

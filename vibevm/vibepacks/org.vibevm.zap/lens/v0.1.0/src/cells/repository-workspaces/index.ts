@@ -34,6 +34,7 @@ export {
   type RegisterRepositoryRequest,
   type RepositoryWorkspaceErrorCode,
   type RepositoryWorkspaceResult,
+  type RepositoryWriterLeaseView,
   type RepositoryWorkspaceService,
   type ResolveExecutionWorkspaceRequest,
   type ResolveAssignedWorkspaceRequest,

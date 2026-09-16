@@ -15,3 +15,5 @@ export * from "./event-ingest.ts";
 export * from "./product-app.ts";
 export * from "./managed-work.ts";
 export * from "./annotations.ts";
+export * from "./repository-workspaces.ts";
+export * from "./workspace-assignment.ts";

@@ -1,6 +1,7 @@
 /** Default annotation runtime composition. @scope spec://org.vibevm.zap/lens/PROP-011#shared-implementation */
 import { resolve } from "node:path";
 import type { ManagedAgentBackend } from "../managed-work/index.ts";
+import type { RepositoryWorkspaceService } from "../repository-workspaces/index.ts";
 import { ClientRequestIdSchema } from "../protocol/index.ts";
 import { annotationDeliveryMarkdown } from "../workspace-annotations/index.ts";
 import type { WorkspacePlanningFeature } from "../workspace-planning/index.ts";
@@ -21,6 +22,7 @@ export function openRuntimeAnnotations(options: {
   readonly store: WorkspaceStore;
   readonly planning?: WorkspacePlanningFeature;
   readonly managedWork?: ManagedAgentBackend;
+  readonly repositories?: RepositoryWorkspaceService;
   readonly restoreIntent?: AnnotationRestoreIntentPort;
 }):
   | {
@@ -94,6 +96,7 @@ export function openRuntimeAnnotations(options: {
     history,
     ...(options.planning === undefined ? {} : { planning: options.planning }),
     ...(options.managedWork === undefined ? {} : { managedWork: options.managedWork }),
+    ...(options.repositories === undefined ? {} : { repositories: options.repositories }),
     ...(options.restoreIntent === undefined ? {} : { restoreIntent: options.restoreIntent }),
   });
   return opened.ok

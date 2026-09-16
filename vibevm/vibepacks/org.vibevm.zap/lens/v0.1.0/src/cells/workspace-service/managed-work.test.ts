@@ -140,6 +140,27 @@ function fakeBackend(projectId: ProjectId, contextId: WorkContextId): ManagedAge
   const claims = new Map<string, ManagedWorkClaim>();
   return {
     capabilities: [],
+    control: {
+      inspect: () => ({
+        ok: true,
+        value: {
+          readiness: "idle",
+          providerSessionId: null,
+          providerTurnId: null,
+          observationId: "observation.fake",
+          automationControlEpoch: "1",
+          pauseRequested: false,
+        },
+      }),
+      interrupt: async () => ({ ok: true, value: { observation: "already_idle" } }),
+      continueSession: () => ({ ok: true, value: { readiness: "idle" } }),
+      offer: async () => ({
+        ok: true,
+        value: { observation: "host_accepted", transportCorrelation: "mock.delivery" },
+      }),
+      subscribe: () => () => undefined,
+      close: () => undefined,
+    },
     registerProfile: (profile) => ({ ok: true, value: profile }),
     async prepare(_access, request) {
       assert.deepEqual(request.contextRefs, []);
@@ -175,6 +196,9 @@ function fakeBackend(projectId: ProjectId, contextId: WorkContextId): ManagedAge
     },
     async stop(_access, runId, expectedRevision) {
       return move(claims, runId, expectedRevision, "stopped");
+    },
+    async continueRun(_access, runId, expectedRevision) {
+      return move(claims, runId, expectedRevision, "running");
     },
     async reconcile(_access, runId) {
       const claim = claims.get(runId);

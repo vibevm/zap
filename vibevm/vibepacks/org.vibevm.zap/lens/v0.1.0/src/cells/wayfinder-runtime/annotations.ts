@@ -1,6 +1,7 @@
 /** Wayfinder annotation runtime composition. @scope spec://org.vibevm.zap/lens/PROP-011#shared-implementation */
 import { createHash } from "node:crypto";
 import type { ManagedAgentBackend, WorkAttachmentPort } from "../managed-work/index.ts";
+import type { RepositoryWorkspaceService } from "../repository-workspaces/index.ts";
 import type {
   WorkspacePlanningFeature,
   WorkspacePlanningSourceObserver,
@@ -52,6 +53,7 @@ export interface WayfinderAnnotationsRuntimeOptions {
   readonly workspaceStore: WorkspaceStore;
   readonly planning?: WorkspacePlanningFeature;
   readonly managedWork?: ManagedAgentBackend;
+  readonly repositories?: RepositoryWorkspaceService;
   readonly notifications: AnnotationNotificationPort;
   readonly restoreIntent?: AnnotationRestoreIntentPort;
   readonly history?: AnnotationHistoryRecorder;
@@ -325,6 +327,50 @@ function createTrustedTargetResolver(
         return agent === undefined
           ? { state: "missing" }
           : { state: "present", snapshot: snapshotOf(agent.revision, agent) };
+      }
+      if (target.domain === "plan_workspace") {
+        if (options.repositories === undefined)
+          return {
+            state: "unavailable",
+            reason: "repository workspace resolver is not configured",
+          };
+        const plan = options.repositories.getPlan(target.ref);
+        return !plan.ok ||
+          plan.value.projectId !== target.projectId ||
+          plan.value.contextId !== target.contextId
+          ? { state: "missing" }
+          : { state: "present", snapshot: snapshotOf(plan.value.revision, plan.value) };
+      }
+      if (target.domain === "worktree") {
+        if (options.repositories === undefined)
+          return {
+            state: "unavailable",
+            reason: "repository workspace resolver is not configured",
+          };
+        const worktree = options.repositories.getWorktree(target.ref);
+        return !worktree.ok ||
+          worktree.value.projectId !== target.projectId ||
+          worktree.value.contextId !== target.contextId
+          ? { state: "missing" }
+          : { state: "present", snapshot: snapshotOf(worktree.value.revision, worktree.value) };
+      }
+      if (target.domain === "integration") {
+        if (options.repositories === undefined)
+          return {
+            state: "unavailable",
+            reason: "repository workspace resolver is not configured",
+          };
+        const integration = options.repositories.getIntegration(target.ref);
+        if (!integration.ok) return { state: "missing" };
+        const plan = options.repositories.getPlan(integration.value.planId);
+        return !plan.ok ||
+          plan.value.projectId !== target.projectId ||
+          plan.value.contextId !== target.contextId
+          ? { state: "missing" }
+          : {
+              state: "present",
+              snapshot: snapshotOf(integration.value.revision, integration.value),
+            };
       }
       if (options.managedWork === undefined)
         return { state: "unavailable", reason: "managed work resolver is not configured" };

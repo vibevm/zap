@@ -18,6 +18,8 @@ import { failure, type AdapterSessionId, type AgentTransportPort } from "../tran
 import {
   ClientIdSchema,
   WorkspaceAccessContextSchema,
+  type ProjectId,
+  type WorkContextId,
   type WorkspaceAccessContext,
 } from "../workspace-model/index.ts";
 import type { WorkspaceStore } from "../workspace-store/index.ts";
@@ -32,6 +34,7 @@ export function createManagedWorkAgentPort(options: {
   readonly backend: () => ManagedAgentBackend | undefined;
   readonly store: WorkspaceStore;
   readonly coordinatorAgents: OwnedCoordinatorAgentPort;
+  readonly ensurePlan?: ManagedRepositoryPlanPort;
 }): ManagedWorkAgentPort {
   const bound = async (session: AdapterSessionId) => {
     const actor = await options.agent.context(session);
@@ -81,6 +84,25 @@ export function createManagedWorkAgentPort(options: {
         options.coordinatorAgents,
       );
       if (!parent.ok) return parent;
+      let planId =
+        parent.value.claim?.packet.planId ??
+        contextPlanId(
+          options.store,
+          context.value.access,
+          context.value.scope.projectId,
+          context.value.scope.contextId,
+        );
+      if (planId === null && input.data.workspace.mode !== "inherit") {
+        if (options.ensurePlan === undefined)
+          return failure("unsupported_operation", "repository plan adoption is not configured");
+        const ensured = await options.ensurePlan({
+          access: context.value.access,
+          projectId: context.value.scope.projectId,
+          contextId: context.value.scope.contextId,
+        });
+        if (!ensured.ok) return ensured;
+        planId = ensured.value;
+      }
       if (
         input.data.targetRefs.some(
           (target) =>
@@ -89,10 +111,13 @@ export function createManagedWorkAgentPort(options: {
         )
       )
         return failure("forbidden", "managed targets are outside the caller project scope");
+      const { workspace, ...managedInput } = input.data;
       const request = ManagedWorkRequestSchema.parse({
-        ...input.data,
+        ...managedInput,
         projectId: context.value.scope.projectId,
         contextId: context.value.scope.contextId,
+        planId,
+        workspaceRequest: workspace,
         parentTaskId: parent.value.claim?.taskId ?? null,
         parentRunId: parent.value.claim?.runId ?? null,
         projectedParentActorId: parent.value.parentActorId,
@@ -182,6 +207,25 @@ export function createManagedWorkAgentPort(options: {
       );
     },
   };
+}
+
+export type ManagedRepositoryPlanPort = (input: {
+  readonly access: WorkspaceAccessContext;
+  readonly projectId: ProjectId;
+  readonly contextId: WorkContextId;
+}) => Promise<Result<string>>;
+
+function contextPlanId(
+  store: WorkspaceStore,
+  access: WorkspaceAccessContext,
+  projectId: ProjectId,
+  contextId: WorkContextId,
+) {
+  const detail = store.read(access, { operation: "project.get.v1", projectId });
+  if (!detail.ok || detail.value.operation !== "project.get.v1") return null;
+  return (
+    detail.value.detail.contexts.find((context) => context.contextId === contextId)?.planId ?? null
+  );
 }
 
 function callerParent(

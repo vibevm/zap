@@ -93,6 +93,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/codex-coordinator/error-observability.test.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/codex-coordinator/error-observability.test.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/codex-coordinator/events.ts",
       "item_kind": "module",
       "line": 1,
@@ -359,6 +366,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/http/repository-work.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/http/repository-work.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/http/resume.ts",
       "item_kind": "module",
       "line": 1,
@@ -429,6 +443,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/managed-work/codex-control.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/codex-control.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/managed-work/contracts.ts",
       "item_kind": "module",
       "line": 1,
@@ -436,10 +457,94 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/managed-work/control-claim.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/managed-work/control-claim.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/control-runtime.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/managed-work/control-runtime.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/control.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/control.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/control.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/managed-work/control.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/hook-server.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/managed-work/hook-server.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/managed-work/index.ts",
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/managed-work/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/mock-control.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/managed-work/mock-control.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/native-control-process.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/native-control-process.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/native-provider-controls.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/native-provider-controls.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/native-provider-controls.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/native-provider-controls.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/opencode-control.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/opencode-control.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/packet.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/packet.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/provider-controls.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/managed-work/provider-controls.ts"
     },
     {
       "crate_name": "src",
@@ -457,10 +562,38 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/managed-work/resume.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/managed-work/resume.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/managed-work/store.ts",
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/managed-work/store.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/websocket-rpc.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/websocket-rpc.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/workspace-backend.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/workspace-backend.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/managed-work/workspace.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/managed-work/workspace.ts"
     },
     {
       "crate_name": "src",
@@ -478,10 +611,157 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/mock-agent/adapter-result.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/adapter-result.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/index.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/index.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/managed-mcp.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/managed-mcp.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/managed-process.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/managed-process.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/managed-process.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/managed-process.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/question-http.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/question-http.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/question-scenario.fixture.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/question-scenario.fixture.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-agent/runtime.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-agent/runtime.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-model/index.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-model/index.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-model/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-model/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-model/model.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-model/model.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-model/schemas.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-model/schemas.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/corpus.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/corpus.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/index.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/index.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/product-process.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/product-process.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/product-process.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/product-process.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/runner.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/runner.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/mock-simulation/schemas.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/mock-simulation/schemas.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/model-policy-service/index.ts",
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/model-policy-service/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/model-policy-service/product-simulation.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/model-policy-service/product-simulation.test.ts"
     },
     {
       "crate_name": "src",
@@ -681,6 +961,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/product-app/providers.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/product-app/providers.test.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/product-app/providers.ts",
       "item_kind": "module",
       "line": 1,
@@ -781,7 +1068,7 @@
       "crate_name": "src",
       "file": "src/cells/protocol/index.ts",
       "item_kind": "export",
-      "line": 505,
+      "line": 506,
       "symbol": "src/cells/protocol/index.ts::ScopedListInputSchema"
     },
     {
@@ -821,6 +1108,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/provider-coordinators/events.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/provider-coordinators/events.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/provider-coordinators/http.ts",
       "item_kind": "module",
       "line": 1,
@@ -842,6 +1136,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/provider-coordinators/process-diagnostic.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/provider-coordinators/process-diagnostic.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/provider-coordinators/qwen-permissions.ts",
       "item_kind": "module",
       "line": 1,
@@ -853,6 +1154,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/provider-coordinators/qwen.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/provider-coordinators/stream-control.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/provider-coordinators/stream-control.ts"
     },
     {
       "crate_name": "src",
@@ -930,6 +1238,20 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/quicklens-graph/portfolio-managed.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/quicklens-graph/portfolio-repository.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/quicklens-graph/portfolio-repository.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/quicklens-graph/portfolio-repository.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/quicklens-graph/portfolio-repository.ts"
     },
     {
       "crate_name": "src",
@@ -1213,6 +1535,132 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/repository-model/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-model/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/adoption.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/adoption.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/contracts.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/contracts.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/diff.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/diff.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/discovery.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/discovery.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/gate.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/gate.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/git.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/git.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/index.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/index.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/integration-read.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/integration-read.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/integration.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/integration.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/operations.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/operations.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/preparation.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/preparation.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/promotion.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/promotion.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/runtime.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/runtime.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/service.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/service.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/simulation.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/simulation.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/store.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/store.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/repository-workspaces/test-support.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/repository-workspaces/test-support.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/session-vault/index.ts",
       "item_kind": "module",
       "line": 3,
@@ -1266,6 +1714,20 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/wayfinder-runtime/agent-config.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/agent-contract.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/agent-contract.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/agent-id.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/agent-id.ts"
     },
     {
       "crate_name": "src",
@@ -1374,6 +1836,41 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/managed-control-composition.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/wayfinder-runtime/managed-control-composition.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/managed-control-io.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/cells/wayfinder-runtime/managed-control-io.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/managed-environment.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/managed-environment.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/managed-wake-composition.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/managed-wake-composition.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/managed-wake-composition.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/managed-wake-composition.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/wayfinder-runtime/managed-work-policy.test.ts",
       "item_kind": "module",
       "line": 1,
@@ -1406,6 +1903,20 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/wayfinder-runtime/managed.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/mock-managed.support.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/mock-managed.support.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/mock-managed.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/mock-managed.test.ts"
     },
     {
       "crate_name": "src",
@@ -1451,6 +1962,20 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/planning-attachment.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/planning-attachment.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/planning-recovery.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/planning-recovery.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/wayfinder-runtime/product-agent.test.ts",
       "item_kind": "module",
       "line": 1,
@@ -1462,6 +1987,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/wayfinder-runtime/product-agent.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/product-managed.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/product-managed.test.ts"
     },
     {
       "crate_name": "src",
@@ -1483,6 +2015,97 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/wayfinder-runtime/provider-runtime.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-activity.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-activity.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-agent.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-agent.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-annotations.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-annotations.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-context.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-context.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-feature.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-feature.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-managed-product.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-managed-product.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-managed.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-managed.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-product.test-support.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-product.test-support.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-reads.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-reads.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-resolution.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-resolution.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-runtime.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-runtime.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/repository-writer.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/repository-writer.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/wayfinder-runtime/runtime-config.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/wayfinder-runtime/runtime-config.ts"
     },
     {
       "crate_name": "src",
@@ -1591,6 +2214,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-annotations/product-simulation.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-annotations/product-simulation.test.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-annotations/service.ts",
       "item_kind": "module",
       "line": 1,
@@ -1665,6 +2295,20 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-client/questions.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-client/repository.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-client/repository.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-client/repository.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-client/repository.ts"
     },
     {
       "crate_name": "src",
@@ -1822,10 +2466,24 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-model/repository-workspaces.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-model/repository-workspaces.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-model/terminal.ts",
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-model/terminal.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-model/workspace-assignment.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-model/workspace-assignment.ts"
     },
     {
       "crate_name": "src",
@@ -1927,6 +2585,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-service/factory.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/factory.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-service/helpers.ts",
       "item_kind": "module",
       "line": 1,
@@ -1962,6 +2627,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-service/lifecycle-barrier.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/lifecycle-barrier.test.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-service/managed-agent.test.ts",
       "item_kind": "module",
       "line": 1,
@@ -1973,6 +2645,34 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-service/managed-agent.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/managed-event.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/managed-event.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/managed-lifecycle.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/managed-lifecycle.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/managed-wake.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/managed-wake.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/managed-wake.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/managed-wake.ts"
     },
     {
       "crate_name": "src",
@@ -2008,6 +2708,20 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-service/reads.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/repository-routing.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/repository-routing.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/service-state.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/service-state.test.ts"
     },
     {
       "crate_name": "src",
@@ -2053,10 +2767,31 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-service/wake.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/wake.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-service/wake.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-service/wake.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-store/agent-questions.ts",
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-store/agent-questions.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-store/chat.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-store/chat.test.ts"
     },
     {
       "crate_name": "src",
@@ -2130,10 +2865,45 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-store/managed-wake-facade.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-store/managed-wake-facade.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-store/managed-wake.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-store/managed-wake.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-store/plan-context.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-store/plan-context.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-store/plan-context.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-store/plan-context.ts"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-store/reads.ts",
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-store/reads.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-store/registration.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-store/registration.ts"
     },
     {
       "crate_name": "src",
@@ -2249,6 +3019,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-ui/managed-work-detail.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/managed-work-detail.tsx"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-ui/managed-work-panel.tsx",
       "item_kind": "module",
       "line": 1,
@@ -2288,6 +3065,20 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-ui/question-helpers.tsx"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-ui/repository-workspace-helpers.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/repository-workspace-helpers.tsx"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-ui/repository-workspace-panel.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/repository-workspace-panel.tsx"
     },
     {
       "crate_name": "src",
@@ -2354,6 +3145,13 @@
     },
     {
       "crate_name": "src",
+      "file": "src/cells/workspace-ui/workspace-plan.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/workspace-plan.tsx"
+    },
+    {
+      "crate_name": "src",
       "file": "src/cells/workspace-ui/workspace-portfolio.tsx",
       "item_kind": "module",
       "line": 1,
@@ -2365,6 +3163,13 @@
       "item_kind": "module",
       "line": 1,
       "symbol": "src/cells/workspace-ui/workspace-questions.tsx"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/cells/workspace-ui/workspace-tabs.tsx",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/cells/workspace-ui/workspace-tabs.tsx"
     },
     {
       "crate_name": "src",
@@ -2470,6 +3275,13 @@
       "item_kind": "module",
       "line": 4,
       "symbol": "src/cli.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/mcp.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/mcp.test.ts"
     },
     {
       "crate_name": "src",
@@ -2582,6 +3394,20 @@
       "item_kind": "module",
       "line": 3,
       "symbol": "src/quicklens/electron/security.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/zap-mock-agent.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/zap-mock-agent.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/zap-mock-simulate.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/zap-mock-simulate.ts"
     },
     {
       "crate_name": "src",
@@ -2815,6 +3641,31 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-005#coordinator-lifecycle",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/codex-coordinator/error-observability.test.ts",
+      "from_symbol": "src/cells/codex-coordinator/error-observability.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/codex-coordinator/error-observability.test.ts",
+      "from_symbol": "src/cells/codex-coordinator/error-observability.test.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
+      "verb": "implements",
+      "reason": "*"
+    },
+    {
+      "file": "src/cells/codex-coordinator/error-observability.test.ts",
+      "from_symbol": "src/cells/codex-coordinator/error-observability.test.ts",
+      "line": 3,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#events",
       "verb": "implements"
     },
     {
@@ -3189,6 +4040,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/http/repository-work.ts",
+      "from_symbol": "src/cells/http/repository-work.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/http/resume.ts",
       "from_symbol": "src/cells/http/resume.ts",
       "line": 1,
@@ -3269,6 +4128,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/managed-work/codex-control.ts",
+      "from_symbol": "src/cells/managed-work/codex-control.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/managed-work/contracts.ts",
       "from_symbol": "src/cells/managed-work/contracts.ts",
       "line": 1,
@@ -3277,11 +4144,155 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/managed-work/control-claim.ts",
+      "from_symbol": "src/cells/managed-work/control-claim.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/control-claim.ts",
+      "from_symbol": "src/cells/managed-work/control-claim.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/control-runtime.ts",
+      "from_symbol": "src/cells/managed-work/control-runtime.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/control-runtime.ts",
+      "from_symbol": "src/cells/managed-work/control-runtime.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/control.test.ts",
+      "from_symbol": "src/cells/managed-work/control.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#acceptance",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/control.ts",
+      "from_symbol": "src/cells/managed-work/control.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/control.ts",
+      "from_symbol": "src/cells/managed-work/control.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/hook-server.ts",
+      "from_symbol": "src/cells/managed-work/hook-server.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/hook-server.ts",
+      "from_symbol": "src/cells/managed-work/hook-server.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/managed-work/index.ts",
       "from_symbol": "src/cells/managed-work/index.ts",
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/mock-control.ts",
+      "from_symbol": "src/cells/managed-work/mock-control.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/mock-control.ts",
+      "from_symbol": "src/cells/managed-work/mock-control.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/native-control-process.ts",
+      "from_symbol": "src/cells/managed-work/native-control-process.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/native-provider-controls.test.ts",
+      "from_symbol": "src/cells/managed-work/native-provider-controls.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/native-provider-controls.ts",
+      "from_symbol": "src/cells/managed-work/native-provider-controls.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/opencode-control.ts",
+      "from_symbol": "src/cells/managed-work/opencode-control.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/packet.ts",
+      "from_symbol": "src/cells/managed-work/packet.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/provider-controls.ts",
+      "from_symbol": "src/cells/managed-work/provider-controls.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/provider-controls.ts",
+      "from_symbol": "src/cells/managed-work/provider-controls.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
       "verb": "implements"
     },
     {
@@ -3301,11 +4312,51 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/managed-work/resume.ts",
+      "from_symbol": "src/cells/managed-work/resume.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#continuation",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/resume.ts",
+      "from_symbol": "src/cells/managed-work/resume.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#continuation",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/managed-work/store.ts",
       "from_symbol": "src/cells/managed-work/store.ts",
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/websocket-rpc.ts",
+      "from_symbol": "src/cells/managed-work/websocket-rpc.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/workspace-backend.ts",
+      "from_symbol": "src/cells/managed-work/workspace-backend.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#assignment",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/managed-work/workspace.ts",
+      "from_symbol": "src/cells/managed-work/workspace.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#assignment",
       "verb": "implements"
     },
     {
@@ -3334,11 +4385,179 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/mock-agent/adapter-result.ts",
+      "from_symbol": "src/cells/mock-agent/adapter-result.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/index.test.ts",
+      "from_symbol": "src/cells/mock-agent/index.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/index.ts",
+      "from_symbol": "src/cells/mock-agent/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/managed-mcp.ts",
+      "from_symbol": "src/cells/mock-agent/managed-mcp.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/managed-process.test.ts",
+      "from_symbol": "src/cells/mock-agent/managed-process.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/managed-process.ts",
+      "from_symbol": "src/cells/mock-agent/managed-process.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/question-http.test.ts",
+      "from_symbol": "src/cells/mock-agent/question-http.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/question-scenario.fixture.ts",
+      "from_symbol": "src/cells/mock-agent/question-scenario.fixture.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-agent/runtime.test.ts",
+      "from_symbol": "src/cells/mock-agent/runtime.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-model/index.test.ts",
+      "from_symbol": "src/cells/mock-model/index.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-model/index.ts",
+      "from_symbol": "src/cells/mock-model/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-model/model.ts",
+      "from_symbol": "src/cells/mock-model/model.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-model/schemas.ts",
+      "from_symbol": "src/cells/mock-model/schemas.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/corpus.ts",
+      "from_symbol": "src/cells/mock-simulation/corpus.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/index.test.ts",
+      "from_symbol": "src/cells/mock-simulation/index.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/index.ts",
+      "from_symbol": "src/cells/mock-simulation/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/product-process.test.ts",
+      "from_symbol": "src/cells/mock-simulation/product-process.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/product-process.ts",
+      "from_symbol": "src/cells/mock-simulation/product-process.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/runner.ts",
+      "from_symbol": "src/cells/mock-simulation/runner.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/mock-simulation/schemas.ts",
+      "from_symbol": "src/cells/mock-simulation/schemas.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/model-policy-service/index.ts",
       "from_symbol": "src/cells/model-policy-service/index.ts",
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-008#policy-interface",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/model-policy-service/product-simulation.test.ts",
+      "from_symbol": "src/cells/model-policy-service/product-simulation.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
       "verb": "implements"
     },
     {
@@ -3590,6 +4809,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/product-app/providers.test.ts",
+      "from_symbol": "src/cells/product-app/providers.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#agent-network",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/product-app/providers.ts",
       "from_symbol": "src/cells/product-app/providers.ts",
       "line": 1,
@@ -3713,7 +4940,7 @@
     {
       "file": "src/cells/protocol/index.ts",
       "from_symbol": "src/cells/protocol/index.ts::ScopedListInputSchema",
-      "line": 505,
+      "line": 506,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-002#interaction",
       "verb": "implements"
@@ -3759,6 +4986,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/provider-coordinators/events.ts",
+      "from_symbol": "src/cells/provider-coordinators/events.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#events",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/provider-coordinators/http.ts",
       "from_symbol": "src/cells/provider-coordinators/http.ts",
       "line": 1,
@@ -3783,6 +5018,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/provider-coordinators/process-diagnostic.ts",
+      "from_symbol": "src/cells/provider-coordinators/process-diagnostic.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-006#provider-adapters",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/provider-coordinators/qwen-permissions.ts",
       "from_symbol": "src/cells/provider-coordinators/qwen-permissions.ts",
       "line": 1,
@@ -3796,6 +5039,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/provider-coordinators/stream-control.ts",
+      "from_symbol": "src/cells/provider-coordinators/stream-control.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#pause",
       "verb": "implements"
     },
     {
@@ -3916,6 +5167,22 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/quicklens-graph/portfolio-repository.test.ts",
+      "from_symbol": "src/cells/quicklens-graph/portfolio-repository.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#simulation",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/quicklens-graph/portfolio-repository.ts",
+      "from_symbol": "src/cells/quicklens-graph/portfolio-repository.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
       "verb": "implements"
     },
     {
@@ -4305,6 +5572,150 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/repository-model/index.ts",
+      "from_symbol": "src/cells/repository-model/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/adoption.ts",
+      "from_symbol": "src/cells/repository-workspaces/adoption.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/contracts.ts",
+      "from_symbol": "src/cells/repository-workspaces/contracts.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/diff.ts",
+      "from_symbol": "src/cells/repository-workspaces/diff.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/discovery.ts",
+      "from_symbol": "src/cells/repository-workspaces/discovery.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/gate.ts",
+      "from_symbol": "src/cells/repository-workspaces/gate.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/git.ts",
+      "from_symbol": "src/cells/repository-workspaces/git.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#preparation",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/index.ts",
+      "from_symbol": "src/cells/repository-workspaces/index.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/integration-read.ts",
+      "from_symbol": "src/cells/repository-workspaces/integration-read.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/integration.ts",
+      "from_symbol": "src/cells/repository-workspaces/integration.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/operations.ts",
+      "from_symbol": "src/cells/repository-workspaces/operations.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#recovery",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/preparation.ts",
+      "from_symbol": "src/cells/repository-workspaces/preparation.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#preparation",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/promotion.ts",
+      "from_symbol": "src/cells/repository-workspaces/promotion.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/runtime.ts",
+      "from_symbol": "src/cells/repository-workspaces/runtime.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#multi-user-hosts",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/service.ts",
+      "from_symbol": "src/cells/repository-workspaces/service.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#root",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/simulation.ts",
+      "from_symbol": "src/cells/repository-workspaces/simulation.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/store.ts",
+      "from_symbol": "src/cells/repository-workspaces/store.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#recovery",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/repository-workspaces/test-support.ts",
+      "from_symbol": "src/cells/repository-workspaces/test-support.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#verification",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/session-vault/index.ts",
       "from_symbol": "src/cells/session-vault/index.ts",
       "line": 1,
@@ -4388,6 +5799,22 @@
     {
       "file": "src/cells/wayfinder-runtime/agent-config.ts",
       "from_symbol": "src/cells/wayfinder-runtime/agent-config.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/agent-contract.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/agent-contract.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/agent-id.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/agent-id.ts",
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
@@ -4522,6 +5949,62 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/wayfinder-runtime/managed-control-composition.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-control-composition.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-control-composition.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-control-composition.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-control-io.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-control-io.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-control-io.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-control-io.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-environment.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-environment.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-wake-composition.test.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-wake-composition.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/managed-wake-composition.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/managed-wake-composition.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/wayfinder-runtime/managed-work-policy.test.ts",
       "from_symbol": "src/cells/wayfinder-runtime/managed-work-policy.test.ts",
       "line": 1,
@@ -4559,6 +6042,22 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-006#managed-terminal",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/mock-managed.support.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/mock-managed.support.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/mock-managed.test.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/mock-managed.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#verification",
       "verb": "implements"
     },
     {
@@ -4610,6 +6109,22 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/wayfinder-runtime/planning-attachment.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/planning-attachment.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/planning-recovery.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/planning-recovery.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#algorithm-binding",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/wayfinder-runtime/product-agent.test.ts",
       "from_symbol": "src/cells/wayfinder-runtime/product-agent.test.ts",
       "line": 1,
@@ -4623,6 +6138,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/product-managed.test.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/product-managed.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#agent-network",
       "verb": "implements"
     },
     {
@@ -4647,6 +6170,110 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-activity.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-activity.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-agent.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-agent.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-annotations.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-annotations.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-context.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-context.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#identity",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-feature.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-feature.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-managed-product.test.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-managed-product.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-managed.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-managed.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#assignment",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-product.test-support.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-product.test-support.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-reads.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-reads.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-resolution.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-resolution.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-runtime.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-runtime.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#multi-user-hosts",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/repository-writer.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/repository-writer.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/wayfinder-runtime/runtime-config.ts",
+      "from_symbol": "src/cells/wayfinder-runtime/runtime-config.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
       "verb": "implements"
     },
     {
@@ -4794,6 +6421,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-annotations/product-simulation.test.ts",
+      "from_symbol": "src/cells/workspace-annotations/product-simulation.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-annotations/service.ts",
       "from_symbol": "src/cells/workspace-annotations/service.ts",
       "line": 1,
@@ -4888,6 +6523,22 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#human-questions",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-client/repository.test.ts",
+      "from_symbol": "src/cells/workspace-client/repository.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-client/repository.ts",
+      "from_symbol": "src/cells/workspace-client/repository.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
       "verb": "implements"
     },
     {
@@ -5075,11 +6726,27 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-model/repository-workspaces.ts",
+      "from_symbol": "src/cells/workspace-model/repository-workspaces.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-model/terminal.ts",
       "from_symbol": "src/cells/workspace-model/terminal.ts",
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-006#managed-terminal",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-model/workspace-assignment.ts",
+      "from_symbol": "src/cells/workspace-model/workspace-assignment.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#assignment",
       "verb": "implements"
     },
     {
@@ -5195,6 +6862,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-service/factory.ts",
+      "from_symbol": "src/cells/workspace-service/factory.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-service/helpers.ts",
       "from_symbol": "src/cells/workspace-service/helpers.ts",
       "line": 1,
@@ -5235,6 +6910,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-service/lifecycle-barrier.test.ts",
+      "from_symbol": "src/cells/workspace-service/lifecycle-barrier.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#continuation",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-service/managed-agent.test.ts",
       "from_symbol": "src/cells/workspace-service/managed-agent.test.ts",
       "line": 1,
@@ -5248,6 +6931,38 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-007#agent-network",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-service/managed-event.ts",
+      "from_symbol": "src/cells/workspace-service/managed-event.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-service/managed-lifecycle.ts",
+      "from_symbol": "src/cells/workspace-service/managed-lifecycle.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-service/managed-wake.test.ts",
+      "from_symbol": "src/cells/workspace-service/managed-wake.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-service/managed-wake.ts",
+      "from_symbol": "src/cells/workspace-service/managed-wake.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
       "verb": "implements"
     },
     {
@@ -5308,6 +7023,22 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-service/repository-routing.ts",
+      "from_symbol": "src/cells/workspace-service/repository-routing.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-service/service-state.test.ts",
+      "from_symbol": "src/cells/workspace-service/service-state.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#events",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-service/service-state.ts",
       "from_symbol": "src/cells/workspace-service/service-state.ts",
       "line": 1,
@@ -5356,11 +7087,35 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-service/wake.test.ts",
+      "from_symbol": "src/cells/workspace-service/wake.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-service/wake.ts",
+      "from_symbol": "src/cells/workspace-service/wake.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-store/agent-questions.ts",
       "from_symbol": "src/cells/workspace-store/agent-questions.ts",
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-005#question-routing",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-store/chat.test.ts",
+      "from_symbol": "src/cells/workspace-store/chat.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#delivery",
       "verb": "implements"
     },
     {
@@ -5444,11 +7199,51 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-store/managed-wake-facade.ts",
+      "from_symbol": "src/cells/workspace-store/managed-wake-facade.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-store/managed-wake.ts",
+      "from_symbol": "src/cells/workspace-store/managed-wake.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-store/plan-context.test.ts",
+      "from_symbol": "src/cells/workspace-store/plan-context.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-store/plan-context.ts",
+      "from_symbol": "src/cells/workspace-store/plan-context.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-store/reads.ts",
       "from_symbol": "src/cells/workspace-store/reads.ts",
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-005#project-views",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-store/registration.ts",
+      "from_symbol": "src/cells/workspace-store/registration.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-005#server-ownership",
       "verb": "implements"
     },
     {
@@ -5580,6 +7375,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-ui/managed-work-detail.tsx",
+      "from_symbol": "src/cells/workspace-ui/managed-work-detail.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#managed-work",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-ui/managed-work-panel.tsx",
       "from_symbol": "src/cells/workspace-ui/managed-work-panel.tsx",
       "line": 1,
@@ -5625,6 +7428,22 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#human-questions",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-ui/repository-workspace-helpers.tsx",
+      "from_symbol": "src/cells/workspace-ui/repository-workspace-helpers.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-ui/repository-workspace-panel.tsx",
+      "from_symbol": "src/cells/workspace-ui/repository-workspace-panel.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection",
       "verb": "implements"
     },
     {
@@ -5708,6 +7527,14 @@
       "verb": "implements"
     },
     {
+      "file": "src/cells/workspace-ui/workspace-plan.tsx",
+      "from_symbol": "src/cells/workspace-ui/workspace-plan.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-002#plan-control",
+      "verb": "implements"
+    },
+    {
       "file": "src/cells/workspace-ui/workspace-portfolio.tsx",
       "from_symbol": "src/cells/workspace-ui/workspace-portfolio.tsx",
       "line": 1,
@@ -5721,6 +7548,14 @@
       "line": 1,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#human-questions",
+      "verb": "implements"
+    },
+    {
+      "file": "src/cells/workspace-ui/workspace-tabs.tsx",
+      "from_symbol": "src/cells/workspace-ui/workspace-tabs.tsx",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-007#primary-experience",
       "verb": "implements"
     },
     {
@@ -5857,6 +7692,14 @@
       "line": 4,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-001#transport",
+      "verb": "implements"
+    },
+    {
+      "file": "src/mcp.test.ts",
+      "from_symbol": "src/mcp.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-010#provider-support",
       "verb": "implements"
     },
     {
@@ -6057,6 +7900,22 @@
       "line": 3,
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-002#shells",
+      "verb": "implements"
+    },
+    {
+      "file": "src/zap-mock-agent.ts",
+      "from_symbol": "src/zap-mock-agent.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent",
+      "verb": "implements"
+    },
+    {
+      "file": "src/zap-mock-simulate.ts",
+      "from_symbol": "src/zap-mock-simulate.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus",
       "verb": "implements"
     },
     {
@@ -6945,7 +8804,7 @@
     },
     {
       "anchor": "root",
-      "content_hash": "sha256:1beb98b083f38c05fcb5d693a13821be4eb2bdf5ab3497af99d4012034bfab1e",
+      "content_hash": "sha256:23e5ffd6eb3e302cdc05ed9f58ebb1d9e04c6ee85eeb110bf175517bcc79ca7a",
       "doc_path": "PROP-009",
       "file": "vibevm/vibespecs/PROP-009.xml",
       "heading": "Zap project pause, stop and continuation",
@@ -7008,10 +8867,10 @@
     },
     {
       "anchor": "verification",
-      "content_hash": "sha256:f73ba7bc291c6f0155cd86167c76e0694b1aab143cd542013eb89470525e8431",
+      "content_hash": "sha256:6472dad89a1c4f1671401e6ded879adb6919a692610f530f40aaf2a6c68f2ddf",
       "doc_path": "PROP-009",
       "file": "vibevm/vibespecs/PROP-009.xml",
-      "heading": "A bounded two-project proof verifies that pause/stop of A leaves B running and observable, repeat requests do not duplicate actions, retained history survives, and continuation reuses known session state without another bootstrap where supported. Fake host processes cover ownership/control semantics; a short inexpensive Codex probe establishes only the actual supported native path. No cross-provider matrix or destructive real-project test is required. @status:spec/plan",
+      "heading": "A bounded two-project proof verifies that pause/stop of A leaves B running and observable, repeat requests do not duplicate actions, retained history survives, and continuation reuses known session state without another bootstrap where supported. Deterministic host fixtures cover ownership and control semantics. The later owner request in PROP-012 additionally requires bounded actual lifecycle and background-delivery checks for all four priority providers using inexpensive models. Comparative model-quality benchmarking and destructive real-project tests remain outside this scope. @status:spec/plan",
       "line": 11,
       "uri": "spec://org.vibevm.zap/lens/PROP-009#verification"
     },
@@ -7194,6 +9053,276 @@
       "heading": "The shared application service owns annotation versions, target resolution, delivery eligibility and Trash. Lens clients render the same scoped records and named commands. Coordinator/managed backend work transitions consume a shared future-work attachment port rather than a Quick Lens-only queue. Source observers archive only on sufficient authoritative evidence. Notes and Trash survive client disconnects, provider changes and ordinary account/session continuity. @status:spec/plan",
       "line": 11,
       "uri": "spec://org.vibevm.zap/lens/PROP-011#shared-implementation"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:9aa4d01a7d513b6ce6a06fe81f577393f5a6706aca6105cdc560762fc983b99c",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "Four-provider pause and background delivery",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#root"
+    },
+    {
+      "anchor": "scope",
+      "content_hash": "sha256:a289be9dd0558caf9541faf9ebd6e74226b4e6781111bd550910f6c224852718",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "The same project lifecycle and addressed background delivery are implemented for all four registered provider families. Owned structured coordinators and owned interactive managed workers retain distinct execution mechanisms. Configured native integrations may report their actual supported session controls. Observing an arbitrary external session does not confer ownership of its desktop window or terminal. @status:spec/plan",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#scope"
+    },
+    {
+      "anchor": "pause",
+      "content_hash": "sha256:8db172b251c3fa53be77fd092b728ff915107838b553a15198f5095fd3fe7d5b",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "Pause commits the project/context dispatch fence before requesting provider control. An already idle owned session can settle immediately. Active work is interrupted using a verified provider mechanism, and the project remains pausing until all relevant owned work is observed settled. An interruption request alone is not settlement. The same conversation, task lineage, questions, answers and queued inputs remain retained. Pause does not promise freezing and resuming a remote model computation at an identical token. @status:spec/plan",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#pause"
+    },
+    {
+      "anchor": "continuation",
+      "content_hash": "sha256:ffb24b35b6b9c4a0a1a53bc82510abaa7b16497ac96fbc4dabaa1dc6a070dba5",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "Explicit Continue re-enables dispatch for the exact project/context and resumes its known provider conversation where process recreation is necessary. It preserves pinned model/effort and trusted agent bindings and does not resend the full coordinator bootstrap. Stored source/plan changes remain available for reconciliation before new mutations. Stop is distinct from Pause; neither state can be cleared by a background event. A lost session requires an explicit recovery state rather than a silent new expensive coordinator. @status:spec/plan",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#continuation"
+    },
+    {
+      "anchor": "wake-queue",
+      "content_hash": "sha256:0a11719d9079d2c606ab52197d10a32a196c8806daf18f81108cab4df83e190e",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "An actionable addressed event creates a durable wake notice on the shared server. Notices retain project/context, intended actor, source event, question/answer version or child result identity, and delivery state. The server submits notice input through a verified provider route only when the exact owned session is ready and automation owns control. Busy sessions retain notices until an observed safe point; paused/stopped projects retain them until Continue. No model polling loop implements waiting. Multiple events may be coalesced without dropping their identities. @status:spec/plan",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#wake-queue"
+    },
+    {
+      "anchor": "delivery",
+      "content_hash": "sha256:382573afaf901782d18fec5540e34a81969f1d7b21549fe82cec3b22e66a712a",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "Persistence, claimed dispatch, host acceptance, observed reply and broker acknowledgement are separate facts. Retries preserve stable identities and fence process/session/control epochs. Uncertain transport after a possible side effect is retained for reconciliation instead of blind duplicate submission. A native turn identifier is stored only when the provider supplied it; otherwise an explicit transport correlation links the accepted message and observed response. Parent notification of a child result or reply does not claim that the child consumed an answer. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#delivery"
+    },
+    {
+      "anchor": "managed-control",
+      "content_hash": "sha256:ef1ecc036660696e027c531a251b7ee522a8bce7561f1f787013f2005f0d4977",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "Managed workers remain real interactive CLI/TUI processes in owned pseudoterminals. Verified structured sidebands, provider server APIs or authenticated configured hooks may observe readiness and support control. Screen colors, prompt-looking text, quiet output and guessed delays are not authoritative idle or permission state. Human input ownership fences automated wake. A wake never answers a native permission prompt, grants plan authority or transfers terminal control. Interrupt and resume preserve the declared project and attempt. @status:spec/plan",
+      "line": 10,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#managed-control"
+    },
+    {
+      "anchor": "events",
+      "content_hash": "sha256:502cd0300333ab8bfda0c90abc86e07c1a077f9d4c63951a1283ebcf6d2b4732",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "User chat, rich question answers and amendments, meaningful cancellation notices and child-result availability use the same scoped dispatch discipline. Passive notes remain passive; deferred instructions stay attached until their declared work boundary. New specifications may signal changed source state without forcing an interruption of the current turn. Reconnect and restart preserve queued notices, their prior delivery observations and paused state. @status:spec/plan",
+      "line": 11,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#events"
+    },
+    {
+      "anchor": "shared-clients",
+      "content_hash": "sha256:79733ef3edb0cdddf4a902d7dff1e756aca48049aa5d101d2e986a5ea55ac52b",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "Wayfinder owns lifecycle, queues and capability observations for every Lens client. Quick Lens displays requested pause, pausing, paused, continuation, queued wake and delivery failure distinctly. Controls are based on verified installed capabilities and current ownership. Opening another client does not create another wake dispatcher or duplicate a model turn. @status:spec/plan",
+      "line": 12,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#shared-clients"
+    },
+    {
+      "anchor": "acceptance",
+      "content_hash": "sha256:681cd6e8d7356ab291d3c1354a8e36f60131d78865be22f9e936e66c0cda3818",
+      "doc_path": "PROP-012",
+      "file": "vibevm/vibespecs/PROP-012.xml",
+      "heading": "Acceptance uses bounded actual checks for Codex, Claude Code, OpenCode and Qwen Code with explicitly selected inexpensive models, plus deterministic integration checks for project isolation, busy-to-idle delivery, pause retention, Continue, duplicate events, uncertain send and human terminal control. At least one actual idle agent must receive a late answer without having a blocking inbox wait in flight. Active pause is checked through provider settlement, and continuation reuses its conversation. Actual provider credentials, model availability or version limits are reported precisely; a fake process or a capability flag is not evidence of a real provider primitive. This is a support check, not a comparative model-quality benchmark. @status:spec/plan",
+      "line": 13,
+      "uri": "spec://org.vibevm.zap/lens/PROP-012#acceptance"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:afe0892b8daab1ca0407fec60f8fa0e74e16ed3025ed1d459dc1bcdfd7e47225",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "ZapMockAgent and deterministic ZapMockModel",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#root"
+    },
+    {
+      "anchor": "model",
+      "content_hash": "sha256:8b04f7697f0ff4ace6b6122a2f378eb721a0f3f39468a1bd3d8b95718f676016",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "ZapMockModel is a deterministic algorithm, not an LLM wrapper. An explicit seed, scenario and ordered inputs determine its state, effects and trace. Time and gates are advanced explicitly by the test driver; model decisions do not depend on wall-clock timing, network randomness or credentials. Snapshot and restore preserve the same logical conversation and scenario position. Scenarios are a small validated test format, not arbitrary executable code or a claim to understand natural-language programming requests. @status:spec/plan",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#model"
+    },
+    {
+      "anchor": "agent",
+      "content_hash": "sha256:a80dadaa33e82d111a5fc46c720728ced176d3a9466b9836e4df7935ca9781d1",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "ZapMockAgent adapts that model to the same public agent, lifecycle and communication contracts used by real Zap integrations. It uses actual authenticated local HTTP/MCP, durable queues, question/answer acknowledgement, work reports and human review where the scenario requires them. It does not reach into application storage to manufacture success. A standalone process and an interactive terminal mode allow process/terminal supervision to be tested without a provider or model account. @status:spec/plan",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#agent"
+    },
+    {
+      "anchor": "identity",
+      "content_hash": "sha256:33173581c984dc6f35b89f9d861748538335feffbcb7a62d68dbc1d059035f92",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "The mock has its own explicit product and model identities and visible synthetic provenance. It is enabled deliberately in test/development profiles and is never selected as a silent substitute for a failed real provider. Mock success establishes Zap contract and orchestration behavior, not compatibility with a particular vendor CLI, authentication path or native protocol. @status:spec/plan",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#identity"
+    },
+    {
+      "anchor": "scenarios",
+      "content_hash": "sha256:aadc7c8b64f2b5c329daac1469034649ef2f8b6ffe3b78ff1ad2b9a4667c87d5",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "Initial scenarios cover a known response, a structured human question followed by an idle period, a late answer and explicit acknowledgement, controllable busy work, pause and continuation, checkpoint/restart, a managed result awaiting separate review, and two isolated actors or projects. Controlled failure cases cover duplicate events, stale epochs, uncertain acceptance and loss of a connection. Add future scenarios by composing the same small model actions rather than copying new ad hoc fake hosts. @status:spec/plan",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenarios"
+    },
+    {
+      "anchor": "scenario-corpus",
+      "content_hash": "sha256:199202ca102de4be917156672d15fdeb154f3d28bad983322fa5ae8a883164c6",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "Owner addition of 2026-09-16: keep reusable simulation scenarios beside the behavioral tests they explain. A scenario has a stable identifier, explicit feature coverage, deterministic seed and input tape, observable expected events and results, and its public-contract runner. Shared discovery validates and runs the corpus without an LLM. Support selecting scenarios and repeating them with recorded seeds; report the failing scenario, seed and input position so it can be replayed exactly. Separate pure model, local protocol, real process, real Git and provider-wire evidence; never describe a transport fixture as an actual provider test. A coverage index records supported features with scenarios and explicit gaps. New or changed orchestration behavior includes its scenario in the same change. Existing functionality is migrated into the corpus without pretending that undiscovered or missing scenarios passed. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#scenario-corpus"
+    },
+    {
+      "anchor": "simulation-effects",
+      "content_hash": "sha256:5470aba8cc0d5f1eda67336978792871ae5fd557b3e29f845c814fff34d0db8d",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "Model actions remain deterministic data. The simulation harness performs bounded external effects through the product's real public contracts, inside isolated owned directories and local services. Process and Git completion are observed explicitly; logical scenario progress never depends on arbitrary sleeps. Actual asynchronous IO may use bounded timeouts to report a failure. Repetition creates fresh state and closes owned resources. The runner rejects unknown actions and unsafe file targets, and never evaluates scenario text as code or an arbitrary shell command. @status:spec/plan",
+      "line": 10,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#simulation-effects"
+    },
+    {
+      "anchor": "verification-order",
+      "content_hash": "sha256:e42bbdfa52431fb4b5d0b3ba0f1c4147f386f022852c7f8f5e32f4c4fd0766a0",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "Meaningful contract and product-flow checks run with ZapMockAgent first. Refactoring and interface mistakes must be detected before new live-model probes. After the mock gate passes, bounded inexpensive real-agent checks establish the provider-specific mechanisms that a mock cannot prove. Existing transport fixtures remain useful for native wire details; they are not relabeled as full product or live-provider evidence. @status:spec/plan",
+      "line": 11,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#verification-order"
+    },
+    {
+      "anchor": "isolation",
+      "content_hash": "sha256:2bf75186920cde544542201af7aeb74c7ecdf86681121ded4a2b80aa3c9b0f3a",
+      "doc_path": "PROP-013",
+      "file": "vibevm/vibespecs/PROP-013.xml",
+      "heading": "The mock requires no LLM API key, has no provider SDK or remote inference route, and does not inspect user credential stores. Its communication is restricted to the explicitly configured local Zap service. Test state stays in an isolated directory, owned processes and observers close naturally, and managed input obeys the same human-control lease, permission and project pause fences as production agents. @status:spec/plan",
+      "line": 12,
+      "uri": "spec://org.vibevm.zap/lens/PROP-013#isolation"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:6ffb647c93d06725e0d5102b44c9ff242d45a81f45d4ef9e85bcc7c9f777a894",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Repository workspaces, parallel plans and branch integration",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#root"
+    },
+    {
+      "anchor": "identity",
+      "content_hash": "sha256:57f006ec910463b4550fdc6672956c7d4bc665561b31b57e43b2d3d0a53d6ba9",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "A repository, a registered project, a plan context and a physical worktree have separate stable opaque identities. Git's canonical common directory identifies a repository binding on one execution host, not the repository's global identity. A project can be a subdirectory within that repository, and distinct projects can share the repository. Each plan context owns its conversation, coordinator, execution state, events and planning-service binding; it is not the planning algorithm's adopted-plan revision. Multiple contexts may belong to one project and repository. Existing default contexts retain their identities and checkout binding. Creating an independent plan prepares its owned worktree before any coordinator starts, preserving the project's relative directory within the repository. Algorithm-plan binding may initially be pending: preparing a working directory and starting the coordinator must remain possible before that coordinator creates or adopts an algorithm plan. @status:spec/plan",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#identity"
+    },
+    {
+      "anchor": "preparation",
+      "content_hash": "sha256:763c171b3c984d210a228fc736cf9344a10442ef170e3b7e59dc8b6ee99fddef",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Workspace preparation is an algorithmic server operation with a durable operation identity, explicit immutable commit basis and observed result. The service generates the owned branch and worktree path under a trusted root, records ownership and verifies common directory, branch, HEAD and project cwd before publishing readiness. Retries reconcile that exact operation and never adopt an unrelated directory. A worker inherits the plan workspace by default or requests an isolated child workspace; the server resolves and persists its actual cwd before launch. Uncommitted parent changes are not silently copied, discarded or stashed. Native children claim isolated-workspace support only when the host can actually set and attest their cwd. @status:spec/plan",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#preparation"
+    },
+    {
+      "anchor": "assignment",
+      "content_hash": "sha256:cb9ef2eb576a2fd2694f6f2aab1e79384935bc0acd70066f219a063fe22cd0f5",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Each work attempt records its plan context, actor, task and known semantic target references together with the prepared workspace and commit basis. Repeated attempts preserve assignment history. Actor identity, workspace identity and a branch name are distinct; unknown assignments stay unknown. Source and target contexts are carried through every command and navigation callback, including portfolio views. A plan's configured source and planning authority follow its own workspace rather than the project's default directory. @status:spec/plan",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#assignment"
+    },
+    {
+      "anchor": "integration",
+      "content_hash": "sha256:de2be2040454f4e6e27466d9474c0b8595af213687ea34531bbd01c58d63772e",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Integration is a durable operation bound to source and target workspace identities and exact observed commit OIDs. Prepare the integration in a separate owned worktree. The requesting plan owns the candidate and its resolution task; the target retains separate admission and write authority. Candidate, worker, graph references and diff share that one owning context even when the recorded target is the original checkout in another context. A clean merge produces a candidate for authorized review; a conflict produces a bounded resolution task in the integration worktree. Neither a clean Git merge nor a worker's report automatically accepts the semantic task. Promotion requires the accepted candidate, unchanged expected target HEAD, a clean target including protection for ignored files, and exclusive permission to write that actual target. Promote by fast-forward without overwriting ignored files. A busy target queues or refuses promotion rather than allowing competing writes. Changed target basis invalidates the preview and requires a new preparation. @status:spec/plan",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#integration"
+    },
+    {
+      "anchor": "recovery",
+      "content_hash": "sha256:b40cf001ea2a9ac7b8433998a8ebec265a4bcf09a454676918219337ad4b4af7",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Persist operation intent and state before side effects. After interruption, reconcile actual Git and workspace state with the recorded identity and commit basis before retrying. Preserve failed and conflicted artifacts for inspection. The first release does not automatically delete branches or worktrees, rewrite history, force-push, reset user changes or perform automatic stashing. Project Pause and Stop retain workspace assignments and pending integrations. Garbage collection and remote execution are separate future capabilities. @status:spec/plan",
+      "line": 9,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#recovery"
+    },
+    {
+      "anchor": "multi-user-hosts",
+      "content_hash": "sha256:29afb8172957758bf70fbce89ef0295b7ddcb50d898096bc40e6c9fa49d4baa5",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Owner addition of 2026-09-16: preserve an extension path to several people, accounts and computers communicating over a network. Human principals and memberships, provider-account references, logical agents, coordinator sessions, execution hosts and process incarnations remain distinct. Shared commands are authorized at the server, carry an accountable author, use scoped idempotency and optimistic revisions, and retain reviewer identity. Paths and provider credentials belong to a protected host binding; another client or host cannot use them merely by knowing a public object ID. Connecting another clone to an existing repository requires explicit trusted registration, not equality of remote URLs or local path strings. Current execution is local-only and refuses unsupported remote operations explicitly. A host-execution port and ownership lease/epoch contract permit later remote dispatch and fencing; the current implementation does not claim distributed locking, remote Git synchronization, account federation or multi-user authentication. Per-client selections remain separate from shared plan state. @status:spec/plan",
+      "line": 10,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#multi-user-hosts"
+    },
+    {
+      "anchor": "contribution-trust",
+      "content_hash": "sha256:2299da8b954c4f3e8bd6ee547cfd3b6d8c74f5393d100c67e75b74dda1e8ca80",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Long-term owner vision: people may contribute their own execution hosts and model-account capacity to a shared project. Resource availability grants no authority to change the accepted project. A contribution retains submitting principal, execution host, assignment and attempt, source basis, produced artifacts and evidence origin. Execution, reporting, testing, reviewing and admission are separate authorities. A future trusted team-lead agent can coordinate review of potentially malicious contributions, but prompts and the contributor's own success reports never replace server authorization, independent checks or an explicit admission decision. Worktree separation is not a security sandbox. Execution of untrusted code will require a separately designed isolation boundary and secret policy. Credentials stay with the resource owner; capacity contribution does not pool or reveal account keys. Current local trusted execution implements none of the future public resource marketplace, hostile-code sandboxing or contributor admission services. @status:spec/plan",
+      "line": 11,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#contribution-trust"
+    },
+    {
+      "anchor": "resource-grants",
+      "content_hash": "sha256:82c74c0383cab0eea85f4a81ac066699716e54f6d43680de3acdd9ec88ac09ea",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "The future scheduling boundary separates a task's requirements from a participant's revocable resource grant and from the selected execution attempt. A grant may restrict projects, operations, model profiles, budget, concurrency and expiry; resource ownership and project authority are checked independently. Host disconnection leaves an observed or uncertain attempt, not an assumed failure or permission to replay irreversible effects. Existing scoped request identities, attempt provenance, lease epochs and separate integration admission must remain usable when a local execution port is replaced by a remote one. This is an extension constraint, not a requirement to implement a distributed scheduler in the current delivery. @status:spec/plan",
+      "line": 12,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#resource-grants"
+    },
+    {
+      "anchor": "projection",
+      "content_hash": "sha256:a2969fd41645a1368b97c470d945f62a4b017a4a113124390e5136b6ee3af9fd",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "All Lens clients share server-owned plan, workspace, assignment and integration data. Quick Lens supports selecting multiple plans of one project, shows the responsible actor and workspace on work items and cards, and represents fork, integration and conflict-resolution operations as stable semantic nodes and relationships. Graph distance and layout never imply elapsed time or completed integration without evidence. Events retain the full history and cross-reference the corresponding operation; notes and Trash preserve references to retired objects. @status:spec/plan",
+      "line": 13,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#projection"
+    },
+    {
+      "anchor": "verification",
+      "content_hash": "sha256:f5aea98dd34c91bd74ef23c5f763ca0cf76a4a247a6d85b0a13b3eeb822a0c8d",
+      "doc_path": "PROP-014",
+      "file": "vibevm/vibespecs/PROP-014.xml",
+      "heading": "Colocated deterministic scenarios use real Git in small disposable repositories and ZapMockAgent executors. Cover two top-level plans in one repository, inherited and isolated workers, preparation before agent launch, scoped file changes, clean integration, an actual conflict and resolution, stale or dirty target refusal, restart reconciliation and graph assignment/fork/join projection. The original checkout and other contexts remain unchanged by child work. No provider inference or developer credentials are required. Mock success does not establish vendor-specific native-worktree capabilities. @status:spec/plan",
+      "line": 14,
+      "uri": "spec://org.vibevm.zap/lens/PROP-014#verification"
     }
   ],
   "suspects": [],
@@ -7203,6 +9332,24 @@
       "file": "src/cells/http/native-work.ts",
       "line": 1,
       "message": "edge `src/cells/http/native-work.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-011#deferred-instructions`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
+      "file": "src/cells/mock-agent/managed-process.test.ts",
+      "line": 1,
+      "message": "edge `src/cells/mock-agent/managed-process.test.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-013#verification`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
+      "file": "src/cells/mock-agent/question-http.test.ts",
+      "line": 1,
+      "message": "edge `src/cells/mock-agent/question-http.test.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-013#verification`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
+      "file": "src/cells/mock-agent/runtime.test.ts",
+      "line": 1,
+      "message": "edge `src/cells/mock-agent/runtime.test.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-013#verification`: no spec unit carries this anchor"
     },
     {
       "code": "dangling-edge",
@@ -7224,9 +9371,33 @@
     },
     {
       "code": "dangling-edge",
+      "file": "src/cells/provider-coordinators/process-diagnostic.ts",
+      "line": 1,
+      "message": "edge `src/cells/provider-coordinators/process-diagnostic.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-006#provider-adapters`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
+      "file": "src/cells/quicklens-graph/portfolio-repository.test.ts",
+      "line": 1,
+      "message": "edge `src/cells/quicklens-graph/portfolio-repository.test.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-014#simulation`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
       "file": "src/cells/wayfinder-runtime/agent-mcp-config.ts",
       "line": 1,
       "message": "edge `src/cells/wayfinder-runtime/agent-mcp-config.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-010#credential-safety`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
+      "file": "src/cells/wayfinder-runtime/mock-managed.support.ts",
+      "line": 1,
+      "message": "edge `src/cells/wayfinder-runtime/mock-managed.support.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-013#verification`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
+      "file": "src/cells/wayfinder-runtime/mock-managed.test.ts",
+      "line": 1,
+      "message": "edge `src/cells/wayfinder-runtime/mock-managed.test.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-013#verification`: no spec unit carries this anchor"
     },
     {
       "code": "dangling-edge",
@@ -7245,6 +9416,12 @@
       "file": "src/cells/wayfinder-runtime/native-work.test.ts",
       "line": 1,
       "message": "edge `src/cells/wayfinder-runtime/native-work.test.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-011#deferred-instructions`: no spec unit carries this anchor"
+    },
+    {
+      "code": "dangling-edge",
+      "file": "src/cells/wayfinder-runtime/planning-recovery.ts",
+      "line": 1,
+      "message": "edge `src/cells/wayfinder-runtime/planning-recovery.ts` --implements--> `spec://org.vibevm.zap/lens/PROP-014#algorithm-binding`: no spec unit carries this anchor"
     }
   ]
 }

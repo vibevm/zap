@@ -197,6 +197,8 @@ function request(name: string) {
     clientRequestId: `request.managed.policy.${name}`,
     projectId: ProjectIdSchema.parse("project.managed"),
     contextId: WorkContextIdSchema.parse("context.managed"),
+    planId: null,
+    workspaceRequest: { mode: "inherit" as const },
     selection: { mode: "project_policy" as const },
     goal: `Run ${name} worker`,
     expectedResult: "Policy-selected worker report",

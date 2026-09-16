@@ -82,10 +82,24 @@ export function addManagedWorkNodes(
       work,
       project,
     });
-    addEdge(graph, `managed-task-run:${work.runId}`, taskKey, runKey, "run", theme);
+    addEdge(
+      graph,
+      `managed-task-run:${project.selection.projectId}:${project.contextId}:${work.runId}`,
+      taskKey,
+      runKey,
+      "run",
+      theme,
+    );
     const agentKey = agentKeys.get(work.actorId);
     if (agentKey !== undefined) {
-      addEdge(graph, `managed-run-agent:${work.runId}`, runKey, agentKey, "actor", theme);
+      addEdge(
+        graph,
+        `managed-run-agent:${project.selection.projectId}:${project.contextId}:${work.runId}`,
+        runKey,
+        agentKey,
+        "actor",
+        theme,
+      );
     }
     for (const target of work.targetRefs) {
       if (
@@ -98,7 +112,7 @@ export function addManagedWorkNodes(
       if (graph.hasNode(targetKey)) {
         addEdge(
           graph,
-          `managed-target:${work.runId}:${target.ref}`,
+          `managed-target:${project.selection.projectId}:${project.contextId}:${work.runId}:${target.ref}`,
           taskKey,
           targetKey,
           "target",

@@ -13,6 +13,9 @@ export const ProjectObjectReferenceSchema = z
       "agent",
       "work_task",
       "work_run",
+      "plan_workspace",
+      "worktree",
+      "integration",
     ]),
     ref: z.string().min(1).max(1_152),
   })

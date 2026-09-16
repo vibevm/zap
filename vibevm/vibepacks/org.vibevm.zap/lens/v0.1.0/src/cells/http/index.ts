@@ -51,7 +51,11 @@ import {
   type AgentQuestionPublisher,
 } from "../workspace-interaction/index.ts";
 import type { WorkspacePlanningFeature } from "../workspace-planning/index.ts";
-import type { ManagedWorkAgentPort, NativeWorkAgentPort } from "../managed-work/index.ts";
+import type {
+  ManagedWorkAgentPort,
+  NativeWorkAgentPort,
+  RepositoryWorkspaceAgentPort,
+} from "../managed-work/index.ts";
 import { executeAgentPlanning } from "./agent-planning.ts";
 import { executeInboxWait } from "./inbox-wait.ts";
 import { executeWorkCommand } from "./work-command.ts";
@@ -87,6 +91,7 @@ export interface LensHttpGatewayOptions {
   readonly planning?: WorkspacePlanningFeature;
   readonly managedWork?: () => ManagedWorkAgentPort | undefined;
   readonly nativeWork?: () => NativeWorkAgentPort | undefined;
+  readonly repositoryWork?: () => RepositoryWorkspaceAgentPort | undefined;
 }
 
 export interface GatewayAddress {
@@ -101,6 +106,7 @@ export interface LensHttpGateway {
 export { createAgentHttpClient, createPrincipalHttpClient } from "./client.ts";
 export { createManagedWorkHttpClient } from "./managed-work.ts";
 export { createNativeWorkHttpClient } from "./native-work.ts";
+export { createRepositoryWorkHttpClient } from "./repository-work.ts";
 export type { AgentHttpClientOptions } from "./client.ts";
 
 /** Creates a credential-redacting, origin-checked HTTP façade. */

@@ -21,6 +21,7 @@ import {
   AgentSessionIdSchema,
   ProjectIdSchema,
   WorkContextIdSchema,
+  WorkContextDescriptorSchema,
   type AgentDescriptor,
   type AgentOutputItem,
   type AgentRelationship,
@@ -30,6 +31,7 @@ import {
   type HistoryEvent,
   type ProjectId,
   type WorkContextId,
+  type WorkContextDescriptor,
   type ProjectDetail,
   type WorkspaceEventIngest,
   type WorkspaceResult,
@@ -46,6 +48,10 @@ import {
   type NativeInteractionRecord,
   type QuestionGroup,
 } from "../workspace-model/index.ts";
+import {
+  ProjectPlanRecordSchema,
+  RepositoryWorktreeRecordSchema,
+} from "../repository-model/index.ts";
 
 const PlanningRegistrationSchema = z.discriminatedUnion("state", [
   z
@@ -91,6 +97,78 @@ export const TrustedProjectRegistrationSchema = z
   })
   .strict();
 export type TrustedProjectRegistration = z.infer<typeof TrustedProjectRegistrationSchema>;
+
+export const TrustedPlanContextRegistrationSchema = z
+  .object({
+    registrationId: ClientRequestIdSchema,
+    projectId: ProjectIdSchema,
+    plan: ProjectPlanRecordSchema,
+    rootWorktree: RepositoryWorktreeRecordSchema,
+    context: z
+      .object({
+        displayName: z.string().min(1).max(256),
+        workspaceRef: z.string().min(3).max(256),
+        branchLabel: z.string().max(512).nullable(),
+        revisionBinding: z.string().max(512).nullable(),
+        planning: PlanningRegistrationSchema,
+        coordinatorConversationId: ConversationIdSchema,
+        brokerScope: z
+          .object({ workspaceId: WorkspaceIdSchema, conversationId: ConversationIdSchema })
+          .strict()
+          .optional(),
+      })
+      .strict(),
+    coordinatorLaunchOptions: z.array(CoordinatorLaunchOptionSchema).min(1).max(32),
+    protected: z
+      .object({ cwd: z.string().min(1).max(32_000), launchProfileRef: z.string().min(3).max(512) })
+      .strict(),
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (
+      value.plan.projectId !== value.projectId ||
+      value.rootWorktree.projectId !== value.projectId ||
+      value.plan.contextId !== value.rootWorktree.contextId ||
+      value.plan.repositoryId !== value.rootWorktree.repositoryId ||
+      value.plan.rootWorktreeId !== value.rootWorktree.worktreeId ||
+      value.plan.state !== "ready" ||
+      value.rootWorktree.state !== "ready"
+    )
+      context.addIssue({
+        code: "custom",
+        message: "prepared plan context identities are inconsistent",
+      });
+  });
+export type TrustedPlanContextRegistration = z.infer<typeof TrustedPlanContextRegistrationSchema>;
+
+export const RegisteredPlanContextSchema = z
+  .object({
+    plan: ProjectPlanRecordSchema,
+    context: WorkContextDescriptorSchema,
+    rootWorktree: RepositoryWorktreeRecordSchema,
+    coordinatorLaunchOptions: z.array(CoordinatorLaunchOptionSchema),
+  })
+  .strict();
+export type RegisteredPlanContext = z.infer<typeof RegisteredPlanContextSchema>;
+
+export const ExistingContextPlanBindingSchema = z
+  .object({
+    projectId: ProjectIdSchema,
+    contextId: WorkContextIdSchema,
+    plan: ProjectPlanRecordSchema,
+    rootWorktree: RepositoryWorktreeRecordSchema,
+  })
+  .strict();
+export type ExistingContextPlanBinding = z.infer<typeof ExistingContextPlanBindingSchema>;
+export const ExistingContextPlanningBindingSchema = z
+  .object({
+    projectId: ProjectIdSchema,
+    contextId: WorkContextIdSchema,
+    expectedRevision: DecimalSchema,
+    planning: PlanningRegistrationSchema,
+  })
+  .strict();
+export type ExistingContextPlanningBinding = z.infer<typeof ExistingContextPlanningBindingSchema>;
 
 export const TrustedProjectLaunchSchema = z
   .object({
@@ -159,7 +237,7 @@ export const ProjectLifecycleSettlementSchema = z
   .object({
     projectId: ProjectIdSchema,
     contextId: WorkContextIdSchema,
-    sessionId: AgentSessionIdSchema,
+    sessionId: AgentSessionIdSchema.nullable(),
     clientRequestId: ClientRequestIdSchema,
     action: z.enum(["pause", "stop", "continue"]),
     observation: z.enum(["requested", "settled", "unsupported", "refused", "uncertain"]),
@@ -168,6 +246,53 @@ export const ProjectLifecycleSettlementSchema = z
   })
   .strict();
 export type ProjectLifecycleSettlement = z.infer<typeof ProjectLifecycleSettlementSchema>;
+
+export const ManagedWakeNoticeSchema = z
+  .object({
+    wakeId: ClientRequestIdSchema,
+    projectId: ProjectIdSchema,
+    contextId: WorkContextIdSchema,
+    actorId: ActorIdSchema,
+    runId: z.string().min(3).max(160),
+    attemptId: z.string().min(3).max(160),
+    adapterSessionId: z.string().min(3).max(160),
+    kind: z.enum(["answer", "amend", "cancel"]),
+    questionGroupId: QuestionGroupIdSchema,
+    answerVersionId: z.string().min(3).max(160).nullable(),
+    bodyMarkdown: z.string().min(1).max(64_000),
+    sourceEventId: z.string().min(3).max(512),
+    state: z.enum(["queued", "offered", "host_accepted", "uncertain", "failed"]),
+    updatedAt: z.iso.datetime(),
+  })
+  .strict();
+export type ManagedWakeNotice = z.infer<typeof ManagedWakeNoticeSchema>;
+
+export const ManagedWakeClaimSchema = z
+  .object({
+    wakeId: ClientRequestIdSchema,
+    projectId: ProjectIdSchema,
+    contextId: WorkContextIdSchema,
+    actorId: ActorIdSchema,
+    runId: z.string().min(3).max(160),
+    attemptId: z.string().min(3).max(160),
+    adapterSessionId: z.string().min(3).max(160),
+    processEpoch: z.string().min(1).max(160),
+    leaseId: z.string().min(3).max(160),
+  })
+  .strict();
+export type ManagedWakeClaim = z.infer<typeof ManagedWakeClaimSchema>;
+
+export const ManagedWakeDeliverySchema = ManagedWakeNoticeSchema.extend({
+  processEpoch: z.string().min(1).max(160),
+  leaseId: z.string().min(3).max(160),
+}).strict();
+export type ManagedWakeDelivery = z.infer<typeof ManagedWakeDeliverySchema>;
+
+export const ManagedWakeSettlementSchema = ManagedWakeClaimSchema.extend({
+  observation: z.enum(["host_accepted", "uncertain", "failed"]),
+  updatedAt: z.iso.datetime(),
+}).strict();
+export type ManagedWakeSettlement = z.infer<typeof ManagedWakeSettlementSchema>;
 
 export const ChatDispatchClaimSchema = z
   .object({
@@ -203,12 +328,41 @@ export const ObservedChatReplySchema = z
     contextId: WorkContextIdSchema,
     sessionId: AgentSessionIdSchema,
     processEpoch: z.string().min(1).max(160),
-    nativeTurnId: z.string().min(1).max(512),
+    nativeTurnId: z.string().min(1).max(512).nullable(),
+    transportCorrelation: z
+      .object({
+        provenance: z.literal("transport_correlation"),
+        clientMessageId: z.string().min(1).max(512),
+        processEpoch: z.string().min(1).max(160),
+      })
+      .strict()
+      .nullable()
+      .optional(),
     actorId: ActorIdSchema,
     bodyMarkdown: z.string().min(1).max(64_000),
     occurredAt: z.iso.datetime(),
   })
-  .strict();
+  .strict()
+  .superRefine((value, context) => {
+    if (value.nativeTurnId === null && (value.transportCorrelation ?? null) === null) {
+      context.addIssue({
+        code: "custom",
+        path: ["nativeTurnId"],
+        message: "reply requires native turn or transport correlation",
+      });
+    }
+    if (
+      value.transportCorrelation !== undefined &&
+      value.transportCorrelation !== null &&
+      value.transportCorrelation.processEpoch !== value.processEpoch
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["transportCorrelation", "processEpoch"],
+        message: "transport correlation epoch must match reply epoch",
+      });
+    }
+  });
 export type ObservedChatReply = z.infer<typeof ObservedChatReplySchema>;
 
 export const ObservedAgentOutputSchema = z
@@ -305,6 +459,15 @@ export interface OpenWorkspaceStoreOptions {
 
 export interface WorkspaceStore extends WorkspaceStorePort {
   registerProject(input: TrustedProjectRegistration): WorkspaceResult<ProjectDetail>;
+  registerPlanContext(
+    input: TrustedPlanContextRegistration,
+  ): WorkspaceResult<RegisteredPlanContext>;
+  bindExistingContextPlan(
+    input: ExistingContextPlanBinding,
+  ): WorkspaceResult<WorkContextDescriptor>;
+  bindExistingContextPlanning(
+    input: ExistingContextPlanningBinding,
+  ): WorkspaceResult<WorkContextDescriptor>;
   resolveProjectLaunch(
     projectId: z.infer<typeof ProjectIdSchema>,
     contextId: z.infer<typeof WorkContextIdSchema>,
@@ -357,6 +520,19 @@ export interface WorkspaceStore extends WorkspaceStorePort {
   releaseChatDispatch(input: ChatDispatchClaim): WorkspaceResult<ChatMessage>;
   settleChatDispatch(input: ChatDispatchSettlement): WorkspaceResult<ChatMessage>;
   appendObservedChatReply(input: ObservedChatReply): WorkspaceResult<ChatMessage | null>;
+  queueManagedWake(input: ManagedWakeNotice): WorkspaceResult<ManagedWakeNotice>;
+  nextManagedWake(
+    projectId: ProjectId,
+    contextId: WorkContextId,
+    actorId: AgentDescriptor["actorId"],
+  ): WorkspaceResult<ManagedWakeNotice | null>;
+  queuedManagedWakeActors(
+    projectId: ProjectId,
+    contextId: WorkContextId,
+  ): WorkspaceResult<readonly AgentDescriptor["actorId"][]>;
+  claimManagedWake(input: ManagedWakeClaim): WorkspaceResult<ManagedWakeDelivery>;
+  releaseManagedWake(input: ManagedWakeClaim): WorkspaceResult<ManagedWakeDelivery>;
+  settleManagedWake(input: ManagedWakeSettlement): WorkspaceResult<ManagedWakeDelivery>;
   resolveAgentScope(
     workspaceId: z.infer<typeof WorkspaceIdSchema>,
     conversationId: z.infer<typeof ConversationIdSchema>,

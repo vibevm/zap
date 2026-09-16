@@ -5,6 +5,11 @@ import type {
   ManagedWorkView,
   ProjectObjectReference,
 } from "../workspace-model/index.ts";
+import type {
+  IntegrationAttempt,
+  ProjectPlanRecord,
+  RepositoryWorktreeRecord,
+} from "../repository-model/index.ts";
 import {
   ProjectObjectReferenceSchema,
   projectObjectReferenceKey,
@@ -19,6 +24,14 @@ import type {
 import type { GraphTheme } from "./index.ts";
 import { layoutQuicklensGraph } from "./layout.ts";
 import { addManagedWorkNodes } from "./portfolio-managed.ts";
+import {
+  addRepositoryWorkspaceNodes,
+  createRepositoryGraphContext,
+  flushRepositoryEdges,
+  compactPortfolioLabel,
+  repositoryContextLabel,
+  type RepositoryGraphContext,
+} from "./portfolio-repository.ts";
 
 export type PortfolioNodeKind =
   | "project"
@@ -29,6 +42,9 @@ export type PortfolioNodeKind =
   | "agent"
   | "work_task"
   | "work_run"
+  | "plan_workspace"
+  | "worktree"
+  | "integration"
   | "context";
 
 export interface PortfolioNodeAttributes extends Record<string, unknown> {
@@ -50,7 +66,7 @@ export interface PortfolioEdgeAttributes extends Record<string, unknown> {
   readonly color: string;
   readonly size: number;
   readonly type: "arrow" | "line";
-  readonly sourceKind: "semantic" | "agent" | "managed_work" | "presentation";
+  readonly sourceKind: "semantic" | "agent" | "managed_work" | "repository" | "presentation";
 }
 
 export type PortfolioGraph = MultiDirectedGraph<
@@ -83,6 +99,24 @@ export type PortfolioCard =
       readonly entity: "task" | "run";
       readonly work: ManagedWorkView;
       readonly project: Extract<WorkspaceCanvasProject, { state: "ready" }>;
+    }
+  | {
+      readonly kind: "plan_workspace";
+      readonly reference: ProjectObjectReference;
+      readonly plan: ProjectPlanRecord;
+      readonly project: Extract<WorkspaceCanvasProject, { state: "ready" }>;
+    }
+  | {
+      readonly kind: "worktree";
+      readonly reference: ProjectObjectReference;
+      readonly worktree: RepositoryWorktreeRecord;
+      readonly project: Extract<WorkspaceCanvasProject, { state: "ready" }>;
+    }
+  | {
+      readonly kind: "integration";
+      readonly reference: ProjectObjectReference;
+      readonly integration: IntegrationAttempt;
+      readonly project: Extract<WorkspaceCanvasProject, { state: "ready" }>;
     };
 
 export interface PortfolioViewState {
@@ -108,11 +142,13 @@ export function projectPortfolioGraph(
   const graph: PortfolioGraph = new MultiDirectedGraph({ allowSelfLoops: true });
   const cards = new Map<string, PortfolioCard>();
   const diagnostics: string[] = [];
-  const columns = Math.min(2, input.projects.length);
+  const columns = Math.min(3, input.projects.length);
+  const repositoryContext = createRepositoryGraphContext(input.projects);
   input.projects.forEach((project, index) => {
-    const origin = { x: (index % columns) * 12, y: Math.floor(index / columns) * 7 };
-    addProject(graph, cards, diagnostics, project, origin, state, theme);
+    const origin = { x: (index % columns) * 13.5, y: Math.floor(index / columns) * 16 };
+    addProject(graph, cards, diagnostics, project, origin, repositoryContext, state, theme);
   });
+  flushRepositoryEdges(graph, repositoryContext, theme);
   return { graph, cards, diagnostics };
 }
 
@@ -122,6 +158,7 @@ function addProject(
   diagnostics: string[],
   project: WorkspaceCanvasProject,
   origin: { readonly x: number; readonly y: number },
+  repositoryContext: RepositoryGraphContext,
   state: PortfolioViewState,
   theme: GraphTheme,
 ): void {
@@ -134,14 +171,16 @@ function addProject(
   );
   const projectKey = projectObjectReferenceKey(projectReference);
   const projectLabel =
-    project.state === "ready" ? project.view.project.displayName : project.selection.fallbackLabel;
+    project.state === "ready"
+      ? repositoryContextLabel(project)
+      : compactPortfolioLabel(project.selection.fallbackLabel, 36);
   const projectStatus = project.state === "ready" ? project.view.execution.state : "unavailable";
-  addProjectRegion(graph, project.selection.projectId, origin, theme);
+  addProjectRegion(graph, project.selection.projectId, contextId, origin, theme);
   graph.addNode(projectKey, {
     label: projectLabel,
     x: origin.x + 4.7,
     y: origin.y,
-    size: 18,
+    size: 14,
     color:
       state.selectedKey === projectKey
         ? theme.selectedRing
@@ -171,6 +210,17 @@ function addProject(
   }
   addAgents(graph, cards, diagnostics, project, projectKey, origin, state, theme);
   addManagedWorkNodes(graph, cards, project, projectKey, origin, state, theme);
+  addRepositoryWorkspaceNodes(
+    graph,
+    cards,
+    diagnostics,
+    project,
+    projectKey,
+    origin,
+    repositoryContext,
+    state,
+    theme,
+  );
 }
 
 function addSemanticProject(
@@ -323,7 +373,7 @@ function addAgents(
     const target = agentKeys.get(relationship.toActorId);
     if (source === undefined || target === undefined) continue;
     graph.addDirectedEdgeWithKey(
-      `agent:${project.selection.projectId}:${relationship.fromActorId}:${relationship.toActorId}:${relationship.kind}`,
+      `agent:${project.selection.projectId}:${project.contextId}:${relationship.fromActorId}:${relationship.toActorId}:${relationship.kind}`,
       source,
       target,
       {
@@ -340,17 +390,18 @@ function addAgents(
 function addProjectRegion(
   graph: PortfolioGraph,
   projectId: string,
+  contextId: string,
   origin: { readonly x: number; readonly y: number },
   theme: GraphTheme,
 ): void {
   const points = [
     { x: origin.x - 0.35, y: origin.y - 0.35 },
-    { x: origin.x + 10.15, y: origin.y - 0.35 },
-    { x: origin.x + 10.15, y: origin.y + 5.75 },
-    { x: origin.x - 0.35, y: origin.y + 5.75 },
+    { x: origin.x + 11.75, y: origin.y - 0.35 },
+    { x: origin.x + 11.75, y: origin.y + 11.75 },
+    { x: origin.x - 0.35, y: origin.y + 11.75 },
   ];
   const keys = points.map((point, index) => {
-    const key = `region:${projectId}:${String(index)}`;
+    const key = `region:${projectId}:${contextId}:${String(index)}`;
     graph.addNode(key, {
       label: "",
       x: point.x,
@@ -369,13 +420,18 @@ function addProjectRegion(
   keys.forEach((source, index) => {
     const target = keys[(index + 1) % keys.length];
     if (target === undefined) return;
-    graph.addDirectedEdgeWithKey(`region-edge:${projectId}:${String(index)}`, source, target, {
-      label: "",
-      color: theme.mutedEdge,
-      size: 1.2,
-      type: "line",
-      sourceKind: "presentation",
-    });
+    graph.addDirectedEdgeWithKey(
+      `region-edge:${projectId}:${contextId}:${String(index)}`,
+      source,
+      target,
+      {
+        label: "",
+        color: theme.mutedEdge,
+        size: 1.2,
+        type: "line",
+        sourceKind: "presentation",
+      },
+    );
   });
 }
 

@@ -264,8 +264,11 @@ test("Wayfinder owns broker, durable actor HTTP, rich question, answer, and inbo
     });
     assert.equal(childAnswer.ok, true);
     assert.equal(adapter.sent.length, 2);
-    assert.match(adapter.sent[1] ?? "", /FORWARDING/);
-    assert.match(adapter.sent[1] ?? "", /child consumption is not claimed/);
+    const forwarded = adapter.sent[1] ?? "";
+    assert.match(forwarded, new RegExp(`Origin actor: ${child.value.connection.actor.actorId}`));
+    assert.match(forwarded, /addressed to your preprovisioned broker actor/);
+    assert.match(forwarded, /forwarded to the owned coordinator/);
+    assert.match(forwarded, /child consumption is not claimed/);
   } finally {
     await opened.value.close();
   }

@@ -17,6 +17,8 @@ import type {
 } from "./index.ts";
 import type { OwnedLineProcess } from "./claude.ts";
 import { qwenZapMcpPermissionArguments } from "./qwen-permissions.ts";
+import { StreamControlClient, streamHostControlRequest } from "./stream-control.ts";
+import { providerStderrDiagnostic, type ProviderProcessDiagnostic } from "./process-diagnostic.ts";
 
 export interface QwenProcessFactory {
   spawn(input: {
@@ -58,9 +60,14 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
   readonly #prepareLaunch: ProviderLaunchPreparationPort | undefined;
   readonly #listeners = new Set<(raw: unknown) => void>();
   readonly #history: unknown[] = [];
+  readonly #control = new StreamControlClient();
+  readonly #activeChildren = new Set<string>();
+  #pendingRootCompletion: unknown;
   #process: OwnedLineProcess | undefined;
   #session: ProviderCoordinatorSession | undefined;
+  #activity: "idle" | "busy" | "unknown" = "unknown";
   #unsubscribeLine: (() => void) | undefined;
+  #unsubscribeDiagnostic: (() => void) | undefined;
   #unsubscribeExit: (() => void) | undefined;
 
   constructor(
@@ -113,6 +120,7 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
         ? undefined
         : (environment["HTTPS_PROXY"] ?? environment["ALL_PROXY"] ?? environment["HTTP_PROXY"]);
     const modelId = scope.modelId ?? this.#profile.modelId;
+    const requestedSessionId = resumeId ?? randomUUID();
     const child = this.#factory.spawn({
       executablePath: this.#profile.executablePath,
       args: [
@@ -130,6 +138,7 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
         "default",
         ...(proxy === undefined ? [] : ["--proxy", proxy]),
         ...(resumeId === undefined ? [] : ["--resume", resumeId]),
+        ...(resumeId === undefined ? ["--session-id", requestedSessionId] : []),
         ...((prepared?.value.mcpConfigPath ?? this.#profile.mcpConfigPath) === undefined ||
         (prepared?.value.mcpConfigPath ?? this.#profile.mcpConfigPath) === null
           ? []
@@ -140,47 +149,29 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
       environment,
     });
     this.#process = child;
+    this.#activeChildren.clear();
+    this.#pendingRootCompletion = undefined;
     this.#observe(child);
-    if (resumeId !== undefined) {
-      this.#session = session(scope, resumeId, processEpoch(child.pid), modelId);
-      return { ok: true as const, value: this.#session };
-    }
-    const initialized = this.#waitForSession(child);
-    if (bootstrap === undefined || !this.#writeUser(bootstrap))
-      return failure("transport_lost", "Qwen input stream rejected bootstrap delivery");
-    const observed = await initialized;
-    if (!observed.ok) {
+    const initialized = await this.#control.request(child, "initialize", this.#timeoutMs);
+    if (!initialized.ok) {
       child.kill();
       this.#process = undefined;
-      return observed;
+      return initialized;
     }
-    this.#session = session(scope, observed.value, processEpoch(child.pid), modelId);
-    return { ok: true as const, value: this.#session };
-  }
-
-  #waitForSession(child: OwnedLineProcess): Promise<QwenResult<string>> {
-    return new Promise((resolve) => {
-      let settled = false;
-      const finish = (result: QwenResult<string>) => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timer);
-        offLine();
-        offExit();
-        resolve(result);
-      };
-      const offLine = child.onLine((line) => {
-        const record = z.record(z.string(), z.unknown()).safeParse(parseJson(line));
-        const id = record.success ? record.data["session_id"] : undefined;
-        if (typeof id === "string") finish({ ok: true, value: id });
-      });
-      const offExit = child.onExit(() => {
-        finish(failure("transport_lost", "Qwen process exited before session observation"));
-      });
-      const timer = setTimeout(() => {
-        finish(failure("transport_lost", "Qwen session observation timed out"));
-      }, this.#timeoutMs);
-    });
+    const observedSessionId = initialized.value["session_id"];
+    const nativeSessionId =
+      typeof observedSessionId === "string" ? observedSessionId : requestedSessionId;
+    if (resumeId !== undefined && nativeSessionId !== resumeId)
+      return failure("protocol_error", "Qwen resumed a different native session");
+    const started = session(scope, nativeSessionId, processEpoch(child.pid), modelId);
+    this.#session = started;
+    this.#activity = "idle";
+    if (bootstrap !== undefined) {
+      if (!this.#writeUser(bootstrap))
+        return failure("transport_lost", "Qwen input stream rejected bootstrap delivery");
+      this.#activity = "busy";
+    }
+    return { ok: true as const, value: started };
   }
 
   history(input: ProviderCoordinatorSession) {
@@ -208,6 +199,7 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
       return Promise.resolve(failure("not_found", "Qwen session is not active"));
     if (!this.#writeUser(input.text))
       return Promise.resolve(failure("transport_lost", "Qwen input stream rejected delivery"));
+    this.#activity = "busy";
     return Promise.resolve({
       ok: true as const,
       value: {
@@ -225,21 +217,40 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
     readonly session: ProviderCoordinatorSession;
     readonly nativeTurnId: string;
   }) {
-    void input;
+    void input.nativeTurnId;
     if (this.#process === undefined)
       return Promise.resolve(failure("not_found", "Qwen process is not active"));
-    this.#process.kill();
-    return Promise.resolve({ ok: true as const, value: null });
+    return this.#control
+      .request(this.#process, "interrupt", this.#timeoutMs)
+      .then((result) => (result.ok ? { ok: true as const, value: null } : result));
   }
 
   respond(input: {
     readonly session: ProviderCoordinatorSession;
     readonly answer: HostRequestAnswer;
   }) {
-    void input;
+    if (
+      this.#session?.nativeSessionId !== input.session.nativeSessionId ||
+      this.#session.processEpoch !== input.answer.processEpoch ||
+      !this.#process
+    )
+      return Promise.resolve(failure("not_found", "Qwen permission session is not active"));
     return Promise.resolve(
-      failure("unsupported", "Qwen direct stream mode has no verified permission response mapping"),
+      this.#control.respond(this.#process, String(input.answer.requestId), input.answer.answer).ok
+        ? { ok: true as const, value: null }
+        : failure("transport_lost", "Qwen permission response was not written"),
     );
+  }
+
+  async pause(input: { readonly session: ProviderCoordinatorSession }) {
+    if (this.#session?.nativeSessionId !== input.session.nativeSessionId || !this.#process)
+      return failure("not_found", "Qwen session is not active");
+    if (this.#activity === "idle")
+      return { ok: true as const, value: { observation: "settled" as const } };
+    const interrupted = await this.#control.request(this.#process, "interrupt", this.#timeoutMs);
+    return interrupted.ok
+      ? { ok: true as const, value: { observation: "requested" as const } }
+      : interrupted;
   }
 
   stop() {
@@ -255,7 +266,9 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
   }
 
   close() {
+    this.#control.close();
     this.#unsubscribeLine?.();
+    this.#unsubscribeDiagnostic?.();
     this.#unsubscribeExit?.();
     this.#process?.kill();
     this.#process = undefined;
@@ -264,13 +277,45 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
   }
 
   #observe(child: OwnedLineProcess): void {
-    this.#unsubscribeLine = child.onLine((line) => {
-      const observed = publicQwenEvent(parseJson(line));
+    this.#unsubscribeDiagnostic = child.onDiagnostic((diagnostic) => {
+      const observed = { type: "process_diagnostic", ...diagnostic };
       this.#history.push(observed);
       for (const listener of this.#listeners) listener(observed);
     });
+    this.#unsubscribeLine = child.onLine((line) => {
+      const raw = parseJson(line);
+      if (this.#control.handle(raw)) return;
+      const childrenBefore = this.#activeChildren.size;
+      const nextActivity = streamActivity(raw, this.#activeChildren);
+      let observed = publicQwenEvent(raw);
+      if (rootCompletion(raw) && this.#activeChildren.size > 0) {
+        this.#pendingRootCompletion = observed;
+        observed = {
+          kind: "session_status",
+          data: { type: "busy", reason: "native_children_active" },
+        };
+      }
+      if (nextActivity !== undefined) this.#activity = nextActivity;
+      this.#history.push(observed);
+      for (const listener of this.#listeners) listener(observed);
+      if (
+        childrenBefore > 0 &&
+        this.#activeChildren.size === 0 &&
+        this.#pendingRootCompletion !== undefined
+      ) {
+        const completion = this.#pendingRootCompletion;
+        this.#pendingRootCompletion = undefined;
+        this.#activity = "idle";
+        this.#history.push(completion);
+        for (const listener of this.#listeners) listener(completion);
+      }
+    });
     this.#unsubscribeExit = child.onExit((code) => {
+      this.#control.close();
       this.#process = undefined;
+      this.#activeChildren.clear();
+      this.#pendingRootCompletion = undefined;
+      this.#activity = "unknown";
       for (const listener of this.#listeners) listener({ type: "process_exited", exitCode: code });
     });
   }
@@ -279,7 +324,12 @@ class QwenStreamJsonTransport implements ProviderCoordinatorTransport {
     if (this.#process === undefined) return false;
     try {
       this.#process.write(
-        `${JSON.stringify({ type: "user", message: { role: "user", content: text } })}\n`,
+        `${JSON.stringify({
+          type: "user",
+          session_id: this.#session?.nativeSessionId,
+          message: { role: "user", content: text },
+          parent_tool_use_id: null,
+        })}\n`,
       );
       return true;
     } catch {
@@ -314,6 +364,16 @@ function publicQwenEvent(raw: unknown): unknown {
   const type = typeof record.data["type"] === "string" ? record.data["type"] : "unknown";
   const sessionId =
     typeof record.data["session_id"] === "string" ? record.data["session_id"] : null;
+  const parentToolUseId =
+    typeof record.data["parent_tool_use_id"] === "string"
+      ? record.data["parent_tool_use_id"]
+      : null;
+  if (parentToolUseId !== null)
+    return {
+      kind: type === "stream_event" ? "native_child_observed" : "native_message_observed",
+      nativeItemId: parentToolUseId,
+      data: { parentToolUseId, type, sessionId },
+    };
   if (type === "assistant") {
     const message = z.record(z.string(), z.unknown()).safeParse(record.data["message"]);
     const content =
@@ -327,7 +387,15 @@ function publicQwenEvent(raw: unknown): unknown {
               : [];
           })
         : [];
-    return { type, session_id: sessionId, message: { role: "assistant", content } };
+    return {
+      kind: "item_completed",
+      nativeItemId: typeof record.data["uuid"] === "string" ? record.data["uuid"] : null,
+      data: {
+        type: "agentMessage",
+        phase: "final_answer",
+        text: content.map((part) => part.text).join("\n"),
+      },
+    };
   }
   if (type === "stream_event") {
     const event = z.record(z.string(), z.unknown()).safeParse(record.data["event"]);
@@ -344,16 +412,69 @@ function publicQwenEvent(raw: unknown): unknown {
         session_id: sessionId,
         event: { type: "content_block_delta", delta: { text: delta.data["text"] } },
       };
+    if (
+      event.success &&
+      (event.data["type"] === "message_start" || event.data["type"] === "message_stop")
+    )
+      return { type, session_id: sessionId, event: { type: event.data["type"] } };
   }
   if (type === "result")
     return {
-      type,
-      session_id: sessionId,
-      subtype: typeof record.data["subtype"] === "string" ? record.data["subtype"] : "unknown",
-      is_error: record.data["is_error"] === true,
-      result: typeof record.data["result"] === "string" ? record.data["result"] : null,
+      kind: "turn_completed",
+      data: {
+        status: record.data["is_error"] === true ? "failed" : "completed",
+        subtype: typeof record.data["subtype"] === "string" ? record.data["subtype"] : "unknown",
+      },
+    };
+  const control = streamHostControlRequest(raw);
+  if (control !== undefined)
+    return {
+      kind: "host_request_pending",
+      nativeItemId:
+        typeof control.request["tool_use_id"] === "string"
+          ? control.request["tool_use_id"]
+          : control.requestId,
+      data: {
+        requestId: control.requestId,
+        kind: "permission_approval",
+        body: control.request,
+      },
     };
   return { type: "provider_event", eventType: type, session_id: sessionId };
+}
+
+function streamActivity(raw: unknown, activeChildren: Set<string>): "idle" | "busy" | undefined {
+  const parsed = z
+    .looseObject({
+      type: z.string(),
+      event: z.unknown().optional(),
+      parent_tool_use_id: z.string().nullable().optional(),
+    })
+    .safeParse(raw);
+  if (!parsed.success) return undefined;
+  const parent = parsed.data.parent_tool_use_id;
+  if (typeof parent === "string") {
+    const event = z.looseObject({ type: z.string() }).safeParse(parsed.data.event);
+    if (parsed.data.type === "result" || (event.success && event.data.type === "message_stop"))
+      activeChildren.delete(parent);
+    else activeChildren.add(parent);
+    return undefined;
+  }
+  if (parsed.data.type === "assistant") return "busy";
+  if (parsed.data.type === "result") return activeChildren.size === 0 ? "idle" : "busy";
+  return undefined;
+}
+
+function rootCompletion(raw: unknown): boolean {
+  const parsed = z
+    .looseObject({
+      type: z.string(),
+      event: z.unknown().optional(),
+      parent_tool_use_id: z.string().nullable().optional(),
+    })
+    .safeParse(raw);
+  if (!parsed.success || typeof parsed.data.parent_tool_use_id === "string") return false;
+  return parsed.data.type === "result";
 }
 
 function parseJson(line: string): unknown {
@@ -379,6 +500,7 @@ function nodeProcessFactory(): QwenProcessFactory {
 
 function ownedNodeProcess(child: ChildProcessWithoutNullStreams): OwnedLineProcess {
   const lines = new Set<(line: string) => void>();
+  const diagnostics = new Set<(diagnostic: ProviderProcessDiagnostic) => void>();
   const exits = new Set<(code: number | null) => void>();
   let buffer = "";
   child.stdout.on("data", (chunk: Buffer | string) => {
@@ -387,6 +509,10 @@ function ownedNodeProcess(child: ChildProcessWithoutNullStreams): OwnedLineProce
     buffer = complete.pop() ?? "";
     for (const line of complete) for (const listener of lines) listener(line);
   });
+  child.stderr.on("data", (chunk: Buffer | string) => {
+    const diagnostic = providerStderrDiagnostic(chunk);
+    for (const listener of diagnostics) listener(diagnostic);
+  });
   child.on("exit", (code) => {
     for (const listener of exits) listener(code);
   });
@@ -394,14 +520,16 @@ function ownedNodeProcess(child: ChildProcessWithoutNullStreams): OwnedLineProce
     pid: child.pid ?? 0,
     write: (input) => void child.stdin.write(input),
     onLine: (listener) => (lines.add(listener), () => lines.delete(listener)),
+    onDiagnostic: (listener) => (diagnostics.add(listener), () => diagnostics.delete(listener)),
     onExit: (listener) => (exits.add(listener), () => exits.delete(listener)),
     kill: () => void child.kill(),
   };
 }
 
-type QwenResult<T> = { readonly ok: true; readonly value: T } | ReturnType<typeof failure>;
-
-function failure(code: "busy" | "not_found" | "unsupported" | "transport_lost", message: string) {
+function failure(
+  code: "busy" | "not_found" | "unsupported" | "transport_lost" | "protocol_error",
+  message: string,
+) {
   return {
     ok: false as const,
     error: {

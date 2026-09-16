@@ -53,6 +53,10 @@ export interface Launch {
   readonly pendingChatReplies: CoordinatorEvent[];
   managedStopObservation: "not_requested" | "settled" | "uncertain";
   managedPauseObservation: "not_requested" | "settled" | "unsupported" | "uncertain";
+  managedContinueObservation: "not_requested" | "settled" | "unsupported" | "uncertain";
+  coordinatorPauseSettled: boolean;
+  coordinatorStopSettled: boolean;
+  coordinatorContinueSettled: boolean;
   readonly agentBinding: OwnedCoordinatorAgentBinding | null;
 }
 
@@ -70,18 +74,24 @@ export interface LaunchActions {
   readonly ensureSubscription: (adapter: CoordinatorAdapter) => void;
   readonly drainPending: (launch: Launch) => void;
   readonly drainChatReplies: (launch: Launch) => void;
-  readonly dispatchQueued: (launch: Launch) => void;
+  readonly dispatchQueued: (launch: Launch) => Promise<void>;
+  readonly dispatchManaged: (projectId: ProjectId, contextId: WorkContextId) => Promise<void>;
   readonly coordinatorRouting?: CoordinatorRoutingBridge | undefined;
   readonly stopManagedProject: (
     access: WorkspaceAccessContext,
     projectId: ProjectId,
     contextId: WorkContextId,
   ) => Promise<"settled" | "uncertain">;
+  readonly continueManagedProject: (
+    access: WorkspaceAccessContext,
+    projectId: ProjectId,
+    contextId: WorkContextId,
+  ) => Promise<"settled" | "unsupported" | "uncertain">;
   readonly inspectManagedPause: (
     access: WorkspaceAccessContext,
     projectId: ProjectId,
     contextId: WorkContextId,
-  ) => "settled" | "unsupported" | "uncertain";
+  ) => Promise<"settled" | "unsupported" | "uncertain">;
   readonly ownedCoordinatorAgents?: OwnedCoordinatorAgentPort | undefined;
 }
 

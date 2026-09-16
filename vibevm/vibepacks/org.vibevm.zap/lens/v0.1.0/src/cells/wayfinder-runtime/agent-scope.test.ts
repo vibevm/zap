@@ -200,7 +200,7 @@ test("empty gateway lazily persists two isolated project scopes and reuses them 
     assert.match(configText, /zap-wayfinder/);
     const configJson: unknown = JSON.parse(configText);
     if (provider === "opencode") {
-      const local = z
+      const openCodeConfig = z
         .object({
           mcp: z.object({
             "zap-wayfinder": z.object({
@@ -210,9 +210,15 @@ test("empty gateway lazily persists two isolated project scopes and reuses them 
               enabled: z.literal(true),
             }),
           }),
+          permission: z.record(z.string(), z.enum(["allow", "ask"])),
         })
-        .parse(configJson).mcp["zap-wayfinder"];
+        .parse(configJson);
+      const local = openCodeConfig.mcp["zap-wayfinder"];
       assert.equal(local.environment["CODLENS_ADAPTER_SESSION_ID"], binding.value.adapterSessionId);
+      assert.equal(openCodeConfig.permission["zap-wayfinder_codlens_inbox_wait"], "allow");
+      assert.equal(openCodeConfig.permission["zap_wayfinder_codlens_inbox_wait"], "allow");
+      assert.equal(openCodeConfig.permission["zap-wayfinder_codlens_plan_apply"], undefined);
+      assert.equal(openCodeConfig.permission["*"], "ask");
     } else {
       z.object({
         mcpServers: z.object({ "zap-wayfinder": z.object({ command: z.string() }) }),

@@ -77,7 +77,7 @@ export const NativeHostRequestIdentitySchema = z
     processEpoch: z.string().min(1).max(160),
     requestId: z.union([z.string().min(1).max(512), z.number().int()]),
     nativeThreadId: z.string().min(1).max(512),
-    nativeTurnId: z.string().min(1).max(512),
+    nativeTurnId: z.string().min(1).max(512).nullable(),
     nativeItemId: z.string().min(1).max(512),
   })
   .strict();

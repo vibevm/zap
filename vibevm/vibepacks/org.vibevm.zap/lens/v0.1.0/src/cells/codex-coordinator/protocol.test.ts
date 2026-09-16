@@ -1,7 +1,7 @@
 /** Installed Codex envelope fixtures. @scope spec://org.vibevm.zap/lens/PROP-005#coordinator-lifecycle */
 import assert from "node:assert/strict";
 import test from "node:test";
-import { CodexWireMessageSchema } from "./protocol.ts";
+import { CodexErrorNotificationSchema, CodexWireMessageSchema } from "./protocol.ts";
 
 test("accepts emittedAtMs notifications without loosening other envelopes", () => {
   assert.equal(
@@ -22,6 +22,34 @@ test("accepts emittedAtMs notifications without loosening other envelopes", () =
   );
   assert.equal(
     CodexWireMessageSchema.safeParse({ id: 1, result: {}, emittedAtMs: 1 }).success,
+    false,
+  );
+});
+
+test("validates the installed app-server error notification without retaining private details", () => {
+  const parsed = CodexErrorNotificationSchema.parse({
+    method: "error",
+    params: {
+      error: {
+        message: "upstream unavailable",
+        codexErrorInfo: { httpConnectionFailed: { httpStatusCode: 503 } },
+        additionalDetails: "not projected",
+        misalignment: null,
+      },
+      willRetry: true,
+      threadId: "thread.fixture",
+      turnId: "turn.fixture",
+    },
+  });
+  assert.equal(parsed.params.willRetry, true);
+  assert.deepEqual(parsed.params.error.codexErrorInfo, {
+    httpConnectionFailed: { httpStatusCode: 503 },
+  });
+  assert.equal(
+    CodexErrorNotificationSchema.safeParse({
+      ...parsed,
+      params: { ...parsed.params, willRetry: "yes" },
+    }).success,
     false,
   );
 });

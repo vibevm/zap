@@ -21,8 +21,8 @@ import {
   type HostRequestAnswer,
 } from "../agent-runtime/index.ts";
 import { ExecutionHostIdSchema, NativeRefSchema } from "../workspace-model/index.ts";
-import { JsonValueSchema } from "../protocol/index.ts";
 import { ProxyPolicySchema } from "../proxy-policy/index.ts";
+import { normalizeProviderEvent } from "./events.ts";
 
 export const ProviderCoordinatorIdSchema = z.enum(["claude_code", "opencode", "qwen_code"]);
 export type ProviderCoordinatorId = z.infer<typeof ProviderCoordinatorIdSchema>;
@@ -87,6 +87,9 @@ export interface ProviderCoordinatorTransport {
     readonly session: ProviderCoordinatorSession;
     readonly answer: HostRequestAnswer;
   }): Promise<ProviderResult<null>>;
+  pause(input: {
+    readonly session: ProviderCoordinatorSession;
+  }): Promise<ProviderResult<{ readonly observation: "settled" | "requested" | "uncertain" }>>;
   stop(input: { readonly session: ProviderCoordinatorSession }): Promise<ProviderResult<null>>;
   subscribe(listener: (raw: unknown) => void): () => void;
   close(): void;
@@ -161,7 +164,17 @@ export function createProviderCoordinatorAdapter(input: {
   let listener: ((event: CoordinatorEvent) => void) | undefined;
   let resumeContext: CoordinatorResumeInput | undefined;
   let stopRequested = false;
-  let stoppedObserved = false;
+  const stopState = { observed: false };
+  const stopWasObserved = () => stopState.observed;
+  let pauseRequested = false;
+  let paused = false;
+  let activity: "idle" | "busy" | "unknown" = "unknown";
+  let pendingCorrelation: Exclude<
+    CoordinatorEvent["transportCorrelation"],
+    null | undefined
+  > | null = null;
+  let observationEpoch: string | undefined;
+  let observationSequence = 0n;
   const pendingRaw: unknown[] = [];
   const unsubscribe = input.transport.subscribe((raw) => {
     if (scope === undefined || current === undefined) {
@@ -172,14 +185,42 @@ export function createProviderCoordinatorAdapter(input: {
   });
   const emit = (raw: unknown) => {
     if (scope === undefined || current === undefined) return;
+    if (observationEpoch !== current.processEpoch) {
+      observationEpoch = current.processEpoch;
+      observationSequence = 0n;
+    }
+    observationSequence += 1n;
     const event = normalizeProviderEvent(
       profile.provider,
       scope.coordinatorSessionId,
       current,
       raw,
+      pendingCorrelation,
+      observationSequence.toString(),
     );
-    if (event?.kind === "process_exited") stoppedObserved = true;
-    if (event !== null && listener !== undefined) listener(event);
+    acceptEvent(event);
+  };
+  const acceptEvent = (event: CoordinatorEvent | null) => {
+    if (event?.kind === "turn_started") activity = "busy";
+    if (event?.kind === "turn_completed" || idleStatus(event)) activity = "idle";
+    const delivered =
+      event?.kind === "process_exited" && stopRequested
+        ? { ...event, kind: "session_stopped" as const }
+        : event;
+    if (event?.kind === "process_exited") {
+      stopState.observed = true;
+      activity = "unknown";
+      pendingCorrelation = null;
+    }
+    if (delivered !== null && listener !== undefined) listener(delivered);
+    if (event?.kind === "turn_completed") pendingCorrelation = null;
+    if (pauseRequested && !stopRequested && activity === "idle") settlePause();
+  };
+  const settlePause = () => {
+    pauseRequested = false;
+    paused = true;
+    activity = "idle";
+    emit({ kind: "session_paused", data: { observation: "settled" } });
   };
   const flushPending = () => {
     for (const raw of pendingRaw.splice(0)) emit(raw);
@@ -202,7 +243,12 @@ export function createProviderCoordinatorAdapter(input: {
       );
       resumeContext = resumeInputFor(startInput, current);
       stopRequested = false;
-      stoppedObserved = false;
+      stopState.observed = false;
+      pauseRequested = false;
+      paused = false;
+      activity = startInput.bootstrapText === "" ? "idle" : "busy";
+      observationEpoch = current.processEpoch;
+      observationSequence = 0n;
       flushPending();
       return { ok: true, value: descriptor };
     },
@@ -221,7 +267,12 @@ export function createProviderCoordinatorAdapter(input: {
       );
       resumeContext = resumeInputFor(resumeInput, current);
       stopRequested = false;
-      stoppedObserved = false;
+      stopState.observed = false;
+      pauseRequested = false;
+      paused = false;
+      activity = "idle";
+      observationEpoch = current.processEpoch;
+      observationSequence = 0n;
       flushPending();
       return { ok: true, value: descriptor };
     },
@@ -261,16 +312,21 @@ export function createProviderCoordinatorAdapter(input: {
       );
     },
     async pause(lifecycle) {
-      return lifecycleAction("pause", lifecycle);
+      return lifecycleAction(lifecycle);
     },
     async stop(lifecycle) {
       if (!current || !scope || lifecycle.coordinatorSessionId !== scope.coordinatorSessionId)
         return failure("not_found", "provider session is not active");
       stopRequested = true;
-      stoppedObserved = false;
+      stopState.observed = false;
       const stopped = await input.transport.stop({ session: current });
       if (!stopped.ok) return stopped;
-      return lifecycleReceipt("stop", lifecycle, current, "requested");
+      return lifecycleReceipt(
+        "stop",
+        lifecycle,
+        current,
+        stopWasObserved() ? "settled" : "requested",
+      );
     },
     async continueSession(lifecycle) {
       if (
@@ -282,7 +338,14 @@ export function createProviderCoordinatorAdapter(input: {
         return failure("not_found", "provider session is not active");
       if (lifecycle.expectedProcessEpoch !== current.processEpoch)
         return failure("stale_epoch", "provider process epoch changed before continuation");
-      if (!stopRequested || !stoppedObserved)
+      if (paused) {
+        paused = false;
+        pauseRequested = false;
+        emit({ kind: "session_continued", data: { resumedNativeThread: false } });
+        return lifecycleReceipt("continue", lifecycle, current, "settled");
+      }
+      if (pauseRequested) return lifecycleReceipt("continue", lifecycle, current, "uncertain");
+      if (!stopRequested || !stopState.observed)
         return lifecycleReceipt("continue", lifecycle, current, "uncertain");
       const previous = current;
       const resumed = await input.transport.resume({ scope: resumeContext });
@@ -298,7 +361,10 @@ export function createProviderCoordinatorAdapter(input: {
         "not_observed",
       );
       stopRequested = false;
-      stoppedObserved = false;
+      stopState.observed = false;
+      activity = "idle";
+      observationEpoch = current.processEpoch;
+      observationSequence = 0n;
       flushPending();
       return lifecycleReceipt("continue", lifecycle, current, "settled", previous.processEpoch);
     },
@@ -314,20 +380,44 @@ export function createProviderCoordinatorAdapter(input: {
       current = undefined;
       scope = undefined;
       descriptor = undefined;
+      observationEpoch = undefined;
+      observationSequence = 0n;
     },
   };
   return { ok: true, value: adapter };
-
   async function send(
     turn: CoordinatorTurnInput,
   ): Promise<AgentRuntimeResult<CoordinatorTurnReceipt>> {
     if (!current || !scope || scope.coordinatorSessionId !== turn.coordinatorSessionId)
       return failure("not_found", "provider session is not active");
+    if (paused || pauseRequested || stopRequested)
+      return failure("busy", "provider dispatch is paused or stopped");
+    if (activity === "busy") return failure("busy", "provider session has active work");
     const sent = await input.transport.send({
       session: current,
       text: turn.text,
       clientMessageId: turn.clientMessageId,
     });
+    if (sent.ok) {
+      activity = "busy";
+      pendingCorrelation = sent.value.transportCorrelation ?? null;
+      acceptEvent({
+        coordinatorSessionId: scope.coordinatorSessionId,
+        processEpoch: current.processEpoch,
+        nativeThreadId: current.nativeThreadId,
+        nativeTurnId: sent.value.nativeTurnId,
+        nativeItemId: null,
+        kind: "turn_started",
+        sourceEventId: `${profile.provider}:${current.processEpoch}:accepted:${createHash("sha256")
+          .update(turn.clientMessageId)
+          .digest("hex")
+          .slice(0, 24)}`,
+        ...(sent.value.transportCorrelation === null
+          ? {}
+          : { transportCorrelation: sent.value.transportCorrelation }),
+        data: { type: "busy", reason: "addressed_turn_accepted" },
+      });
+    }
     return sent.ok
       ? {
           ok: true,
@@ -342,14 +432,27 @@ export function createProviderCoordinatorAdapter(input: {
         }
       : sent;
   }
-
-  function lifecycleAction(
-    action: "pause",
+  async function lifecycleAction(
     lifecycle: CoordinatorLifecycleInput,
   ): Promise<AgentRuntimeResult<CoordinatorLifecycleReceipt>> {
-    if (lifecycleCapabilities.pause === "unsupported")
-      return Promise.resolve(lifecycleReceipt(action, lifecycle, current, "unsupported"));
-    return Promise.resolve(lifecycleReceipt(action, lifecycle, current, "unsupported"));
+    if (!current || !scope || lifecycle.coordinatorSessionId !== scope.coordinatorSessionId)
+      return failure("not_found", "provider session is not active");
+    if (lifecycle.expectedProcessEpoch !== current.processEpoch)
+      return failure("stale_epoch", "provider process epoch changed before pause");
+    if (stopRequested) return lifecycleReceipt("pause", lifecycle, current, "unsupported");
+    if (paused) return lifecycleReceipt("pause", lifecycle, current, "settled");
+    pauseRequested = true;
+    if (activity === "idle") {
+      settlePause();
+      return lifecycleReceipt("pause", lifecycle, current, "settled");
+    }
+    const result = await input.transport.pause({ session: current });
+    if (!result.ok) {
+      pauseRequested = false;
+      return result;
+    }
+    if (result.value.observation === "settled") settlePause();
+    return lifecycleReceipt("pause", lifecycle, current, result.value.observation);
   }
 }
 
@@ -372,7 +475,7 @@ function capabilitiesFor(provider: ProviderCoordinatorId): CoordinatorCapabiliti
 function lifecycleFor(provider: ProviderCoordinatorId) {
   void provider;
   return CoordinatorLifecycleCapabilitiesSchema.parse({
-    pause: "unsupported",
+    pause: "interrupt_owned_session",
     stop: "owned_process",
     continue: "saved_thread_resume",
     nativeChildren: "unsupported",
@@ -416,119 +519,6 @@ function descriptorFor(
   });
 }
 
-function normalizeProviderEvent(
-  provider: ProviderCoordinatorId,
-  sessionId: CoordinatorScope["coordinatorSessionId"],
-  session: ProviderCoordinatorSession,
-  raw: unknown,
-): CoordinatorEvent | null {
-  const parsed = z
-    .object({
-      kind: z.string().optional(),
-      nativeTurnId: z.string().nullable().optional(),
-      nativeItemId: z.string().nullable().optional(),
-      data: z.unknown().optional(),
-    })
-    .catchall(z.unknown())
-    .safeParse(raw);
-  if (!parsed.success) return null;
-  const providerEvent = providerEventKind(provider, parsed.data);
-  const kind = providerEvent.kind;
-  const mapped = z
-    .enum([
-      "message_delta",
-      "item_completed",
-      "turn_completed",
-      "session_started",
-      "session_resumed",
-      "host_request_pending",
-      "host_request_resolved",
-      "process_exited",
-      "host_event_unmapped",
-    ])
-    .catch("host_event_unmapped")
-    .parse(kind);
-  return {
-    coordinatorSessionId: sessionId,
-    processEpoch: session.processEpoch,
-    nativeThreadId: session.nativeThreadId,
-    nativeTurnId: providerEvent.nativeTurnId,
-    nativeItemId: providerEvent.nativeItemId,
-    kind: mapped,
-    sourceEventId: `${provider}:${session.processEpoch}:${JSON.stringify(raw).slice(0, 240)}`,
-    data: JsonValueSchema.safeParse(providerEvent.data).success
-      ? JsonValueSchema.parse(providerEvent.data)
-      : JSON.stringify(raw),
-  };
-}
-
-function providerEventKind(
-  provider: ProviderCoordinatorId,
-  raw: Record<string, unknown>,
-): {
-  readonly kind: string | undefined;
-  readonly nativeTurnId: string | null;
-  readonly nativeItemId: string | null;
-  readonly data: unknown;
-} {
-  const explicit = stringField(raw, "kind");
-  const type = stringField(raw, "type");
-  const nativeTurnId = stringField(raw, "nativeTurnId") ?? stringField(raw, "turn_id") ?? null;
-  const nativeItemId = stringField(raw, "nativeItemId") ?? stringField(raw, "item_id") ?? null;
-  if (explicit !== undefined)
-    return { kind: explicit, nativeTurnId, nativeItemId, data: raw["data"] ?? raw };
-  if (provider === "claude_code" && type === "stream_event") {
-    const event = objectField(raw, "event");
-    const eventType = stringField(event, "type");
-    return {
-      kind:
-        eventType === "content_block_delta"
-          ? "message_delta"
-          : eventType === "message_stop"
-            ? "turn_completed"
-            : "host_event_unmapped",
-      nativeTurnId: stringField(raw, "message_id") ?? nativeTurnId,
-      nativeItemId: stringField(event, "index") ?? nativeItemId,
-      data: event ?? raw,
-    };
-  }
-  if ((provider === "claude_code" || provider === "qwen_code") && type === "assistant")
-    return {
-      kind: "message_delta",
-      nativeTurnId,
-      nativeItemId,
-      data: raw["message"] ?? { role: "assistant", content: [] },
-    };
-  if ((provider === "opencode" || provider === "qwen_code") && type === "text")
-    return { kind: "message_delta", nativeTurnId, nativeItemId, data: raw["text"] ?? raw };
-  if (
-    (provider === "opencode" || provider === "qwen_code") &&
-    (type === "result" || type === "turn.completed")
-  )
-    return { kind: "turn_completed", nativeTurnId, nativeItemId, data: raw };
-  return {
-    kind: undefined,
-    nativeTurnId,
-    nativeItemId,
-    data: { provider, eventType: type ?? "unknown" },
-  };
-}
-
-function stringField(value: Record<string, unknown> | undefined, key: string): string | undefined {
-  const field = value?.[key];
-  return typeof field === "string" ? field : undefined;
-}
-
-function objectField(
-  value: Record<string, unknown> | undefined,
-  key: string,
-): Record<string, unknown> | undefined {
-  const field = value?.[key];
-  return typeof field === "object" && field !== null && !Array.isArray(field)
-    ? z.record(z.string(), z.unknown()).parse(field)
-    : undefined;
-}
-
 function lifecycleReceipt(
   action: "pause" | "stop" | "continue",
   input: CoordinatorLifecycleInput,
@@ -556,6 +546,16 @@ function lifecycleReceipt(
       };
 }
 
+function idleStatus(event: CoordinatorEvent | null): boolean {
+  return (
+    event?.kind === "session_status" &&
+    z
+      .object({ type: z.literal("idle") })
+      .loose()
+      .safeParse(event.data).success
+  );
+}
+
 function resumeInputFor(
   input: CoordinatorStartInput | CoordinatorResumeInput,
   session: ProviderCoordinatorSession,
@@ -576,10 +576,9 @@ function resumeInputFor(
     ...(input.agentBinding === undefined ? {} : { agentBinding: input.agentBinding }),
   };
 }
-
 type ProviderResult<T> = AgentRuntimeResult<T>;
 function failure(
-  code: "invalid_input" | "unsupported" | "not_found" | "protocol_error" | "stale_epoch",
+  code: "busy" | "invalid_input" | "unsupported" | "not_found" | "protocol_error" | "stale_epoch",
   message: string,
 ): AgentRuntimeResult<never> {
   return {

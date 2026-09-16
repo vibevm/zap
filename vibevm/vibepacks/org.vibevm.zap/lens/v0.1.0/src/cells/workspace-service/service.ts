@@ -25,8 +25,8 @@ import type {
   WorkspaceService,
   WorkspaceServiceAuthorization,
   WorkspaceServiceOptions,
+  ManagedWakePort,
 } from "./types.ts";
-import type { AnnotationCommandRequest } from "../workspace-model/index.ts";
 import { WorkspaceSubscriptionHub } from "./subscriptions.ts";
 import { workspaceFailure } from "./errors.ts";
 import { stateForAgent } from "./helpers.ts";
@@ -45,6 +45,15 @@ import {
   DeltaSchema,
   itemType,
 } from "./event-model.ts";
+import { shouldWakeCoordinatorChat } from "./wake.ts";
+import { dispatchManagedProject } from "./managed-wake.ts";
+import { handleManagedWakeEvent } from "./managed-event.ts";
+import {
+  isAnnotationCommand,
+  opensRepositoryWriter,
+  repositoryCommand,
+  repositoryRead,
+} from "./repository-routing.ts";
 
 export class InProcessWorkspaceService implements WorkspaceService {
   readonly #store: WorkspaceStore;
@@ -56,6 +65,8 @@ export class InProcessWorkspaceService implements WorkspaceService {
   readonly #ownedCoordinatorAgents: WorkspaceServiceOptions["ownedCoordinatorAgents"];
   readonly #planning: WorkspaceServiceOptions["planning"];
   readonly #managedWork: WorkspaceServiceOptions["managedWork"];
+  readonly #managedWake: ManagedWakePort | undefined;
+  readonly #repositoryWorkspaces: WorkspaceServiceOptions["repositoryWorkspaces"];
   readonly #annotations: WorkspaceServiceOptions["annotations"];
   readonly #clock: () => Date;
   readonly #idFactory: (kind: string) => string;
@@ -66,7 +77,9 @@ export class InProcessWorkspaceService implements WorkspaceService {
     { readonly digest: string; readonly result: WorkspaceResult<WorkspaceCommandResponse> }
   >();
   readonly #subscriptions = new Map<CoordinatorAdapter, () => void>();
+  readonly #managedWakeUnsubscribe: (() => void) | null;
   readonly #subscriptionsHub: WorkspaceSubscriptionHub;
+  #managedEvents: Promise<void> = Promise.resolve();
   #closed = false;
 
   constructor(options: WorkspaceServiceOptions) {
@@ -79,10 +92,22 @@ export class InProcessWorkspaceService implements WorkspaceService {
     this.#ownedCoordinatorAgents = options.ownedCoordinatorAgents;
     this.#planning = options.planning;
     this.#managedWork = options.managedWork;
+    this.#managedWake = options.managedWake;
+    this.#repositoryWorkspaces = options.repositoryWorkspaces;
     this.#annotations = options.annotations;
     this.#clock = options.clock ?? (() => new Date());
     this.#idFactory = options.idFactory ?? ((kind) => `${kind}.${randomUUID()}`);
     this.#subscriptionsHub = new WorkspaceSubscriptionHub(options.store);
+    const managedWake = this.#managedWake;
+    this.#managedWakeUnsubscribe =
+      managedWake?.subscribe((event) => {
+        this.#managedEvents = this.#managedEvents
+          .then(async () => {
+            if (this.#closed) return;
+            await handleManagedWakeEvent(this.#launchActions(), managedWake, event);
+          })
+          .catch(() => undefined);
+      }) ?? null;
   }
 
   bind(authorization: WorkspaceServiceAuthorization): WorkspaceClientPort {
@@ -91,7 +116,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
     const actions = new Set<string>(authorization.allowedActions);
     return {
       read: (request) =>
-        access !== null && this.#allowed(actions, "read")
+        access !== null && actions.has("read")
           ? this.#read(access, request)
           : workspaceFailure("unauthorized", "authenticated workspace access is malformed"),
       command: (request) =>
@@ -101,7 +126,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
             )
           : this.#command(access, actions, request),
       events: (request) =>
-        access !== null && this.#allowed(actions, "events")
+        access !== null && actions.has("events")
           ? this.#store.events(access, request)
           : workspaceFailure("unauthorized", "authenticated workspace access is malformed"),
       subscribe: (request) =>
@@ -135,17 +160,18 @@ export class InProcessWorkspaceService implements WorkspaceService {
       adapter.close();
     }
     this.#subscriptions.clear();
+    this.#managedWakeUnsubscribe?.();
     this.#subscriptionsHub.close();
-  }
-
-  #allowed(actions: Set<string>, action: string): boolean {
-    return actions.has(action);
   }
 
   #read(
     access: WorkspaceAccessContext,
     request: Parameters<WorkspaceClientPort["read"]>[0],
   ): ReturnType<WorkspaceClientPort["read"]> {
+    if (repositoryRead(request))
+      return this.#repositoryWorkspaces === undefined
+        ? workspaceFailure("unavailable", "repository workspace service is not configured")
+        : this.#repositoryWorkspaces.read(access, request);
     return readWorkspace(
       this.#store,
       this.#planning,
@@ -163,12 +189,25 @@ export class InProcessWorkspaceService implements WorkspaceService {
     actions: Set<string>,
     request: WorkspaceCommandRequest,
   ): Promise<WorkspaceResult<WorkspaceCommandResponse>> {
-    if (!this.#allowed(actions, request.operation)) {
+    if (!actions.has(request.operation)) {
       return Promise.resolve(
         workspaceFailure("forbidden", `command ${request.operation} is not granted`),
       );
     }
-    if (request.operation === "session.start.v1") return this.#start(access, request);
+    if (opensRepositoryWriter(request.operation) && this.#repositoryWorkspaces !== undefined) {
+      const allowed = this.#repositoryWorkspaces.canOpenWriter(
+        access,
+        request.projectId,
+        request.contextId,
+      );
+      if (!allowed.ok) return allowed;
+    }
+    if (request.operation === "session.start.v1")
+      return startWorkspace(this.#launchActions(), access, request);
+    if (repositoryCommand(request))
+      return this.#repositoryWorkspaces === undefined
+        ? workspaceFailure("unavailable", "repository workspace service is not configured")
+        : this.#repositoryWorkspaces.command(access, request);
     if (request.operation === "chat.post.v1") {
       return postCoordinatorChat(this.#launchActions(), access, request);
     }
@@ -235,7 +274,9 @@ export class InProcessWorkspaceService implements WorkspaceService {
     if (
       result.ok &&
       this.#interactions !== undefined &&
-      (request.operation === "question.answer.v1" || request.operation === "question.amend.v1")
+      (request.operation === "question.answer.v1" ||
+        request.operation === "question.amend.v1" ||
+        request.operation === "question.cancel.v1")
     ) {
       const observed = await this.#interactions.afterQuestionCommand(
         access,
@@ -251,17 +292,12 @@ export class InProcessWorkspaceService implements WorkspaceService {
         actions: this.#launchActions(),
         access,
         response: result.value,
+        managedWake: this.#managedWake,
+        clock: this.#clock,
       });
       if (!notified.ok) return notified;
     }
     return result;
-  }
-
-  #start(
-    access: WorkspaceAccessContext,
-    request: Extract<WorkspaceCommandRequest, { operation: "session.start.v1" }>,
-  ): Promise<WorkspaceResult<WorkspaceCommandResponse>> {
-    return startWorkspace(this.#launchActions(), access, request);
   }
 
   #launchActions(): LaunchActions {
@@ -282,16 +318,34 @@ export class InProcessWorkspaceService implements WorkspaceService {
       drainChatReplies: (launch) => {
         this.#drainChatReplies(launch);
       },
-      dispatchQueued: (launch) => {
-        dispatchNextChat(this.#launchActions(), launch).catch(() => undefined);
+      dispatchQueued: async (launch) => {
+        await dispatchNextChat(this.#launchActions(), launch);
+      },
+      dispatchManaged: async (projectId, contextId) => {
+        if (this.#managedWake === undefined) return;
+        await dispatchManagedProject({
+          store: this.#store,
+          managedWake: this.#managedWake,
+          projectId,
+          contextId,
+          clock: this.#clock,
+        });
       },
       coordinatorRouting: this.#coordinatorRouting,
       stopManagedProject: async (access, projectId, contextId) => {
+        if (this.#managedWake !== undefined)
+          return this.#managedWake.stopOwned(access, projectId, contextId);
         if (this.#terminals === undefined) return "settled";
         const stopped = await this.#terminals.stopProject(access, projectId, contextId);
         return stopped.ok ? "settled" : "uncertain";
       },
-      inspectManagedPause: (access, projectId, contextId) => {
+      continueManagedProject: async (access, projectId, contextId) =>
+        this.#managedWake?.continueOwned(access, projectId, contextId) ?? "settled",
+      inspectManagedPause: async (access, projectId, contextId) => {
+        if (this.#managedWake !== undefined)
+          return this.#managedWake
+            .pauseOwned(access, projectId, contextId)
+            .then((observation) => (observation === "requested" ? "uncertain" : observation));
         if (this.#terminals === undefined) return "settled";
         const listed = this.#terminals.list(access, projectId, contextId);
         if (!listed.ok) return "uncertain";
@@ -390,11 +444,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
     if (!history.ok || history.value === null) return;
     updateWorkspaceState({ launch, event, actor, store: this.#store, now: this.#clock });
     this.#subscriptionsHub.notify(history.value);
-    if (
-      (event.kind === "turn_completed" &&
-        event.nativeThreadId === launch.descriptor.nativeThreadRef.value) ||
-      event.kind === "session_continued"
-    ) {
+    if (shouldWakeCoordinatorChat(launch, event)) {
       dispatchNextChat(this.#launchActions(), launch).catch(() => undefined);
     }
   }
@@ -412,7 +462,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
       actorId: actor?.actorId ?? null,
       occurrenceAt: this.#clock().toISOString(),
       sourceEventId: event.sourceEventId,
-      correlationId: event.nativeTurnId,
+      correlationId: event.nativeTurnId ?? event.transportCorrelation?.clientMessageId ?? null,
       causationId: null,
       planProvenance: null,
       sourceSequence: null,
@@ -421,7 +471,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
   }
 
   #actorForThread(launch: Launch, threadId: string | null): AgentDescriptor | undefined {
-    return threadId === null ? undefined : launch.actors.get(threadId);
+    return threadId === null ? launch.actors.get("__coordinator__") : launch.actors.get(threadId);
   }
 
   #child(launch: Launch, event: CoordinatorEvent): void {
@@ -519,7 +569,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
     actions: Set<string>,
     request: Parameters<WorkspaceClientPort["subscribe"]>[0],
   ): ReturnType<WorkspaceClientPort["subscribe"]> {
-    const valid = this.#allowed(actions, "subscribe");
+    const valid = actions.has("subscribe");
     return valid
       ? this.#subscriptionsHub.subscribe(access, request)
       : (async function* () {
@@ -543,14 +593,4 @@ export class InProcessWorkspaceService implements WorkspaceService {
       executionEnabled: execution.ok && execution.value.state === "running",
     };
   }
-}
-
-function isAnnotationCommand(
-  request: WorkspaceCommandRequest,
-): request is AnnotationCommandRequest {
-  return request.operation.startsWith("annotation.");
-}
-
-export function createWorkspaceService(options: WorkspaceServiceOptions): WorkspaceService {
-  return new InProcessWorkspaceService(options);
 }

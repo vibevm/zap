@@ -4,6 +4,11 @@ import { ClientRequestIdSchema, DecimalSchema } from "../protocol/index.ts";
 import { ProjectObjectReferenceSchema } from "./object-reference.ts";
 import { ProjectIdSchema, RunIdSchema, TaskIdSchema, WorkContextIdSchema } from "./ids.ts";
 import { ModelSelectionSchema } from "./model-policy.ts";
+import {
+  ManagedWorkspaceAssignmentSchema,
+  ManagedWorkspaceRequestSchema,
+} from "./workspace-assignment.ts";
+import { ProjectPlanIdSchema } from "../repository-model/index.ts";
 
 const Scope = z.object({
   clientRequestId: ClientRequestIdSchema,
@@ -22,6 +27,8 @@ export const ManagedWorkSelectionSchema = z.discriminatedUnion("mode", [
 ]);
 export const ManagedWorkCreateCommandSchema = Scope.extend({
   operation: z.literal("managed-work.create.v1"),
+  planId: ProjectPlanIdSchema.nullable().optional(),
+  workspaceRequest: ManagedWorkspaceRequestSchema.optional(),
   selection: ManagedWorkSelectionSchema.default({ mode: "project_policy" }),
   goal: z.string().min(1).max(1_000_000),
   expectedResult: z.string().min(1).max(100_000),
@@ -47,6 +54,9 @@ export const ManagedWorkStartCommandSchema = Existing.extend({
 export const ManagedWorkStopCommandSchema = Existing.extend({
   operation: z.literal("managed-work.stop.v1"),
 }).strict();
+export const ManagedWorkContinueCommandSchema = Existing.extend({
+  operation: z.literal("managed-work.continue.v1"),
+}).strict();
 export const ManagedWorkInterruptCommandSchema = Existing.extend({
   operation: z.literal("managed-work.interrupt.v1"),
 }).strict();
@@ -64,6 +74,7 @@ export const ManagedWorkCommandSchemas = [
   ManagedWorkCreateCommandSchema,
   ManagedWorkStartCommandSchema,
   ManagedWorkStopCommandSchema,
+  ManagedWorkContinueCommandSchema,
   ManagedWorkInterruptCommandSchema,
   ManagedWorkReportCommandSchema,
   ManagedWorkReviewCommandSchema,
@@ -98,17 +109,41 @@ export const ManagedWorkViewSchema = z
     terminalId: z.string().min(3).max(160),
     projectId: ProjectIdSchema,
     contextId: WorkContextIdSchema,
-    provider: z.enum(["codex", "claude_code", "opencode", "qwen_code"]),
+    planId: ProjectPlanIdSchema.nullable().default(null),
+    workspaceAssignment: ManagedWorkspaceAssignmentSchema.nullable().default(null),
+    provider: z.enum(["codex", "claude_code", "opencode", "qwen_code", "zap_mock"]),
     profileId: z.string().min(3).max(160),
     goal: z.string().min(1).max(1_000_000),
     expectedResult: z.string().min(1).max(100_000),
     targetRefs: z.array(ProjectObjectReferenceSchema).max(256),
     modelSelection: ModelSelectionSchema,
+    managedControl: z
+      .object({
+        processEpoch: z.string().min(1).max(160),
+        readiness: z.enum([
+          "starting",
+          "idle",
+          "busy",
+          "permission_required",
+          "interrupting",
+          "stopped",
+          "unknown",
+        ]),
+        providerSessionId: z.string().min(1).max(512).nullable(),
+        providerTurnId: z.string().min(1).max(512).nullable(),
+        observationId: z.string().min(3).max(160),
+        automationControlEpoch: DecimalSchema,
+        pauseRequested: z.boolean(),
+        continuation: z.enum(["live", "restart_from_saved_session", "unavailable"]),
+      })
+      .strict()
+      .nullable(),
     state: z.enum([
       "prepared",
       "launching",
       "running",
       "waiting_for_user",
+      "paused",
       "reported",
       "accepted",
       "follow_up_required",
@@ -160,7 +195,7 @@ export const ManagedWorkReadResponseSchemas = [
             tier: z.enum(["ultra", "big", "medium", "small"]).nullable(),
             projectId: ProjectIdSchema,
             contextId: WorkContextIdSchema,
-            provider: z.enum(["codex", "claude_code", "opencode", "qwen_code"]),
+            provider: z.enum(["codex", "claude_code", "opencode", "qwen_code", "zap_mock"]),
             modelId: z.string().min(1).max(256),
             effort: z.string().min(1).max(64).nullable(),
             installed: z.boolean(),
@@ -185,6 +220,9 @@ export const ManagedWorkCommandResponseSchemas = [
     .strict(),
   z.object({ operation: z.literal("managed-work.start.v1"), work: ManagedWorkViewSchema }).strict(),
   z.object({ operation: z.literal("managed-work.stop.v1"), work: ManagedWorkViewSchema }).strict(),
+  z
+    .object({ operation: z.literal("managed-work.continue.v1"), work: ManagedWorkViewSchema })
+    .strict(),
   z
     .object({ operation: z.literal("managed-work.interrupt.v1"), work: ManagedWorkViewSchema })
     .strict(),

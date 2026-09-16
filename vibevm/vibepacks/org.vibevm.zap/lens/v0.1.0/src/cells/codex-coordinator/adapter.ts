@@ -433,7 +433,7 @@ export class CodexAdapter implements CoordinatorAdapter {
       this.#events.message(worker, message);
     });
     worker.unsubscribeExit = process.value.onExit((exit) => {
-      this.#events.exited(worker, exit.code);
+      this.#events.exited(worker, exit);
     });
     this.#workers.set(ownerCoordinatorSessionId, worker);
     const initialized = await process.value.request("initialize", {

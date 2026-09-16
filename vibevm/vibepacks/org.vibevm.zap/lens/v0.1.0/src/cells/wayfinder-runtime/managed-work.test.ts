@@ -13,6 +13,7 @@ import {
 import { openWayfinderAgentFoundation } from "./agent.ts";
 import {
   createManagedAgentBackend,
+  createManagedControlRuntime,
   createManagedProviderDrivers,
   ManagedAgentProfileSchema,
   openManagedWorkStore,
@@ -93,6 +94,14 @@ test("Wayfinder runs real managed backend over authenticated workspace and broke
   const profile = managedProfile(root);
   const ids = new Map<string, number>();
   const attachmentAcks: string[] = [];
+  const control = createManagedControlRuntime({
+    adapters: [],
+    io: () => ({
+      input: () => ({ ok: true, value: undefined }),
+      interrupt: () => ({ ok: true, value: undefined }),
+      stop: () => ({ ok: true, value: undefined }),
+    }),
+  });
   const backend = createManagedAgentBackend({
     store: workStore.value,
     terminals: terminal,
@@ -106,6 +115,7 @@ test("Wayfinder runs real managed backend over authenticated workspace and broke
     execution: {
       canStart: () => ({ ok: true, value: null }),
     },
+    control,
     id: (kind) => {
       const next = (ids.get(kind) ?? 0) + 1;
       ids.set(kind, next);
@@ -446,7 +456,7 @@ test("Wayfinder runs real managed backend over authenticated workspace and broke
         ],
       },
     );
-    assert.equal(childCreated.ok, true);
+    assert.equal(childCreated.ok, true, JSON.stringify(childCreated));
     if (!childCreated.ok) return;
     assert.equal(JSON.stringify(childCreated.value).includes("controlLeaseId"), false);
     const child = ManagedWorkViewSchema.parse(childCreated.value);

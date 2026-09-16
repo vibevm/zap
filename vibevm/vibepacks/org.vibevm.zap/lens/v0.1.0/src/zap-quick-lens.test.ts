@@ -1,5 +1,6 @@
 /** Normal launcher ownership proof. @scope spec://org.vibevm.zap/lens/PROP-010#start-and-projects */
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -17,6 +18,27 @@ const ReceiptSchema = z
     presentation: z.enum(["browser", "electron"]),
   })
   .passthrough();
+
+test("--help exits before creating state or starting the product", async () => {
+  const parent = await mkdtemp(join(tmpdir(), "zap-quick-lens-help-"));
+  const state = join(parent, "must-not-exist");
+  try {
+    const child = spawn(
+      process.execPath,
+      ["--experimental-strip-types", "src/zap-quick-lens.ts", "--help", "--state-dir", state],
+      { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+    );
+    const result = await output(child);
+    assert.equal(result.code, 0);
+    assert.match(result.stdout, /^Zap Quick Lens\r?\n/);
+    assert.match(result.stdout, /Usage: zap-quick-lens \[options\]/);
+    assert.match(result.stdout, /--state-dir <path>/);
+    assert.equal(result.stderr, "");
+    assert.equal(existsSync(state), false);
+  } finally {
+    await rm(parent, { recursive: true, force: true });
+  }
+});
 
 test("ordinary launcher starts empty then a second invocation reuses the owner", async () => {
   const state = await mkdtemp(join(tmpdir(), "zap-quick-lens-cli-"));
@@ -117,4 +139,33 @@ function exitCode(child: ChildProcess): Promise<number | null> {
   return child.exitCode === null
     ? new Promise((resolve) => child.once("exit", resolve))
     : Promise.resolve(child.exitCode);
+}
+
+function output(
+  child: ChildProcess,
+): Promise<{ readonly code: number | null; readonly stdout: string; readonly stderr: string }> {
+  return new Promise((resolveOutput, reject) => {
+    let stdout = "";
+    let stderr = "";
+    child.stdout?.setEncoding("utf8");
+    child.stderr?.setEncoding("utf8");
+    child.stdout?.on("data", (chunk: string) => (stdout += chunk));
+    child.stderr?.on("data", (chunk: string) => (stderr += chunk));
+    const timer = setTimeout(() => {
+      child.kill("SIGTERM");
+      reject(
+        new Error(
+          "violates REQ spec://org.vibevm.zap/lens/PROP-010#start-and-projects: help did not exit before product startup; fix surface: handle help before launcher side effects",
+        ),
+      );
+    }, 5_000);
+    child.once("exit", (code) => {
+      clearTimeout(timer);
+      resolveOutput({ code, stdout, stderr });
+    });
+    child.once("error", (error) => {
+      clearTimeout(timer);
+      reject(error);
+    });
+  });
 }

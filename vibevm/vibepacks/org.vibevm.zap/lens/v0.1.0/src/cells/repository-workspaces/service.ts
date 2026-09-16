@@ -141,6 +141,7 @@ export function createRepositoryWorkspaceService(
         serial(`integration:${input.integrationId}:diff`, () =>
           readIntegrationDiff(runtime, input),
         ),
+      currentWriterLease: (targetWorktreeId) => runtime.writerGate.current(targetWorktreeId),
       close() {
         runtime.store.close();
       },

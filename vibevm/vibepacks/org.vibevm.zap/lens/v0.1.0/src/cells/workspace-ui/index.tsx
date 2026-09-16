@@ -1,10 +1,8 @@
 /** Shared multi-project Lens workspace renderer. @scope spec://org.vibevm.zap/lens/PROP-005#shared-code */
-import { $, component$, noSerialize, useSignal, useStore, useVisibleTask$ } from "@qwik.dev/core";
-import { QuicklensApp } from "../quicklens-ui/index.tsx";
+import { $, component$, useSignal, useStore, useVisibleTask$ } from "@qwik.dev/core";
 import {
   initialHistoryCursor,
   listWorkspaceProjects,
-  createWorkspacePlanningDataSource,
   readAgentOutput,
   readProjectWorkspace,
   readWorkspaceModelPolicy,
@@ -17,15 +15,10 @@ import {
 } from "../workspace-client/index.ts";
 import {
   WorkContextIdSchema,
-  type AgentDescriptor,
-  type AgentOutputItem,
-  type ChatMessage,
-  type HistoryCursor,
-  type HistoryEvent,
-  type ProjectDescriptor,
   type ProjectId,
   type WorkContextId,
 } from "../workspace-model/index.ts";
+import type * as WorkspaceModel from "../workspace-model/index.ts";
 import { DecimalSchema } from "../protocol/index.ts";
 import { ActivityPanel, type ActivityScope } from "./activity-panel.tsx";
 import { AgentPanel } from "./agent-panel.tsx";
@@ -40,6 +33,9 @@ import { WorkspaceHeader } from "./workspace-header.tsx";
 import type { WorkspaceAppProps } from "./workspace-app.tsx";
 import { WorkspacePortfolio } from "./workspace-portfolio.tsx";
 import { WorkspaceQuestions } from "./workspace-questions.tsx";
+import { WorkspacePlan } from "./workspace-plan.tsx";
+import { RepositoryWorkspacePanel } from "./repository-workspace-panel.tsx";
+import { PlanUnavailable, WorkspaceTabs, type WorkspaceTab } from "./workspace-tabs.tsx";
 import { createProjectEventRefresh } from "./workspace-event-refresh.ts";
 import {
   agentNames,
@@ -48,33 +44,34 @@ import {
   historyScope,
   observeEvents,
   projectNames,
+  readProjectBoardViews,
   preservesInspection,
   selectedAgent,
   uniqueEvents,
 } from "./workspace-helpers.ts";
 import "./styles.css";
 export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
-  const projects = useSignal<readonly ProjectDescriptor[]>([]);
+  const projects = useSignal<readonly WorkspaceModel.ProjectDescriptor[]>([]);
   const boardViews = useStore<Record<string, ProjectWorkspaceView | undefined>>({});
   const selectedProjectId = useSignal<ProjectId | null>(null);
   const selectedContextId = useSignal<WorkContextId | null>(null);
   const projectView = useSignal<ProjectWorkspaceView | null>(null);
-  const selectedActorId = useSignal<AgentDescriptor["actorId"] | null>(null);
-  const agentOutput = useSignal<readonly AgentOutputItem[]>([]);
+  const selectedActorId = useSignal<WorkspaceModel.AgentDescriptor["actorId"] | null>(null);
+  const agentOutput = useSignal<readonly WorkspaceModel.AgentOutputItem[]>([]);
   const agentOutputLoading = useSignal(false);
   const agentOutputError = useSignal<string | null>(null);
-  const chat = useSignal<readonly ChatMessage[]>([]);
+  const chat = useSignal<readonly WorkspaceModel.ChatMessage[]>([]);
   const chatLoading = useSignal(false);
   const chatError = useSignal<string | null>(null);
-  const activity = useSignal<readonly HistoryEvent[]>([]);
-  const activityCursor = useSignal<HistoryCursor | null>(null);
+  const activity = useSignal<readonly WorkspaceModel.HistoryEvent[]>([]);
+  const activityCursor = useSignal<WorkspaceModel.HistoryCursor | null>(null);
   const activityCoverage = useSignal<string | null>(null);
   const activityLoading = useSignal(false);
   const activityError = useSignal<string | null>(null);
   const activityScope = useSignal<ActivityScope>("all");
   const projectLoading = useSignal(false),
     globalError = useSignal<string | null>(null);
-  const tab = useSignal<"agents" | "chat" | "questions" | "plan">("agents");
+  const tab = useSignal<WorkspaceTab>("agents");
   const theme = useSignal<"light" | "dark">("light");
   const coordinatorMessage = useSignal<string | null>(null);
   const coordinatorStarting = useSignal(false);
@@ -83,30 +80,32 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
   const focusEpoch = useSignal(0),
     canvasRefreshEpoch = useSignal(0),
     setupOpen = useSignal(false);
-  const loadActivity = $(async (scope: ActivityScope, cursor: HistoryCursor | null = null) => {
-    const port = props.port;
-    if (port === undefined) return;
-    const eventScope = historyScope(
-      scope,
-      selectedProjectId.value,
-      selectedContextId.value,
-      selectedActorId.value,
-    );
-    if (eventScope === null) return;
-    activityLoading.value = true;
-    const result = await readWorkspaceHistory(port, cursor ?? initialHistoryCursor(eventScope));
-    activityLoading.value = false;
-    if (!result.ok) {
-      activityError.value = result.error.message;
-      return;
-    }
-    activityError.value = null;
-    activity.value =
-      cursor === null ? result.value.events : [...activity.value, ...result.value.events];
-    activityCursor.value = result.value.next;
-    activityCoverage.value = historyCoverageLabel(result.value.coverage);
-  });
-  const loadAgent = $(async (actorId: AgentDescriptor["actorId"]) => {
+  const loadActivity = $(
+    async (scope: ActivityScope, cursor: WorkspaceModel.HistoryCursor | null = null) => {
+      const port = props.port;
+      if (port === undefined) return;
+      const eventScope = historyScope(
+        scope,
+        selectedProjectId.value,
+        selectedContextId.value,
+        selectedActorId.value,
+      );
+      if (eventScope === null) return;
+      activityLoading.value = true;
+      const result = await readWorkspaceHistory(port, cursor ?? initialHistoryCursor(eventScope));
+      activityLoading.value = false;
+      if (!result.ok) {
+        activityError.value = result.error.message;
+        return;
+      }
+      activityError.value = null;
+      activity.value =
+        cursor === null ? result.value.events : [...activity.value, ...result.value.events];
+      activityCursor.value = result.value.next;
+      activityCoverage.value = historyCoverageLabel(result.value.coverage);
+    },
+  );
+  const loadAgent = $(async (actorId: WorkspaceModel.AgentDescriptor["actorId"]) => {
     const port = props.port;
     const view = projectView.value;
     if (port === undefined || view === null || selectedContextId.value === null) return;
@@ -204,9 +203,15 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
       if (preserveInspection && !background) return;
       const epoch = ++focusEpoch.value;
       const previousActorId = selectedActorId.value;
+      if (!background && preferred !== undefined) selectedContextId.value = preferred;
       if (!background) projectLoading.value = true;
       const result = await readProjectWorkspace(port, projectId, preferred);
-      if (focusEpoch.value !== epoch || selectedProjectId.value !== projectId) return;
+      if (
+        focusEpoch.value !== epoch ||
+        selectedProjectId.value !== projectId ||
+        (preferred !== undefined && selectedContextId.value !== preferred)
+      )
+        return;
       if (!background) projectLoading.value = false;
       if (!result.ok) {
         globalError.value = result.error.message;
@@ -243,19 +248,21 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
       return;
     }
     projects.value = result.value;
-    await Promise.all(
-      result.value.slice(0, 8).map(async (project) => {
-        const view = await readProjectWorkspace(port, project.projectId);
-        if (view.ok) boardViews[project.projectId] = view.value;
-      }),
-    );
+    Object.assign(boardViews, await readProjectBoardViews(port, result.value));
   });
-  const openPortfolioProject = $(async (projectId: ProjectId, nextTab: "agents" | "questions") => {
-    selectedProjectId.value = projectId;
-    activityScope.value = "project";
-    tab.value = nextTab;
-    await loadProject(projectId);
-    await loadActivity("project");
+  const openPortfolioProject = $(
+    async (projectId: ProjectId, nextTab: WorkspaceTab, contextId?: WorkContextId) => {
+      selectedProjectId.value = projectId;
+      activityScope.value = "project";
+      tab.value = nextTab;
+      await Promise.all([loadProject(projectId, contextId), loadActivity("project")]);
+    },
+  );
+  const refreshCurrentProject = $(async () => {
+    canvasRefreshEpoch.value += 1;
+    const projectId = selectedProjectId.value;
+    const contextId = selectedContextId.value;
+    if (projectId !== null && contextId !== null) await loadProject(projectId, contextId, true);
   });
   useVisibleTask$(({ cleanup }) => {
     theme.value = window.localStorage.getItem("quicklens.theme") === "dark" ? "dark" : "light";
@@ -283,7 +290,6 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
       refresh.close();
     });
   });
-
   if (
     tab.value === "plan" &&
     projectView.value?.snapshot.state === "ready" &&
@@ -292,22 +298,14 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
     props.port !== undefined
   ) {
     return (
-      <QuicklensApp
-        source={noSerialize(
-          createWorkspacePlanningDataSource({
-            port: props.port,
-            projectId: selectedProjectId.value,
-            contextId: selectedContextId.value,
-          }),
-        )}
-        headerActionLabel="Back to workspace"
-        onHeaderAction$={$(() => {
-          tab.value = "agents";
-        })}
+      <WorkspacePlan
+        port={props.port}
+        projectId={selectedProjectId.value}
+        contextId={selectedContextId.value}
+        onBack$={$(() => (tab.value = "agents"))}
       />
     );
   }
-
   return (
     <div class={`workspace-shell theme-${theme.value}`}>
       <WorkspaceHeader
@@ -370,12 +368,16 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
           ) : selectedProjectId.value === null ? (
             <WorkspacePortfolio
               port={props.port}
-              projects={projects.value.slice(0, 8)}
+              projects={projects.value}
               views={boardViews}
               theme={theme.value}
               refreshEpoch={canvasRefreshEpoch.value}
-              onOpenProject$={$((projectId) => openPortfolioProject(projectId, "agents"))}
-              onOpenQuestions$={$((projectId) => openPortfolioProject(projectId, "questions"))}
+              onOpenProject$={$((projectId, contextId) =>
+                openPortfolioProject(projectId, "agents", contextId),
+              )}
+              onOpenQuestions$={$((projectId, contextId) =>
+                openPortfolioProject(projectId, "questions", contextId),
+              )}
             />
           ) : projectLoading.value ||
             projectView.value === null ||
@@ -383,17 +385,7 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
             <div class="workspace-panel workspace-loading">Loading project workspace…</div>
           ) : (
             <>
-              <nav class="workspace-tabs" aria-label="Project workspace views">
-                {(["agents", "chat", "questions", "plan"] as const).map((item) => (
-                  <button
-                    key={item}
-                    class={tab.value === item ? "selected" : ""}
-                    onClick$={() => (tab.value = item)}
-                  >
-                    {item === "agents" ? "Agents" : item.charAt(0).toUpperCase() + item.slice(1)}
-                  </button>
-                ))}
-              </nav>
+              <WorkspaceTabs selected={tab.value} onSelect$={$((next) => (tab.value = next))} />
               {tab.value === "agents" ? (
                 <>
                   <CoordinatorControls
@@ -483,10 +475,7 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
                       await loadAgent(actorId);
                       activityScope.value = "agent";
                     })}
-                    onChanged$={$(async () => {
-                      if (selectedProjectId.value !== null && selectedContextId.value !== null)
-                        await loadProject(selectedProjectId.value, selectedContextId.value, true);
-                    })}
+                    onChanged$={refreshCurrentProject}
                   />
                   <ManagedTerminalWorkspace
                     key={`${selectedProjectId.value}:${selectedContextId.value}`}
@@ -564,11 +553,20 @@ export const WorkspaceApp = component$<WorkspaceAppProps>((props) => {
                       );
                   })}
                 />
+              ) : tab.value === "workspaces" ? (
+                <RepositoryWorkspacePanel
+                  key={`repository:${selectedProjectId.value}:${selectedContextId.value}`}
+                  port={props.port}
+                  projectId={selectedProjectId.value}
+                  contextId={selectedContextId.value}
+                  onOpenContext$={$(async (projectId, contextId) => {
+                    selectedProjectId.value = projectId;
+                    await loadProject(projectId, contextId);
+                  })}
+                  onChanged$={refreshCurrentProject}
+                />
               ) : projectView.value.snapshot.state === "unavailable" ? (
-                <div class="workspace-panel workspace-empty">
-                  <strong>Plan view unavailable</strong>
-                  <span>{projectView.value.snapshot.reason}</span>
-                </div>
+                <PlanUnavailable reason={projectView.value.snapshot.reason} />
               ) : null}
             </>
           )}

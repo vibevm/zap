@@ -1,0 +1,39 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "annotations_product",
+  "scenarioId": "annotations.deferred-trash-restore",
+  "runnerId": "workspace.annotations-product",
+  "seed": "seed.annotations-deferred-1",
+  "tags": ["annotations", "deferred-instruction", "trash", "zero-llm"],
+  "coverage": [
+    "annotations.notes-trash-restore",
+    "annotations.deferred-delivery-ack",
+    "workspace.operation.annotation.note.create.v1",
+    "workspace.operation.annotation.note.get.v1",
+    "workspace.operation.annotation.note.list.v1",
+    "workspace.operation.annotation.note.archive.v1",
+    "workspace.operation.annotation.note.restore.v1",
+    "workspace.operation.annotation.trash.list.v1"
+  ],
+  "inputs": {
+    "projectId": "project.annotations.product",
+    "contextId": "context.annotations.product",
+    "targetDomain": "work_task",
+    "targetRef": "task.annotations.product",
+    "recipientActorId": "actor.annotations.product",
+    "firstAttemptId": "attempt.annotations.first",
+    "restoredAttemptId": "attempt.annotations.restored",
+    "title": "Review the exact work item",
+    "bodyMarkdown": "Read the anchored constraints before changing this work item.",
+    "sourceBasisRef": "basis.annotations.product.1"
+  },
+  "expected": {
+    "initialInstructionCount": 1,
+    "archivedInstructionCount": 0,
+    "restoredInstructionCount": 1,
+    "trashEntryCount": 1,
+    "restoredVersion": "2",
+    "wrongActorAckRefused": true,
+    "zeroLlmInference": true
+  }
+}

@@ -1,4 +1,4 @@
-/** Real-Git disposable fixture support; never used by product runtime. */
+/** Real-Git disposable fixture support. @scope spec://org.vibevm.zap/lens/PROP-014#verification */
 import { createHash } from "node:crypto";
 import {
   lstatSync,

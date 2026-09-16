@@ -118,6 +118,10 @@ export function provisionalLaunch(
     pendingChatReplies: [],
     managedStopObservation: "not_requested",
     managedPauseObservation: "not_requested",
+    managedContinueObservation: "not_requested",
+    coordinatorPauseSettled: false,
+    coordinatorStopSettled: false,
+    coordinatorContinueSettled: false,
     agentBinding,
   };
 }

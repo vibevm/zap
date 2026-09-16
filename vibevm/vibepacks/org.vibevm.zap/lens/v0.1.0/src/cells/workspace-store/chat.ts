@@ -221,9 +221,18 @@ function appendReply(
   const dispatched = state.database.get(
     `SELECT c.public_json FROM workspace_chat_dispatch d
      JOIN workspace_chat c ON c.message_id = d.message_id
-     WHERE d.session_id = ? AND d.process_epoch = ? AND d.native_turn_id = ?`,
+     WHERE d.session_id = ? AND d.process_epoch = ? AND
+       ((? IS NOT NULL AND d.native_turn_id = ?) OR
+        (? IS NOT NULL AND json_extract(d.transport_correlation, '$.clientMessageId') = ?))`,
     DispatchMessageRowSchema,
-    [input.sessionId, input.processEpoch, input.nativeTurnId],
+    [
+      input.sessionId,
+      input.processEpoch,
+      input.nativeTurnId,
+      input.nativeTurnId,
+      input.transportCorrelation?.clientMessageId ?? null,
+      input.transportCorrelation?.clientMessageId ?? null,
+    ],
   );
   const request =
     dispatched === null ? null : state.parse(dispatched.public_json, ChatMessageSchema);
@@ -245,7 +254,7 @@ function appendReply(
     role: "assistant",
     bodyMarkdown: input.bodyMarkdown,
     artifactRefs: [],
-    correlationId: input.nativeTurnId,
+    correlationId: input.nativeTurnId ?? input.transportCorrelation?.clientMessageId ?? null,
     causationMessageId: request.messageId,
     deliveryState: "answered",
     revision: DecimalSchema.parse(String(sequence)),

@@ -1,7 +1,13 @@
 /** Provider capability evidence. @scope spec://org.vibevm.zap/lens/PROP-010#provider-support */
 import { z } from "zod";
 
-export const ManagedProviderIdSchema = z.enum(["codex", "claude_code", "opencode", "qwen_code"]);
+export const ManagedProviderIdSchema = z.enum([
+  "codex",
+  "claude_code",
+  "opencode",
+  "qwen_code",
+  "zap_mock",
+]);
 export type ManagedProviderId = z.infer<typeof ManagedProviderIdSchema>;
 export const ProviderCapabilitySchema = z.enum(["supported", "conditional", "unsupported"]);
 export const ManagedProviderCapabilitiesSchema = z

@@ -10,15 +10,24 @@ import {
   ArtifactRefIdSchema,
   AttemptIdSchema,
   ManagedWorkSelectionSchema,
+  ManagedWorkspaceRequestSchema,
   ProjectObjectReferenceSchema,
   RunIdSchema,
 } from "../workspace-model/index.ts";
 import type { AdapterSessionId } from "../transport/index.ts";
+import {
+  GitObjectIdSchema,
+  IntegrationAttemptIdSchema,
+  ProjectPlanIdSchema,
+  RepositoryWorktreeIdSchema,
+  RevisionSchema,
+} from "../repository-model/index.ts";
 
 export const ManagedAgentCreateInputSchema = z
   .object({
     clientRequestId: ClientRequestIdSchema,
     selection: ManagedWorkSelectionSchema.default({ mode: "project_policy" }),
+    workspace: ManagedWorkspaceRequestSchema.default({ mode: "inherit" }),
     goal: z.string().min(1).max(1_000_000),
     expectedResult: z.string().min(1).max(100_000),
     targetRefs: z.array(ProjectObjectReferenceSchema).max(256),
@@ -58,6 +67,52 @@ export interface ManagedWorkAgentPort {
   read(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
   report(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
   acknowledgeAttachment(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+}
+
+export const RepositoryPlanListAgentInputSchema = z.object({}).strict();
+export const RepositoryWorktreeListAgentInputSchema = z
+  .object({ planId: ProjectPlanIdSchema })
+  .strict();
+export const RepositoryWorktreeGetAgentInputSchema = z
+  .object({ worktreeId: RepositoryWorktreeIdSchema })
+  .strict();
+export const RepositoryIntegrationListAgentInputSchema = z
+  .object({ planId: ProjectPlanIdSchema })
+  .strict();
+export const RepositoryIntegrationGetAgentInputSchema = z
+  .object({ integrationId: IntegrationAttemptIdSchema })
+  .strict();
+export const RepositoryIntegrationDiffAgentInputSchema =
+  RepositoryIntegrationGetAgentInputSchema.extend({
+    maximumBytes: z.number().int().min(1_024).max(1_000_000).default(128_000),
+  }).strict();
+export const RepositoryIntegrationPrepareAgentInputSchema = z
+  .object({
+    clientRequestId: ClientRequestIdSchema,
+    sourceWorktreeId: RepositoryWorktreeIdSchema,
+    targetWorktreeId: RepositoryWorktreeIdSchema,
+    expectedSourceHead: GitObjectIdSchema,
+    expectedTargetHead: GitObjectIdSchema,
+  })
+  .strict();
+export const RepositoryIntegrationTestAgentInputSchema = z
+  .object({
+    clientRequestId: ClientRequestIdSchema,
+    integrationId: IntegrationAttemptIdSchema,
+    expectedRevision: RevisionSchema,
+    profileId: z.string().min(1).max(160),
+  })
+  .strict();
+
+export interface RepositoryWorkspaceAgentPort {
+  planList(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+  worktreeList(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+  worktreeGet(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+  integrationList(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+  integrationGet(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+  integrationDiff(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+  integrationPrepare(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
+  integrationTest(session: AdapterSessionId, input: unknown): Promise<Result<JsonValue>>;
 }
 
 export const NativeWorkBeforeInputSchema = z

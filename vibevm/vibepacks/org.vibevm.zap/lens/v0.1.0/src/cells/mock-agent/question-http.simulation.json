@@ -1,0 +1,59 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "coordinator_http",
+  "scenarioId": "coordinator.question-pause-answer-continue",
+  "runnerId": "coordinator_http",
+  "tags": ["coordinator", "http", "question", "pause", "continue", "ack"],
+  "coverage": [
+    "coordinator.http-question-lifecycle",
+    "question.coordinator-late-answer",
+    "lifecycle.coordinator-pause-continue",
+    "coordinator.same-session",
+    "inbox.coordinator-ack",
+    "workspace.operation.session.start.v1",
+    "workspace.operation.chat.post.v1",
+    "workspace.operation.chat.page.v1",
+    "workspace.operation.question.list.v1",
+    "workspace.operation.question.answer.v1",
+    "workspace.operation.project.execution.get.v1",
+    "workspace.operation.project.pause.v1",
+    "workspace.operation.project.continue.v1"
+  ],
+  "scenarioFile": {
+    "protocol": "zap-mock-scenario/1",
+    "seed": "seed.question-http",
+    "scenario": {
+      "scenarioId": "scenario.question-http",
+      "steps": [
+        { "kind": "ready" },
+        {
+          "kind": "question",
+          "questionId": "question.mock.http",
+          "prompt": "Provide a signal",
+          "options": ["yes"]
+        },
+        {
+          "kind": "late_answer",
+          "questionId": "question.mock.http",
+          "acknowledgementId": "ack.mock.http"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "initialMessage": "ask",
+    "answerText": "HTTP-ANSWER",
+    "pauseBeforeAnswer": true,
+    "pauseReason": "Retain the exact question before the answer arrives.",
+    "continueReason": "Deliver the retained answer to the same mock session."
+  },
+  "expected": {
+    "questionPrompt": "Provide a signal",
+    "pausedExecutionState": "paused",
+    "acknowledgementsBeforeContinue": 0,
+    "acknowledgementsAfterContinue": 1,
+    "finalModelStatus": "complete",
+    "sameSession": true,
+    "zeroLlmInference": true
+  }
+}

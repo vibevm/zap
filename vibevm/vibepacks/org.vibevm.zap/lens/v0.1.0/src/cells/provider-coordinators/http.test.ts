@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createOpenCodeHttpTransportFactory } from "./http.ts";
 import { createOpenCodeOwnedTransportFactory, type OpenCodeDaemonFactory } from "./opencode.ts";
+import { createProviderCoordinatorAdapter, type ProviderCoordinatorProfile } from "./index.ts";
 import {
   AgentSessionIdSchema,
   ProjectIdSchema,
@@ -28,6 +29,9 @@ test("OpenCode HTTP transport uses official session, prompt_async, message and e
         { status: 200, headers: { "content-type": "text/event-stream" } },
       );
     if (path.endsWith("/prompt_async")) return new Response(null, { status: 204 });
+    if (path === "/session/status")
+      return Response.json({ "opencode.session.fixture": { type: "busy" } });
+    if (path.endsWith("/abort")) return Response.json(true);
     if (path.endsWith("/message")) return Response.json([]);
     return Response.json({});
   };
@@ -36,7 +40,7 @@ test("OpenCode HTTP transport uses official session, prompt_async, message and e
     provider: "opencode",
     executablePath: "C:/fixture/opencode.exe",
     cwd: "C:/fixture",
-    modelId: "fixture-model",
+    modelId: "fixture/fixture-model",
     effort: null,
     endpoint: "http://127.0.0.1:4170",
   });
@@ -53,7 +57,7 @@ test("OpenCode HTTP transport uses official session, prompt_async, message and e
       coordinatorActorId: ActorIdSchema.parse("actor.fixture"),
       hostId: ExecutionHostIdSchema.parse("host.fixture"),
       profileId: "profile.opencode.fixture",
-      modelId: "selected-model",
+      modelId: "fixture/selected-model",
       cwd: "C:/fixture",
       bootstrapText: "bootstrap fixture",
       bootstrapBasis: "fixture",
@@ -71,11 +75,16 @@ test("OpenCode HTTP transport uses official session, prompt_async, message and e
     assert.equal(sent.value.nativeTurnId, null);
     assert.equal(sent.value.transportCorrelation?.provenance, "transport_correlation");
   }
+  const paused = await opened.value.pause({ session: started.value });
+  assert.equal(paused.ok && paused.value.observation, "requested");
+  assert.equal(
+    requests.some((request) => request.path.endsWith("/abort")),
+    true,
+  );
   const prompt = requests.filter((request) => request.path.endsWith("/prompt_async"));
   assert.equal(prompt.length, 2);
   assert.deepEqual(prompt[1]?.body, {
-    messageID: "message.fixture",
-    model: "selected-model",
+    model: { providerID: "fixture", modelID: "selected-model" },
     parts: [{ type: "text", text: "fixture" }],
   });
   await new Promise((resolve) => setImmediate(resolve));
@@ -89,7 +98,7 @@ test("OpenCode HTTP transport uses official session, prompt_async, message and e
       coordinatorActorId: ActorIdSchema.parse("actor.fixture"),
       hostId: ExecutionHostIdSchema.parse("host.fixture"),
       profileId: "profile.opencode.fixture",
-      modelId: "selected-model",
+      modelId: "fixture/selected-model",
       cwd: "C:/fixture",
       nativeThreadId: "opencode.session.fixture",
     },
@@ -148,7 +157,7 @@ test("OpenCode owned factory launches one authenticated pure daemon in the exact
     provider: "opencode",
     executablePath: "C:/fixture/opencode.exe",
     cwd: "C:/configured-must-not-win",
-    modelId: "fixture-model",
+    modelId: "fixture/fixture-model",
     effort: null,
     endpoint: null,
     argumentPrefix: ["C:/fixture/opencode-prefix"],
@@ -192,4 +201,134 @@ test("OpenCode owned factory launches one authenticated pure daemon in the exact
   );
   opened.value.close();
   assert.equal(killed, true);
+});
+
+test("OpenCode HTTP failures retain safe schema metadata without response text", async () => {
+  const rawMessage = "invalid field synthetic-secret-must-not-escape";
+  const opened = await createOpenCodeHttpTransportFactory({
+    fetchImpl: () =>
+      Promise.resolve(
+        Response.json(
+          {
+            _tag: "InvalidRequestError",
+            message: rawMessage,
+            kind: "validation",
+            field: "messageID",
+          },
+          { status: 400 },
+        ),
+      ),
+  }).open({
+    profileId: "profile.opencode.error",
+    provider: "opencode",
+    executablePath: "C:/fixture/opencode.exe",
+    cwd: "C:/fixture",
+    modelId: "fixture/fixture-model",
+    effort: null,
+    endpoint: "http://127.0.0.1:4170",
+  });
+  assert.equal(opened.ok, true);
+  if (!opened.ok) return;
+  const result = await opened.value.start({
+    scope: {
+      coordinatorSessionId: AgentSessionIdSchema.parse("session.opencode.error"),
+      projectId: ProjectIdSchema.parse("project.fixture"),
+      contextId: WorkContextIdSchema.parse("context.fixture"),
+      conversationId: ConversationIdSchema.parse("conversation.fixture"),
+      coordinatorActorId: ActorIdSchema.parse("actor.fixture"),
+      hostId: ExecutionHostIdSchema.parse("host.fixture"),
+      profileId: "profile.opencode.error",
+      cwd: "C:/fixture",
+      bootstrapText: "",
+      bootstrapBasis: "fixture",
+    },
+  });
+  assert.equal(result.ok, false);
+  if (result.ok) return;
+  assert.match(result.error.message, /InvalidRequestError\/validation\/messageID/u);
+  assert.match(result.error.message, /sha256=[0-9a-f]{64} bytes=/u);
+  assert.doesNotMatch(result.error.message, /synthetic-secret/u);
+});
+
+test("OpenCode public Stop settles only after the owned daemon exits", async () => {
+  let exitListener: ((code: number | null) => void) | undefined;
+  let killRequested = false;
+  const processFactory: OpenCodeDaemonFactory = {
+    spawn: () => ({
+      pid: 9202,
+      onExit(listener) {
+        exitListener = listener;
+        return () => {
+          if (exitListener === listener) exitListener = undefined;
+        };
+      },
+      kill() {
+        killRequested = true;
+      },
+    }),
+  };
+  const fetchImpl: typeof fetch = async (input) => {
+    const path = new URL(input instanceof Request ? input.url : input.toString()).pathname;
+    if (path === "/doc") return Response.json({ openapi: "3.1.0" });
+    if (path === "/session") return Response.json({ id: "owned.session.stop" });
+    if (path.endsWith("/abort")) return Response.json(true);
+    if (path === "/event") return new Response(null, { status: 200 });
+    return Response.json({});
+  };
+  const profile: ProviderCoordinatorProfile = {
+    profileId: "profile.opencode.stop",
+    provider: "opencode",
+    executablePath: "C:/fixture/opencode.exe",
+    cwd: "C:/fixture",
+    modelId: "fixture/fixture-model",
+    effort: null,
+    endpoint: null,
+  };
+  const transport = await createOpenCodeOwnedTransportFactory({
+    processFactory,
+    fetchImpl,
+    reservePort: () => Promise.resolve(42118),
+  }).open(profile);
+  assert.equal(transport.ok, true);
+  if (!transport.ok) return;
+  const adapter = createProviderCoordinatorAdapter({
+    profile,
+    hostId: "host.opencode.stop",
+    transport: transport.value,
+  });
+  assert.equal(adapter.ok, true);
+  if (!adapter.ok) return;
+  const sessionId = AgentSessionIdSchema.parse("session.opencode.stop");
+  const started = await adapter.value.start({
+    coordinatorSessionId: sessionId,
+    projectId: ProjectIdSchema.parse("project.fixture"),
+    contextId: WorkContextIdSchema.parse("context.fixture"),
+    conversationId: ConversationIdSchema.parse("conversation.fixture"),
+    coordinatorActorId: ActorIdSchema.parse("actor.fixture"),
+    hostId: ExecutionHostIdSchema.parse("host.opencode.stop"),
+    profileId: profile.profileId,
+    cwd: "C:/fixture",
+    bootstrapText: "",
+    bootstrapBasis: "fixture",
+  });
+  assert.equal(started.ok, true);
+  if (!started.ok) return;
+  const events: Array<{ readonly kind: string }> = [];
+  adapter.value.subscribe((event) => events.push(event));
+  const stopped = await adapter.value.stop?.({
+    coordinatorSessionId: sessionId,
+    expectedProcessEpoch: started.value.processEpoch,
+  });
+  assert.equal(stopped?.ok && stopped.value.observation, "requested");
+  assert.equal(killRequested, true);
+  assert.equal(
+    events.some((event) => event.kind === "session_stopped"),
+    false,
+  );
+  exitListener?.(0);
+  assert.equal(
+    events.some((event) => event.kind === "session_stopped"),
+    true,
+  );
+  adapter.value.close();
 });

@@ -7,6 +7,112 @@
   background: #12151d;
 }
 
+.canvas-scope-selector {
+  grid-column: 1 / -1;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.canvas-scope-selector summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.canvas-scope-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.canvas-scope-options label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+}
+
+.repository-workspace-panel,
+.repository-actions,
+.repository-create-plan,
+.repository-integration-card {
+  display: grid;
+  gap: 10px;
+}
+
+.repository-create-plan {
+  grid-template-columns: minmax(220px, 1fr) auto;
+  align-items: end;
+}
+
+.repository-plan-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin: 0;
+}
+
+.repository-plan-summary div,
+.repository-worktree,
+.repository-integration-card {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.repository-plan-summary dd {
+  margin: 4px 0 0;
+}
+
+.repository-worktree-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+}
+
+.repository-worktree {
+  display: grid;
+  gap: 4px;
+  border-left: 4px solid var(--muted);
+}
+
+.repository-worktree.lane-plan_root {
+  border-left-color: var(--accent);
+}
+
+.repository-worktree.lane-worker {
+  border-left-color: #7b7ee0;
+}
+
+.repository-worktree.lane-integration {
+  border-left-color: #7d9b76;
+}
+
+.repository-worktree span,
+.repository-worktree small {
+  color: var(--muted);
+}
+
+.repository-integration-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr)) auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.repository-integration-card pre {
+  max-height: 320px;
+  overflow: auto;
+  padding: 10px;
+  border-radius: 8px;
+  color: #d8e7d3;
+  background: #12151d;
+  white-space: pre-wrap;
+}
+
 .managed-terminal-facts {
   display: flex;
   flex-wrap: wrap;

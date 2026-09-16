@@ -2,17 +2,29 @@
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { z } from "zod";
-import { ProductProjectSchema } from "../workspace-model/index.ts";
+import { ProductPlanContextSchema, ProductProjectSchema } from "../workspace-model/index.ts";
 import {
+  TrustedPlanContextRegistrationSchema,
   TrustedProjectRegistrationSchema,
+  type TrustedPlanContextRegistration,
   type TrustedProjectRegistration,
 } from "../workspace-store/index.ts";
+
+const PlanEntrySchema = z
+  .object({
+    context: ProductPlanContextSchema,
+    registration: TrustedPlanContextRegistrationSchema,
+    requestDigest: z.string().length(64),
+  })
+  .strict();
+export type ProductPlanContextEntry = z.infer<typeof PlanEntrySchema>;
 
 const EntrySchema = z
   .object({
     project: ProductProjectSchema,
     registration: TrustedProjectRegistrationSchema,
     requestDigest: z.string().length(64),
+    plans: z.array(PlanEntrySchema).max(256).default([]),
   })
   .strict();
 export type ProductProjectEntry = z.infer<typeof EntrySchema>;
@@ -24,7 +36,12 @@ export interface ProductAppRegistry {
   entries(): readonly ProductProjectEntry[];
   findByRequest(registrationId: string): ProductProjectEntry | null;
   findByDirectory(directoryPath: string): ProductProjectEntry | null;
+  findPlanByRequest(registrationId: string): ProductPlanContextEntry | null;
   put(entry: ProductProjectEntry): ProductStoreResult<ProductProjectEntry>;
+  putPlan(
+    projectId: string,
+    entry: ProductPlanContextEntry,
+  ): ProductStoreResult<ProductPlanContextEntry>;
 }
 
 export type ProductStoreResult<T> =
@@ -65,6 +82,10 @@ export function openProductAppRegistry(path: string): ProductStoreResult<Product
         state.entries.find((entry) => entry.registration.registrationId === registrationId) ?? null,
       findByDirectory: (directoryPath) =>
         state.entries.find((entry) => entry.project.directoryPath === directoryPath) ?? null,
+      findPlanByRequest: (registrationId) =>
+        state.entries
+          .flatMap((entry) => entry.plans)
+          .find((entry) => entry.registration.registrationId === registrationId) ?? null,
       put: (input) => {
         const parsed = EntrySchema.safeParse(input);
         if (!parsed.success) return failure("product project entry is invalid");
@@ -77,6 +98,50 @@ export function openProductAppRegistry(path: string): ProductStoreResult<Product
             : failure("registration request identity changed content");
         if (state.entries.length >= 256) return failure("product project limit is reached");
         state = { version: 1, entries: [...state.entries, parsed.data] };
+        const saved = persist();
+        return saved.ok ? { ok: true, value: parsed.data } : saved;
+      },
+      putPlan: (projectId, input) => {
+        const parsed = PlanEntrySchema.safeParse(input);
+        if (!parsed.success) return failure("product plan context entry is invalid");
+        const projectIndex = state.entries.findIndex(
+          (entry) => entry.project.projectId === projectId,
+        );
+        const project = state.entries[projectIndex];
+        if (project === undefined) return failure("product project is unavailable");
+        const prior = state.entries
+          .flatMap((entry) => entry.plans)
+          .find(
+            (entry) =>
+              entry.registration.registrationId === parsed.data.registration.registrationId,
+          );
+        if (prior !== undefined)
+          return prior.requestDigest === parsed.data.requestDigest
+            ? { ok: true, value: prior }
+            : failure("plan context request identity changed content");
+        if (
+          project.plans.some(
+            (entry) =>
+              entry.context.planId === parsed.data.context.planId ||
+              entry.context.contextId === parsed.data.context.contextId,
+          )
+        )
+          return failure("plan or context identity is already registered");
+        const nextProject = ProductProjectSchema.parse({
+          ...project.project,
+          planContexts: [...project.project.planContexts, parsed.data.context],
+        });
+        const nextEntry = {
+          ...project,
+          project: nextProject,
+          plans: [...project.plans, parsed.data],
+        };
+        state = {
+          version: 1,
+          entries: state.entries.map((entry, index) =>
+            index === projectIndex ? nextEntry : entry,
+          ),
+        };
         const saved = persist();
         return saved.ok ? { ok: true, value: parsed.data } : saved;
       },
@@ -93,5 +158,9 @@ function failure(message: string): ProductStoreResult<never> {
 }
 
 export function registrationOf(entry: ProductProjectEntry): TrustedProjectRegistration {
+  return entry.registration;
+}
+
+export function planRegistrationOf(entry: ProductPlanContextEntry): TrustedPlanContextRegistration {
   return entry.registration;
 }

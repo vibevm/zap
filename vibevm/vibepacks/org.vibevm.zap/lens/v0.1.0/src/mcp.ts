@@ -11,6 +11,7 @@ import {
   createAgentHttpClient,
   createManagedWorkHttpClient,
   createNativeWorkHttpClient,
+  createRepositoryWorkHttpClient,
 } from "./cells/http/index.ts";
 import { createCodlensMcpServer } from "./cells/mcp/index.ts";
 import { CredentialSchema } from "./cells/protocol/index.ts";
@@ -19,7 +20,7 @@ import { createAgentPlanningHttpClient } from "./cells/workspace-planning/index.
 
 export async function runMcp(environment: NodeJS.ProcessEnv): Promise<number> {
   const brokerUrl = environment["CODLENS_URL"];
-  const principal = agentCredential(environment);
+  const principal = readAgentCredential(environment);
   if (brokerUrl === undefined || !principal.success) {
     return 2;
   }
@@ -42,12 +43,13 @@ export async function runMcp(environment: NodeJS.ProcessEnv): Promise<number> {
     }),
     managedWork: createManagedWorkHttpClient({ baseUrl, principalToken: principal.data }),
     nativeWork: createNativeWorkHttpClient({ baseUrl, principalToken: principal.data }),
+    repositoryWork: createRepositoryWorkHttpClient({ baseUrl, principalToken: principal.data }),
   });
   await server.connect(new StdioServerTransport());
   return 0;
 }
 
-function agentCredential(environment: NodeJS.ProcessEnv) {
+export function readAgentCredential(environment: NodeJS.ProcessEnv) {
   const direct = CredentialSchema.safeParse(environment["CODLENS_PRINCIPAL_TOKEN"]);
   if (direct.success) return direct;
   const path = environment["CODLENS_CREDENTIAL_FILE"];
@@ -57,10 +59,20 @@ function agentCredential(environment: NodeJS.ProcessEnv) {
     const parsed = z
       .looseObject({
         protocol: z.literal("lens/1"),
-        agent: z.looseObject({ principalToken: CredentialSchema }),
+        principalToken: CredentialSchema.optional(),
+        agent: z.looseObject({ principalToken: CredentialSchema }).optional(),
+      })
+      .superRefine((value, context) => {
+        if ((value.principalToken === undefined) === (value.agent === undefined))
+          context.addIssue({
+            code: "custom",
+            message: "credential file must contain exactly one agent credential shape",
+          });
       })
       .safeParse(raw);
-    return parsed.success ? CredentialSchema.safeParse(parsed.data.agent.principalToken) : direct;
+    return parsed.success
+      ? CredentialSchema.safeParse(parsed.data.principalToken ?? parsed.data.agent?.principalToken)
+      : direct;
   } catch {
     return direct;
   }

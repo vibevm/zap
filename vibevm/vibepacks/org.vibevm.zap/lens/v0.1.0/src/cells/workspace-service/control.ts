@@ -33,14 +33,34 @@ export async function controlProject(
       : null;
   const managedPauseObservation =
     request.operation === "project.pause.v1"
-      ? actions.inspectManagedPause(access, request.projectId, request.contextId)
+      ? await actions.inspectManagedPause(access, request.projectId, request.contextId)
       : null;
-  let launch = actions.launches.get(request.sessionId);
+  const managedContinueObservation =
+    request.operation === "project.continue.v1"
+      ? await actions.continueManagedProject(access, request.projectId, request.contextId)
+      : null;
+  let launch = request.sessionId === null ? undefined : actions.launches.get(request.sessionId);
   if (
     launch === undefined ||
     launch.projectId !== request.projectId ||
     launch.contextId !== request.contextId
   ) {
+    if (request.sessionId === null) {
+      const observation =
+        request.operation === "project.pause.v1"
+          ? (managedPauseObservation ?? "unsupported")
+          : request.operation === "project.stop.v1"
+            ? (managedStopObservation ?? "uncertain")
+            : (managedContinueObservation ?? "unsupported");
+      const settled = settle(actions, request, requested.value.execution, observation, null);
+      if (
+        settled.ok &&
+        request.operation === "project.continue.v1" &&
+        settled.value.state === "running"
+      )
+        await actions.dispatchManaged(request.projectId, request.contextId);
+      return settled.ok ? response(request.operation, settled.value) : settled;
+    }
     if (request.operation === "project.continue.v1") {
       const restored = await restoreWorkspaceLaunch(actions, access, {
         projectId: request.projectId,
@@ -49,18 +69,27 @@ export async function controlProject(
       });
       if (restored.ok) {
         launch = restored.value;
+        launch.managedContinueObservation = managedContinueObservation ?? "unsupported";
+        launch.coordinatorContinueSettled = true;
+        const observation =
+          launch.managedContinueObservation === "settled"
+            ? "settled"
+            : launch.managedContinueObservation === "unsupported"
+              ? "unsupported"
+              : "uncertain";
         const continued = settle(
           actions,
           request,
           requested.value.execution,
-          "settled",
+          observation,
           launch.processEpoch,
         );
-        if (continued.ok) {
-          actions.dispatchQueued(launch);
+        if (continued.ok && continued.value.state === "running") {
+          await actions.dispatchQueued(launch);
+          await actions.dispatchManaged(request.projectId, request.contextId);
           return response(request.operation, continued.value);
         }
-        return continued;
+        return continued.ok ? response(request.operation, continued.value) : continued;
       }
     }
     const unavailable = settle(
@@ -74,6 +103,8 @@ export async function controlProject(
       ? response(request.operation, unavailable.value)
       : workspaceFailure("unavailable", "coordinator lifecycle requires session reconciliation");
   }
+  if (request.sessionId === null)
+    return workspaceFailure("conflict", "coordinator lifecycle requires a session identity");
   const expectedEpoch = requested.value.execution.processEpoch;
   if (expectedEpoch === null || expectedEpoch !== launch.processEpoch) {
     return workspaceFailure(
@@ -96,11 +127,16 @@ export async function controlProject(
   if (request.operation === "project.continue.v1") launch.started = false;
   if (managedStopObservation !== null) launch.managedStopObservation = managedStopObservation;
   if (managedPauseObservation !== null) launch.managedPauseObservation = managedPauseObservation;
+  if (managedContinueObservation !== null)
+    launch.managedContinueObservation = managedContinueObservation;
+  resetCoordinatorBarrier(launch, request.operation);
   const result = await method({
     coordinatorSessionId: request.sessionId,
     expectedProcessEpoch: expectedEpoch,
   });
   let observation = result.ok ? result.value.observation : runtimeObservation(result.error.code);
+  if (result.ok && result.value.observation === "settled")
+    markCoordinatorSettled(launch, request.operation);
   if (
     request.operation === "project.stop.v1" &&
     launch.managedStopObservation !== "settled" &&
@@ -114,6 +150,13 @@ export async function controlProject(
     observation === "settled"
   ) {
     observation = launch.managedPauseObservation === "unsupported" ? "unsupported" : "uncertain";
+  }
+  if (
+    request.operation === "project.continue.v1" &&
+    launch.managedContinueObservation !== "settled" &&
+    observation === "settled"
+  ) {
+    observation = launch.managedContinueObservation === "unsupported" ? "unsupported" : "uncertain";
   }
   const processEpoch = result.ok ? result.value.currentProcessEpoch : expectedEpoch;
   if (result.ok && result.value.currentProcessEpoch !== null) {
@@ -133,7 +176,13 @@ export async function controlProject(
   updateLaunch(actions, launch);
   if (request.operation === "project.continue.v1") actions.drainPending(launch);
   const settled = settle(actions, request, requested.value.execution, observation, processEpoch);
-  if (settled.ok) return response(request.operation, settled.value);
+  if (settled.ok) {
+    if (request.operation === "project.continue.v1" && settled.value.state === "running") {
+      await actions.dispatchQueued(launch);
+      await actions.dispatchManaged(request.projectId, request.contextId);
+    }
+    return response(request.operation, settled.value);
+  }
   const current = actions.store.readProjectExecution(request.projectId, request.contextId);
   return current.ok ? response(request.operation, current.value) : settled;
 }
@@ -145,6 +194,7 @@ export function settleLifecycleEvent(
 ): WorkspaceResult<ProjectExecutionState | null> {
   const mapped = eventSettlement(event);
   if (mapped === null) return { ok: true, value: null };
+  if (mapped.observation === "settled") markCoordinatorSettled(launch, mapped.action);
   const effective =
     mapped.action === "stop" &&
     mapped.observation === "settled" &&
@@ -154,7 +204,11 @@ export function settleLifecycleEvent(
           mapped.observation === "settled" &&
           launch.managedPauseObservation !== "settled"
         ? { ...mapped, observation: "uncertain" as const }
-        : mapped;
+        : mapped.action === "continue" &&
+            mapped.observation === "settled" &&
+            launch.managedContinueObservation !== "settled"
+          ? { ...mapped, observation: "uncertain" as const }
+          : mapped;
   const current = actions.store.readProjectExecution(launch.projectId, launch.contextId);
   if (!current.ok) return current;
   const pending = current.value.pendingAction;
@@ -266,7 +320,7 @@ function eventSettlement(event: CoordinatorEvent): {
     : null;
 }
 
-function updateLaunch(actions: LaunchActions, launch: Launch): void {
+export function updateLaunch(actions: LaunchActions, launch: Launch): void {
   const now = actions.clock().toISOString();
   launch.session = CoordinatorSessionSchema.parse({
     ...launch.session,
@@ -285,6 +339,21 @@ function updateLaunch(actions: LaunchActions, launch: Launch): void {
   launch.actors.set("__coordinator__", updated);
   launch.actors.set(launch.descriptor.nativeThreadRef.value, updated);
   actions.store.upsertAgent(updated);
+}
+
+function resetCoordinatorBarrier(launch: Launch, operation: LifecycleRequest["operation"]): void {
+  if (operation === "project.pause.v1") launch.coordinatorPauseSettled = false;
+  else if (operation === "project.stop.v1") launch.coordinatorStopSettled = false;
+  else launch.coordinatorContinueSettled = false;
+}
+
+function markCoordinatorSettled(
+  launch: Launch,
+  action: "pause" | "stop" | "continue" | LifecycleRequest["operation"],
+): void {
+  if (action === "pause" || action === "project.pause.v1") launch.coordinatorPauseSettled = true;
+  else if (action === "stop" || action === "project.stop.v1") launch.coordinatorStopSettled = true;
+  else launch.coordinatorContinueSettled = true;
 }
 
 function response(

@@ -7,6 +7,7 @@ import type {
   WorkspaceResult,
 } from "../workspace-model/index.ts";
 import { readProjectWorkspace, type ProjectWorkspaceView } from "./index.ts";
+import { readRepositoryWorkspace, type RepositoryWorkspaceView } from "./repository.ts";
 
 export interface WorkspaceCanvasSelection {
   readonly projectId: ProjectId;
@@ -24,6 +25,9 @@ export type WorkspaceCanvasProject =
       readonly coverage: "complete" | "partial";
       readonly coverageReasons: readonly string[];
       readonly managedWorks: readonly ManagedWorkView[];
+      readonly repository:
+        | { readonly state: "ready"; readonly value: RepositoryWorkspaceView }
+        | { readonly state: "unavailable"; readonly reason: string };
     }
   | {
       readonly state: "unavailable";
@@ -48,13 +52,14 @@ export async function readWorkspaceCanvas(
     return failure("Canvas project/context selections repeat.");
   const projects = await Promise.all(
     selections.map(async (selection): Promise<WorkspaceCanvasProject> => {
-      const [read, managed] = await Promise.all([
+      const [read, managed, repository] = await Promise.all([
         readProjectWorkspace(port, selection.projectId, selection.contextId),
         port.read({
           operation: "managed-work.list.v1",
           projectId: selection.projectId,
           contextId: selection.contextId,
         }),
+        readRepositoryWorkspace(port, selection.projectId, selection.contextId),
       ]);
       if (!read.ok) return { state: "unavailable", selection, reason: read.error.message };
       const coverageReasons = [
@@ -62,6 +67,7 @@ export async function readWorkspaceCanvas(
         ...(managed.ok && managed.value.operation === "managed-work.list.v1"
           ? []
           : [managed.ok ? "Managed work response did not match." : managed.error.message]),
+        ...(repository.ok ? [] : [repository.error.message]),
       ];
       return {
         state: "ready",
@@ -78,6 +84,9 @@ export async function readWorkspaceCanvas(
           managed.ok && managed.value.operation === "managed-work.list.v1"
             ? managed.value.works
             : [],
+        repository: repository.ok
+          ? { state: "ready", value: repository.value }
+          : { state: "unavailable", reason: repository.error.message },
       };
     }),
   );

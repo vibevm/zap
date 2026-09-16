@@ -1,0 +1,115 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "model_reducer",
+  "scenarioId": "model.full-lifecycle",
+  "runnerId": "model.reducer",
+  "tags": ["model", "lifecycle", "question", "faults", "snapshot"],
+  "coverage": [
+    "model.ready-echo",
+    "model.busy-gate",
+    "question.idle-late-answer-ack",
+    "managed.report-effect",
+    "lifecycle.pause-continue-restart",
+    "delivery.duplicate-uncertain"
+  ],
+  "scenarioFile": {
+    "protocol": "zap-mock-scenario/1",
+    "seed": "seed.full-lifecycle",
+    "scenario": {
+      "scenarioId": "scenario.full-lifecycle",
+      "steps": [
+        { "kind": "ready" },
+        { "kind": "echo", "prefix": "echo: " },
+        { "kind": "busy_gate", "gateId": "gate.fixture", "completionText": "gate complete" },
+        {
+          "kind": "question",
+          "questionId": "question.fixture",
+          "prompt": "Choose a route",
+          "options": ["first", "second"]
+        },
+        {
+          "kind": "late_answer",
+          "questionId": "question.fixture",
+          "acknowledgementId": "ack.fixture"
+        },
+        { "kind": "report", "reportId": "report.fixture" },
+        { "kind": "pause_continue" },
+        { "kind": "restart" },
+        { "kind": "delivery_fault", "deliveryId": "delivery.duplicate", "fault": "duplicate" },
+        { "kind": "delivery_fault", "deliveryId": "delivery.uncertain", "fault": "uncertain" }
+      ]
+    }
+  },
+  "inputTape": [
+    { "kind": "start", "inputId": "input.start" },
+    { "kind": "message", "inputId": "input.echo", "messageId": "message.echo", "text": "hello" },
+    { "kind": "message", "inputId": "input.busy", "messageId": "message.busy", "text": "work" },
+    { "kind": "tick", "inputId": "input.tick", "count": 3 },
+    { "kind": "open_gate", "inputId": "input.gate", "gateId": "gate.fixture" },
+    {
+      "kind": "message",
+      "inputId": "input.question",
+      "messageId": "message.question",
+      "text": "ask"
+    },
+    {
+      "kind": "answer",
+      "inputId": "input.answer",
+      "questionId": "question.fixture",
+      "answerVersion": "answer.version.1",
+      "text": "first"
+    },
+    {
+      "kind": "ack",
+      "inputId": "input.ack",
+      "acknowledgementId": "ack.fixture",
+      "answerVersion": "answer.version.1"
+    },
+    {
+      "kind": "report",
+      "inputId": "input.report",
+      "reportId": "report.fixture",
+      "summary": "fixture work complete"
+    },
+    { "kind": "pause", "inputId": "input.pause" },
+    { "kind": "continue", "inputId": "input.continue" },
+    { "kind": "restart", "inputId": "input.restart" },
+    {
+      "kind": "message",
+      "inputId": "input.duplicate-fault",
+      "messageId": "message.duplicate-fault",
+      "text": "duplicate"
+    },
+    {
+      "kind": "message",
+      "inputId": "input.uncertain-fault",
+      "messageId": "message.uncertain-fault",
+      "text": "uncertain"
+    }
+  ],
+  "expected": {
+    "effectKindsByInput": [
+      ["session_ready"],
+      ["turn_started", "assistant_message", "turn_settled"],
+      ["turn_started", "busy"],
+      [],
+      ["assistant_message", "turn_settled"],
+      ["turn_started", "question", "turn_settled"],
+      ["answer_received"],
+      ["answer_acknowledged"],
+      ["work_reported"],
+      ["paused"],
+      ["continued"],
+      ["restarted"],
+      ["turn_started", "delivery", "delivery"],
+      ["turn_started", "delivery"]
+    ],
+    "finalState": {
+      "status": "complete",
+      "cursor": 10,
+      "logicalTick": 16,
+      "generation": 2
+    },
+    "traceLength": 14
+  }
+}

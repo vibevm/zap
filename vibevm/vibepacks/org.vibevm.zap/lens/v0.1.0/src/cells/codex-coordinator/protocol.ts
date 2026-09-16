@@ -198,6 +198,89 @@ const ThreadNotificationSchema = z.discriminatedUnion("method", [
     .strict(),
 ]);
 
+export const CodexErrorInfoSchema = z.union([
+  z.enum([
+    "contextWindowExceeded",
+    "sessionBudgetExceeded",
+    "usageLimitExceeded",
+    "rateLimitExceeded",
+    "serverOverloaded",
+    "cyberPolicy",
+    "misalignmentPolicyViolation",
+    "internalServerError",
+    "unauthorized",
+    "badRequest",
+    "threadRollbackFailed",
+    "sandboxError",
+    "other",
+  ]),
+  z
+    .object({
+      httpConnectionFailed: z.object({ httpStatusCode: z.number().int().nullable() }).strict(),
+    })
+    .strict(),
+  z
+    .object({
+      responseStreamConnectionFailed: z
+        .object({ httpStatusCode: z.number().int().nullable() })
+        .strict(),
+    })
+    .strict(),
+  z
+    .object({
+      responseStreamDisconnected: z
+        .object({ httpStatusCode: z.number().int().nullable() })
+        .strict(),
+    })
+    .strict(),
+  z
+    .object({
+      responseTooManyFailedAttempts: z
+        .object({ httpStatusCode: z.number().int().nullable() })
+        .strict(),
+    })
+    .strict(),
+  z
+    .object({
+      activeTurnNotSteerable: z.object({ turnKind: z.enum(["review", "compact"]) }).strict(),
+    })
+    .strict(),
+]);
+
+const CodexTurnErrorSchema = z
+  .object({
+    message: z.string().max(16_000),
+    codexErrorInfo: CodexErrorInfoSchema.nullable(),
+    additionalDetails: z.string().max(100_000).nullable(),
+    misalignment: z
+      .object({
+        errorType: z.string().max(1_000).nullable(),
+        detailedExplanation: z.string().max(100_000).nullable(),
+        steer: z
+          .object({ message: z.string().max(100_000) })
+          .strict()
+          .nullable(),
+      })
+      .strict()
+      .nullable(),
+  })
+  .strict();
+
+export const CodexErrorNotificationSchema = z
+  .object({
+    method: z.literal("error"),
+    emittedAtMs: EmittedAtMsSchema.optional(),
+    params: z
+      .object({
+        error: CodexTurnErrorSchema,
+        willRetry: z.boolean(),
+        threadId: CodexThreadIdSchema,
+        turnId: CodexTurnIdSchema,
+      })
+      .strict(),
+  })
+  .strict();
+
 const TurnNotificationSchema = z.discriminatedUnion("method", [
   z
     .object({
@@ -254,6 +337,7 @@ const RequestResolvedSchema = z
   .strict();
 
 export const CodexNotificationSchema = z.union([
+  CodexErrorNotificationSchema,
   ThreadNotificationSchema,
   TurnNotificationSchema,
   ItemNotificationSchema,

@@ -2,6 +2,19 @@
 import { z } from "zod";
 import { ClientRequestIdSchema } from "../protocol/index.ts";
 import { ProjectIdSchema, WorkContextIdSchema } from "./ids.ts";
+import { ProjectPlanIdSchema, RepositoryWorktreeIdSchema } from "../repository-model/index.ts";
+
+export const ProductPlanContextSchema = z
+  .object({
+    planId: ProjectPlanIdSchema,
+    contextId: WorkContextIdSchema,
+    displayName: z.string().min(1).max(256),
+    profileId: z.string().min(3).max(160),
+    rootWorktreeId: RepositoryWorktreeIdSchema,
+    registeredAt: z.iso.datetime(),
+  })
+  .strict();
+export type ProductPlanContext = z.infer<typeof ProductPlanContextSchema>;
 
 export const ProductProviderProfileSchema = z
   .object({
@@ -31,6 +44,7 @@ export const ProductProjectSchema = z
     directoryPath: z.string().min(1).max(32_000),
     profileId: z.string().min(3).max(160),
     registeredAt: z.iso.datetime(),
+    planContexts: z.array(ProductPlanContextSchema).max(256).default([]),
   })
   .strict();
 export type ProductProject = z.infer<typeof ProductProjectSchema>;

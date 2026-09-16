@@ -15,7 +15,14 @@ import type { PublicConnection } from "../protocol/index.ts";
 
 export type WorkspacePlanCommand = Extract<
   WorkspaceCommandRequest,
-  { operation: `plan.${string}` }
+  {
+    operation:
+      | "plan.intent.v1"
+      | "plan.preview.v1"
+      | "plan.apply.v1"
+      | "plan.reconcile.v1"
+      | "plan.decide.v1";
+  }
 >;
 export type AgentPlanningPort = ReturnType<QuicklensSourceRuntime["createAgentPlanning"]>;
 

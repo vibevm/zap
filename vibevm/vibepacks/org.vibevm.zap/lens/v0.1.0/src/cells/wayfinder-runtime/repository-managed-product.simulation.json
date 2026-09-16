@@ -1,0 +1,40 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "repository_managed_product",
+  "scenarioId": "repository.managed-isolated-writer-fence",
+  "runnerId": "wayfinder.repository-managed-product",
+  "seed": "seed.repository-managed-product-1",
+  "tags": ["repository", "managed-work", "writer-fence", "zap-mock", "zero-llm"],
+  "coverage": [
+    "repository.managed-isolated-writer-fence",
+    "workspace.operation.managed-work.start.v1",
+    "workspace.operation.project.continue.v1",
+    "workspace.operation.managed-work.report.v1",
+    "workspace.operation.project.pause.v1",
+    "workspace.operation.integration.promote.v1"
+  ],
+  "inputs": {
+    "mockBehaviorSeed": "repository-product-seed",
+    "initialPath": "value.txt",
+    "initialContent": "base\n",
+    "sourcePlanDisplayName": "Source plan while registered target is active",
+    "changePath": "active-target.txt",
+    "changeContent": "candidate waits for the active registered target\n",
+    "workerProfileId": "profile.zap-mock.product",
+    "workerGoal": "Report from the assigned isolated repository workspace",
+    "workerExpectedResult": "A deterministic report",
+    "answerNoteMarkdown": "Answer delivered to the isolated repository worker."
+  },
+  "expected": {
+    "defaultPlanAdopted": true,
+    "assignmentKind": "isolated_child",
+    "isolatedChildAgainstContextRoot": true,
+    "promotionBlockedWhileRunning": true,
+    "projectPauseSettled": true,
+    "promotionWhilePaused": true,
+    "answerDeliveredAfterContinue": true,
+    "reportIncludes": "ZapMock deterministic report",
+    "assignmentOwnershipRetained": true,
+    "zeroLlmInference": true
+  }
+}

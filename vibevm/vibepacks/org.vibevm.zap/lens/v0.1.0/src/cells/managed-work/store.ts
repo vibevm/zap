@@ -19,6 +19,7 @@ const RowSchema = z.looseObject({
 });
 
 export interface ManagedWorkStore {
+  findRequest(request: ManagedWorkRequest): ManagedWorkResult<ManagedWorkClaim | null>;
   create(request: ManagedWorkRequest, claim: ManagedWorkClaim): ManagedWorkResult<ManagedWorkClaim>;
   load(runId: string): ManagedWorkResult<ManagedWorkClaim>;
   list(projectId: string, contextId: string): ManagedWorkResult<readonly ManagedWorkClaim[]>;
@@ -44,6 +45,22 @@ export function openManagedWorkStore(databasePath: string): ManagedWorkResult<Ma
     return {
       ok: true,
       value: {
+        findRequest(request) {
+          const parsed = ManagedWorkRequestSchema.safeParse(request);
+          if (!parsed.success) return fail("invalid_input", "managed work request is invalid");
+          const digest = hash(parsed.data);
+          try {
+            const row = database
+              .prepare(
+                "SELECT request_digest,value_blob FROM managed_work_claims WHERE project_id=? AND context_id=? AND client_request_id=?",
+              )
+              .get(parsed.data.projectId, parsed.data.contextId, parsed.data.clientRequestId);
+            if (row === undefined) return { ok: true, value: null };
+            return decode(row, digest, "client request identity changed content");
+          } catch {
+            return fail("unavailable", "managed work request cannot be read");
+          }
+        },
         create(request, claim) {
           const parsedRequest = ManagedWorkRequestSchema.safeParse(request);
           const parsedClaim = ManagedWorkClaimSchema.safeParse(claim);

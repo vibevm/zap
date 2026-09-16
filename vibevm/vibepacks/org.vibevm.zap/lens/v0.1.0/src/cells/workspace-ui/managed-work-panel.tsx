@@ -7,7 +7,12 @@ import {
   type NoSerialize,
   type QRL,
 } from "@qwik.dev/core";
-import { workspaceRequestId, type WorkspaceClientPort } from "../workspace-client/index.ts";
+import {
+  readRepositoryWorkspace,
+  workspaceRequestId,
+  type RepositoryWorkspaceView,
+  type WorkspaceClientPort,
+} from "../workspace-client/index.ts";
 import { ActorIdSchema } from "../protocol/index.ts";
 import type {
   AgentDescriptor,
@@ -18,6 +23,7 @@ import type {
 } from "../workspace-model/index.ts";
 import { createProjectEventRefresh } from "./workspace-event-refresh.ts";
 import { observeEvents } from "./workspace-helpers.ts";
+import { ManagedWorkDetail } from "./managed-work-detail.tsx";
 
 type ProfileList = Extract<
   WorkspaceReadResponse,
@@ -40,6 +46,10 @@ export const ManagedWorkPanel = component$<{
   const overrideReason = useSignal("");
   const targetDomain = useSignal<"semantic_object" | "work_task">("work_task");
   const targetRefs = useSignal("");
+  const repository = useSignal<RepositoryWorkspaceView | null>(null);
+  const workspaceMode = useSignal<"inherit" | "isolated_child">("inherit");
+  const workspacePlanId = useSignal("");
+  const parentWorktreeId = useSignal("");
   const report = useSignal("");
   const review = useSignal("");
   const busy = useSignal(false);
@@ -48,7 +58,7 @@ export const ManagedWorkPanel = component$<{
   const refresh = $(async () => {
     const port = props.port;
     if (port === undefined) return;
-    const [profileResult, workResult] = await Promise.all([
+    const [profileResult, workResult, repositoryResult] = await Promise.all([
       port.read({
         operation: "managed-work.profile.list.v1",
         projectId: props.projectId,
@@ -59,6 +69,7 @@ export const ManagedWorkPanel = component$<{
         projectId: props.projectId,
         contextId: props.contextId,
       }),
+      readRepositoryWorkspace(port, props.projectId, props.contextId),
     ]);
     if (
       !profileResult.ok ||
@@ -75,6 +86,18 @@ export const ManagedWorkPanel = component$<{
     }
     profiles.value = profileResult.value.profiles;
     works.value = workResult.value.works;
+    repository.value = repositoryResult.ok ? repositoryResult.value : null;
+    const plan =
+      repository.value?.plans.find((candidate) => candidate.planId === workspacePlanId.value) ??
+      repository.value?.plans[0];
+    workspacePlanId.value = plan?.planId ?? "";
+    const parent =
+      repository.value?.worktrees.find(
+        (worktree) =>
+          worktree.planId === plan?.planId && worktree.worktreeId === parentWorktreeId.value,
+      ) ?? repository.value?.worktrees.find((worktree) => worktree.planId === plan?.planId);
+    parentWorktreeId.value = parent?.worktreeId ?? "";
+    if (repository.value === null) workspaceMode.value = "inherit";
     if (
       selectedRunId.value === null ||
       !workResult.value.works.some((work) => work.runId === selectedRunId.value)
@@ -172,6 +195,80 @@ export const ManagedWorkPanel = component$<{
               />
             </>
           )}
+          <label class="field-label" for="managed-work-workspace-mode">
+            Worker workspace
+          </label>
+          <select
+            id="managed-work-workspace-mode"
+            value={workspaceMode.value}
+            onChange$={(_, element) =>
+              (workspaceMode.value =
+                element.value === "isolated_child" ? "isolated_child" : "inherit")
+            }
+          >
+            <option value="inherit">Inherit selected plan workspace</option>
+            <option
+              value="isolated_child"
+              disabled={repository.value === null || repository.value.plans.length === 0}
+            >
+              Isolated child worktree
+            </option>
+          </select>
+          {repository.value === null ? (
+            <p class="workspace-muted">
+              Repository workspace capability is unavailable. This task will use the registered
+              context workspace.
+            </p>
+          ) : repository.value.plans.length === 0 ? (
+            <p class="workspace-muted">
+              Prepare an independent plan workspace before requesting isolation.
+            </p>
+          ) : (
+            <>
+              <label class="field-label" for="managed-work-plan-workspace">
+                Plan workspace
+              </label>
+              <select
+                id="managed-work-plan-workspace"
+                value={workspacePlanId.value}
+                onChange$={(_, element) => {
+                  workspacePlanId.value = element.value;
+                  parentWorktreeId.value =
+                    repository.value?.worktrees.find(
+                      (worktree) => worktree.planId === element.value,
+                    )?.worktreeId ?? "";
+                }}
+              >
+                {repository.value.plans.map((plan) => (
+                  <option key={plan.planId} value={plan.planId}>
+                    {`${plan.displayName} · ${plan.state}`}
+                  </option>
+                ))}
+              </select>
+              {workspaceMode.value !== "isolated_child" ? null : (
+                <label class="field-label" for="managed-work-parent-worktree">
+                  Parent branch and committed basis
+                  <select
+                    id="managed-work-parent-worktree"
+                    value={parentWorktreeId.value}
+                    onChange$={(_, element) => (parentWorktreeId.value = element.value)}
+                  >
+                    {repository.value.worktrees
+                      .filter((worktree) => worktree.planId === workspacePlanId.value)
+                      .map((worktree) => (
+                        <option key={worktree.worktreeId} value={worktree.worktreeId}>
+                          {`${branchName(worktree.branchRef)} · ${worktree.headCommit.slice(0, 10)}`}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+              )}
+              <p class="workspace-muted">
+                Isolation forks the recorded committed basis. Unsaved edits stay in their current
+                worktree.
+              </p>
+            </>
+          )}
           <label class="field-label" for="managed-work-goal">
             Goal
           </label>
@@ -230,6 +327,11 @@ export const ManagedWorkPanel = component$<{
                 clientRequestId: workspaceRequestId("managed-work-create"),
                 projectId: props.projectId,
                 contextId: props.contextId,
+                planId: workspacePlanId.value === "" ? null : workspacePlanId.value,
+                workspaceRequest:
+                  workspaceMode.value === "isolated_child"
+                    ? isolatedWorkspace(repository.value, parentWorktreeId.value)
+                    : { mode: "inherit" },
                 selection:
                   selectionMode.value === "project_policy"
                     ? { mode: "project_policy" }
@@ -301,7 +403,12 @@ export const ManagedWorkPanel = component$<{
           onAction$={$(async (action) => {
             const work = selected();
             if (work === undefined) return;
-            if (action === "start" || action === "interrupt" || action === "stop") {
+            if (
+              action === "start" ||
+              action === "continue" ||
+              action === "interrupt" ||
+              action === "stop"
+            ) {
               await command(
                 {
                   operation: `managed-work.${action}.v1`,
@@ -371,156 +478,17 @@ export const ManagedWorkPanel = component$<{
   );
 });
 
-type ManagedAction = "start" | "interrupt" | "stop" | "report" | "accept" | "follow_up";
-const ManagedWorkDetail = component$<{
-  readonly work: ManagedWorkView | undefined;
-  readonly busy: boolean;
-  readonly report: string;
-  readonly review: string;
-  readonly onReportInput$: QRL<(value: string) => void>;
-  readonly onReviewInput$: QRL<(value: string) => void>;
-  readonly onTerminal$: QRL<() => void>;
-  readonly onAction$: QRL<(action: ManagedAction) => void>;
-}>((props) => {
-  const work = props.work;
-  if (work === undefined) return null;
-  const active = ["launching", "running", "waiting_for_user", "uncertain"].includes(work.state);
-  return (
-    <article class="managed-work-detail">
-      <div>
-        <strong>{work.goal}</strong>
-        <span class={`coordinator-state state-${work.state}`}>
-          {work.state.replaceAll("_", " ")}
-        </span>
-      </div>
-      <p>{work.expectedResult}</p>
-      <dl class="canvas-facts">
-        <div>
-          <dt>Provider</dt>
-          <dd>{work.provider.replaceAll("_", " ")}</dd>
-        </div>
-        <div>
-          <dt>Model</dt>
-          <dd>{work.modelSelection.modelId}</dd>
-        </div>
-        <div>
-          <dt>Tier / effort</dt>
-          <dd>
-            {work.modelSelection.requestedTier} · {effortLabel(work.modelSelection.effectiveEffort)}
-          </dd>
-        </div>
-        <div>
-          <dt>Terminal</dt>
-          <dd>{work.terminalId}</dd>
-        </div>
-      </dl>
-      <p class="workspace-muted">{work.modelSelection.selectionReason}</p>
-      {work.modelSelection.overrideReason === null ? null : (
-        <p class="workspace-notice">
-          <strong>Override rationale</strong>
-          <br />
-          {work.modelSelection.overrideReason}
-        </p>
-      )}
-      <div class="execution-actions">
-        <button class="button secondary" onClick$={props.onTerminal$}>
-          Open terminal
-        </button>
-        {work.state === "prepared" ? (
-          <button
-            class="button primary"
-            disabled={props.busy}
-            onClick$={() => props.onAction$("start")}
-          >
-            Start
-          </button>
-        ) : null}
-        {!active ? null : (
-          <button
-            class="button secondary"
-            disabled={props.busy}
-            onClick$={() => props.onAction$("interrupt")}
-          >
-            Interrupt
-          </button>
-        )}
-        {!active ? null : (
-          <button
-            class="button danger"
-            disabled={props.busy}
-            onClick$={() => props.onAction$("stop")}
-          >
-            Stop
-          </button>
-        )}
-      </div>
-      {work.report === null ? (
-        <div class="managed-work-report">
-          <label class="field-label" for="managed-work-report">
-            Worker report
-          </label>
-          <textarea
-            id="managed-work-report"
-            rows={3}
-            value={props.report}
-            onInput$={(_, element) => props.onReportInput$(element.value)}
-          />
-          <button
-            class="button secondary"
-            disabled={props.busy || props.report.trim() === ""}
-            onClick$={() => props.onAction$("report")}
-          >
-            Record report
-          </button>
-        </div>
-      ) : (
-        <div class="managed-work-report">
-          <strong>Worker report</strong>
-          <p>{work.report.summaryMarkdown}</p>
-          {work.review === null ? (
-            <>
-              <label class="field-label" for="managed-work-review">
-                Review comment
-              </label>
-              <textarea
-                id="managed-work-review"
-                rows={2}
-                value={props.review}
-                onInput$={(_, element) => props.onReviewInput$(element.value)}
-              />
-              <div class="execution-actions">
-                <button
-                  class="button primary"
-                  disabled={props.busy}
-                  onClick$={() => props.onAction$("accept")}
-                >
-                  Accept report
-                </button>
-                <button
-                  class="button secondary"
-                  disabled={props.busy || props.review.trim() === ""}
-                  onClick$={() => props.onAction$("follow_up")}
-                >
-                  Request changes
-                </button>
-              </div>
-            </>
-          ) : (
-            <p>
-              <strong>{work.review.disposition.replaceAll("_", " ")}</strong>
-              {work.review.commentMarkdown === "" ? null : ` · ${work.review.commentMarkdown}`}
-            </p>
-          )}
-        </div>
-      )}
-    </article>
-  );
-});
+function isolatedWorkspace(view: RepositoryWorkspaceView | null, worktreeId: string) {
+  const parent = view?.worktrees.find((worktree) => worktree.worktreeId === worktreeId);
+  return parent === undefined
+    ? { mode: "inherit" as const }
+    : {
+        mode: "isolated_child" as const,
+        parentWorktreeId: parent.worktreeId,
+        expectedParentHead: parent.headCommit,
+      };
+}
 
-function effortLabel(effort: ManagedWorkView["modelSelection"]["effectiveEffort"]): string {
-  return effort.state === "explicit" ||
-    effort.state === "configured_default" ||
-    effort.state === "inherited"
-    ? (effort.value ?? "provider default")
-    : effort.state;
+function branchName(value: string): string {
+  return value.split("/").at(-1) ?? value;
 }

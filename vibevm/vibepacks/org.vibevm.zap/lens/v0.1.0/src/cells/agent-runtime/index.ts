@@ -18,6 +18,8 @@ import {
   ArtifactRefIdSchema,
   ExecutionHostIdSchema,
   NativeRefSchema,
+  ManagedWorkspaceAssignmentSchema,
+  ProjectPlanIdSchema,
   ProjectIdSchema,
   ProjectObjectReferenceSchema,
   TaskIdSchema,
@@ -185,7 +187,7 @@ export const PendingHostRequestSchema = z
   .object({
     coordinatorSessionId: AgentSessionIdSchema,
     nativeThreadId: z.string().min(1).max(512),
-    nativeTurnId: z.string().min(1).max(512),
+    nativeTurnId: z.string().min(1).max(512).nullable(),
     nativeItemId: z.string().min(1).max(512),
     requestId: z.union([z.string(), z.number().int()]),
     processEpoch: z.string().min(1).max(160),
@@ -237,6 +239,15 @@ export const CoordinatorEventSchema = z
       "host_event_unmapped",
     ]),
     sourceEventId: z.string().min(1).max(512),
+    transportCorrelation: z
+      .object({
+        provenance: z.literal("transport_correlation"),
+        clientMessageId: z.string().min(1).max(512),
+        processEpoch: z.string().min(1).max(160),
+      })
+      .strict()
+      .nullable()
+      .optional(),
     data: JsonValueSchema,
   })
   .strict();
@@ -255,7 +266,7 @@ export type CoordinatorHistory = z.infer<typeof CoordinatorHistorySchema>;
 
 export const CoordinatorLifecycleCapabilitiesSchema = z
   .object({
-    pause: z.enum(["interrupt_known_turns", "unsupported"]),
+    pause: z.enum(["interrupt_known_turns", "interrupt_owned_session", "unsupported"]),
     stop: z.enum(["owned_process", "unsupported"]),
     continue: z.enum(["saved_thread_resume", "unsupported"]),
     nativeChildren: z.enum(["known_active_turns", "unsupported"]),
@@ -342,6 +353,8 @@ export const WorkPacketSchema = z
     parentTaskId: TaskIdSchema.nullable(),
     projectId: ProjectIdSchema,
     contextId: WorkContextIdSchema,
+    planId: ProjectPlanIdSchema.nullable().default(null),
+    workspaceAssignment: ManagedWorkspaceAssignmentSchema.nullable().default(null),
     goal: z.string().min(1).max(1_000_000),
     contextRefs: z.array(ArtifactRefIdSchema).max(1_000),
     expectedResult: z.string().min(1).max(100_000),

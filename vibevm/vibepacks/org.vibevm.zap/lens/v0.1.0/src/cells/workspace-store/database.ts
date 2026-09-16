@@ -24,6 +24,25 @@ CREATE TABLE IF NOT EXISTS workspace_contexts (
   protected_profile_ref TEXT NOT NULL,
   UNIQUE(project_id, context_id)
 );
+CREATE TABLE IF NOT EXISTS workspace_context_launch_options (
+  context_id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL,
+  launch_options_json TEXT NOT NULL,
+  registration_id TEXT NOT NULL UNIQUE,
+  request_digest TEXT NOT NULL,
+  FOREIGN KEY(project_id, context_id) REFERENCES workspace_contexts(project_id, context_id)
+);
+CREATE TABLE IF NOT EXISTS workspace_plan_contexts (
+  plan_id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL,
+  context_id TEXT NOT NULL UNIQUE,
+  root_worktree_id TEXT NOT NULL UNIQUE,
+  registration_id TEXT NOT NULL UNIQUE,
+  request_digest TEXT NOT NULL,
+  plan_json TEXT NOT NULL,
+  root_worktree_json TEXT NOT NULL,
+  FOREIGN KEY(project_id, context_id) REFERENCES workspace_contexts(project_id, context_id)
+);
 CREATE TABLE IF NOT EXISTS workspace_agent_scopes (
   workspace_id TEXT NOT NULL,
   conversation_id TEXT NOT NULL,
@@ -70,6 +89,20 @@ CREATE TABLE IF NOT EXISTS workspace_chat_dispatch (
 CREATE TABLE IF NOT EXISTS workspace_chat_reply_sources (
   source_event_id TEXT PRIMARY KEY,
   message_id TEXT NOT NULL REFERENCES workspace_chat(message_id)
+);
+CREATE TABLE IF NOT EXISTS workspace_managed_wakes (
+  wake_id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL,
+  context_id TEXT NOT NULL,
+  actor_id TEXT NOT NULL,
+  run_id TEXT NOT NULL,
+  attempt_id TEXT NOT NULL,
+  adapter_session_id TEXT NOT NULL,
+  process_epoch TEXT NOT NULL,
+  source_event_id TEXT NOT NULL,
+  state TEXT NOT NULL,
+  public_json TEXT NOT NULL,
+  UNIQUE(project_id, context_id, actor_id, source_event_id)
 );
 CREATE TABLE IF NOT EXISTS workspace_project_execution (
   project_id TEXT NOT NULL,
@@ -201,6 +234,8 @@ CREATE TABLE IF NOT EXISTS workspace_idempotency (
 CREATE INDEX IF NOT EXISTS workspace_history_project ON workspace_history(project_id, global_sequence);
 CREATE INDEX IF NOT EXISTS workspace_history_actor ON workspace_history(project_id, context_id, actor_id, global_sequence);
 CREATE INDEX IF NOT EXISTS workspace_chat_page ON workspace_chat(project_id, context_id, conversation_id, sequence);
+CREATE INDEX IF NOT EXISTS workspace_managed_wakes_ready
+  ON workspace_managed_wakes(project_id, context_id, actor_id, state, wake_id);
 CREATE INDEX IF NOT EXISTS workspace_native_interaction_scope
   ON workspace_native_interactions(project_id, context_id, state, updated_at);
 `;

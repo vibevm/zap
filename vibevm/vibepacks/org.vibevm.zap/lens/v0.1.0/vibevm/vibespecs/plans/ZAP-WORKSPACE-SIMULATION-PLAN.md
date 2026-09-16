@@ -1,8 +1,12 @@
 # Parallel plans, workspaces and deterministic simulation
 
-Status: active implementation. The previously accepted product baseline is
-`110c2c43`. Later four-provider and mock changes are candidates until the checks
-below pass. Contracts: PROP-012, PROP-013 and PROP-014.
+Status: repository/product-runtime implementation is present. The final
+zero-inference corpus passes 14/14 while reporting 50 explicit coverage gaps
+(`coverageComplete = false`). All four providers completed the bounded main
+question/Pause/wake/context flow. Codex/Luna and Claude Code/Haiku also observed
+live Stop; Qwen/free and OpenCode retain historical cleanup failures from the
+old exit ordering, followed by four passing public no-model tests of the exact
+shared Stop repair. Contracts: PROP-012, PROP-013 and PROP-014.
 
 ## Intended result
 
@@ -16,6 +20,22 @@ Quick Lens displays plan selection, responsibility, forks and integrations.
 Keep reusable deterministic scenarios beside the corresponding behavioral tests.
 Run them collectively or individually, repeat with recorded seeds, and retain
 enough evidence to replay a failure without an LLM. Coverage gaps remain visible.
+
+The developer-source runner is:
+
+```text
+npm run simulate:mock -- --list
+npm run simulate:mock -- --id <scenario-id> --repeat 3 --seed <seed>
+npm run simulate:mock -- --tag <tag>
+npm run simulate:mock -- --coverage
+npm run simulate:mock -- --all
+```
+
+Unknown IDs/tags fail. Each document names a fixed registered runner; scenario
+data cannot supply a command. A receipt records scenario, runner, evidence kind,
+iteration, effective seed and failing input position. Passing selected checks
+does not imply complete product coverage. Gaps remain explicit unless
+`--require-complete-coverage` is deliberately selected.
 
 ## Delivery sequence
 
@@ -85,10 +105,47 @@ enough evidence to replay a failure without an LLM. Coverage gaps remain visible
 
 ## Current findings
 
-The store and coordinator claims already support multiple contexts internally.
-Product setup exposes only the default context. Additive registration, exact
-context coordinator lookup, managed cwd assignment and context-qualified graph
-keys are required. A real managed mock test also exposed a missing production
-connection between the managed control runtime and the durable wake service;
-helper tests alone did not detect it. These are implementation work, not accepted
-completion claims.
+The additive runtime now supports several development-plan contexts in one
+registered repository. The original checkout is metadata-adopted in place;
+additional top-level plans receive owned root worktrees, conversation/broker
+scope, coordinator launch options and protected cwd. Managed isolated-child
+assignment records exact task/run/actor provenance before launch and resumes in
+the same worktree.
+
+Repository reads project current committed HEAD without changing durable state;
+prepare commands CAS-record it. Integration artifacts and resolution work belong
+to the source plan even when the recorded promotion target is the original
+checkout in another context. The target context supplies writer activity and an
+exclusive host-local lease. Bounded diff, registered test evidence, human review
+and promotion are distinct. Plan/worktree/integration objects participate in
+the shared notes/Trash resolver without borrowing semantic-snapshot coverage.
+
+The ordinary launcher enables the local repository host and consistency profile.
+A protected Git identity is optional for discovery/preparation and required only
+when a commit must be authored. Planning-source attachment is per context and
+identity-checked; protected dynamic attachment config is not persisted, so an
+unrestored restart becomes explicitly unavailable/pending and requires
+reconnection.
+
+Current evidence includes 14 registered corpus scenarios: pure reducer cases, authenticated coordinator and
+managed ZapMock flows, actual Node PTY/generated MCP cases, real temporary Git
+clean/conflict/stale/recovery cases, the authenticated repository HTTP product
+flow, notes and model-policy baseline scenarios, and graph/client projections.
+The joined source gate records all five TypeScript configurations passing, Node
+274 passed/zero failed/one explicit skip, tooling 2/2, Vitest 24/24 across nine
+files, and clean lint, format, browser boundary and build. Conform reports zero
+findings across 46 gated cells with zero exemptions. Specmap reports 153 units,
+489 tags, 562 edges, zero suspect links, zero orphan roots and 16 visible
+warnings. Focused provider, MCP credential, proxy-inheritance and raw-exit
+lifecycle checks also pass.
+
+The actual shared-canvas review rendered the current three-context sample with
+14 selectable nodes in both light and dark themes. Context names, worktree lanes
+and cross-context integration remain deterministic; label/lane corrections were
+reviewed against the real 1600×1100 product view rather than a synthetic graph.
+
+Remote hosts, distributed writer locking, multi-user identity and merge policy,
+contributor admission, hostile-code isolation, resource scheduling and
+crowdsourced computers/accounts remain future architecture. Native provider
+children retain provider-owned cwd capabilities; only managed work has the
+general isolated-worktree assignment contract today.

@@ -1,0 +1,64 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "portfolio_repository",
+  "scenarioId": "same-project.parallel-plans.fork-merge-assignment",
+  "runnerId": "quicklens.portfolio-repository",
+  "seed": "seed.parallel-plans-1",
+  "tags": ["quicklens", "repository", "parallel-plans", "zero-llm"],
+  "coverage": [
+    "canvas.context-qualified-keys",
+    "canvas.shared-repository-root",
+    "canvas.worker-assignment",
+    "canvas.repository-fork-merge",
+    "canvas.integration-conflict"
+  ],
+  "inputs": {
+    "projectId": "project.shared",
+    "repositoryId": "repository.shared",
+    "registered": {
+      "contextId": "context.original",
+      "worktreeId": "worktree.registered",
+      "branchRef": "refs/heads/main",
+      "headCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "plans": [
+      {
+        "planId": "plan.alpha",
+        "contextId": "context.alpha",
+        "displayName": "Payments reliability",
+        "rootWorktreeId": "worktree.alpha",
+        "branchRef": "refs/heads/plan/payments"
+      },
+      {
+        "planId": "plan.beta",
+        "contextId": "context.beta",
+        "displayName": "Search indexing",
+        "rootWorktreeId": "worktree.beta",
+        "branchRef": "refs/heads/plan/search"
+      }
+    ],
+    "worker": {
+      "worktreeId": "worktree.alpha.worker",
+      "parentWorktreeId": "worktree.alpha",
+      "branchRef": "refs/heads/worker/payments-retry",
+      "actorId": "actor.alpha.worker",
+      "taskId": "task.alpha.retry",
+      "runId": "run.alpha.retry"
+    },
+    "integration": {
+      "integrationId": "integration.alpha.main",
+      "sourceWorktreeId": "worktree.alpha.worker",
+      "targetWorktreeId": "worktree.registered",
+      "integrationWorktreeId": "worktree.alpha.integration",
+      "conflictPaths": ["src/payments/retry.ts"]
+    }
+  },
+  "expected": {
+    "planCount": 2,
+    "sharedRegisteredRoot": true,
+    "workerAssignmentVisible": true,
+    "conflictVisible": true,
+    "contextFrameCount": 12,
+    "zeroLlmInference": true
+  }
+}

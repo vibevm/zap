@@ -1,6 +1,5 @@
 /** Shared Wayfinder broker/agent composition. @scope spec://org.vibevm.zap/lens/PROP-005#server-ownership */
 import { randomUUID } from "node:crypto";
-import { createHash } from "node:crypto";
 import { z } from "zod";
 import { openBroker, type LensBroker } from "../broker/index.ts";
 import { createLensHttpGateway, type GatewayAddress, type LensHttpGateway } from "../http/index.ts";
@@ -18,6 +17,7 @@ import {
   AdapterSessions,
   createLocalPrincipalTransport,
   createRetainedAgentTransport,
+  failure,
 } from "../transport/index.ts";
 import {
   createBrokerAgentAnswerDelivery,
@@ -32,29 +32,20 @@ import type {
 import { OwnedCoordinatorAgentBindingSchema } from "../workspace-service/index.ts";
 import { AdapterSessionIdSchema } from "../transport/index.ts";
 import type { WorkspacePlanningFeature } from "../workspace-planning/index.ts";
-import type {
-  ManagedActorBindingPort,
-  ManagedAgentBackend,
-  WorkAttachmentPort,
-} from "../managed-work/index.ts";
+import type { ManagedActorBindingPort, ManagedAgentBackend } from "../managed-work/index.ts";
 import { createManagedWorkAgentPort } from "./managed-agent.ts";
+import type { ManagedRepositoryPlanPort } from "./managed-agent.ts";
+import { agentDigest as digest } from "./agent-id.ts";
+import { createRepositoryWorkspaceAgentPort } from "./repository-agent.ts";
+import type { RepositoryWorkspaceFeature } from "../workspace-service/index.ts";
 import { createNativeWorkAgentPort } from "./native-agent.ts";
 import {
   createDeclaredNativeWorkTargetBridge,
   type DeclaredNativeWorkTargetBridge,
 } from "./native-targets.ts";
-import {
-  openAgentScopeManager,
-  type AgentScopeManager,
-  type WayfinderAgentScopeInput,
-  type WayfinderEnsuredAgentScope,
-} from "./agent-scope.ts";
+import { openAgentScopeManager, type AgentScopeManager } from "./agent-scope.ts";
 import { WayfinderAgentGatewayConfigSchema } from "./agent-config.ts";
-import {
-  prepareCoordinatorMcpLaunch,
-  type CoordinatorMcpLaunch,
-  type CoordinatorMcpLaunchInput,
-} from "./coordinator-mcp.ts";
+import { prepareCoordinatorMcpLaunch } from "./coordinator-mcp.ts";
 import {
   defaultMcpLaunch,
   managedBindingFailure,
@@ -63,26 +54,8 @@ import {
 export { WayfinderAgentGatewayConfigSchema } from "./agent-config.ts";
 export type { WayfinderAgentGatewayConfig } from "./agent-config.ts";
 export type { CoordinatorMcpLaunch, CoordinatorMcpLaunchInput } from "./coordinator-mcp.ts";
-
-export interface WayfinderAgentFoundation {
-  readonly interactions: ReturnType<typeof createWorkspaceInteractionFeature>;
-  readonly ownedCoordinators: OwnedCoordinatorAgentPort;
-  readonly managedActors: ManagedActorBindingPort;
-  ensureScope(
-    input: WayfinderAgentScopeInput,
-  ): Promise<WayfinderAgentFoundationResult<WayfinderEnsuredAgentScope>>;
-  prepareOwnedCoordinatorLaunch(
-    input: CoordinatorMcpLaunchInput,
-  ): Promise<WayfinderAgentFoundationResult<CoordinatorMcpLaunch>>;
-  bindManagedWork(backend: ManagedAgentBackend): WayfinderAgentFoundationResult<null>;
-  bindNativeWork(attachments: WorkAttachmentPort): WayfinderAgentFoundationResult<null>;
-  start(): Promise<WayfinderAgentFoundationResult<GatewayAddress>>;
-  close(): Promise<void>;
-}
-
-export type WayfinderAgentFoundationResult<T> =
-  | { readonly ok: true; readonly value: T }
-  | { readonly ok: false; readonly message: string };
+import type { WayfinderAgentFoundation, WayfinderAgentFoundationResult } from "./agent-contract.ts";
+export type { WayfinderAgentFoundation, WayfinderAgentFoundationResult } from "./agent-contract.ts";
 
 export function openWayfinderAgentFoundation(
   raw: unknown,
@@ -144,6 +117,8 @@ export function openWayfinderAgentFoundation(
   );
   let managedBackend: ManagedAgentBackend | undefined;
   let nativeBridge: DeclaredNativeWorkTargetBridge | undefined;
+  let repositoryPlans: ManagedRepositoryPlanPort | undefined;
+  let repositoryFeature: RepositoryWorkspaceFeature | undefined;
   const retainedAgent = createRetainedAgentTransport({
     broker: broker.value,
     principalToken: config.data.statusToken,
@@ -157,11 +132,26 @@ export function openWayfinderAgentFoundation(
     backend: () => managedBackend,
     store,
     coordinatorAgents: ownedCoordinators,
+    ensurePlan: (input) =>
+      repositoryPlans === undefined
+        ? Promise.resolve(
+            failure(
+              "unsupported_operation",
+              "repository plan adoption is not configured for this agent runtime",
+            ),
+          )
+        : repositoryPlans(input),
   });
   const nativeAgentPort = createNativeWorkAgentPort({
     agent: retainedAgent,
     bridge: () => nativeBridge,
     store,
+  });
+  const repositoryAgentPort = createRepositoryWorkspaceAgentPort({
+    agent: retainedAgent,
+    store,
+    coordinatorAgents: ownedCoordinators,
+    feature: () => repositoryFeature,
   });
   const gateway: LensHttpGateway = createLensHttpGateway({
     broker: broker.value,
@@ -173,6 +163,7 @@ export function openWayfinderAgentFoundation(
     adapterSessionVault: vault.value,
     managedWork: () => (managedBackend === undefined ? undefined : managedAgentPort),
     nativeWork: () => (nativeBridge === undefined ? undefined : nativeAgentPort),
+    repositoryWork: () => (repositoryFeature === undefined ? undefined : repositoryAgentPort),
     ...(planning === undefined ? {} : { planning }),
   });
   let closed = false;
@@ -209,6 +200,18 @@ export function openWayfinderAgentFoundation(
         if (nativeBridge !== undefined)
           return { ok: false, message: "native work attachments are already bound" };
         nativeBridge = next;
+        return { ok: true, value: null };
+      },
+      bindRepositoryPlans(port) {
+        if (repositoryPlans !== undefined && repositoryPlans !== port)
+          return { ok: false, message: "repository plan adoption is already bound" };
+        repositoryPlans = port;
+        return { ok: true, value: null };
+      },
+      bindRepositoryWork(feature) {
+        if (repositoryFeature !== undefined && repositoryFeature !== feature)
+          return { ok: false, message: "repository workspace feature is already bound" };
+        repositoryFeature = feature;
         return { ok: true, value: null };
       },
       async start() {
@@ -552,10 +555,6 @@ function ownedCoordinatorPort(
       return { ok: true, value: null };
     },
   };
-}
-
-function digest(value: string): string {
-  return createHash("sha256").update(value).digest("hex");
 }
 
 function workspaceBrokerFailure(code: string, message: string) {

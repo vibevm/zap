@@ -29,6 +29,22 @@ npm run build:quicklens
 `dist/mcp.js` are the Codlens CLI and MCP connector. The package scripts are
 the source of truth for the current command names.
 
+For deterministic developer replay without provider inference:
+
+```text
+npm run simulate:mock -- --list
+npm run simulate:mock -- --id <scenario-id> --repeat 3 --seed <seed>
+npm run simulate:mock -- --coverage
+npm run simulate:mock -- --all
+```
+
+The runner discovers indexed colocated scenario documents and dispatches only
+known test entries. Selection by unknown ID/tag fails. Effective seeds and input
+positions are written to receipts. Passed scenarios and complete coverage are
+reported separately; use `--require-complete-coverage` only when an incomplete
+inventory should fail the run. These are deterministic component/runtime
+checks, not evidence that every real provider supports current Pause or wake.
+
 ## Normal local start
 
 After an installed build, start the product with:
@@ -72,9 +88,16 @@ proxy example is:
   "coordinatorDefaults": {
     "modelId": "your-protected-model-id",
     "effort": "low"
-  }
+  },
+  "repositoryMergeIdentity": null
 }
 ```
+
+Ordinary startup enables the local repository execution host and the bounded
+`repository.consistency` profile. Leave `repositoryMergeIdentity` null when you
+only need discovery, worktree preparation and reads. Configure a protected
+`{"name":"…","email":"…"}` value before an integration operation that
+must create a Git commit. Wayfinder never substitutes an invented author.
 
 The shared proxy policy applies to owned Codex, Claude Code, OpenCode and Qwen
 Code processes and to managed workers. A protected provider profile may select
@@ -82,6 +105,10 @@ Code processes and to managed workers. A protected provider profile may select
 credentials; provider credentials belong in protected environment files. Local
 Wayfinder, MCP and provider-control loopback addresses remain in the no-proxy
 set, and TLS verification remains enabled.
+
+`coordinatorDefaults.proxy` is the protected Codex-only override. Omit it to
+inherit the shared `proxy`, or set `{ "mode": "direct" }` (or another complete
+proxy policy) without changing Claude Code, OpenCode or Qwen Code profiles.
 
 For Claude Code, OpenCode or Qwen Code, add a protected
 `providerCoordinators` entry with its stable profile ID, provider, absolute
@@ -313,6 +340,50 @@ relinking chooses another exact anchor. **Propose restore** for a removed object
 creates an ordinary planning intent. It does not resurrect an obsolete plan or
 infer that temporarily missing or filtered data was deleted.
 
+## Multiple plans, worktrees and integration
+
+**New plan** creates another development-plan context inside the selected Git
+project. Wayfinder observes the selected committed HEAD, prepares an owned root
+worktree, and registers an independent context, conversation, broker scope,
+launch options and protected cwd. The project's original registered checkout
+stays the default context. The first repository read metadata-adopts that
+existing context in place so isolated managed work does not require relocating
+or restarting its coordinator.
+
+Use the plan selector to switch contexts. Each plan, worktree, integration,
+actor and run keeps its project and context identity in the map and detail
+cards. A worktree read observes current Git HEAD without mutating the durable
+record; the next preparation command CAS-records that exact committed head.
+Dirty edits are disclosed and are not copied into a child fork.
+
+Managed workers may request an isolated child worktree. Preparation records the
+parent, basis commit, execution host and actor/task/run assignment before the
+terminal starts. Continue uses the same assigned worktree and does not demand
+that it still match its initial clean HEAD. Provider-native children remain
+provider-owned and are not universally assignable to isolated cwd. A native
+coordinator launched for a prepared top-level context receives that context's
+protected root cwd only through the provider's supported launch mechanism.
+
+Integration is a separate checkout owned by the requesting/source plan. Its
+recorded target may be the original checkout in another context; that target's
+actual context supplies writer activity and promotion authority. The sequence
+is prepare candidate, inspect bounded diff, run a registered test profile,
+record human review, then promote against the exact target HEAD. A conflict
+creates an explicitly authorized managed resolution task in the integration
+checkout. There is no automatic stash, reset, force-push or conflict choice.
+
+Notes can target `plan_workspace`, `worktree` and `integration` references.
+These objects have their own authoritative annotation catalog, separate from a
+semantic planning snapshot, so a semantic refresh cannot falsely trash a
+worktree note.
+
+The repository writer gate is host-local. It resolves the recorded target
+worktree's real context, observes settled project lifecycle plus exact managed
+work and terminal activity, and holds one local target lease through promotion.
+The same lease prevents session/chat/Continue and managed prelaunch from
+reopening that target. Distributed leases, remote execution hosts and
+multi-user merge authority are not implemented.
+
 ## Plan and source boundaries
 
 ZAP remains authoritative for planning rules, economics, admission, holds,
@@ -325,6 +396,16 @@ their exact source basis and revision.
 The current renderer and local Wayfinder composition preserve unavailable
 states when a ZAP source or policy provider is not configured. That is an
 honest capability boundary, not a successful plan operation.
+
+A prepared development plan may remain source-pending while its coordinator,
+chat and managed work operate. Trusted dynamic attachment verifies the exact
+broker context, live ZAP store/campaign/base/revision/adopted-plan identity and
+worktree-local workflow/specification paths before binding. Two independent
+plans cannot silently share the same active planning identity. Dynamically
+supplied protected source configuration is not persisted by this slice: after
+restart, an unrestored source is explicitly unavailable and the algorithm
+binding is pending until a trusted caller reconnects it. No parent source is
+copied into a child plan.
 
 When `planning.contexts` is configured, Wayfinder owns one protected ZAP/source
 runtime and journal per registered project/context. Browser controls use
@@ -424,9 +505,13 @@ the same project/context identities and cannot merge plans, camera state or
 authority.
 
 The four provider families have registered drivers, shared proxy and MCP
-preparation. Qwen Code completed a real managed question, browser answer,
-explicit delivery acknowledgement and typed report through an HTTP proxy;
-browser review also succeeded after Wayfinder restart. The current cycle does
-not claim a real-model end-to-end run for every provider. The
+preparation. Codex/Luna and Claude Code/Haiku completed the bounded live
+question, idle and active Pause, late-answer delivery, same-conversation
+Continue and Stop flow. Qwen Code with a free model completed the main live
+question/pause/wake/context flow, and OpenCode completed the same main live flow
+after its request shape was corrected. The Qwen and OpenCode receipts still
+record cleanup failures from the old exit-unsubscription ordering. The exact
+shared Stop repair is covered by four focused public no-model lifecycle tests;
+the historical receipts are not rewritten. The
 [acceptance record](research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md) distinguishes
 live evidence from deterministic adapter tests and records the remaining limits.

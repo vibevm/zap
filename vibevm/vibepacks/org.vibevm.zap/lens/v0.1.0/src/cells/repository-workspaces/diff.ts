@@ -4,7 +4,7 @@ import type {
   IntegrationDiffRequest,
   RepositoryWorkspaceResult,
 } from "./contracts.ts";
-import { fail, gitText, hostAvailable, type RepositoryWorkspaceRuntime } from "./runtime.ts";
+import { fail, hostAvailable, type RepositoryWorkspaceRuntime } from "./runtime.ts";
 
 export async function readIntegrationDiff(
   runtime: RepositoryWorkspaceRuntime,
@@ -29,39 +29,42 @@ export async function readIntegrationDiff(
     worktree.record.contextId !== input.contextId
   )
     return fail("unavailable", "integration workspace is unavailable");
-  const files = await gitText(runtime, worktree.directory, [
-    "diff",
-    "--no-ext-diff",
-    "--no-textconv",
-    "--name-only",
-    "-z",
-    `${integration.expectedTargetHead}..${integration.candidateCommit}`,
-    "--",
-  ]);
-  if (!files.ok) return files;
-  const diff = await gitText(runtime, worktree.directory, [
-    "diff",
-    "--no-ext-diff",
-    "--no-textconv",
-    "--unified=3",
-    `${integration.expectedTargetHead}..${integration.candidateCommit}`,
-    "--",
-  ]);
-  if (!diff.ok) return diff;
-  const bytes = Buffer.from(diff.value, "utf8");
+  const files = await runtime.git.run({
+    cwd: worktree.directory,
+    args: [
+      "diff",
+      "--no-ext-diff",
+      "--no-textconv",
+      "--name-only",
+      "-z",
+      `${integration.expectedTargetHead}..${integration.candidateCommit}`,
+      "--",
+    ],
+  });
+  if (files.exitCode !== 0) return fail("unavailable", "integration file diff is unavailable");
+  const diff = await runtime.git.run({
+    cwd: worktree.directory,
+    args: [
+      "diff",
+      "--no-ext-diff",
+      "--no-textconv",
+      "--unified=3",
+      `${integration.expectedTargetHead}..${integration.candidateCommit}`,
+      "--",
+    ],
+  });
+  if (diff.exitCode !== 0) return fail("unavailable", "integration unified diff is unavailable");
+  const changedFiles = files.stdout.split("\0").filter((path) => path.length > 0);
+  const bytes = Buffer.from(diff.stdout, "utf8");
   const truncated = bytes.length > input.maximumBytes;
   return {
     ok: true,
     value: {
       targetCommit: integration.expectedTargetHead,
       candidateCommit: integration.candidateCommit,
-      changedFiles: files.value
-        .split("\0")
-        .filter((path) => path.length > 0)
-        .slice(0, 2_048),
-      unifiedText: truncated ? bytes.subarray(0, input.maximumBytes).toString("utf8") : diff.value,
-      truncated:
-        truncated || files.value.split("\0").filter((path) => path.length > 0).length > 2_048,
+      changedFiles: changedFiles.slice(0, 2_048),
+      unifiedText: truncated ? bytes.subarray(0, input.maximumBytes).toString("utf8") : diff.stdout,
+      truncated: truncated || changedFiles.length > 2_048,
     },
   };
 }

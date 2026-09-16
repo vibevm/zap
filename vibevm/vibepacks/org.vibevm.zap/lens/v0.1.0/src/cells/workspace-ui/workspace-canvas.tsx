@@ -18,9 +18,10 @@ import { PortfolioCanvas } from "../quicklens-ui/index.tsx";
 import {
   readWorkspaceCanvas,
   type WorkspaceCanvasInput,
+  type WorkspaceCanvasSelection,
   type WorkspaceClientPort,
 } from "../workspace-client/index.ts";
-import type { ProjectDescriptor, ProjectId } from "../workspace-model/index.ts";
+import type { ProjectDescriptor, ProjectId, WorkContextId } from "../workspace-model/index.ts";
 import { CanvasCard } from "./canvas-card.tsx";
 import { AnnotationPanel } from "./annotation-panel.tsx";
 import { ScopedRequestFence } from "./request-fence.ts";
@@ -30,8 +31,8 @@ export const WorkspaceCanvas = component$<{
   readonly projects: readonly ProjectDescriptor[];
   readonly theme: "light" | "dark";
   readonly refreshEpoch: number;
-  readonly onOpenProject$: QRL<(projectId: ProjectId) => void>;
-  readonly onOpenQuestions$: QRL<(projectId: ProjectId) => void>;
+  readonly onOpenProject$: QRL<(projectId: ProjectId, contextId: WorkContextId) => void>;
+  readonly onOpenQuestions$: QRL<(projectId: ProjectId, contextId: WorkContextId) => void>;
 }>((props) => {
   const input = useSignal<WorkspaceCanvasInput | null>(null);
   const selectedKey = useSignal<string | null>(null);
@@ -42,12 +43,15 @@ export const WorkspaceCanvas = component$<{
   const error = useSignal<string | null>(null);
   const refreshEpoch = useSignal(0);
   const annotationMode = useSignal<"notes" | "trash" | null>(null);
+  const selectedScopes = useSignal<readonly WorkspaceCanvasSelection[]>([]);
+  const scopeSelectionTouched = useSignal(false);
   const fence = useSignal<NoSerialize<ScopedRequestFence>>(noSerialize(new ScopedRequestFence()));
 
   useVisibleTask$(({ track, cleanup }) => {
     const projectScope = track(() =>
       props.projects.map((project) => `${project.projectId}:${project.revision}`).join("|"),
     );
+    track(() => selectedScopes.value.map(selectionKey).join("|"));
     const refresh = track(() => refreshEpoch.value);
     track(() => props.refreshEpoch);
     const port = props.port;
@@ -57,16 +61,23 @@ export const WorkspaceCanvas = component$<{
       loading.value = false;
       return;
     }
+    const validProjects = new Set(props.projects.map((project) => project.projectId));
+    const retained = selectedScopes.value.filter((scope) => validProjects.has(scope.projectId));
+    const selections =
+      retained.length === 0
+        ? props.projects.slice(0, 8).map((project) => ({
+            projectId: project.projectId,
+            contextId: project.defaultContextId,
+            fallbackLabel: project.displayName,
+          }))
+        : retained;
+    if (selectionSignature(selections) !== selectionSignature(selectedScopes.value)) {
+      selectedScopes.value = selections;
+      return;
+    }
     const token = activeFence.begin(`${projectScope}\u0000${String(refresh)}`);
     loading.value = true;
-    void readWorkspaceCanvas(
-      port,
-      props.projects.slice(0, 8).map((project) => ({
-        projectId: project.projectId,
-        contextId: project.defaultContextId,
-        fallbackLabel: project.displayName,
-      })),
-    ).then((read) => {
+    void readWorkspaceCanvas(port, selections).then((read) => {
       if (!activeFence.isCurrent(token)) return;
       loading.value = false;
       if (!read.ok) {
@@ -74,6 +85,11 @@ export const WorkspaceCanvas = component$<{
         return;
       }
       input.value = read.value;
+      if (!scopeSelectionTouched.value) {
+        const discovered = canvasScopes(props.projects, read.value).slice(0, 8);
+        if (selectionSignature(discovered) !== selectionSignature(selectedScopes.value))
+          selectedScopes.value = discovered;
+      }
       error.value = null;
     });
     cleanup(() => {
@@ -119,10 +135,11 @@ export const WorkspaceCanvas = component$<{
       project.state === "ready"
         ? [
             project.selection.projectId,
+            project.selection.contextId,
             project.revision,
             ...project.managedWorks.map((work) => work.revision),
           ]
-        : [project.selection.projectId, project.reason],
+        : [project.selection.projectId, project.selection.contextId, project.reason],
     ),
   });
   const questions = input.value.projects.flatMap((project) =>
@@ -136,7 +153,11 @@ export const WorkspaceCanvas = component$<{
           }))
       : [],
   );
-  const omittedProjects = props.projects.slice(8);
+  const availableScopes = canvasScopes(props.projects, input.value);
+  const unselectedScopes = availableScopes.filter(
+    (scope) =>
+      !selectedScopes.value.some((selected) => selectionKey(selected) === selectionKey(scope)),
+  );
 
   return (
     <section class="workspace-canvas-shell">
@@ -146,8 +167,44 @@ export const WorkspaceCanvas = component$<{
           <h1>Projects, plans and agents</h1>
           <p>Each region keeps its own project, context and plan authority.</p>
           <small>
-            Showing {input.value.projects.length} of {props.projects.length} registered project(s).
+            Selected {selectedScopes.value.length} of {availableScopes.length} visible plan
+            context(s).
           </small>
+        </div>
+        <details class="canvas-scope-selector">
+          <summary>Choose plan contexts</summary>
+          <div class="canvas-scope-options">
+            {availableScopes.map((scope) => {
+              const selected = selectedScopes.value.some(
+                (candidate) => selectionKey(candidate) === selectionKey(scope),
+              );
+              return (
+                <label key={selectionKey(scope)}>
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    disabled={!selected && selectedScopes.value.length >= 8}
+                    onChange$={() => {
+                      scopeSelectionTouched.value = true;
+                      selectedScopes.value = selected
+                        ? selectedScopes.value.filter(
+                            (candidate) => selectionKey(candidate) !== selectionKey(scope),
+                          )
+                        : [...selectedScopes.value, scope];
+                    }}
+                  />
+                  <span>{scope.fallbackLabel}</span>
+                </label>
+              );
+            })}
+          </div>
+        </details>
+        <div class="network-legend repository-legend" aria-label="Workspace map legend">
+          <span>Plan context</span>
+          <span>Root branch lane</span>
+          <span>Isolated worker branch</span>
+          <span>Integration and conflict resolution</span>
+          <span>Arrows show fork, execution and merge direction</span>
         </div>
         <div class="canvas-toolbar-actions">
           <label class="field-label">
@@ -179,11 +236,18 @@ export const WorkspaceCanvas = component$<{
         ) : (
           <div class="canvas-question-attention">
             <strong>{questions.length} open question group(s)</strong>
-            {[...new Map(questions.map((item) => [item.projectId, item])).values()].map((item) => (
+            {[
+              ...new Map(
+                questions.map((item) => [
+                  `${item.projectId}\u0000${item.question.contextId}`,
+                  item,
+                ]),
+              ).values(),
+            ].map((item) => (
               <button
-                key={item.projectId}
+                key={`${item.projectId}:${item.question.contextId}`}
                 class="button secondary"
-                onClick$={() => props.onOpenQuestions$(item.projectId)}
+                onClick$={() => props.onOpenQuestions$(item.projectId, item.question.contextId)}
               >
                 {item.projectLabel}
               </button>
@@ -191,10 +255,10 @@ export const WorkspaceCanvas = component$<{
           </div>
         )}
       </header>
-      {omittedProjects.length === 0 ? null : (
+      {unselectedScopes.length === 0 ? null : (
         <details class="workspace-notice canvas-diagnostics">
-          <summary>{omittedProjects.length} project(s) are outside this bounded map</summary>
-          <p>{omittedProjects.map((project) => project.displayName).join(", ")}</p>
+          <summary>{unselectedScopes.length} plan context(s) are outside this bounded map</summary>
+          <p>{unselectedScopes.map((scope) => scope.fallbackLabel).join(", ")}</p>
         </details>
       )}
       {projection.diagnostics.length === 0 ? null : (
@@ -264,15 +328,70 @@ function cardLabel(card: PortfolioCard): string {
     card.project.state === "ready"
       ? card.project.view.project.displayName
       : card.project.selection.fallbackLabel;
+  const context =
+    card.project.state === "ready"
+      ? (card.project.view.contexts.find((item) => item.contextId === card.reference.contextId)
+          ?.displayName ?? "Context")
+      : "Context";
   const title =
     card.kind === "project"
-      ? project
+      ? "Context overview"
       : card.kind === "semantic"
         ? card.object.title
         : card.kind === "agent"
           ? card.agent.displayName
-          : card.entity === "task"
-            ? card.work.goal
-            : `${card.work.provider} run`;
-  return `${project} · ${title}`;
+          : card.kind === "managed_work"
+            ? card.entity === "task"
+              ? compactLabel(card.work.goal, 48)
+              : `${card.work.provider} run`
+            : card.kind === "plan_workspace"
+              ? "Plan workspace"
+              : card.kind === "worktree"
+                ? worktreeCanvasLabel(card)
+                : `Merge result · ${card.integration.state}`;
+  return `${project} · ${context} · ${title}`;
+}
+
+function worktreeCanvasLabel(card: Extract<PortfolioCard, { kind: "worktree" }>): string {
+  if (card.worktree.kind === "registered") return "Original checkout";
+  if (card.worktree.kind === "plan_root") return "Plan root";
+  if (card.worktree.kind === "worker") return "Worker branch";
+  return "Merge workspace";
+}
+
+function compactLabel(value: string, maximum: number): string {
+  return value.length <= maximum ? value : `${value.slice(0, maximum - 1)}…`;
+}
+
+function canvasScopes(
+  projects: readonly ProjectDescriptor[],
+  input: WorkspaceCanvasInput,
+): readonly WorkspaceCanvasSelection[] {
+  const byProject = new Map(projects.map((project) => [project.projectId, project]));
+  const scopes = projects.map((project) => ({
+    projectId: project.projectId,
+    contextId: project.defaultContextId,
+    fallbackLabel: `${project.displayName} · default`,
+  }));
+  for (const canvasProject of input.projects) {
+    if (canvasProject.state !== "ready") continue;
+    const project = byProject.get(canvasProject.selection.projectId);
+    for (const context of canvasProject.view.contexts)
+      scopes.push({
+        projectId: canvasProject.selection.projectId,
+        contextId: context.contextId,
+        fallbackLabel: `${project?.displayName ?? canvasProject.selection.fallbackLabel} · ${context.displayName}`,
+      });
+  }
+  return [...new Map(scopes.map((scope) => [selectionKey(scope), scope])).values()];
+}
+
+function selectionKey(
+  selection: Pick<WorkspaceCanvasSelection, "projectId" | "contextId">,
+): string {
+  return `${selection.projectId}\u0000${selection.contextId}`;
+}
+
+function selectionSignature(selections: readonly WorkspaceCanvasSelection[]): string {
+  return selections.map(selectionKey).join("|");
 }

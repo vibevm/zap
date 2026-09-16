@@ -27,6 +27,7 @@ export const ManagedAgentProfileSchema = z
     mcpCommandPath: AbsolutePathSchema.optional(),
     mcpArgs: z.array(z.string().max(16_384)).max(64).optional(),
     proxy: ProxyPolicySchema.optional(),
+    mockScenarioPath: AbsolutePathSchema.optional(),
     capabilities: ManagedProviderCapabilitiesSchema,
   })
   .strict()
@@ -37,7 +38,7 @@ export const ManagedAgentProfileSchema = z
         message: "capability evidence must name the launch provider",
       });
     if (
-      (profile.provider === "opencode" || profile.provider === "qwen_code") &&
+      ["opencode", "qwen_code", "zap_mock"].includes(profile.provider) &&
       profile.effort !== null &&
       !profile.effortSupported
     )
@@ -45,6 +46,26 @@ export const ManagedAgentProfileSchema = z
         code: "custom",
         path: ["effort"],
         message: "installed launch surface has no verified effort argument",
+      });
+    if (profile.provider === "zap_mock" && profile.mockScenarioPath === undefined)
+      context.addIssue({
+        code: "custom",
+        path: ["mockScenarioPath"],
+        message: "explicit ZapMock managed profiles require a scenario file",
+      });
+    if (
+      profile.provider === "zap_mock" &&
+      (profile.environmentRef !== null || profile.proxy !== undefined)
+    )
+      context.addIssue({
+        code: "custom",
+        message: "ZapMock profiles cannot resolve provider environment or proxy configuration",
+      });
+    if (profile.provider !== "zap_mock" && profile.mockScenarioPath !== undefined)
+      context.addIssue({
+        code: "custom",
+        path: ["mockScenarioPath"],
+        message: "mock scenario is valid only for ZapMock profiles",
       });
   });
 export type ManagedAgentProfile = z.infer<typeof ManagedAgentProfileSchema>;
@@ -69,8 +90,17 @@ export interface ManagedProviderDriver {
   readonly provider: z.infer<typeof ManagedProviderIdSchema>;
   launch(input: {
     readonly profile: ManagedAgentProfile;
+    readonly workspaceCwd: string;
     readonly selection: ModelSelection;
     readonly instructions: string;
+    readonly environment: Readonly<Record<string, string>>;
+    readonly trustedZapMcp: boolean;
+  }): ProviderLaunch;
+  resume(input: {
+    readonly profile: ManagedAgentProfile;
+    readonly workspaceCwd: string;
+    readonly selection: ModelSelection;
+    readonly providerSessionId: string;
     readonly environment: Readonly<Record<string, string>>;
     readonly trustedZapMcp: boolean;
   }): ProviderLaunch;
@@ -93,9 +123,10 @@ function driver(
   provider: z.infer<typeof ManagedProviderIdSchema>,
   globalProxy?: ProxyPolicySchemaType,
 ): ManagedProviderDriver {
-  return {
+  if (provider === "zap_mock") return mockDriver();
+  const managedDriver: ManagedProviderDriver = {
     provider,
-    launch({ profile, selection, instructions, environment, trustedZapMcp }) {
+    launch({ profile, workspaceCwd, selection, instructions, environment, trustedZapMcp }) {
       const model = selection.modelId;
       const effort = effectiveEffort(selection);
       const proxyResolution = resolveProxyEnvironment({
@@ -139,7 +170,7 @@ function driver(
               ]
             : provider === "opencode"
               ? [
-                  profile.cwd,
+                  workspaceCwd,
                   "--model",
                   model,
                   ...(effort === null || !profile.effortSupported ? [] : ["--agent", "managed"]),
@@ -181,14 +212,111 @@ function driver(
       return {
         executable: profile.executablePath,
         args: [...profile.argumentPrefix, ...args],
-        cwd: profile.cwd,
+        cwd: workspaceCwd,
         env: {
           ...inheritedEnvironment,
           ...providerEnv,
         },
       };
     },
+    resume(input) {
+      const marker = "__zap_resume_without_bootstrap__";
+      const launch = managedDriver.launch({ ...input, instructions: marker });
+      return {
+        ...launch,
+        args: resumeArguments(provider, launch.args, marker, input.providerSessionId),
+      };
+    },
   };
+  return managedDriver;
+}
+
+function mockDriver(): ManagedProviderDriver {
+  const launch = (input: Parameters<ManagedProviderDriver["launch"]>[0]): ProviderLaunch => {
+    const scenario = input.profile.mockScenarioPath;
+    if (scenario === undefined)
+      throw new Error(
+        "violates REQ spec://org.vibevm.zap/lens/PROP-013#identity: explicit ZapMock scenario is missing; fix surface: register mockScenarioPath on the mock profile",
+      );
+    return {
+      executable: input.profile.executablePath,
+      args: [
+        ...input.profile.argumentPrefix,
+        "managed",
+        "--scenario",
+        scenario,
+        "--model",
+        "zap-mock/deterministic-v1",
+        "--mcp-config",
+        input.profile.mcpConfigPath,
+        "--instructions",
+        input.instructions,
+      ],
+      cwd: input.workspaceCwd,
+      env: mockEnvironment(input.environment),
+    };
+  };
+  return {
+    provider: "zap_mock",
+    launch,
+    resume(input) {
+      const resumed = launch({ ...input, instructions: "" });
+      const instructions = resumed.args.indexOf("--instructions");
+      return {
+        ...resumed,
+        args: [
+          ...resumed.args.slice(0, instructions),
+          "--resume",
+          input.providerSessionId,
+          ...resumed.args.slice(instructions + 2),
+        ],
+      };
+    },
+  };
+}
+
+function mockEnvironment(
+  environment: Readonly<Record<string, string>>,
+): Readonly<Record<string, string>> {
+  const codlens = new Set([
+    "CODLENS_URL",
+    "CODLENS_CREDENTIAL_FILE",
+    "CODLENS_ADAPTER_SESSION_ID",
+    "CODLENS_WORKSPACE_ID",
+    "CODLENS_CONVERSATION_ID",
+  ]);
+  const runtime = new Set(["SystemRoot", "WINDIR", "PATH", "Path", "PATHEXT", "TEMP", "TMP"]);
+  const inherited = Object.entries(process.env).filter(
+    (entry): entry is [string, string] => runtime.has(entry[0]) && entry[1] !== undefined,
+  );
+  const binding = Object.entries(environment).filter(([name]) => codlens.has(name));
+  return Object.fromEntries([...inherited, ...binding]);
+}
+
+function resumeArguments(
+  provider: z.infer<typeof ManagedProviderIdSchema>,
+  args: readonly string[],
+  marker: string,
+  providerSessionId: string,
+): readonly string[] {
+  if (provider === "codex")
+    return args.flatMap((argument) =>
+      argument === marker ? ["resume", providerSessionId] : [argument],
+    );
+  if (provider === "claude_code")
+    return args.flatMap((argument) =>
+      argument === marker ? ["--resume", providerSessionId] : [argument],
+    );
+  if (provider === "qwen_code") {
+    const prompt = args.indexOf("--prompt-interactive");
+    return prompt < 0
+      ? [...args, "--resume", providerSessionId]
+      : [...args.slice(0, prompt), "--resume", providerSessionId, ...args.slice(prompt + 2)];
+  }
+  const prompt = args.indexOf("--prompt");
+  return prompt < 0
+    ? [...args, "--session", providerSessionId]
+    : [...args.slice(0, prompt), "--session", providerSessionId, ...args.slice(prompt + 2)];
 }
 
 function readJsonObject(path: string): Record<string, unknown> {

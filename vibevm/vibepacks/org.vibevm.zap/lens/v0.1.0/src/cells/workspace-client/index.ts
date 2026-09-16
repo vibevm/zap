@@ -141,7 +141,11 @@ export async function readProjectWorkspace(
   projectId: ProjectId,
   preferredContextId?: WorkContextId,
 ): Promise<WorkspaceResult<ProjectWorkspaceView>> {
-  const detail = await readOperation(port, { operation: "project.get.v1", projectId });
+  const detail = await readOperation(port, {
+    operation: "project.get.v1",
+    projectId,
+    ...(preferredContextId === undefined ? {} : { contextId: preferredContextId }),
+  });
   if (!detail.ok) return detail;
   const contextId = preferredContextId ?? detail.value.detail.project.defaultContextId;
   const [snapshot, execution, network, questions, sessions] = await Promise.all([
@@ -356,3 +360,10 @@ export {
 } from "./canvas.ts";
 export { createLocalQuestionDraftStore, type QuestionDraftStore } from "./question-drafts.ts";
 export { createQuestionCancelRequest } from "./questions.ts";
+export {
+  commandRepositoryWorkspace,
+  readIntegrationDiff,
+  readRepositoryWorkspace,
+  type IntegrationDiffView,
+  type RepositoryWorkspaceView,
+} from "./repository.ts";

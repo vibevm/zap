@@ -19,9 +19,10 @@ test("normal Qwen profile receives protected environment and generated MCP befor
     scriptPath,
     [
       "import { writeFileSync } from 'node:fs';",
+      "import { createInterface } from 'node:readline';",
       "writeFileSync(process.env.CAPTURE_PATH, JSON.stringify({args:process.argv.slice(2),url:process.env.CODLENS_URL,credential:process.env.CODLENS_CREDENTIAL_FILE,marker:process.env.SYNTHETIC_PROVIDER_MARKER}));",
-      "process.stdin.setEncoding('utf8');",
-      "process.stdin.once('data',()=>console.log(JSON.stringify({type:'system',session_id:'qwen-session-fixture'})));",
+      "const lines=createInterface({input:process.stdin,crlfDelay:Infinity});",
+      "lines.on('line',(line)=>{const input=JSON.parse(line);if(input.type==='control_request'){console.log(JSON.stringify({type:'control_response',response:{subtype:'success',request_id:input.request_id,response:{subtype:input.request?.subtype,session_id:'qwen-session-fixture'}}}));}});",
       "setInterval(()=>undefined,60000);",
     ].join("\n"),
   );

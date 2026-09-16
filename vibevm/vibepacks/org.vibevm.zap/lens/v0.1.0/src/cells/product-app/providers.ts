@@ -80,18 +80,7 @@ export async function discoverLocalProductProviders(
     };
   return {
     coordinatorProfiles: [
-      {
-        profileId,
-        executablePath: executable.value,
-        requestTimeoutMs: 30_000,
-        proxy: settings.proxy,
-        model: defaults.modelId,
-        effort: defaults.effort,
-        approvalPolicy: "on-request",
-        sandbox: "workspace-write",
-        personality: "pragmatic",
-        serviceName: "zap-quick-lens",
-      },
+      configuredCodexProfile({ ...settings, coordinatorDefaults: defaults }, executable.value),
     ],
     providerCoordinatorProfiles: configuredProviders,
     productProviders: [
@@ -115,6 +104,26 @@ export async function discoverLocalProductProviders(
       ...detectedCatalog,
     ],
     managedWorkers,
+  };
+}
+
+export function configuredCodexProfile(
+  settings: ProductLocalSettings & {
+    readonly coordinatorDefaults: NonNullable<ProductLocalSettings["coordinatorDefaults"]>;
+  },
+  executablePath: string,
+): CodexCoordinatorProfile {
+  return {
+    profileId: "profile.codex.local",
+    executablePath,
+    requestTimeoutMs: 30_000,
+    proxy: settings.coordinatorDefaults.proxy ?? settings.proxy,
+    model: settings.coordinatorDefaults.modelId,
+    effort: settings.coordinatorDefaults.effort,
+    approvalPolicy: "on-request",
+    sandbox: "workspace-write",
+    personality: "pragmatic",
+    serviceName: "zap-quick-lens",
   };
 }
 

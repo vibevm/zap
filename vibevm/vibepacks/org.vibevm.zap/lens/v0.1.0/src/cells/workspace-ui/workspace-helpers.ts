@@ -2,6 +2,7 @@
 /** Pure workspace UI event and command helpers. */
 import {
   initialHistoryCursor,
+  readProjectWorkspace,
   readQuestionWorkspace,
   workspaceRequestId,
   type ProjectWorkspaceView,
@@ -123,6 +124,19 @@ export function projectNames(projects: readonly ProjectDescriptor[]): ReadonlyMa
 
 export function agentNames(view: ProjectWorkspaceView | null): ReadonlyMap<string, string> {
   return new Map((view?.network.agents ?? []).map((agent) => [agent.actorId, agent.displayName]));
+}
+
+export async function readProjectBoardViews(
+  port: WorkspaceClientPort,
+  projects: readonly ProjectDescriptor[],
+): Promise<Record<string, ProjectWorkspaceView>> {
+  const entries = await Promise.all(
+    projects.slice(0, 8).map(async (project) => {
+      const view = await readProjectWorkspace(port, project.projectId);
+      return view.ok ? ([project.projectId, view.value] as const) : null;
+    }),
+  );
+  return Object.fromEntries(entries.filter((entry) => entry !== null));
 }
 
 export async function submitQuestion(

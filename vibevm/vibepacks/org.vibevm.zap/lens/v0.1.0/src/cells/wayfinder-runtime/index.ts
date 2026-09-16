@@ -1,28 +1,23 @@
 /** Runnable local Zap Wayfinder composition over the shared workspace service.
  * @scope spec://org.vibevm.zap/lens/PROP-005#server-ownership
  */
-import { readFile } from "node:fs/promises";
 import { mkdirSync } from "node:fs";
-import { dirname, isAbsolute, resolve } from "node:path";
-import { z } from "zod";
+import { dirname, resolve } from "node:path";
 import type { AgentHost } from "../agent-runtime/index.ts";
 import {
   CodexCoordinatorProfileSchema,
   createNodeCodexProcessFactory,
 } from "../codex-coordinator/index.ts";
 import { unavailableDataSource } from "../quicklens-model/index.ts";
-import { ProxyPolicySchema } from "../proxy-policy/index.ts";
 import {
   createClaudeStreamJsonTransportFactory,
   createOpenCodeOwnedTransportFactory,
   createProviderCoordinatorHost,
   createQwenStreamJsonTransportFactory,
-  ProviderCoordinatorProfileSchema,
 } from "../provider-coordinators/index.ts";
 import {
   createDynamicWorkspacePort,
   createProductAppService,
-  ManagedWorkerTemplateSchema,
   openProductAppRegistry,
 } from "../product-app/index.ts";
 import {
@@ -30,39 +25,23 @@ import {
   createWorkspaceService,
 } from "../workspace-service/index.ts";
 import { createWayfinderAnnotationBindings } from "./annotations.ts";
-import { ManagedAgentProfileSchema } from "../managed-work/index.ts";
+import type { ManagedAgentBackend } from "../managed-work/index.ts";
 import { createModelPolicyService } from "../model-policy-service/index.ts";
 import { openModelPolicyStore, type ModelPolicyStore } from "../model-policy-store/index.ts";
-import {
-  CoordinatorRoutingConfigSchema,
-  createConfiguredCoordinatorRoutingProvider,
-} from "../coordinator-routing/index.ts";
-import { openWorkspaceStore, TrustedProjectRegistrationSchema } from "../workspace-store/index.ts";
-import { type ProjectId, ProductProviderProfileSchema } from "../workspace-model/index.ts";
-import {
-  openWayfinderAgentFoundation,
-  WayfinderAgentGatewayConfigSchema,
-  type WayfinderAgentFoundation,
-} from "./agent.ts";
-import {
-  createManagedRuntimeController,
-  ManagedRuntimeConfigSchema,
-  type ManagedRuntimeController,
-} from "./managed.ts";
+import { createConfiguredCoordinatorRoutingProvider } from "../coordinator-routing/index.ts";
+import { openWorkspaceStore } from "../workspace-store/index.ts";
+import type { ProjectId } from "../workspace-model/index.ts";
+import { openWayfinderAgentFoundation, type WayfinderAgentFoundation } from "./agent.ts";
+import { createManagedRuntimeController, type ManagedRuntimeController } from "./managed.ts";
 import {
   openConfiguredManagedWorkRuntime,
   type ConfiguredManagedWorkRuntime,
 } from "./managed-work.ts";
 import {
   createWorkspacePlanningController,
-  WorkspacePlanningRuntimeConfigSchema,
   type WorkspacePlanningController,
 } from "../workspace-planning/index.ts";
-import {
-  openWayfinderWebRuntime,
-  WayfinderWebConfigSchema,
-  type WayfinderWebRuntime,
-} from "./web.ts";
+import { openWayfinderWebRuntime, type WayfinderWebRuntime } from "./web.ts";
 import {
   createCodexHost,
   createRuntimeRoutingBridge,
@@ -81,110 +60,24 @@ import { openRuntimeAnnotations } from "./annotation-composition.ts";
 import { invalidConfig } from "./runtime-result.ts";
 import { createRuntimeTrustedContextProvider } from "./model-policy-wire.ts";
 import { createQuicklensGateway, type QuicklensGateway } from "../quicklens-service/index.ts";
-
-const AbsolutePathSchema = z.string().min(1).refine(isAbsolute, "path must be absolute");
-const GatewaySchema = z
-  .object({
-    host: z.string().min(1).max(255),
-    port: z.number().int().min(0).max(65_535),
-    namespace: z.string().regex(/^[A-Za-z][A-Za-z0-9_-]{2,63}$/),
-    pairingToken: z.string().min(24).max(512),
-    allowedHosts: z.array(z.string().min(1)).min(1).max(16),
-    allowedOrigins: z.array(z.string().min(1)).min(1).max(16),
-  })
-  .strict();
-
-export const WayfinderRuntimeConfigSchema = z
-  .object({
-    version: z.literal(1),
-    state: z
-      .object({
-        databasePath: AbsolutePathSchema,
-        modelPolicyDatabasePath: AbsolutePathSchema.optional(),
-        annotationsDatabasePath: AbsolutePathSchema.optional(),
-        productRegistryPath: AbsolutePathSchema.optional(),
-      })
-      .strict(),
-    gateway: GatewaySchema,
-    agentGateway: WayfinderAgentGatewayConfigSchema.optional(),
-    managedTerminals: ManagedRuntimeConfigSchema.optional(),
-    managedAgents: z.array(ManagedAgentProfileSchema).max(256).default([]),
-    planning: WorkspacePlanningRuntimeConfigSchema.optional(),
-    profiles: z.array(CodexCoordinatorProfileSchema).max(32).default([]),
-    providerCoordinatorProfiles: z.array(ProviderCoordinatorProfileSchema).max(32).default([]),
-    productProviders: z.array(ProductProviderProfileSchema).max(64).default([]),
-    managedWorkerProfiles: z.array(ManagedWorkerTemplateSchema).max(64).default([]),
-    proxy: ProxyPolicySchema.default({ mode: "inherit" }),
-    projects: z.array(TrustedProjectRegistrationSchema).max(256).default([]),
-    modelPolicies: z
-      .array(
-        z
-          .object({
-            projectId: z.string().min(3).max(160),
-            contextId: z.string().min(3).max(160),
-            policyId: z.string().min(3).max(160),
-          })
-          .strict(),
-      )
-      .max(256)
-      .default([]),
-    routing: CoordinatorRoutingConfigSchema.optional(),
-    web: WayfinderWebConfigSchema.optional(),
-  })
-  .strict()
-  .superRefine((config, context) => {
-    const profileIds = new Set([
-      ...config.profiles.map((profile) => profile.profileId),
-      ...config.providerCoordinatorProfiles.map((profile) => profile.profileId),
-    ]);
-    if (profileIds.size !== config.profiles.length + config.providerCoordinatorProfiles.length)
-      context.addIssue({
-        code: "custom",
-        path: ["providerCoordinatorProfiles"],
-        message: "coordinator profile IDs must be unique across providers",
-      });
-    for (const [index, profile] of config.productProviders.entries()) {
-      if (profile.configured && profile.launchable && !profileIds.has(profile.profileId))
-        context.addIssue({
-          code: "custom",
-          path: ["productProviders", index, "profileId"],
-          message: "product provider must name a protected coordinator profile",
-        });
-    }
-    for (const [index, profile] of config.profiles.entries()) {
-      if (profile.lensMcp === undefined) continue;
-      const endpoint = new URL(profile.lensMcp.brokerUrl);
-      const endpointHost = endpoint.hostname === "[::1]" ? "::1" : endpoint.hostname;
-      const configuredPort = Number(endpoint.port || "80");
-      if (
-        config.agentGateway === undefined ||
-        config.agentGateway.port === 0 ||
-        endpointHost !== config.agentGateway.host ||
-        configuredPort !== config.agentGateway.port
-      ) {
-        context.addIssue({
-          code: "custom",
-          path: ["profiles", index, "lensMcp", "brokerUrl"],
-          message: "Lens MCP URL must match the fixed configured agent gateway",
-        });
-      }
-    }
-  });
-export type WayfinderRuntimeConfig = z.infer<typeof WayfinderRuntimeConfigSchema>;
-
-export async function loadWayfinderConfig(
-  path: string,
-): Promise<WayfinderResult<WayfinderRuntimeConfig>> {
-  try {
-    const raw: unknown = JSON.parse(await readFile(resolve(path), "utf8"));
-    const parsed = WayfinderRuntimeConfigSchema.safeParse(raw);
-    return parsed.success
-      ? { ok: true, value: parsed.data }
-      : invalidConfig("config schema is invalid");
-  } catch {
-    return invalidConfig("config file could not be read");
-  }
-}
+import { createWayfinderManagedWake } from "./managed-wake-composition.ts";
+import {
+  openRuntimeRepositoryWorkspaces,
+  type RuntimeRepositoryWorkspaces,
+} from "./repository-runtime.ts";
+import {
+  createRuntimeRepositoryFeature,
+  ensureRuntimeRepositoryContextPlan,
+} from "./repository-feature.ts";
+import { createRepositoryResolutionComposition } from "./repository-resolution.ts";
+import { createRepositoryWriterAdmission } from "./repository-writer.ts";
+import { attachRuntimePlanningSource } from "./planning-attachment.ts";
+import { createRuntimeRepositoryWriterActivity } from "./repository-activity.ts";
+import { reconcileDetachedPlanningSources } from "./planning-recovery.ts";
+import { failure as transportFailure } from "../transport/index.ts";
+import { WayfinderRuntimeConfigSchema } from "./runtime-config.ts";
+export { loadWayfinderConfig, WayfinderRuntimeConfigSchema } from "./runtime-config.ts";
+export type { WayfinderRuntimeConfig } from "./runtime-config.ts";
 
 export function createWayfinderRuntime(
   rawConfig: unknown,
@@ -251,6 +144,7 @@ export function createWayfinderRuntime(
       return invalidConfig("trusted project registration failed");
     }
   }
+  let repositoryRuntime: RuntimeRepositoryWorkspaces | null = null;
   const profiles = config.profiles.map((profile) => CodexCoordinatorProfileSchema.parse(profile));
   const knownCoordinatorProfileIds = [
     ...profiles.map((profile) => profile.profileId),
@@ -278,6 +172,14 @@ export function createWayfinderRuntime(
     }
   }
   let managedWorkRuntime: ConfiguredManagedWorkRuntime | null = null;
+  const managedBackendBinding: { backend: ManagedAgentBackend | undefined } = {
+    backend: undefined,
+  };
+  const repositoryWriterActivity = createRuntimeRepositoryWriterActivity({
+    managedWork: () => managedBackendBinding.backend,
+    terminals: () => options.terminals ?? managedController?.service,
+  });
+  let repositoryManaged: ReturnType<typeof createRepositoryResolutionComposition> | null = null;
   const registry = openProductAppRegistry(
     resolve(config.state.productRegistryPath ?? `${databasePath}.projects.json`),
   );
@@ -329,6 +231,52 @@ export function createWayfinderRuntime(
     config.routing === undefined || routingProvider === undefined
       ? undefined
       : createRuntimeRoutingBridge(config.routing, modelPolicyStore, routingProvider);
+  if (config.repositoryWorkspaces !== undefined) {
+    const openedRepository = openRuntimeRepositoryWorkspaces({
+      config: config.repositoryWorkspaces,
+      workspaceDatabasePath: databasePath,
+      workspaceStore: store,
+      writerActivity: repositoryWriterActivity,
+    });
+    if (!openedRepository.ok) {
+      modelPolicyStore.close();
+      if (options.store === undefined) store.close();
+      return invalidConfig(openedRepository.message);
+    }
+    repositoryRuntime = openedRepository.value;
+    repositoryManaged = createRepositoryResolutionComposition({
+      repositories: repositoryRuntime.service,
+      executionHostId: repositoryRuntime.executionHostId,
+      backend: () => managedBackendBinding.backend,
+    });
+  }
+  const repositoryFeatureInput =
+    repositoryRuntime === null
+      ? null
+      : { runtime: repositoryRuntime, store, product: product.value };
+  if (agentFoundation !== null && repositoryFeatureInput !== null) {
+    const bound = agentFoundation.bindRepositoryPlans(async (input) => {
+      const ensured = await ensureRuntimeRepositoryContextPlan(
+        repositoryFeatureInput,
+        input.access.principalId,
+        input.projectId,
+        input.contextId,
+      );
+      return ensured.ok
+        ? { ok: true, value: ensured.value.plan.planId }
+        : transportFailure(
+            ensured.error.code === "forbidden" ? "forbidden" : "storage_failure",
+            ensured.error.message,
+            "retry through the exact registered repository context",
+          );
+    });
+    if (!bound.ok) {
+      repositoryRuntime?.close();
+      modelPolicyStore.close();
+      if (options.store === undefined) store.close();
+      return invalidConfig(bound.message);
+    }
+  }
   if (options.managedWork === undefined) {
     const terminals = options.terminals ?? managedController?.service;
     if (terminals === undefined || agentFoundation === null) {
@@ -349,10 +297,15 @@ export function createWayfinderRuntime(
         routingProvider,
         proxyPolicy: config.proxy,
         workspaceStore: store,
+        controlAdapters: options.managedControlAdapters ?? [],
         ...(options.managedEnvironment === undefined
           ? {}
           : { environment: options.managedEnvironment }),
         attachments: options.managedAttachments ?? annotationBindings.attachments,
+        ...(repositoryManaged === null ? {} : { workspaces: repositoryManaged.workspaces }),
+        ...(repositoryRuntime === null
+          ? {}
+          : { canOpenWriter: createRepositoryWriterAdmission(repositoryRuntime) }),
       });
       if (!managed.ok) {
         void agentFoundation.close();
@@ -364,6 +317,7 @@ export function createWayfinderRuntime(
     }
   }
   const activeManagedBackend = options.managedWork ?? managedWorkRuntime?.backend;
+  managedBackendBinding.backend = activeManagedBackend;
   if (agentFoundation !== null && activeManagedBackend !== undefined) {
     const bound = agentFoundation.bindManagedWork(activeManagedBackend);
     if (!bound.ok) {
@@ -423,6 +377,7 @@ export function createWayfinderRuntime(
     store,
     ...(planningController === null ? {} : { planning: planningController.feature }),
     ...(managedWorkRuntime === null ? {} : { managedWork: managedWorkRuntime.backend }),
+    ...(repositoryRuntime === null ? {} : { repositories: repositoryRuntime.service }),
     ...(options.annotationRestoreIntent === undefined
       ? {}
       : { restoreIntent: options.annotationRestoreIntent }),
@@ -433,6 +388,34 @@ export function createWayfinderRuntime(
     return invalidConfig(annotations.message);
   }
   annotationBindings.bind(annotations.value.runtime);
+  const managedWake =
+    activeManagedBackend === undefined
+      ? undefined
+      : createWayfinderManagedWake({
+          backend: activeManagedBackend,
+          projects: () =>
+            [...config.projects, ...product.value.registrations()].map((project) => ({
+              projectId: project.projectId,
+              contextId: project.context.contextId,
+            })),
+        });
+  const repositoryFeature =
+    repositoryFeatureInput === null
+      ? undefined
+      : createRuntimeRepositoryFeature({
+          ...repositoryFeatureInput,
+          annotations: options.annotations ?? annotations.value.runtime.service,
+          ...(repositoryManaged === null ? {} : { resolution: repositoryManaged.resolution }),
+        });
+  if (agentFoundation !== null && repositoryFeature !== undefined) {
+    const bound = agentFoundation.bindRepositoryWork(repositoryFeature);
+    if (!bound.ok) {
+      repositoryRuntime?.close();
+      modelPolicyStore.close();
+      if (options.store === undefined) store.close();
+      return invalidConfig(bound.message);
+    }
+  }
   const service = createWorkspaceService({
     store,
     adapters: createCoordinatorAdapterRegistry(registrations),
@@ -443,7 +426,9 @@ export function createWayfinderRuntime(
     ownedCoordinatorAgents: agentFoundation?.ownedCoordinators,
     planning: planningController?.feature,
     managedWork: options.managedWork ?? managedWorkRuntime?.backend,
+    ...(managedWake === undefined ? {} : { managedWake }),
     annotations: options.annotations ?? annotations.value.runtime.service,
+    ...(repositoryFeature === undefined ? {} : { repositoryWorkspaces: repositoryFeature }),
   });
   annotations.value.bindService(service);
   let gateway: QuicklensGateway | null = null;
@@ -489,6 +474,13 @@ export function createWayfinderRuntime(
       const planningStarted = await planningController?.start();
       if (planningStarted !== undefined && !planningStarted.ok)
         return invalidConfig("shared planning runtime could not start");
+      const planningRecovery = await reconcileDetachedPlanningSources({
+        store,
+        planning: planningController,
+        repositories: repositoryRuntime,
+        projectIds: projectIds(),
+      });
+      if (!planningRecovery.ok) return planningRecovery;
       const opened = createQuicklensGateway({
         source: unavailableDataSource(
           "Zap Wayfinder ZAP plan source is not configured for this local profile.",
@@ -554,6 +546,14 @@ export function createWayfinderRuntime(
     issuePairingTicket() {
       return gateway?.issuePairingTicket?.() ?? invalidConfig("Wayfinder gateway is not started");
     },
+    async attachPlanningSource(input) {
+      return attachRuntimePlanningSource({
+        planning: planningController,
+        repositories: repositoryRuntime,
+        store,
+        attachment: input,
+      });
+    },
     async close(): Promise<void> {
       if (webRuntime !== undefined) await webRuntime.close();
       webRuntime = undefined;
@@ -568,6 +568,7 @@ export function createWayfinderRuntime(
       service.close();
       annotations.value.runtime.close();
       modelPolicyStore.close();
+      repositoryRuntime?.close();
       disposeOwnedHosts(ownedHosts);
       if (options.store === undefined) store.close();
     },

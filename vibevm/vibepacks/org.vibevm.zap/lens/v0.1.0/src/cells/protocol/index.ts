@@ -92,6 +92,7 @@ export const HostKindSchema = z.enum([
   "claude_code",
   "opencode",
   "qwen_code",
+  "zap_mock",
   "lens",
   "test",
 ]);
