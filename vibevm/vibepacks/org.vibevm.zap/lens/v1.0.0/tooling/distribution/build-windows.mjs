@@ -72,7 +72,7 @@ export async function buildWindowsDistribution(input, ports = {}) {
     const staging = await mkdtemp(join(outputRoot, `.zap-distribution-${randomUUID()}-`));
     try {
       const lensBuild = join(staging, "lens-build");
-      const cargoTarget = join(staging, "cargo-target");
+      const cargoTarget = options.cargoTargetDirectory ?? join(staging, "cargo-target");
       const bundle = join(staging, DIRECTORY_NAME);
       await copySourceTree(options.lensRoot, lensBuild);
       const nodeExecutable = join(options.nodeRoot, "node.exe");
@@ -409,6 +409,13 @@ function contained(parent, child) {
   return path !== "" && path !== ".." && !path.startsWith(`..${sep}`) && !isAbsolute(path);
 }
 
+function absoluteOutsideSource(value, sourceRoot, label) {
+  if (typeof value !== "string" || !isAbsolute(value)) failure(`${label} must be absolute`);
+  const path = resolve(value);
+  if (contained(sourceRoot, path)) failure(`${label} must be outside sourceRoot`);
+  return path;
+}
+
 function validateInput(value) {
   if (value === null || typeof value !== "object" || Array.isArray(value))
     failure("input is invalid");
@@ -441,6 +448,10 @@ function validateInput(value) {
     sourceCommit: value.sourceCommit,
     sourceTree: value.sourceTree,
     cargoExecutable: value.cargoExecutable ?? "cargo",
+    cargoTargetDirectory:
+      value.cargoTargetDirectory === undefined
+        ? null
+        : absoluteOutsideSource(value.cargoTargetDirectory, sourceRoot, "cargoTargetDirectory"),
     gitExecutable: value.gitExecutable ?? "git",
     tarExecutable: value.tarExecutable ?? "tar.exe",
     offline: value.offline === true,
@@ -539,6 +550,7 @@ function parseArgs(argv) {
         "--source-commit",
         "--source-tree",
         "--cargo",
+        "--cargo-target-dir",
         "--git",
       ].includes(argument)
     ) {
@@ -553,6 +565,7 @@ function parseArgs(argv) {
         "--source-commit": "sourceCommit",
         "--source-tree": "sourceTree",
         "--cargo": "cargoExecutable",
+        "--cargo-target-dir": "cargoTargetDirectory",
         "--git": "gitExecutable",
       }[argument];
       options[field] = next;
@@ -575,6 +588,7 @@ Usage: node tooling/distribution/build-windows.mjs [options]
   --source-commit HEX    Exact immutable source commit
   --source-tree DIGEST   Exact sha256-tree/1:<hex> Vibe portable content hash
   --cargo PATH           Cargo executable (default cargo)
+  --cargo-target-dir PATH Reusable private Cargo target outside source
   --git PATH             Git executable (default git)
   --print-source-witness Print clean HEAD + Vibe portable tree without building
   --offline              Require npm and Cargo offline resolution

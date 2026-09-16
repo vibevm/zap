@@ -8749,14 +8749,14 @@
   "spec_units": [
     {
       "anchor": "root",
-      "content_hash": "sha256:ecf9e1f0ebc3b106d4fdad56338677f8b025f09f9b591a0ca5d64bc07775a829",
+      "content_hash": "sha256:5dc3cc324b59b1cf99236c4e91a394dc5679cb5ee94c07309c8220e082efc800",
       "doc_path": "BINARY-RELEASE-GUIDE",
       "file": "vibevm/vibespecs/BINARY-RELEASE-GUIDE.md",
       "heading": "Build the Windows x64 Zap distribution",
       "line": 1,
       "uri": "spec://org.vibevm.zap/lens/BINARY-RELEASE-GUIDE#root",
       "kind": "guide",
-      "revision": 1
+      "revision": 2
     },
     {
       "anchor": "source-witness",
@@ -8769,7 +8769,7 @@
     },
     {
       "anchor": "build",
-      "content_hash": "sha256:fcb542f4c52ef9c3069e8a843abe50480e959a0bcbe86448b55d9d08179b1daa",
+      "content_hash": "sha256:b84c27cd92e71d7d8b5dc100767c3ab5db33c11ad4a58b83f3f5d85a56ed160a",
       "doc_path": "BINARY-RELEASE-GUIDE",
       "file": "vibevm/vibespecs/BINARY-RELEASE-GUIDE.md",
       "heading": "Build",
@@ -8782,7 +8782,7 @@
       "doc_path": "BINARY-RELEASE-GUIDE",
       "file": "vibevm/vibespecs/BINARY-RELEASE-GUIDE.md",
       "heading": "Release boundary",
-      "line": 52,
+      "line": 55,
       "uri": "spec://org.vibevm.zap/lens/BINARY-RELEASE-GUIDE#release"
     },
     {

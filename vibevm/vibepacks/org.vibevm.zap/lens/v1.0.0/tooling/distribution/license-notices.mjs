@@ -52,6 +52,16 @@ async function stageRustLicenseFiles(cargoMetadata, licensesRoot) {
     for (const entry of await readdir(packageRoot, { withFileTypes: true }))
       if (entry.isFile() && licenseFileName(entry.name))
         candidates.add(join(packageRoot, entry.name));
+    if (candidates.size === 0) {
+      const authors = join(packageRoot, "AUTHORS");
+      try {
+        const metadata = await lstat(authors);
+        if (!metadata.isSymbolicLink() && metadata.isFile()) candidates.add(authors);
+      } catch (error) {
+        if (typeof error !== "object" || error === null || Reflect.get(error, "code") !== "ENOENT")
+          throw error;
+      }
+    }
     if (candidates.size === 0)
       failure(`Rust package ${record.name}@${record.version} has no actual license notice file`);
     const packageId = safeLicenseDirectory(record.name, record.version, record.id);
@@ -60,7 +70,7 @@ async function stageRustLicenseFiles(cargoMetadata, licensesRoot) {
     const licenseFiles = [];
     for (const source of [...candidates].sort((left, right) => left.localeCompare(right, "en"))) {
       const fileName = basename(source);
-      if (!licenseFileName(fileName))
+      if (!licenseFileName(fileName) && fileName !== "AUTHORS")
         failure(`Rust package ${record.name}@${record.version} declares an unsafe license file`);
       const metadata = await lstat(source);
       if (metadata.isSymbolicLink() || !metadata.isFile() || metadata.size > 2_000_000)

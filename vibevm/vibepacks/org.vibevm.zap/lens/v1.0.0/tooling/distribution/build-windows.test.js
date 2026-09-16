@@ -59,6 +59,7 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
     const engineRoot = join(sourceRoot, "Engine Source");
     const nodeRoot = join(root, "Node Runtime");
     const outputDirectory = join(root, "Output");
+    const cargoTargetDirectory = join(root, "Cargo Cache");
     await fixtureSources(lensRoot, engineRoot, nodeRoot);
     const commands = [];
     const sourceCommit = "a".repeat(40);
@@ -150,6 +151,7 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
         sourceCommit,
         sourceTree,
         cargoExecutable: "cargo",
+        cargoTargetDirectory,
         offline: false,
       },
       {
@@ -180,6 +182,10 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
       notices.rust.every((entry) => entry.licenseFiles.length > 0),
       true,
     );
+    assert.equal(
+      notices.rust.some((entry) => entry.licenseFiles.some((path) => path.endsWith("/AUTHORS"))),
+      true,
+    );
     const publicLauncher = await readFile(
       join(result.directory, "launchers", "zap-quicklens.cmd"),
       "utf8",
@@ -200,6 +206,12 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
     );
     assert.equal(
       commands.some((request) => request.args.includes("--target")),
+      true,
+    );
+    assert.equal(
+      commands
+        .filter((request) => request.executable === "cargo")
+        .every((request) => request.environment.CARGO_TARGET_DIR === cargoTargetDirectory),
       true,
     );
     assert.equal(
@@ -239,7 +251,7 @@ async function fixtureSources(lensRoot, engineRoot, nodeRoot) {
     [nodeRoot, "node_modules/npm/bin/npm-cli.js"],
     [engineRoot, "Cargo.toml"],
     [engineRoot, "fixture-deps/serde/Cargo.toml"],
-    [engineRoot, "fixture-deps/serde/LICENSE-MIT"],
+    [engineRoot, "fixture-deps/serde/AUTHORS"],
   ])
     await writeRuntimeEntry(root, name);
 }

@@ -1,6 +1,6 @@
 # Build the Windows x64 Zap distribution {#root}
 
-`guide r1`
+`guide r2`
 
 The binary release is derived from a clean committed checkout. It does not
 write artifact URLs or hashes into `vibe.toml`; release automation publishes
@@ -39,6 +39,7 @@ node <lens>/tooling/distribution/build-windows.mjs `
   --output <absent-or-new-output-directory> `
   --source-commit <full-head-oid> `
   --source-tree <sha256-tree/1:digest> `
+  --cargo-target-dir <private-cache-outside-source> `
   --cargo cargo
 ```
 
@@ -48,6 +49,8 @@ bundled Node directory to every npm lifecycle `PATH`, requires x64 Node,
 builds Rust for `x86_64-pc-windows-msvc`, stages actual Rust/Node/npm license
 notices, rejects an incomplete Electron or node-pty runtime, writes the strict
 descriptor, and creates a ZIP with regular file entries only.
+`--cargo-target-dir` may reuse a private target cache across identical
+toolchain/target retries; it never changes the committed source witness.
 
 ## Release boundary {#release}
 
