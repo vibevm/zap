@@ -9,6 +9,7 @@ import {
   renderLaunchers,
   validatePackageCommands,
 } from "./launchers.mjs";
+import { stageManagementTools } from "./management-tools.mjs";
 import {
   canonicalExistingDirectory,
   contained,
@@ -29,7 +30,6 @@ import {
 
 export const PREPARED_PROTOCOL = "zap-source-install-prepared/1";
 export const GENERATION_PROTOCOL = "zap-source-install-generation/1";
-
 export async function buildSourceInstallation(input, ports = {}) {
   requireNode24();
   const hostRoot = await canonicalExistingDirectory(input.projectRoot);
@@ -212,6 +212,7 @@ async function stageLensRuntime(
   await mkdir(runtimeRoot, { recursive: true });
   for (const file of ["package.json", "package-lock.json", "LICENSE.md", "README.md", "vibe.toml"])
     await copyFile(join(lensRoot, file), join(runtimeRoot, file));
+  await stageManagementTools(lensRoot, runtimeRoot);
   for (const directory of ["dist", "integrations", "vibevm/vibespecs"]) {
     const destination = join(runtimeRoot, directory);
     await mkdir(dirname(destination), { recursive: true });

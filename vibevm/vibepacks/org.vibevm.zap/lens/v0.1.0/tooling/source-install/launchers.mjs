@@ -8,6 +8,8 @@ export const PACKAGE_COMMANDS = Object.freeze([
   ["quicklens-web-auth", "dist/quicklens-web-auth.js"],
   ["quicklens-web", "dist/quicklens-web.js"],
   ["zap-wayfinder", "dist/wayfinder.js"],
+  ["zap-server", "dist/zap-server.js"],
+  ["zap-quicklens", "dist/zap-quick-lens.js"],
   ["zap-quick-lens", "dist/zap-quick-lens.js"],
   ["zap-mock-agent", "dist/zap-mock-agent.js"],
 ]);

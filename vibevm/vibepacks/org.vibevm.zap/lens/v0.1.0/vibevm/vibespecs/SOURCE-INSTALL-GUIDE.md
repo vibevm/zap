@@ -1,5 +1,11 @@
 # Install Zap from local source with Vibe {#root}
 
+The normal user command is `vibe install -g org.vibevm.zap/zap`, with matching
+native `update -g` and `uninstall -g` operations. It requires a Vibe version
+that supports global user applications. The Node workflow below is the advanced
+local-registry bootstrap for source development, isolated acceptance and
+explicit registry overrides; it is not the primary end-user spelling.
+
 This path installs Zap Quick Lens as a user-local Vibe application from an
 explicit local source registry. It does not publish or download a Zap binary
 release, change `PATH`, start an agent, or alter provider account homes. The
@@ -8,6 +14,31 @@ removed.
 
 The normal host workspace is `<settings-dir>/opt/apps/zap`. Zap project data
 continues to live separately under the selected user's Zap data directory.
+
+## Native commands {#native}
+
+With an updated source-installed Vibe:
+
+```text
+vibe install -g org.vibevm.zap/zap
+zap-quicklens
+```
+
+For a server that serves the same workspace without opening a viewer, run
+`zap-server`. Neither launch command starts agent work automatically.
+
+```text
+vibe update -g org.vibevm.zap/zap
+vibe uninstall -g org.vibevm.zap/zap
+```
+
+`-g` selects the user application and leaves the current project's manifest and
+dependencies alone. A source-installed Vibe uses its embedded source registry.
+For a standalone developer build, add `--registry <local-registry>` to install
+or update. This first global application implementation supports local and
+embedded sources; remote-only application resolution is not implemented.
+Uninstall uses the retained management entry and does not require the original
+source registry. The public application recipe selects the public npm registry.
 
 ## Prerequisites {#prerequisites}
 
@@ -26,7 +57,7 @@ An explicit `--vibe` path is useful for isolated verification. The installer
 does not run a shell command by name when it can address the native executable
 directly.
 
-## Install {#install}
+## Advanced source bootstrap {#install}
 
 From the materialized Lens package or its source checkout, run:
 
@@ -118,7 +149,7 @@ inside the dedicated host.
 
 ## Installed commands {#commands}
 
-The deployed launchers provide the package's eight ordinary commands:
+The deployed launchers provide the package's ten ordinary commands:
 
 - `codlens`
 - `codlens-mcp`
@@ -126,8 +157,14 @@ The deployed launchers provide the package's eight ordinary commands:
 - `quicklens-web-auth`
 - `quicklens-web`
 - `zap-wayfinder`
+- `zap-server`
+- `zap-quicklens`
 - `zap-quick-lens`
 - `zap-mock-agent`
+
+`zap-quicklens` is the short product command; `zap-quick-lens` is its retained
+legacy alias. `zap-server` runs the same normal product/HTTP stack without
+opening a viewer. `zap-wayfinder` remains the advanced explicit-config command.
 
 The default engine installation also provides `zap`. The installer generates
 Windows command and PowerShell launchers plus POSIX launchers with structured
@@ -168,3 +205,5 @@ Vibe materialization, package, deploy and undeploy behavior. The completed
 [Windows source-install acceptance](research/ZAP-SOURCE-INSTALL-ACCEPTANCE-2026-09-16.md)
 records the actual build, deployment, browser startup, update, source-removal
 proof and data-preserving uninstall.
+The subsequent [native command acceptance](research/ZAP-NATIVE-INSTALL-ACCEPTANCE-2026-09-16.md)
+covers `-g`, the short launchers and their shared running server.

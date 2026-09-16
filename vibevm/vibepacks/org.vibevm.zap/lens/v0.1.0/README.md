@@ -70,13 +70,24 @@ fixtures do not saturate ConPTY resources; every assertion and timeout remains a
 The compiled command entry is `dist/cli.js`; `dist/mcp.js` is the MCP stdio
 connector. An installed npm package also provides `codlens` and `codlens-mcp`.
 
-For a durable user-local source installation through Vibe, run
-`node tooling/install-source.mjs` with the local registry and settings root.
-The source installer materializes pinned packages into a dedicated marked host,
-builds an immutable runtime generation and deploys receipt-owned launchers. It
-does not modify `PATH` or provider credentials. See the
-[source-install guide](vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md) for install,
-update, status, uninstall and Lens-only commands.
+The normal native installation command is:
+
+```text
+vibe install -g org.vibevm.zap/zap
+```
+
+Use `vibe update -g org.vibevm.zap/zap` and
+`vibe uninstall -g org.vibevm.zap/zap` for the same user application. This
+requires a Vibe version that implements the global application dispatcher; an
+older installed Vibe CLI cannot interpret this new declaration retroactively.
+
+The advanced local-registry bootstrap remains available as
+`node tooling/install-source.mjs`. It is intended for source development,
+isolated acceptance and an explicit registry override. It materializes pinned
+packages into a dedicated marked host, builds an immutable runtime generation
+and deploys receipt-owned launchers. It does not modify `PATH` or provider
+credentials. See the
+[source-install guide](vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md).
 Use `--npm-registry <credential-free-http(s)-url>` only when the build must
 override the registry already selected by npm configuration.
 On Windows, the default engine build requires Visual Studio Build Tools with
@@ -84,7 +95,8 @@ Desktop development with C++ and a Windows SDK; `--lens-only` omits that engine
 build. After moving the original checkout, status and uninstall remain
 available from the retained Lens slot under
 `<settings>/opt/apps/zap/vibevm/vibedeps/org.vibevm.zap.lens/0.1.0/tooling/install-source.mjs`.
-Updates still require `--registry` pointing at an existing local registry.
+Advanced-bootstrap updates still require `--registry` pointing at an existing
+local registry.
 
 ### Deterministic ZapMock gate
 
@@ -120,12 +132,13 @@ those require the separate explicitly selected real-provider checks.
 After an installed build, ordinary local startup needs no multi-file JSON:
 
 ```text
-zap-quick-lens
+zap-quicklens
 ```
 
 The launcher reuses the existing Wayfinder owner for `~/.vibe/zap`, or starts
 one owner, serves the built renderer on loopback, and opens a one-time paired
-browser session. Use `zap-quick-lens --electron` for the same owner in the
+browser session. The legacy `zap-quick-lens` spelling remains supported. Use
+`zap-quicklens --electron` for the same owner in the
 Electron shell. Opening or closing either viewer does not start or stop agents.
 An empty workspace is valid; **Add project** validates an existing directory,
 shows the protected detected profile/model/effort, and leaves inference stopped
@@ -176,7 +189,13 @@ authentication observation and launchability. Merely finding `claude`,
 `opencode`, or `qwen` on `PATH` does not make it launchable: the operator must
 select a protected model and environment first. These settings never enter
 browser project-registration payloads. Existing advanced Wayfinder JSON remains
-available through `zap-quick-lens --config`.
+available through `zap-quicklens --config`.
+
+Run `zap-server` for the same normal product stack without opening a browser or
+Electron viewer. It still serves the Quick Lens HTTP client and uses the same
+`~/.vibe/zap` settings/state by default. Starting it does not start an agent or
+model turn. `zap-wayfinder` remains the advanced command that requires an
+explicit Wayfinder configuration.
 
 Managed workers and native provider children are different execution paths.
 Managed work has a durable task/run, Lens-owned terminal, explicit model-policy

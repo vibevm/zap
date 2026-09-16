@@ -3786,6 +3786,20 @@
       "item_kind": "module",
       "line": 2,
       "symbol": "src/zap-quick-lens.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/zap-server.test.ts",
+      "item_kind": "module",
+      "line": 1,
+      "symbol": "src/zap-server.test.ts"
+    },
+    {
+      "crate_name": "src",
+      "file": "src/zap-server.ts",
+      "item_kind": "module",
+      "line": 2,
+      "symbol": "src/zap-server.ts"
     }
   ],
   "edges": [
@@ -8713,6 +8727,22 @@
       "provenance": "authored",
       "uri": "spec://org.vibevm.zap/lens/PROP-010#start-and-projects",
       "verb": "implements"
+    },
+    {
+      "file": "src/zap-server.test.ts",
+      "from_symbol": "src/zap-server.test.ts",
+      "line": 1,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-017#verification",
+      "verb": "implements"
+    },
+    {
+      "file": "src/zap-server.ts",
+      "from_symbol": "src/zap-server.ts",
+      "line": 2,
+      "provenance": "authored",
+      "uri": "spec://org.vibevm.zap/lens/PROP-017#launch",
+      "verb": "implements"
     }
   ],
   "schema": 3,
@@ -10268,7 +10298,52 @@
     },
     {
       "anchor": "root",
-      "content_hash": "sha256:6ec9db65588b395191583eab287f65244b8c245f559e1d6e4e9d2b4579f78044",
+      "content_hash": "sha256:a6d599d3126bb81dbc0683d5bf34b9a5b7a933388495dabb20cb2cf133a72ce5",
+      "doc_path": "PROP-017",
+      "file": "vibevm/vibespecs/PROP-017.xml",
+      "heading": "Short native installation and command entry points",
+      "line": 3,
+      "uri": "spec://org.vibevm.zap/lens/PROP-017#root"
+    },
+    {
+      "anchor": "install",
+      "content_hash": "sha256:3fe1235e0f3415b23afb436817019f2f6a32e3b3cb0a6a83b45aa6e7412c6714",
+      "doc_path": "PROP-017",
+      "file": "vibevm/vibespecs/PROP-017.xml",
+      "heading": "The normal source installation is vibe install -g org.vibevm.zap/zap, using the generic user-application dispatcher in spec://org.vibevm.core/vibevm/common/PROP-056#root. Update and uninstall use the same coordinate with their native -g verbs. The advanced Node bootstrap remains available but is not the primary user path. @status:impl/done",
+      "line": 5,
+      "uri": "spec://org.vibevm.zap/lens/PROP-017#install"
+    },
+    {
+      "anchor": "adapter",
+      "content_hash": "sha256:be910661fb990078bfdf3ea1371b03e999cd0d07d970040cb61842f78a3ac96a",
+      "doc_path": "PROP-017",
+      "file": "vibevm/vibespecs/PROP-017.xml",
+      "heading": "The provider entry tooling/source-install/application.mjs validates the generic context, exact Zap/Lens identities, settings/host binding and operation, then invokes the accepted source bootstrap with structured options and the current native Vibe executable. It writes a matching generic reply only after actual success, and returns its management entry from a retained immutable runtime generation. No new model call, user credential copy or extra project mutation is introduced. @status:impl/done",
+      "line": 6,
+      "uri": "spec://org.vibevm.zap/lens/PROP-017#adapter"
+    },
+    {
+      "anchor": "launch",
+      "content_hash": "sha256:eb732a2b164c6e6ce23d5b366bacaf463a012917dfd86d9460f4862a6088e3d2",
+      "doc_path": "PROP-017",
+      "file": "vibevm/vibespecs/PROP-017.xml",
+      "heading": "zap-quicklens uses the ordinary product launcher. zap-server uses the same state, owner, services and HTTP presentation but forcibly disables browser/Electron opening; starting either command does not start agent work. Help returns before state creation or provider discovery. The old zap-quick-lens and advanced zap-wayfinder spellings retain compatibility. All launchers remain declared package bins and receipt-owned Vibe deployments. @status:impl/done",
+      "line": 7,
+      "uri": "spec://org.vibevm.zap/lens/PROP-017#launch"
+    },
+    {
+      "anchor": "verification",
+      "content_hash": "sha256:cc7ef01c2c881567c60638d2c9dedc0fe8f675520149fbfabd3abf62cfe6f4fd",
+      "doc_path": "PROP-017",
+      "file": "vibevm/vibespecs/PROP-017.xml",
+      "heading": "Colocated deterministic tests and simulation cover the adapter and short/headless command behavior. Root acceptance exercises the actual generic native command, installed short launchers and original-source-independent uninstall in an isolated user settings directory, without LLM inference. @status:impl/done",
+      "line": 8,
+      "uri": "spec://org.vibevm.zap/lens/PROP-017#verification"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:ceaa24583b52ead272fc6be517af01c3f7a6f54597d966039936bec5a311217d",
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Install Zap from local source with Vibe",
@@ -10276,21 +10351,30 @@
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#root"
     },
     {
+      "anchor": "native",
+      "content_hash": "sha256:035f7f90ec6b724218e26b1282afe33b43e07e23b97852ef20c918ac946bb6d5",
+      "doc_path": "SOURCE-INSTALL-GUIDE",
+      "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
+      "heading": "Native commands",
+      "line": 18,
+      "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#native"
+    },
+    {
       "anchor": "prerequisites",
       "content_hash": "sha256:7cd8cb6aa3601e94cd4b720d669c24db7c2e2a53dd168da85ff57c07b1393e18",
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Prerequisites",
-      "line": 12,
+      "line": 43,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#prerequisites"
     },
     {
       "anchor": "install",
-      "content_hash": "sha256:6c86d70cac154b45914ee4abfe5546722ad4afd8797cc9982bd4abd84f4777d1",
+      "content_hash": "sha256:3ec8f596b913b31c68b3f925c81e6d41c6db261c622e42ad2401618b53577847",
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
-      "heading": "Install",
-      "line": 29,
+      "heading": "Advanced source bootstrap",
+      "line": 60,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#install"
     },
     {
@@ -10299,7 +10383,7 @@
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Manage an installation after moving the checkout",
-      "line": 54,
+      "line": 85,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#management"
     },
     {
@@ -10308,7 +10392,7 @@
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Inspect status without starting Zap",
-      "line": 82,
+      "line": 113,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#status"
     },
     {
@@ -10317,16 +10401,16 @@
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Update transactionally",
-      "line": 98,
+      "line": 129,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#update"
     },
     {
       "anchor": "commands",
-      "content_hash": "sha256:4ed2c7609d233528e0f663adaba0288b5ea3692739720b71dec8d629790a348c",
+      "content_hash": "sha256:f53bdb9f849b5590efbf24656fdf0037e5a0f60beeb566bdfd271daf433d35a8",
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Installed commands",
-      "line": 119,
+      "line": 150,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#commands"
     },
     {
@@ -10335,17 +10419,26 @@
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Uninstall launchers safely",
-      "line": 138,
+      "line": 175,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#uninstall"
     },
     {
       "anchor": "verification",
-      "content_hash": "sha256:a21b3ed44000b76d914d19d79266294645a6a7a7a3c7500889683fdd1e9a356f",
+      "content_hash": "sha256:ab3708015ef943a50b6161c4a57ed76515a694d93e5cf0ba7851a6cf76bcd4f6",
       "doc_path": "SOURCE-INSTALL-GUIDE",
       "file": "vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md",
       "heading": "Isolated acceptance",
-      "line": 154,
+      "line": 191,
       "uri": "spec://org.vibevm.zap/lens/SOURCE-INSTALL-GUIDE#verification"
+    },
+    {
+      "anchor": "root",
+      "content_hash": "sha256:a55cb5896c93ded8343e8062325b4c313618651cda921aaf05e2fd03c036cd25",
+      "doc_path": "research/ZAP-NATIVE-INSTALL-ACCEPTANCE-2026-09-16",
+      "file": "vibevm/vibespecs/research/ZAP-NATIVE-INSTALL-ACCEPTANCE-2026-09-16.md",
+      "heading": "Native application commands acceptance, 2026-09-16",
+      "line": 1,
+      "uri": "spec://org.vibevm.zap/lens/research/ZAP-NATIVE-INSTALL-ACCEPTANCE-2026-09-16#root"
     },
     {
       "anchor": "root",

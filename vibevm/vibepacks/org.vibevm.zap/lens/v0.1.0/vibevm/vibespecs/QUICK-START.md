@@ -8,6 +8,18 @@ This guide is for the local 0.1 preview. The release acceptance record lists the
 tested provider versions and the remaining limits. Gamelens, IDE clients and
 collaboration between several people or computers are future components.
 
+With a Vibe version that supports global user applications, install and start
+Zap with the short native commands:
+
+```text
+vibe install -g org.vibevm.zap/zap
+zap-quicklens
+```
+
+Update and removal use `vibe update -g org.vibevm.zap/zap` and
+`vibe uninstall -g org.vibevm.zap/zap`. An older Vibe CLI must itself be
+updated before it can read the new global application declaration.
+
 ## Start the application
 
 For a Windows portable distribution, extract the complete archive to a writable
@@ -21,10 +33,11 @@ package archive in a directory of your choice:
 
 ```powershell
 npm install ./org.vibevm.zap-lens-0.1.0.tgz
-npx --no-install zap-quick-lens
+npx --no-install zap-quicklens
 ```
 
-Use `npx --no-install zap-quick-lens --electron` for the desktop viewer. These
+The legacy `zap-quick-lens` command remains available. Use
+`npx --no-install zap-quicklens --electron` for the desktop viewer. These
 commands consume no inference until you explicitly start an agent or send work
 to one. The application opens a paired local browser session automatically.
 
@@ -124,7 +137,7 @@ their protected agent homes or explicitly configured environment files.
 For a separate evaluation workspace, launch with:
 
 ```text
-zap-quick-lens --state-dir ABSOLUTE_PATH_TO_NEW_STATE_DIRECTORY
+zap-quicklens --state-dir ABSOLUTE_PATH_TO_NEW_STATE_DIRECTORY
 ```
 
 For the portable package, pass the same argument to **Start Zap.cmd**. Use a

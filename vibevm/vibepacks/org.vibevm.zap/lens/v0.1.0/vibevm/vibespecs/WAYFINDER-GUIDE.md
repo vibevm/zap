@@ -52,16 +52,31 @@ checks, not evidence that every real provider supports current Pause or wake.
 
 ## Normal local start
 
+The normal native user installation is:
+
+```text
+vibe install -g org.vibevm.zap/zap
+```
+
+This command requires a Vibe version with global application support. The
+advanced Node source bootstrap remains a development/isolated-registry path.
+
 After an installed build, start the product with:
 
 ```text
-zap-quick-lens
+zap-quicklens
 ```
 
 The launcher reuses the owner already serving the local Zap data directory or
 starts one owner, serves the built renderer on loopback and opens a one-use
-paired browser session. `zap-quick-lens --electron` opens the same owner through
+paired browser session. The legacy `zap-quick-lens` alias is retained.
+`zap-quicklens --electron` opens the same owner through
 the Electron shell. An empty workspace is a valid first screen.
+
+`zap-server` starts the same normal owner and Quick Lens HTTP service but never
+opens a viewer. It uses the same default settings and state, and starts no
+coordinator, worker, child agent or model turn. `zap-wayfinder` remains the
+advanced explicit-config entrypoint.
 
 The ordinary setup flow is deliberately two-step:
 

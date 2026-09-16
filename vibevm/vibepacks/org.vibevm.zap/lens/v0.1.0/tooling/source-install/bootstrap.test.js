@@ -33,6 +33,8 @@ const COMMANDS = [
   "quicklens-web-auth",
   "quicklens-web",
   "zap-wayfinder",
+  "zap-server",
+  "zap-quicklens",
   "zap-quick-lens",
   "zap-mock-agent",
   "zap",

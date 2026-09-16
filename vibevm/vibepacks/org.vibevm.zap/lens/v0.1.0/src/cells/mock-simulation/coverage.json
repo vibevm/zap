@@ -559,6 +559,14 @@
     {
       "feature": "source-install.npm-registry",
       "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.application-adapter",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
+    },
+    {
+      "feature": "source-install.short-command-aliases",
+      "scenarioIds": ["source-install.bootstrap-build-lifecycle"]
     }
   ]
 }

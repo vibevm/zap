@@ -6,6 +6,7 @@ import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { z } from "zod";
 import { CredentialSchema } from "./cells/protocol/index.ts";
 import { ExecutionHostIdSchema } from "./cells/workspace-model/index.ts";
@@ -29,15 +30,42 @@ import {
   type WayfinderRuntimeConfig,
 } from "./cells/wayfinder-runtime/index.ts";
 
-const arguments_ = process.argv.slice(2);
-if (arguments_.includes("--help") || arguments_.includes("-h")) printHelp();
-else await main();
+export interface ZapProductLauncherInput {
+  readonly args?: readonly string[];
+  readonly commandName?: "zap-quicklens" | "zap-server";
+  readonly forceNoOpen?: boolean;
+  readonly serverMode?: boolean;
+}
 
-async function main(): Promise<void> {
-  const advancedPath = option("--config");
-  const stateDirectory = resolve(option("--state-dir") ?? join(homedir(), ".vibe", "zap"));
-  const presentation = arguments_.includes("--electron") ? "electron" : "browser";
-  const shouldOpen = !arguments_.includes("--no-open");
+export async function runZapProductLauncher(input: ZapProductLauncherInput = {}): Promise<void> {
+  const args = [...(input.args ?? process.argv.slice(2))];
+  const mode = {
+    commandName: input.commandName ?? ("zap-quicklens" as const),
+    forceNoOpen: input.forceNoOpen ?? false,
+    serverMode: input.serverMode ?? false,
+  };
+  if (args.includes("--help") || args.includes("-h")) {
+    printHelp(mode);
+    return;
+  }
+  if (
+    mode.serverMode &&
+    args.some((argument) => argument === "--electron" || argument.startsWith("--electron="))
+  ) {
+    fail("zap-server does not open a presentation; use zap-quicklens --electron", 2);
+    return;
+  }
+  await main(args, mode);
+}
+
+async function main(
+  args: readonly string[],
+  mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
+): Promise<void> {
+  const advancedPath = option(args, "--config");
+  const stateDirectory = resolve(option(args, "--state-dir") ?? join(homedir(), ".vibe", "zap"));
+  const presentation = args.includes("--electron") ? "electron" : "browser";
+  const shouldOpen = !mode.forceNoOpen && !args.includes("--no-open");
   const settings = await loadProductLocalSettings(join(stateDirectory, "settings.json"));
   if (!settings.ok) {
     fail(settings.message, 2);
@@ -56,7 +84,7 @@ async function main(): Promise<void> {
   const existing = await requestRunningOwnerTicket(databasePath);
   if (existing.ok) {
     const url = attachUrl(existing.value.gateway, existing.value.ticket, uiOrigin);
-    emit({ url, reusedOwner: true, databasePath, presentation });
+    emit(mode, receipt(mode, { url, reusedOwner: true, databasePath, presentation }));
     if (shouldOpen)
       openPresentation(presentation, url, existing.value.gateway, existing.value.ticket);
     return;
@@ -72,15 +100,37 @@ async function main(): Promise<void> {
     settings.value,
     presentation,
     shouldOpen,
+    mode,
   );
 }
 
-function printHelp(): void {
+function printHelp(
+  mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
+): void {
+  if (mode.serverMode) {
+    console.log(
+      [
+        "Zap Server",
+        "",
+        "Usage: zap-server [options]",
+        "",
+        "Starts the normal Wayfinder and Quick Lens HTTP stack without opening a viewer.",
+        "It does not start a coordinator, worker, child agent, or model turn.",
+        "",
+        "Options:",
+        "  --state-dir <path>  Store settings and workspace state under this directory",
+        "  --config <path>     Load an advanced Wayfinder runtime configuration",
+        "  -h, --help          Show this help and exit",
+      ].join("\n"),
+    );
+    return;
+  }
   console.log(
     [
       "Zap Quick Lens",
       "",
-      "Usage: zap-quick-lens [options]",
+      "Usage: zap-quicklens [options]",
+      "Legacy alias: zap-quick-lens",
       "",
       "Options:",
       "  --state-dir <path>  Store settings and workspace state under this directory",
@@ -99,6 +149,7 @@ async function startNewOwner(
   settings: ProductLocalSettings,
   client: "browser" | "electron",
   open: boolean,
+  mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
 ): Promise<void> {
   const owner = acquireWayfinderOwner(database);
   if (!owner.ok) {
@@ -153,7 +204,16 @@ async function startNewOwner(
     return;
   }
   const url = attachUrl(gateway, ticket.value.ticket, ui.value.origin);
-  emit({ url, reusedOwner: false, databasePath: database, presentation: client, stateRoot });
+  emit(
+    mode,
+    receipt(mode, {
+      url,
+      reusedOwner: false,
+      databasePath: database,
+      presentation: client,
+      stateRoot,
+    }),
+  );
   if (open) openPresentation(client, url, gateway, ticket.value.ticket);
   const close = async (): Promise<void> => {
     await closeOwner(created.value, ui.value, owner.value);
@@ -329,15 +389,32 @@ async function closeOwner(
   await owner.close();
 }
 
-function option(name: string): string | undefined {
-  const direct = arguments_.find((argument) => argument.startsWith(`${name}=`));
+function option(args: readonly string[], name: string): string | undefined {
+  const direct = args.find((argument) => argument.startsWith(`${name}=`));
   if (direct !== undefined) return direct.slice(name.length + 1);
-  const index = arguments_.indexOf(name);
-  return index < 0 ? undefined : arguments_[index + 1];
+  const index = args.indexOf(name);
+  return index < 0 ? undefined : args[index + 1];
 }
 
-function emit(value: unknown): void {
-  console.log(JSON.stringify({ protocol: "zap-quick-lens/1", ...object(value) }));
+function receipt(
+  mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
+  value: Record<string, unknown>,
+): Record<string, unknown> {
+  return mode.serverMode
+    ? { ...value, presentation: undefined, headless: true, viewerOpened: false }
+    : value;
+}
+
+function emit(
+  mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
+  value: unknown,
+): void {
+  console.log(
+    JSON.stringify({
+      protocol: mode.serverMode ? "zap-server/1" : "zap-quick-lens/1",
+      ...object(value),
+    }),
+  );
 }
 
 function object(value: unknown): Record<string, unknown> {
@@ -348,3 +425,9 @@ function fail(message: string, exitCode: number): void {
   console.error(message);
   process.exitCode = exitCode;
 }
+
+if (
+  process.argv[1] !== undefined &&
+  import.meta.url === pathToFileURL(resolve(process.argv[1])).href
+)
+  await runZapProductLauncher();

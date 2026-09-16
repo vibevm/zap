@@ -2,9 +2,11 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import "./application.test.js";
 import "./bootstrap.test.js";
 import "./build-core.test.js";
 import "./contract-launchers.test.js";
+import "../../src/zap-server.test.ts";
 
 const scenario = JSON.parse(
   readFileSync(new URL("./source-install.simulation.json", import.meta.url), "utf8"),
@@ -24,6 +26,10 @@ test("source-install scenario binds the complete deterministic lifecycle", () =>
   assert.equal(scenario.expected.npmRegistryNormalized, true);
   assert.equal(scenario.expected.npmRegistryPreservedOnUpdate, true);
   assert.equal(scenario.expected.unsafeNpmRegistryRefused, true);
+  assert.equal(scenario.expected.shortQuickAliasIncluded, true);
+  assert.equal(scenario.expected.legacyQuickAliasRetained, true);
+  assert.equal(scenario.expected.headlessServerNoAgentStart, true);
+  assert.equal(scenario.coverage.includes("source-install.application-adapter"), true);
   assert.equal(scenario.expected.zeroLlmInference, true);
 });
 

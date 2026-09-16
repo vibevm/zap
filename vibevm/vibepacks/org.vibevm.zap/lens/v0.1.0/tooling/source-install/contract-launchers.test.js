@@ -84,9 +84,11 @@ test("source-install marker and lifecycle context retain exact package identity"
 
 test("launchers cover every package bin and preserve paths and arguments", () => {
   validatePackageCommands(packageDocument);
-  assert.equal(PACKAGE_COMMANDS.length, 8);
-  assert.equal(launcherFileNames(false).length, 24);
-  assert.equal(launcherFileNames(true).length, 27);
+  assert.equal(PACKAGE_COMMANDS.length, 10);
+  assert.equal(launcherFileNames(false).length, 30);
+  assert.equal(launcherFileNames(true).length, 33);
+  assert.equal(packageDocument.bin["zap-quicklens"], packageDocument.bin["zap-quick-lens"]);
+  assert.equal(packageDocument.bin["zap-server"], "./dist/zap-server.js");
   const launchers = renderLaunchers({
     runtimeRoot: absolute(
       "Settings Root/opt/apps/zap/target/zap-source-install/generations/a b/runtime",
@@ -94,7 +96,7 @@ test("launchers cover every package bin and preserve paths and arguments", () =>
     nativeNode: absolute("Node Runtime/node.exe"),
     enginePath: absolute("Settings Root/opt/apps/zap/generated engine/zap.exe"),
   });
-  assert.equal(launchers.length, 27);
+  assert.equal(launchers.length, 33);
   const powershell = launchers.find(
     (launcher) =>
       launcher.command === "zap-quick-lens" && launcher.platform === "windows-powershell",

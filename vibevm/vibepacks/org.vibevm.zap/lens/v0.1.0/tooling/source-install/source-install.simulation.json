@@ -14,6 +14,8 @@
     "source-install.build-evidence-gate",
     "source-install.immutable-generation",
     "source-install.npm-registry",
+    "source-install.application-adapter",
+    "source-install.short-command-aliases",
     "source-install.status-read-only",
     "source-install.uninstall-preserves-data"
   ],
@@ -49,6 +51,9 @@
     "npmRegistryNormalized": true,
     "npmRegistryPreservedOnUpdate": true,
     "unsafeNpmRegistryRefused": true,
+    "shortQuickAliasIncluded": true,
+    "legacyQuickAliasRetained": true,
+    "headlessServerNoAgentStart": true,
     "previousGenerationPreserved": true,
     "receiptOwnedUndeployOnly": true,
     "cachePreserved": true,

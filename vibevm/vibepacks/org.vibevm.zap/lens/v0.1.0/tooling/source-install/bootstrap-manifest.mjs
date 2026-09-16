@@ -18,6 +18,8 @@ export const LENS_COMMANDS = Object.freeze([
   "quicklens-web-auth",
   "quicklens-web",
   "zap-wayfinder",
+  "zap-server",
+  "zap-quicklens",
   "zap-quick-lens",
   "zap-mock-agent",
 ]);

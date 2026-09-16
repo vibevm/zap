@@ -1,4 +1,4 @@
-/** Normal launcher ownership proof. @scope spec://org.vibevm.zap/lens/PROP-010#start-and-projects */
+/** Short headless product command proof. @scope spec://org.vibevm.zap/lens/PROP-017#verification */
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
@@ -9,55 +9,73 @@ import test from "node:test";
 import { z } from "zod";
 import { createWorkspaceHttpConnection } from "./cells/workspace-client/index.ts";
 
-const ReceiptSchema = z
+const ServerReceiptSchema = z
   .object({
-    protocol: z.literal("zap-quick-lens/1"),
+    protocol: z.literal("zap-server/1"),
     url: z.url(),
     reusedOwner: z.boolean(),
     databasePath: z.string().min(1),
-    presentation: z.enum(["browser", "electron"]),
+    headless: z.literal(true),
+    viewerOpened: z.literal(false),
   })
   .passthrough();
 
-test("--help exits before creating state or starting the product", async () => {
-  const parent = await mkdtemp(join(tmpdir(), "zap-quick-lens-help-"));
+test("zap-server help and incompatible presentation exit before state creation", async () => {
+  const parent = await mkdtemp(join(tmpdir(), "zap-server-help-"));
   const state = join(parent, "must-not-exist");
   try {
-    const child = spawn(
-      process.execPath,
-      ["--experimental-strip-types", "src/zap-quick-lens.ts", "--help", "--state-dir", state],
-      { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+    const help = await output(
+      spawn(
+        process.execPath,
+        ["--experimental-strip-types", "src/zap-server.ts", "--help", "--state-dir", state],
+        { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+      ),
     );
-    const result = await output(child);
-    assert.equal(result.code, 0);
-    assert.match(result.stdout, /^Zap Quick Lens\r?\n/);
-    assert.match(result.stdout, /Usage: zap-quicklens \[options\]/);
-    assert.match(result.stdout, /Legacy alias: zap-quick-lens/);
-    assert.match(result.stdout, /--state-dir <path>/);
-    assert.equal(result.stderr, "");
+    assert.equal(help.code, 0);
+    assert.match(help.stdout, /^Zap Server\r?\n/);
+    assert.match(help.stdout, /Usage: zap-server \[options\]/);
+    assert.match(help.stdout, /does not start a coordinator, worker, child agent, or model turn/i);
+    assert.equal(existsSync(state), false);
+    const incompatible = await output(
+      spawn(
+        process.execPath,
+        ["--experimental-strip-types", "src/zap-server.ts", "--electron", "--state-dir", state],
+        { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+      ),
+    );
+    assert.equal(incompatible.code, 2);
+    assert.match(incompatible.stderr, /does not open a presentation/);
     assert.equal(existsSync(state), false);
   } finally {
     await rm(parent, { recursive: true, force: true });
   }
 });
 
-test("ordinary launcher starts empty then a second invocation reuses the owner", async () => {
-  const state = await mkdtemp(join(tmpdir(), "zap-quick-lens-cli-"));
+test("zap-server starts the normal HTTP stack headlessly without agents", async () => {
+  const state = await mkdtemp(join(tmpdir(), "zap-server-product-"));
+  const uiPort = 24_000 + (process.pid % 1_000);
   await writeFile(
     join(state, "settings.json"),
     JSON.stringify({
       version: 1,
-      uiPort: 4174,
+      uiPort,
       proxy: { mode: "inherit" },
       coordinatorDefaults: { modelId: "gpt-5.6-luna", effort: "low" },
     }),
   );
-  const owner = launch(state);
+  const server = spawn(
+    process.execPath,
+    ["--experimental-strip-types", "src/zap-server.ts", "--state-dir", state],
+    { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+  );
   try {
-    const first = await receipt(owner);
-    assert.equal(first.reusedOwner, false);
-    assert.match(first.url, /^http:\/\/127\.0\.0\.1:4174\//);
-    const attach = new URL(first.url);
+    const started = await receipt(server);
+    assert.equal(started.reusedOwner, false);
+    assert.equal(started.headless, true);
+    assert.equal(started.viewerOpened, false);
+    assert.equal("presentation" in started, false);
+    const attach = new URL(started.url);
+    assert.equal(attach.origin, `http://127.0.0.1:${String(uiPort)}`);
     const gateway = attach.searchParams.get("workspace-gateway");
     const pairing = new URLSearchParams(attach.hash.slice(1)).get("workspace-pair");
     assert.notEqual(gateway, null);
@@ -74,71 +92,53 @@ test("ordinary launcher starts empty then a second invocation reuses the owner",
     assert.equal(
       setup.ok &&
         setup.value.operation === "product.setup.get.v1" &&
-        setup.value.snapshot.providers.some(
-          (profile) =>
-            profile.provider === "codex" &&
-            profile.installed &&
-            profile.configured &&
-            profile.authenticated === "not_observed",
-        ),
+        setup.value.snapshot.projects.length === 0,
       true,
     );
-    const secondProcess = launch(state);
-    const second = await receipt(secondProcess);
-    assert.equal(await exitCode(secondProcess), 0);
-    assert.equal(second.reusedOwner, true);
-    assert.equal(second.databasePath, first.databasePath);
-    assert.equal(owner.exitCode, null);
+    assert.equal(server.exitCode, null);
   } finally {
-    owner.kill("SIGTERM");
-    await exitCode(owner);
+    server.kill("SIGTERM");
+    await exitCode(server);
     await rm(state, { recursive: true, force: true });
   }
 });
 
-function launch(state: string): ChildProcess {
-  return spawn(
-    process.execPath,
-    ["--experimental-strip-types", "src/zap-quick-lens.ts", "--state-dir", state, "--no-open"],
-    { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
-  );
-}
-
-function receipt(child: ChildProcess): Promise<z.infer<typeof ReceiptSchema>> {
-  return new Promise((resolve, reject) => {
+function receipt(child: ChildProcess): Promise<z.infer<typeof ServerReceiptSchema>> {
+  return new Promise((resolveReceipt, reject) => {
     let stdout = "";
     let stderr = "";
     child.stdout?.setEncoding("utf8");
     child.stderr?.setEncoding("utf8");
-    child.stderr?.on("data", (chunk: string) => {
-      stderr += chunk;
-    });
+    child.stderr?.on("data", (chunk: string) => (stderr += chunk));
     child.stdout?.on("data", (chunk: string) => {
       stdout += chunk;
       const boundary = stdout.indexOf("\n");
       if (boundary < 0) return;
       try {
         const raw: unknown = JSON.parse(stdout.slice(0, boundary));
-        resolve(ReceiptSchema.parse(raw));
+        resolveReceipt(ServerReceiptSchema.parse(raw));
       } catch (error) {
         reject(
           error instanceof Error
             ? error
             : new Error(
-                "violates REQ spec://org.vibevm.zap/lens/PROP-010#start-and-projects: launcher receipt could not be parsed; fix surface: emit one JSON receipt line",
+                reqMessage(
+                  "zap-server receipt could not be parsed",
+                  "emit one typed JSON receipt line",
+                ),
               ),
         );
       }
     });
     child.once("exit", (code) => {
-      if (!stdout.includes("\n")) reject(new Error(`launcher exited ${String(code)}: ${stderr}`));
+      if (!stdout.includes("\n")) reject(new Error(`zap-server exited ${String(code)}: ${stderr}`));
     });
   });
 }
 
 function exitCode(child: ChildProcess): Promise<number | null> {
   return child.exitCode === null
-    ? new Promise((resolve) => child.once("exit", resolve))
+    ? new Promise((resolveExit) => child.once("exit", resolveExit))
     : Promise.resolve(child.exitCode);
 }
 
@@ -156,7 +156,10 @@ function output(
       child.kill("SIGTERM");
       reject(
         new Error(
-          "violates REQ spec://org.vibevm.zap/lens/PROP-010#start-and-projects: help did not exit before product startup; fix surface: handle help before launcher side effects",
+          reqMessage(
+            "zap-server help or presentation refusal did not exit before product startup",
+            "handle read-only/refused arguments before settings and runtime composition",
+          ),
         ),
       );
     }, 5_000);
@@ -169,4 +172,8 @@ function output(
       reject(error);
     });
   });
+}
+
+function reqMessage(why: string, fix: string): string {
+  return `violates REQ spec://org.vibevm.zap/lens/PROP-017#verification: ${why}; fix surface: ${fix}`;
 }

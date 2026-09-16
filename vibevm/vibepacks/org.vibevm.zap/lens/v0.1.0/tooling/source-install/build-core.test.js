@@ -14,6 +14,7 @@ import { basename, dirname, join } from "node:path";
 import test from "node:test";
 import { GENERATION_PROTOCOL, PREPARED_PROTOCOL, buildSourceInstallation } from "./build-core.mjs";
 import { PACKAGE_COMMANDS } from "./launchers.mjs";
+import { MANAGEMENT_TOOL_FILES } from "./management-tools.mjs";
 
 test("build stages an immutable Lens generation and reuses exact inputs", async () => {
   const fixture = createFixture();
@@ -28,7 +29,7 @@ test("build stages an immutable Lens generation and reuses exact inputs", async 
     assert.equal(first.generation.protocol, GENERATION_PROTOCOL);
     assert.equal(first.prepared.protocol, PREPARED_PROTOCOL);
     assert.equal(first.prepared.engineEnabled, false);
-    assert.equal(first.prepared.launchers.length, 24);
+    assert.equal(first.prepared.launchers.length, 30);
     assert.equal(runner.commands.length, 3);
     assert.equal(
       runner.commands
@@ -86,6 +87,19 @@ test("build stages an immutable Lens generation and reuses exact inputs", async 
         "utf8",
       ),
       "// production electron package\n",
+    );
+    assert.equal(
+      readFileSync(
+        join(
+          fixture.hostRoot,
+          first.generation.runtimeRoot,
+          "tooling",
+          "source-install",
+          "application.mjs",
+        ),
+        "utf8",
+      ),
+      "// application.mjs management fixture\n",
     );
   } finally {
     fixture.close();
@@ -159,7 +173,7 @@ test("default build uses Vibe binary dispatch and publishes the engine launcher"
     );
     assert.equal(built.prepared.engineEnabled, true);
     assert.equal(built.prepared.engineVersion, "1.1.0");
-    assert.equal(built.prepared.launchers.length, 27);
+    assert.equal(built.prepared.launchers.length, 33);
     assert.equal(
       runner.commands.some(
         (command) =>
@@ -196,6 +210,7 @@ function createFixture() {
     hostRoot,
     join(lensRoot, "src"),
     join(lensRoot, "integrations"),
+    join(lensRoot, "tooling", "source-install"),
     join(lensRoot, "vibevm", "vibespecs"),
     join(root, "Node Runtime"),
   ])
@@ -214,6 +229,11 @@ function createFixture() {
     join(lensRoot, "vibevm", "vibespecs", "PROP-016.xml"),
     "fixture source-install guide\n",
   );
+  for (const file of MANAGEMENT_TOOL_FILES)
+    writeFileSync(
+      join(lensRoot, "tooling", "source-install", file),
+      `// ${file} management fixture\n`,
+    );
   writeFileSync(npmCli, "// fixture npm cli\n");
   return {
     root,
