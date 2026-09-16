@@ -1,0 +1,96 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "repository_git",
+  "scenarioId": "repository.conflict-resolution-promotion",
+  "runnerId": "repository.git",
+  "seed": "repository.seed.conflict",
+  "tags": ["repository", "conflict", "resolution", "zero-llm"],
+  "coverage": [
+    "integration.actual-conflict",
+    "integration.bounded-resolution",
+    "integration.semantic-review"
+  ],
+  "inputs": {
+    "fixture": {
+      "projectRelativePath": "apps/demo",
+      "initialFiles": [{ "path": "conflict.txt", "content": "base\n" }],
+      "ignoredFiles": []
+    },
+    "inputTape": [
+      {
+        "kind": "register_repository",
+        "actionId": "register",
+        "projectKey": "project",
+        "projectId": "project.fixture"
+      },
+      {
+        "kind": "prepare_plan",
+        "actionId": "plan",
+        "planKey": "plan",
+        "planId": "plan.fixture",
+        "contextId": "context.fixture",
+        "baseWorktreeKey": "project"
+      },
+      {
+        "kind": "prepare_child",
+        "actionId": "child",
+        "worktreeKey": "child",
+        "planKey": "plan",
+        "parentWorktreeKey": "plan"
+      },
+      {
+        "kind": "fixture_commit",
+        "actionId": "target-change",
+        "worktreeKey": "plan",
+        "files": [{ "path": "conflict.txt", "content": "target\n" }]
+      },
+      {
+        "kind": "fixture_commit",
+        "actionId": "source-change",
+        "worktreeKey": "child",
+        "files": [{ "path": "conflict.txt", "content": "source\n" }]
+      },
+      {
+        "kind": "prepare_integration",
+        "actionId": "integrate",
+        "integrationKey": "integration",
+        "integrationId": "integration.fixture.conflict",
+        "planKey": "plan",
+        "sourceWorktreeKey": "child",
+        "targetWorktreeKey": "plan"
+      },
+      {
+        "kind": "fixture_resolve",
+        "actionId": "resolve",
+        "integrationKey": "integration",
+        "files": [{ "path": "conflict.txt", "content": "resolved\n" }]
+      },
+      {
+        "kind": "run_test",
+        "actionId": "test",
+        "integrationKey": "integration",
+        "profileId": "fixture.clean"
+      },
+      {
+        "kind": "record_review",
+        "actionId": "review",
+        "integrationKey": "integration",
+        "accepted": true
+      },
+      { "kind": "promote", "actionId": "promote", "integrationKey": "integration" }
+    ]
+  },
+  "expected": {
+    "finalActionStates": {
+      "integrate": "conflicted",
+      "resolve": "succeeded",
+      "promote": "succeeded"
+    },
+    "targetWorktreeKey": "plan",
+    "targetFiles": [{ "path": "conflict.txt", "content": "resolved\n" }],
+    "conflictPaths": ["apps/demo/conflict.txt"],
+    "refusalCodes": {},
+    "unchangedOriginalCheckout": true,
+    "zeroInference": true
+  }
+}

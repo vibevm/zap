@@ -1,0 +1,79 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "repository_git",
+  "scenarioId": "repository.restart-idempotent-reconcile",
+  "runnerId": "repository.git",
+  "seed": "repository.seed.restart",
+  "tags": ["repository", "restart", "idempotency", "zero-llm"],
+  "coverage": [
+    "preparation.intent-before-io",
+    "preparation.exact-request-retry",
+    "recovery.durable-reopen"
+  ],
+  "inputs": {
+    "fixture": {
+      "projectRelativePath": "apps/demo",
+      "initialFiles": [{ "path": "value.txt", "content": "base\n" }],
+      "ignoredFiles": []
+    },
+    "inputTape": [
+      {
+        "kind": "register_repository",
+        "actionId": "register",
+        "projectKey": "project",
+        "projectId": "project.fixture"
+      },
+      {
+        "kind": "prepare_plan",
+        "actionId": "plan-first",
+        "requestKey": "plan-request",
+        "planKey": "plan",
+        "planId": "plan.fixture",
+        "contextId": "context.fixture",
+        "baseWorktreeKey": "project"
+      },
+      {
+        "kind": "prepare_child",
+        "actionId": "child-first",
+        "requestKey": "child-request",
+        "worktreeKey": "child",
+        "planKey": "plan",
+        "parentWorktreeKey": "plan"
+      },
+      { "kind": "reopen_store", "actionId": "reopen" },
+      {
+        "kind": "prepare_plan",
+        "actionId": "plan-retry",
+        "requestKey": "plan-request",
+        "planKey": "plan",
+        "planId": "plan.fixture",
+        "contextId": "context.fixture",
+        "baseWorktreeKey": "project"
+      },
+      {
+        "kind": "prepare_child",
+        "actionId": "child-retry",
+        "requestKey": "child-request",
+        "worktreeKey": "child",
+        "planKey": "plan",
+        "parentWorktreeKey": "plan"
+      },
+      { "kind": "inspect", "actionId": "inspect" }
+    ]
+  },
+  "expected": {
+    "finalActionStates": {
+      "plan-first": "succeeded",
+      "child-first": "succeeded",
+      "reopen": "succeeded",
+      "plan-retry": "succeeded",
+      "child-retry": "succeeded"
+    },
+    "targetWorktreeKey": "plan",
+    "targetFiles": [{ "path": "value.txt", "content": "base\n" }],
+    "conflictPaths": [],
+    "refusalCodes": {},
+    "unchangedOriginalCheckout": true,
+    "zeroInference": true
+  }
+}

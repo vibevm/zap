@@ -1,0 +1,67 @@
+/** Durable host-bound Git workspaces for parallel plans. @scope spec://org.vibevm.zap/lens/PROP-014#root */
+export {
+  AdoptRegisteredPlanRequestSchema,
+  AssignWorktreeRequestSchema,
+  AssignIntegrationWorktreeRequestSchema,
+  IntegrationResultSchema,
+  PrepareChildRequestSchema,
+  PreparedPlanSchema,
+  PrepareIntegrationRequestSchema,
+  PreparePlanRequestSchema,
+  PromoteIntegrationRequestSchema,
+  RecordIntegrationReviewRequestSchema,
+  RecordResolutionRequestSchema,
+  RecordWorktreeHeadRequestSchema,
+  RegisterRepositoryRequestSchema,
+  RegisteredRepositorySchema,
+  RunIntegrationTestRequestSchema,
+  UpdateAlgorithmBindingRequestSchema,
+  type AssignWorktreeRequest,
+  type AssignIntegrationWorktreeRequest,
+  type AdoptRegisteredPlanRequest,
+  type PreparedPlan,
+  type IntegrationDiff,
+  type IntegrationDiffRequest,
+  type ObserveWorktreeRequest,
+  type PrepareChildRequest,
+  type PrepareIntegrationRequest,
+  type PreparePlanRequest,
+  type PromoteIntegrationRequest,
+  type RecordIntegrationReviewRequest,
+  type RecordResolutionRequest,
+  type RecordWorktreeHeadRequest,
+  type RegisteredRepository,
+  type RegisterRepositoryRequest,
+  type RepositoryWorkspaceErrorCode,
+  type RepositoryWorkspaceResult,
+  type RepositoryWorkspaceService,
+  type ResolveExecutionWorkspaceRequest,
+  type ResolveAssignedWorkspaceRequest,
+  type ResolveIntegrationWorkspaceRequest,
+  type RunIntegrationTestRequest,
+  type TrustedExecutionWorkspace,
+  type TrustedWorktreeObservation,
+  type UpdateAlgorithmBindingRequest,
+} from "./contracts.ts";
+export {
+  createGitArgvAdapter,
+  fixtureGitIdentityEnvironment,
+  type RepositoryGitPort,
+} from "./git.ts";
+export {
+  createLocalIdleWriterGate,
+  createUnavailableWriterGate,
+  type RepositoryWriterGate,
+  type RepositoryWriterLease,
+  type RepositoryWriterTarget,
+} from "./gate.ts";
+export { createRepositoryWorkspaceService } from "./service.ts";
+export { RepositoryGitSimulationSchema, type RepositoryGitSimulation } from "./simulation.ts";
+export { openRepositoryWorkspaceStore, type RepositoryWorkspaceStore } from "./store.ts";
+export type {
+  IntegrationTestRunInput,
+  IntegrationTestRunResult,
+  RepositoryIntegrationTestRunner,
+  RepositoryWorkspaceIdFactory,
+  RepositoryWorkspaceRuntimeOptions,
+} from "./runtime.ts";

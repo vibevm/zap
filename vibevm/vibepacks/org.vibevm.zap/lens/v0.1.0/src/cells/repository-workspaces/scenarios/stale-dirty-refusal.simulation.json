@@ -1,0 +1,114 @@
+{
+  "protocol": "zap-mock-behavior/1",
+  "kind": "repository_git",
+  "scenarioId": "repository.stale-and-dirty-target-refusal",
+  "runnerId": "repository.git",
+  "seed": "repository.seed.refusal",
+  "tags": ["repository", "stale", "dirty", "refusal", "zero-llm"],
+  "coverage": [
+    "integration.target-head-cas",
+    "integration.dirty-target-refusal",
+    "integration.no-overwrite"
+  ],
+  "inputs": {
+    "fixture": {
+      "projectRelativePath": "apps/demo",
+      "initialFiles": [{ "path": "value.txt", "content": "base\n" }],
+      "ignoredFiles": []
+    },
+    "inputTape": [
+      {
+        "kind": "register_repository",
+        "actionId": "register",
+        "projectKey": "project",
+        "projectId": "project.fixture"
+      },
+      {
+        "kind": "prepare_plan",
+        "actionId": "plan",
+        "planKey": "plan",
+        "planId": "plan.fixture",
+        "contextId": "context.fixture",
+        "baseWorktreeKey": "project"
+      },
+      {
+        "kind": "prepare_child",
+        "actionId": "child",
+        "worktreeKey": "child",
+        "planKey": "plan",
+        "parentWorktreeKey": "plan"
+      },
+      {
+        "kind": "fixture_commit",
+        "actionId": "source-change",
+        "worktreeKey": "child",
+        "files": [{ "path": "source.txt", "content": "candidate\n" }]
+      },
+      {
+        "kind": "prepare_integration",
+        "actionId": "integrate-stale",
+        "integrationKey": "stale",
+        "integrationId": "integration.fixture.stale",
+        "planKey": "plan",
+        "sourceWorktreeKey": "child",
+        "targetWorktreeKey": "plan"
+      },
+      {
+        "kind": "run_test",
+        "actionId": "test-stale",
+        "integrationKey": "stale",
+        "profileId": "fixture.clean"
+      },
+      {
+        "kind": "record_review",
+        "actionId": "review-stale",
+        "integrationKey": "stale",
+        "accepted": true
+      },
+      {
+        "kind": "fixture_commit",
+        "actionId": "target-advance",
+        "worktreeKey": "plan",
+        "files": [{ "path": "target.txt", "content": "advanced\n" }]
+      },
+      { "kind": "promote", "actionId": "promote-stale", "integrationKey": "stale" },
+      {
+        "kind": "prepare_integration",
+        "actionId": "integrate-dirty",
+        "integrationKey": "dirty",
+        "integrationId": "integration.fixture.dirty",
+        "planKey": "plan",
+        "sourceWorktreeKey": "child",
+        "targetWorktreeKey": "plan"
+      },
+      {
+        "kind": "run_test",
+        "actionId": "test-dirty",
+        "integrationKey": "dirty",
+        "profileId": "fixture.clean"
+      },
+      {
+        "kind": "record_review",
+        "actionId": "review-dirty",
+        "integrationKey": "dirty",
+        "accepted": true
+      },
+      {
+        "kind": "fixture_write",
+        "actionId": "target-dirty",
+        "worktreeKey": "plan",
+        "files": [{ "path": "uncommitted.txt", "content": "dirty\n" }]
+      },
+      { "kind": "promote", "actionId": "promote-dirty", "integrationKey": "dirty" }
+    ]
+  },
+  "expected": {
+    "finalActionStates": { "promote-stale": "refused", "promote-dirty": "refused" },
+    "targetWorktreeKey": "plan",
+    "targetFiles": [{ "path": "target.txt", "content": "advanced\n" }],
+    "conflictPaths": [],
+    "refusalCodes": { "promote-stale": "stale", "promote-dirty": "dirty" },
+    "unchangedOriginalCheckout": true,
+    "zeroInference": true
+  }
+}

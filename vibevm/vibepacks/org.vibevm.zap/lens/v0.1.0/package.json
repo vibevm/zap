@@ -77,6 +77,14 @@
       "types": "./dist/cells/workspace-model/index.d.ts",
       "import": "./dist/cells/workspace-model/index.js"
     },
+    "./repository-model": {
+      "types": "./dist/cells/repository-model/index.d.ts",
+      "import": "./dist/cells/repository-model/index.js"
+    },
+    "./repository-workspaces": {
+      "types": "./dist/cells/repository-workspaces/index.d.ts",
+      "import": "./dist/cells/repository-workspaces/index.js"
+    },
     "./workspace-store": {
       "types": "./dist/cells/workspace-store/index.d.ts",
       "import": "./dist/cells/workspace-store/index.js"
