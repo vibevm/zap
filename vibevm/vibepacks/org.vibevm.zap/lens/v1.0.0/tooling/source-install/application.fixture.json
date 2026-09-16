@@ -1,0 +1,21 @@
+{
+  "protocol": "zap-source-install-application-simulation/1",
+  "applicationId": "zap",
+  "applicationPackage": {
+    "group": "org.vibevm.zap",
+    "name": "zap",
+    "version": "1.0.0"
+  },
+  "installerPackage": {
+    "group": "org.vibevm.zap",
+    "name": "lens",
+    "version": "1.0.0"
+  },
+  "commands": ["zap-quicklens", "zap-server"],
+  "expected": {
+    "installStatus": "ready",
+    "uninstallStatus": "undeployed",
+    "npmRegistry": "https://registry.npmjs.org/",
+    "zeroLlmInference": true
+  }
+}

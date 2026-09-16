@@ -1,0 +1,252 @@
+{
+  "name": "@org.vibevm.zap/lens",
+  "version": "1.0.0",
+  "description": "Zap Quick Lens local workspace, agent coordination, and Vibe source installer",
+  "license": "UPL-1.0",
+  "homepage": "https://github.com/vibevm/zap",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vibevm/zap.git"
+  },
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist",
+    "integrations",
+    "LICENSE.md",
+    "README.md",
+    "tooling/install-source.mjs",
+    "tooling/source-install/*.mjs",
+    "vibe.toml",
+    "vibevm/vibespecs"
+  ],
+  "bin": {
+    "codlens": "./dist/cli.js",
+    "codlens-mcp": "./dist/mcp.js",
+    "quicklens-service": "./dist/quicklens.js",
+    "quicklens-web-auth": "./dist/quicklens-web-auth.js",
+    "quicklens-web": "./dist/quicklens-web.js",
+    "zap-wayfinder": "./dist/wayfinder.js",
+    "zap-server": "./dist/zap-server.js",
+    "zap-quicklens": "./dist/zap-quick-lens.js",
+    "zap-quick-lens": "./dist/zap-quick-lens.js",
+    "zap-mock-agent": "./dist/zap-mock-agent.js"
+  },
+  "exports": {
+    "./protocol": {
+      "types": "./dist/cells/protocol/index.d.ts",
+      "import": "./dist/cells/protocol/index.js"
+    },
+    "./broker": {
+      "types": "./dist/cells/broker/index.d.ts",
+      "import": "./dist/cells/broker/index.js"
+    },
+    "./host-adapters": {
+      "types": "./dist/cells/host-adapters/index.d.ts",
+      "import": "./dist/cells/host-adapters/index.js"
+    },
+    "./transport": {
+      "types": "./dist/cells/transport/index.d.ts",
+      "import": "./dist/cells/transport/index.js"
+    },
+    "./http": {
+      "types": "./dist/cells/http/index.d.ts",
+      "import": "./dist/cells/http/index.js"
+    },
+    "./mcp": {
+      "types": "./dist/cells/mcp/index.d.ts",
+      "import": "./dist/cells/mcp/index.js"
+    },
+    "./quicklens-model": {
+      "types": "./dist/cells/quicklens-model/index.d.ts",
+      "import": "./dist/cells/quicklens-model/index.js"
+    },
+    "./quicklens-service": {
+      "types": "./dist/cells/quicklens-service/index.d.ts",
+      "import": "./dist/cells/quicklens-service/index.js"
+    },
+    "./plan-authoring": {
+      "types": "./dist/cells/plan-authoring/index.d.ts",
+      "import": "./dist/cells/plan-authoring/index.js"
+    },
+    "./specification-watch": {
+      "types": "./dist/cells/specification-watch/index.d.ts",
+      "import": "./dist/cells/specification-watch/index.js"
+    },
+    "./web-auth": {
+      "types": "./dist/cells/web-auth/index.d.ts",
+      "import": "./dist/cells/web-auth/index.js"
+    },
+    "./web-gateway": {
+      "types": "./dist/cells/web-gateway/index.d.ts",
+      "import": "./dist/cells/web-gateway/index.js"
+    },
+    "./zap-client": {
+      "types": "./dist/cells/zap-client/index.d.ts",
+      "import": "./dist/cells/zap-client/index.js"
+    },
+    "./execution-catalog": {
+      "types": "./dist/cells/execution-catalog/index.d.ts",
+      "import": "./dist/cells/execution-catalog/index.js"
+    },
+    "./execution-catalog-store": {
+      "types": "./dist/cells/execution-catalog-store/index.d.ts",
+      "import": "./dist/cells/execution-catalog-store/index.js"
+    },
+    "./execution-catalog-service": {
+      "types": "./dist/cells/execution-catalog-service/index.d.ts",
+      "import": "./dist/cells/execution-catalog-service/index.js"
+    },
+    "./execution-accounts": {
+      "types": "./dist/cells/execution-accounts/index.d.ts",
+      "import": "./dist/cells/execution-accounts/index.js"
+    },
+    "./workspace-model": {
+      "types": "./dist/cells/workspace-model/index.d.ts",
+      "import": "./dist/cells/workspace-model/index.js"
+    },
+    "./repository-model": {
+      "types": "./dist/cells/repository-model/index.d.ts",
+      "import": "./dist/cells/repository-model/index.js"
+    },
+    "./repository-workspaces": {
+      "types": "./dist/cells/repository-workspaces/index.d.ts",
+      "import": "./dist/cells/repository-workspaces/index.js"
+    },
+    "./workspace-store": {
+      "types": "./dist/cells/workspace-store/index.d.ts",
+      "import": "./dist/cells/workspace-store/index.js"
+    },
+    "./workspace-client": {
+      "types": "./dist/cells/workspace-client/index.d.ts",
+      "import": "./dist/cells/workspace-client/index.js"
+    },
+    "./mock-model": {
+      "types": "./dist/cells/mock-model/index.d.ts",
+      "import": "./dist/cells/mock-model/index.js"
+    },
+    "./mock-agent": {
+      "types": "./dist/cells/mock-agent/index.d.ts",
+      "import": "./dist/cells/mock-agent/index.js"
+    },
+    "./zap-mock-agent": {
+      "types": "./dist/zap-mock-agent.d.ts",
+      "import": "./dist/zap-mock-agent.js"
+    },
+    "./workspace-annotations": {
+      "types": "./dist/cells/workspace-annotations/index.d.ts",
+      "import": "./dist/cells/workspace-annotations/index.js"
+    },
+    "./product-app": {
+      "types": "./dist/cells/product-app/index.d.ts",
+      "import": "./dist/cells/product-app/index.js"
+    },
+    "./proxy-policy": {
+      "types": "./dist/cells/proxy-policy/index.d.ts",
+      "import": "./dist/cells/proxy-policy/index.js"
+    },
+    "./provider-coordinators": {
+      "types": "./dist/cells/provider-coordinators/index.d.ts",
+      "import": "./dist/cells/provider-coordinators/index.js"
+    },
+    "./agent-runtime": {
+      "types": "./dist/cells/agent-runtime/index.d.ts",
+      "import": "./dist/cells/agent-runtime/index.js"
+    },
+    "./codex-coordinator": {
+      "types": "./dist/cells/codex-coordinator/index.d.ts",
+      "import": "./dist/cells/codex-coordinator/index.js"
+    },
+    "./workspace-demo": {
+      "types": "./dist/cells/workspace-demo/index.d.ts",
+      "import": "./dist/cells/workspace-demo/index.js"
+    },
+    "./wayfinder-runtime": {
+      "types": "./dist/cells/wayfinder-runtime/index.d.ts",
+      "import": "./dist/cells/wayfinder-runtime/index.js"
+    },
+    "./managed-terminal": {
+      "types": "./dist/cells/managed-terminal/index.d.ts",
+      "import": "./dist/cells/managed-terminal/index.js"
+    },
+    "./managed-work": {
+      "types": "./dist/cells/managed-work/index.d.ts",
+      "import": "./dist/cells/managed-work/index.js"
+    },
+    "./managed-terminal-service": {
+      "types": "./dist/cells/managed-terminal-service/index.d.ts",
+      "import": "./dist/cells/managed-terminal-service/index.js"
+    },
+    "./managed-terminal-store": {
+      "types": "./dist/cells/managed-terminal-store/index.d.ts",
+      "import": "./dist/cells/managed-terminal-store/index.js"
+    },
+    "./workspace-interaction": {
+      "types": "./dist/cells/workspace-interaction/index.d.ts",
+      "import": "./dist/cells/workspace-interaction/index.js"
+    },
+    "./workspace-planning": {
+      "types": "./dist/cells/workspace-planning/index.d.ts",
+      "import": "./dist/cells/workspace-planning/index.js"
+    },
+    "./wayfinder-agent": {
+      "types": "./dist/cells/wayfinder-agent/index.d.ts",
+      "import": "./dist/cells/wayfinder-agent/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "node tooling/clean-dist.js",
+    "build:node": "tsc -p tsconfig.build.json",
+    "build:quicklens:browser": "vite build --config quicklens.vite.config.ts",
+    "build:quicklens:electron": "tsc -p tsconfig.electron.json && vite build --config quicklens.preload.vite.config.ts",
+    "build:quicklens": "npm run build:quicklens:browser && npm run build:quicklens:electron",
+    "build": "npm run clean && npm run build:node && npm run build:quicklens",
+    "dev:quicklens": "vite --config quicklens.vite.config.ts --host 127.0.0.1",
+    "preview:quicklens": "vite preview --config quicklens.preview.config.ts --host 127.0.0.1",
+    "start:quicklens-service": "node dist/quicklens.js",
+    "start:quicklens-web": "node dist/quicklens-web.js",
+    "start:wayfinder": "node dist/wayfinder.js",
+    "start": "node dist/zap-quick-lens.js",
+    "quicklens:demo": "npm run build:quicklens && electron dist/quicklens/electron/main.js --demo",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit && tsc -p tsconfig.browser.json --noEmit && tsc -p tsconfig.electron.json --noEmit && tsc -p tsconfig.quicklens.test.json --noEmit",
+    "test:node": "node --test --test-concurrency=4 \"src/**/*.test.ts\"",
+    "simulate:mock": "node --experimental-strip-types src/zap-mock-simulate.ts",
+    "test:mock": "npm run simulate:mock -- --all",
+    "test:tooling": "node --test \"tooling/**/*.test.js\"",
+    "test:types": "vitest run",
+    "test": "npm run test:node && npm run test:tooling && npm run test:types",
+    "lint": "eslint src",
+    "check:quicklens:boundary": "node tooling/check-quicklens-browser-boundary.js",
+    "verify": "npm run format:check && npm run typecheck && npm test && npm run lint && npm run check:quicklens:boundary && npm run build",
+    "prepack": "npm run verify"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@qwik.dev/core": "2.0.0-beta.43",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0",
+    "electron": "44.3.0",
+    "graphology": "0.26.0",
+    "lossless-json": "4.3.1",
+    "sigma": "3.0.3",
+    "zod": "4.1.11"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.0",
+    "@types/node": "24.10.1",
+    "eslint": "9.39.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.0",
+    "vite": "8.3.0",
+    "vitest": "4.1.11"
+  },
+  "optionalDependencies": {
+    "node-pty": "1.1.0"
+  }
+}

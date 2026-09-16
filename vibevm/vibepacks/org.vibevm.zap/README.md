@@ -1,7 +1,7 @@
 # ZAP product group
 
-Active ZAP development lives in this group so the product can later move into
-its own repository. That repository move has not happened.
+Zap is maintained in its standalone product repository. Both shipped packages
+use the mutable 1.0.0 release line on branch `1.0`.
 
 | Package | Responsibility |
 | --- | --- |
@@ -16,5 +16,6 @@ are not separate versions of the protocol or copies of the planning model.
 
 The engine and lens communicate through public APIs. They do not import
 Vibevm's implementation. Tooling dependencies remain explicit and replaceable.
-Published `org.vibevm.world/zap@1.0.0` is historical compatibility; its release
-identity and prior verification receipts are preserved.
+The predecessor `org.vibevm.world/zap@1.0.0` source is historical compatibility
+material under `archive/legacy-zap-v1.0`, outside this registry. Its release
+identity and prior verification receipts remain historical evidence.

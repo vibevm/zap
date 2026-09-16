@@ -1,0 +1,8 @@
+**/.vibe/
+**/dist/
+**/node_modules/
+**/target/
+*.log
+*.tgz
+vibevm/vibedeps/
+vibevm/vibepacks/*/*/*/vibevm/vibedeps/

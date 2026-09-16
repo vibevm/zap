@@ -1,0 +1,15 @@
+[package]
+name = "lens"
+group = "org.vibevm.zap"
+kind = "tool"
+version = "1.0.0"
+epoch = 1
+format = "normal"
+authors = ["Oleg Chirukhin"]
+license = "UPL-1.0"
+description = "Zap Quick Lens local workspace, agent coordination, and Vibe source installer"
+keywords = ["agents", "lens", "broker", "mcp", "typescript"]
+
+[compatibility]
+min_vibe_version = "1.0.0"
+requires_kinds = []
