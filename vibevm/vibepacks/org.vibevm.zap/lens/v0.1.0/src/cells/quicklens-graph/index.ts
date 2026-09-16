@@ -29,6 +29,16 @@ export {
   layoutQuicklensGraph,
   relationshipVisibleInGraph,
 } from "./layout.ts";
+export {
+  projectPortfolioGraph,
+  type PortfolioCard,
+  type PortfolioEdgeAttributes,
+  type PortfolioGraph,
+  type PortfolioNodeAttributes,
+  type PortfolioNodeKind,
+  type PortfolioProjection,
+  type PortfolioViewState,
+} from "./portfolio.ts";
 
 export interface GraphFilters {
   readonly search: string;

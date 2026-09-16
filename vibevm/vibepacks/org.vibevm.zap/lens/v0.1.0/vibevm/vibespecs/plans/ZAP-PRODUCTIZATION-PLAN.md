@@ -5,6 +5,29 @@ The current requirements are [PROP-010](../PROP-010.xml) and
 [PROP-011](../PROP-011.xml). The earlier MVP acceptance remains evidence for its
 documented paths; it is not acceptance of the larger product workflows below.
 
+## Current implementation checkpoint
+
+The productized local path now starts from an empty workspace, registers an
+existing project without launching inference, and starts the selected model only
+after **Start development**. One owner serves browser/Electron clients, the
+single multi-project map, scoped cards/terminals, rich questions, managed work,
+anchored notes and recoverable Trash. Dynamic broker scopes and provider MCP
+files are prepared per project rather than predeclared in one static list.
+
+Codex, Claude Code, OpenCode and Qwen Code share the protected proxy policy and
+provider-specific coordinator adapters. Managed worker templates feed the
+project model policy; ordinary work resolves policy, while an explicit
+registered-profile override carries a reason. Managed work and native provider
+children remain separate paths. An idle worker has a bounded authenticated
+inbox wait, but the product does not claim universal wake behavior.
+
+Qwen Code completed the real managed question, browser answer, delivery
+acknowledgement and typed-report flow through an HTTP proxy; human review
+succeeded after Wayfinder restart. Not all four providers have completed a
+current real-model end-to-end run. Provider Pause is unsupported where no
+verified primitive exists. The final delivery boundary and evidence are in the
+[acceptance record](../research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md).
+
 ## Delivery and acceptance
 
 | Slice | User-visible outcome | Acceptance boundary |
@@ -15,7 +38,7 @@ documented paths; it is not acceptance of the larger product workflows below.
 | Managed work | Delegate a bounded task, inspect its real agent terminal, answer questions, receive a report and review it. | Durable launch claim precedes spawn; server identities and model selection are preserved. Human control fences automation. Closing a viewer does not kill work. Process exit is separate from report and acceptance. |
 | Questions for people | Understand who is asking, why and in which project; answer ordinary rich question groups comfortably. | Choices, descriptions, custom/text/multiple answers, limits, drafts, cancel/amendment, deadlines and accessible feedback work. Drafts do not cross question revisions or silently overwrite another client. Cancellation and delivery states reflect the actual recipient path. |
 | One project map | Several project regions and their work appear in one pan/zoom canvas. | Exact scoped selection opens the right card or terminal; layout indicates decomposition/dependencies, and unavailable or partial data remains visible. Camera/collapse state survives refresh. No cross-project authority or edges are invented. |
-| Future notes | Capture a note or future instruction against an exact graph element without disturbing current work. | Passive notes do not dispatch. The next declared matching work boundary receives the eligible instruction version; offer, read and resolution are distinct. Unknown native task binding remains waiting rather than guessed. |
+| Anchored notes | Capture a note or future instruction against an exact graph element without disturbing current work. | Passive notes do not dispatch. The next declared matching work boundary receives the eligible instruction version; offer, read and acknowledgement are distinct. Unknown native task binding remains waiting rather than guessed. |
 | Recoverable Trash | Find removed elements and their notes, inspect the former context and restore/relink deliberately. | Soft archive suppresses deferred delivery and preserves history. Partial data, filters or temporary disconnect never mean deletion. Restoring annotations does not revive an old plan; object restoration uses the ordinary planning proposal path. |
 | Runnable delivery | The same shared server serves browser and Electron, with clear setup/recovery states. | Focused real user-flow checks, required repository gates, an installed-package check and an account-independent checkpoint. No redundant broad/model comparison campaign. |
 
@@ -46,8 +69,8 @@ not an adapter.
 
 ## Local start flow
 
-The ordinary launcher should discover an existing owner or start one local
-Wayfinder, serve the built renderer, and open the selected browser/Electron
+The ordinary launcher discovers an existing owner or starts one local
+Wayfinder, serves the built renderer, and opens the selected browser/Electron
 presentation. Advanced explicit JSON configuration remains supported, but is not
 the only way to reach a usable screen.
 
@@ -63,6 +86,13 @@ managed work; the semantic planning source is explicitly unavailable until
 configured. Setup must not fabricate a campaign, adopt a discovered legacy plan,
 or treat a terminal process as an agent task. Existing planning sources attach
 through the accepted protected ZAP interface.
+
+The current workspace canvas lays out authorized projects together while every
+node and edge retains project/context identity. Notes and deferred instructions
+anchor through `ProjectObjectReference`; managed starts add their exact task/run
+references, and native callers must declare targets. Trash preserves archived
+notes and removed-object context. Restoring an object remains a planning
+proposal, never a direct resurrection.
 
 ## Deferred scope
 

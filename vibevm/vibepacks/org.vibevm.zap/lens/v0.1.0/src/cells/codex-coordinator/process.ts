@@ -10,6 +10,11 @@ import { access } from "node:fs/promises";
 import { constants } from "node:fs";
 import { basename, delimiter, dirname, isAbsolute, join, resolve } from "node:path";
 import { z } from "zod";
+import {
+  resolveProxyEnvironment,
+  ProxyPolicySchema,
+  type ProxyPolicy,
+} from "../proxy-policy/index.ts";
 import type { JsonValue } from "../protocol/index.ts";
 import {
   CodexRpcIdSchema,
@@ -59,12 +64,14 @@ export const CodexProcessProfileSchema = z
   .object({
     executablePath: z.string().min(1),
     requestTimeoutMs: z.number().int().min(1_000).max(300_000).default(30_000),
+    proxy: ProxyPolicySchema.optional(),
   })
   .strict();
 export type CodexProcessProfile = z.infer<typeof CodexProcessProfileSchema>;
 
 export function createNodeCodexProcessFactory(options?: {
   readonly environment?: Readonly<Record<string, string | undefined>>;
+  readonly proxyPolicy?: ProxyPolicy;
 }): CodexProcessFactory {
   return {
     start: async (rawProfile, launchCwd) => {
@@ -75,8 +82,9 @@ export function createNodeCodexProcessFactory(options?: {
       const cwd = resolve(launchCwd);
       try {
         await access(parsed.data.executablePath, constants.X_OK);
+        const environment = codexProcessEnvironment(parsed.data, options);
         const child = spawn(parsed.data.executablePath, ["app-server", "--listen", "stdio://"], {
-          env: options?.environment === undefined ? process.env : { ...options.environment },
+          env: environment.environment,
           cwd,
           shell: false,
           windowsHide: true,
@@ -88,6 +96,20 @@ export function createNodeCodexProcessFactory(options?: {
       }
     },
   };
+}
+
+export function codexProcessEnvironment(
+  profile: CodexProcessProfile,
+  options?: {
+    readonly environment?: Readonly<Record<string, string | undefined>>;
+    readonly proxyPolicy?: ProxyPolicy;
+  },
+) {
+  return resolveProxyEnvironment({
+    ambient: options?.environment ?? process.env,
+    ...(options?.proxyPolicy === undefined ? {} : { global: options.proxyPolicy }),
+    ...(profile.proxy === undefined ? {} : { profile: profile.proxy }),
+  });
 }
 
 export async function resolveInstalledCodexExecutable(input?: {

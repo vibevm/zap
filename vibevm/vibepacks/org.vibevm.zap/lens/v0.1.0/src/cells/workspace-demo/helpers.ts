@@ -1,10 +1,13 @@
 /** @scope spec://org.vibevm.zap/lens/PROP-007#primary-experience */
 /** Pure helpers for the synthetic workspace acceptance port. */
-import type {
-  HistoryEvent,
-  WorkspaceClientPort,
-  WorkspaceCommandRequest,
-  WorkspaceResult,
+import {
+  HistoryEventSchema,
+  type ProjectId,
+  type WorkContextId,
+  type HistoryEvent,
+  type WorkspaceClientPort,
+  type WorkspaceCommandRequest,
+  type WorkspaceResult,
 } from "../workspace-model/index.ts";
 
 export function eventInScope(
@@ -16,6 +19,62 @@ export function eventInScope(
   if (scope.kind === "project") return true;
   if (event.contextId !== scope.contextId) return false;
   return scope.kind === "context" || event.actorId === scope.actorId;
+}
+
+export function demoEvent(
+  historyEventId: string,
+  projectId: ProjectId,
+  contextId: WorkContextId,
+  sequence: string,
+  kind: string,
+  source: "lens" | "host" | "zap",
+  actorId: string | null,
+  occurredAt: string,
+) {
+  return HistoryEventSchema.parse({
+    historyEventId,
+    projectId,
+    contextId,
+    globalSequence: sequence,
+    projectSequence: sequence,
+    sourceSequence: sequence,
+    kind,
+    source,
+    actorId,
+    occurrenceAt: occurredAt,
+    ingestedAt: occurredAt,
+    sourceEventId: `source.${historyEventId}`,
+    correlationId: null,
+    causationId: null,
+    planProvenance: null,
+    payload: {},
+  });
+}
+
+export function createDemoEvent(input: {
+  readonly alphaProjectId: ProjectId;
+  readonly alphaContextId: WorkContextId;
+  readonly betaContextId: WorkContextId;
+  readonly occurredAt: string;
+}) {
+  return (
+    id: string,
+    projectId: ProjectId,
+    sequence: string,
+    kind: string,
+    source: "lens" | "host" | "zap",
+    actorId: string | null,
+  ) =>
+    demoEvent(
+      id,
+      projectId,
+      projectId === input.alphaProjectId ? input.alphaContextId : input.betaContextId,
+      sequence,
+      kind,
+      source,
+      actorId,
+      input.occurredAt,
+    );
 }
 
 export function pending(request: WorkspaceCommandRequest) {

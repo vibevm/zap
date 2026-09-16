@@ -3,6 +3,7 @@
 import { z } from "zod";
 import {
   HistoryPageSchema,
+  ProductSetupResponseSchema,
   WorkspaceCommandResponseSchema,
   WorkspaceErrorSchema,
   WorkspaceReadResponseSchema,
@@ -17,6 +18,9 @@ import {
   type WorkspaceReadRequest,
   type WorkspaceReadResponse,
   type WorkspaceResult,
+  type ProductSetupPort,
+  type ProductSetupResponse,
+  type ProductSetupResult,
 } from "../workspace-model/index.ts";
 
 type Fetcher = (input: string, init: RequestInit) => Promise<Response>;
@@ -29,9 +33,20 @@ export interface WorkspaceHttpClientOptions {
   readonly pollIntervalMs?: number;
 }
 
+export interface WorkspaceHttpConnection {
+  readonly workspace: WorkspaceClientPort;
+  readonly product: ProductSetupPort;
+}
+
 export function createWorkspaceHttpClient(
   options: WorkspaceHttpClientOptions,
 ): WorkspaceClientPort | null {
+  return createWorkspaceHttpConnection(options)?.workspace ?? null;
+}
+
+export function createWorkspaceHttpConnection(
+  options: WorkspaceHttpClientOptions,
+): WorkspaceHttpConnection | null {
   const gateway = parseWorkspaceGateway(options.baseUrl);
   if (gateway === null || options.origin.length < 1) return null;
   const endpoint = gateway;
@@ -91,7 +106,7 @@ export function createWorkspaceHttpClient(
     }
   }
 
-  return {
+  const workspace: WorkspaceClientPort = {
     read: (input: WorkspaceReadRequest): Promise<WorkspaceResult<WorkspaceReadResponse>> =>
       request("v1/workspace/read", input, WorkspaceReadResponseSchema),
     command: (input: WorkspaceCommandRequest): Promise<WorkspaceResult<WorkspaceCommandResponse>> =>
@@ -100,6 +115,56 @@ export function createWorkspaceHttpClient(
       request("v1/workspace/events", input, HistoryPageSchema),
     subscribe: (input) => subscribe(input, request, pollInterval),
   };
+  const productRequest: ProductSetupPort["request"] = async (input) => {
+    try {
+      if (pairingToken !== undefined) {
+        pairing ??= pair(pairingToken);
+        if (!(await pairing))
+          return productFailure("unavailable", "Product gateway pairing failed.");
+      }
+      const headers = new Headers({ Origin: options.origin, "Content-Type": "application/json" });
+      if (sessionCookie !== undefined) headers.set("Cookie", sessionCookie);
+      const response = await fetcher(new URL("v1/product/request", endpoint).href, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(input),
+        credentials: "include",
+        redirect: "error",
+      });
+      const raw: unknown = await response.json();
+      const parsed = z
+        .union([
+          z.object({ ok: z.literal(true), value: ProductSetupResponseSchema }).strict(),
+          z
+            .object({
+              ok: z.literal(false),
+              error: z
+                .object({
+                  code: z.enum(["invalid_input", "not_found", "conflict", "unavailable"]),
+                  message: z.string().min(1),
+                })
+                .strict(),
+            })
+            .strict(),
+        ])
+        .safeParse(raw);
+      return parsed.success
+        ? parsed.data
+        : productFailure("unavailable", "Product gateway returned invalid data.");
+    } catch {
+      return productFailure("unavailable", "Product gateway request failed.");
+    }
+  };
+  const product: ProductSetupPort = {
+    request: productRequest,
+  };
+  return { workspace, product };
+}
+
+function productFailure(code: string, message: string): ProductSetupResult<ProductSetupResponse> {
+  if (code === "invalid_input" || code === "not_found" || code === "conflict")
+    return { ok: false, error: { code, message } };
+  return { ok: false, error: { code: "unavailable", message } };
 }
 
 async function* subscribe(

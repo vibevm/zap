@@ -12,6 +12,7 @@ export {
 } from "./profile.ts";
 export {
   createNodeCodexProcessFactory,
+  codexProcessEnvironment,
   resolveInstalledCodexExecutable,
   CodexProcessErrorSchema,
   CodexProcessProfileSchema,

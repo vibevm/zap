@@ -27,6 +27,7 @@ export interface ElectronWorkspaceGatewayClient {
   read(input: unknown): Promise<unknown>;
   command(input: unknown): Promise<unknown>;
   events(input: unknown): Promise<unknown>;
+  product(input: unknown): Promise<unknown>;
 }
 
 const routes = {
@@ -188,6 +189,7 @@ export function createElectronWorkspaceGatewayClient(
     read: (input) => request("v1/workspace/read", input),
     command: (input) => request("v1/workspace/command", input),
     events: (input) => request("v1/workspace/events", input),
+    product: (input) => request("v1/product/request", input),
   };
 }
 

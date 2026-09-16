@@ -40,6 +40,7 @@ const capabilities: CoordinatorCapabilities = {
 export class FakeAdapter implements CoordinatorAdapter {
   readonly capabilities = capabilities;
   starts = 0;
+  closes = 0;
   startInputs: CoordinatorStartInput[] = [];
   resumes = 0;
   onStart: (() => void) | null = null;
@@ -146,6 +147,7 @@ export class FakeAdapter implements CoordinatorAdapter {
     };
   }
   close(): void {
+    this.closes += 1;
     this.#listener = null;
   }
   emit(event: unknown): void {

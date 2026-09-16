@@ -183,6 +183,15 @@ export type ChatDispatchClaim = z.infer<typeof ChatDispatchClaimSchema>;
 export const ChatDispatchSettlementSchema = ChatDispatchClaimSchema.extend({
   observation: z.enum(["host_accepted", "uncertain", "failed"]),
   nativeTurnId: z.string().min(1).max(512).nullable(),
+  transportCorrelation: z
+    .object({
+      provenance: z.literal("transport_correlation"),
+      clientMessageId: z.string().min(1).max(512),
+      processEpoch: z.string().min(1).max(160),
+    })
+    .strict()
+    .nullable()
+    .optional(),
   updatedAt: z.iso.datetime(),
 }).strict();
 export type ChatDispatchSettlement = z.infer<typeof ChatDispatchSettlementSchema>;

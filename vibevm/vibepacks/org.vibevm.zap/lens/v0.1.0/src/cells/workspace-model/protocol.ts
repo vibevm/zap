@@ -26,7 +26,6 @@ import {
 import {
   AgentSessionIdSchema,
   ClientIdSchema,
-  HistoryEventIdSchema,
   ProjectIdSchema,
   QuestionGroupIdSchema,
   WorkContextIdSchema,
@@ -64,6 +63,18 @@ import {
   WorkspacePlanCommandRequestSchemas,
   WorkspacePlanCommandResponseSchemas,
 } from "./planning.ts";
+import {
+  ManagedWorkCommandSchemas,
+  ManagedWorkCommandResponseSchemas,
+  ManagedWorkReadRequestSchemas,
+  ManagedWorkReadResponseSchemas,
+} from "./managed-work.ts";
+import {
+  AnnotationCommandRequestSchemas,
+  AnnotationCommandResponseSchemas,
+  AnnotationReadRequestSchemas,
+  AnnotationReadResponseSchemas,
+} from "./annotations.ts";
 
 export const WorkspaceErrorCodeSchema = z.enum([
   "invalid_input",
@@ -200,6 +211,7 @@ export const ProjectSnapshotStateSchema = z.discriminatedUnion("state", [
 export type ProjectSnapshotState = z.infer<typeof ProjectSnapshotStateSchema>;
 
 export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
+  ...AnnotationReadRequestSchemas,
   z.object({ operation: z.literal("project.list.v1") }).strict(),
   z.object({ operation: z.literal("project.get.v1"), projectId: ProjectIdSchema }).strict(),
   z
@@ -307,6 +319,7 @@ export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
     })
     .strict(),
   ...TerminalReadRequestSchemas,
+  ...ManagedWorkReadRequestSchemas,
   ModelPolicyGetInputSchema.extend({ operation: z.literal("model-policy.get.v1") }).strict(),
   ModelPolicyPreviewInputSchema.extend({
     operation: z.literal("model-policy.preview.v1"),
@@ -321,6 +334,7 @@ export const WorkspaceReadRequestSchema = z.discriminatedUnion("operation", [
 export type WorkspaceReadRequest = z.infer<typeof WorkspaceReadRequestSchema>;
 
 export const WorkspaceReadResponseSchema = z.discriminatedUnion("operation", [
+  ...AnnotationReadResponseSchemas,
   z
     .object({ operation: z.literal("project.list.v1"), projects: z.array(ProjectDescriptorSchema) })
     .strict(),
@@ -370,6 +384,7 @@ export const WorkspaceReadResponseSchema = z.discriminatedUnion("operation", [
   z.object({ operation: z.literal("agent.network.v1"), network: AgentNetworkSchema }).strict(),
   z.object({ operation: z.literal("agent.output.page.v1"), page: AgentOutputPageSchema }).strict(),
   ...TerminalReadResponseSchemas,
+  ...ManagedWorkReadResponseSchemas,
   z
     .object({ operation: z.literal("model-policy.get.v1"), policy: StoredModelPolicyViewSchema })
     .strict(),
@@ -406,6 +421,7 @@ const ProjectLifecycleCommandSchema = ScopedRequestSchema.extend({
   reasonMarkdown: z.string().min(1).max(8_000),
 });
 export const WorkspaceCommandRequestSchema = z.discriminatedUnion("operation", [
+  ...AnnotationCommandRequestSchemas,
   ...WorkspacePlanCommandRequestSchemas,
   ScopedRequestSchema.extend({
     operation: z.literal("chat.post.v1"),
@@ -461,6 +477,7 @@ export const WorkspaceCommandRequestSchema = z.discriminatedUnion("operation", [
   ProjectLifecycleCommandSchema.extend({ operation: z.literal("project.continue.v1") }).strict(),
   ModelPolicyUpdateInputSchema.extend({ operation: z.literal("model-policy.update.v1") }).strict(),
   ...TerminalCommandSchemas,
+  ...ManagedWorkCommandSchemas,
 ]);
 export type WorkspaceCommandRequest = z.infer<typeof WorkspaceCommandRequestSchema>;
 
@@ -472,6 +489,7 @@ const PendingActionSchema = z
   })
   .strict();
 export const WorkspaceCommandResponseSchema = z.discriminatedUnion("operation", [
+  ...AnnotationCommandResponseSchemas,
   ...WorkspacePlanCommandResponseSchemas,
   z.object({ operation: z.literal("chat.post.v1"), message: ChatMessageSchema }).strict(),
   z.object({ operation: z.literal("question.create.v1"), question: QuestionGroupSchema }).strict(),
@@ -515,6 +533,7 @@ export const WorkspaceCommandResponseSchema = z.discriminatedUnion("operation", 
     })
     .strict(),
   ...TerminalCommandResponseSchemas,
+  ...ManagedWorkCommandResponseSchemas,
 ]);
 export type WorkspaceCommandResponse = z.infer<typeof WorkspaceCommandResponseSchema>;
 
@@ -553,24 +572,6 @@ export interface WorkspaceStorePort {
     request: WorkspaceEventsRequest,
   ): WorkspaceResult<HistoryPage>;
 }
-
-export const WorkspaceEventIngestSchema = z
-  .object({
-    projectId: ProjectIdSchema,
-    contextId: WorkContextIdSchema.nullable(),
-    kind: z.string().min(3).max(160),
-    source: z.enum(["lens", "host", "zap"]),
-    actorId: ActorIdSchema.nullable(),
-    occurrenceAt: z.iso.datetime(),
-    sourceEventId: z.string().min(1).max(512).nullable(),
-    correlationId: z.string().min(3).max(160).nullable(),
-    causationId: HistoryEventIdSchema.nullable(),
-    planProvenance: HistoryEventSchema.shape.planProvenance,
-    sourceSequence: DecimalSchema.nullable(),
-    payload: JsonValueSchema,
-  })
-  .strict();
-export type WorkspaceEventIngest = z.infer<typeof WorkspaceEventIngestSchema>;
 
 export type TerminalControl = Extract<
   WorkspaceCommandRequest,

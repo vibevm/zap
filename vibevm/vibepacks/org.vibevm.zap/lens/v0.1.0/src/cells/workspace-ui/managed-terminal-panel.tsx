@@ -13,11 +13,18 @@ export const ManagedTerminalPanel = component$<{
   readonly capability: TerminalCapability;
   readonly output: readonly PublicTerminalOutput[];
   readonly profileLabel?: string | undefined;
+  readonly terminalLabel?: string | undefined;
+  readonly terminalState?: string | undefined;
+  readonly connectionState?: "connected" | "reconnecting" | undefined;
+  readonly gapMessage?: string | null | undefined;
+  readonly outputError?: string | null | undefined;
   readonly onStart$?: QRL<() => void> | undefined;
   readonly onAcquire$?: QRL<() => void> | undefined;
   readonly onRelease$?: QRL<() => void> | undefined;
   readonly onInput$?: QRL<(data: string) => void> | undefined;
   readonly onResize$?: QRL<(columns: number, rows: number) => void> | undefined;
+  readonly onInterrupt$?: QRL<() => void> | undefined;
+  readonly onStop$?: QRL<() => void> | undefined;
 }>((props) => (
   <section class="workspace-panel managed-terminal-panel">
     <div class="workspace-panel-heading">
@@ -42,6 +49,19 @@ export const ManagedTerminalPanel = component$<{
         </button>
       )}
     </div>
+    {props.capability.state === "available" ? (
+      <div class="managed-terminal-facts">
+        <span>{props.terminalLabel ?? "Managed terminal"}</span>
+        <span>{props.terminalState?.replaceAll("_", " ") ?? "unknown state"}</span>
+        <span>{props.connectionState ?? "connected"}</span>
+      </div>
+    ) : null}
+    {props.gapMessage === null || props.gapMessage === undefined ? null : (
+      <p class="workspace-notice">{props.gapMessage}</p>
+    )}
+    {props.outputError === null || props.outputError === undefined ? null : (
+      <p class="workspace-notice">{props.outputError}</p>
+    )}
     {props.capability.state !== "available" ? (
       <p class="workspace-muted">
         {props.onStart$ === undefined
@@ -66,6 +86,16 @@ export const ManagedTerminalPanel = component$<{
           {props.onRelease$ === undefined ? null : (
             <button class="button secondary" onClick$={props.onRelease$}>
               Return control
+            </button>
+          )}
+          {props.onInterrupt$ === undefined ? null : (
+            <button class="button secondary" onClick$={props.onInterrupt$}>
+              Interrupt
+            </button>
+          )}
+          {props.onStop$ === undefined ? null : (
+            <button class="button secondary danger" onClick$={props.onStop$}>
+              Stop
             </button>
           )}
         </div>

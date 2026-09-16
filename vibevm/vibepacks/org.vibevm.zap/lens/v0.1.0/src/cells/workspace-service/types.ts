@@ -24,6 +24,7 @@ import {
   type WorkspaceId,
 } from "../protocol/index.ts";
 import type { WorkspaceStore } from "../workspace-store/index.ts";
+import type { ManagedAgentBackend } from "../managed-work/index.ts";
 import type { ModelPolicyService } from "../model-policy-service/index.ts";
 import type {
   CoordinatorRoutingResult,
@@ -32,6 +33,7 @@ import type {
 import type { WorkspaceInteractionFeature } from "../workspace-interaction/index.ts";
 import type { ManagedTerminalServicePort } from "../managed-terminal-service/index.ts";
 import type { WorkspacePlanningFeature } from "../workspace-planning/index.ts";
+import type { AnnotationService } from "../workspace-annotations/index.ts";
 import type { ManagedTerminalResult, ManagedTerminalSnapshot } from "../managed-terminal/index.ts";
 
 export const WORKSPACE_SERVICE_ACTIONS = [
@@ -61,6 +63,19 @@ export const WORKSPACE_SERVICE_ACTIONS = [
   "project.stop.v1",
   "project.continue.v1",
   "model-policy.update.v1",
+  "managed-work.create.v1",
+  "managed-work.start.v1",
+  "managed-work.stop.v1",
+  "managed-work.interrupt.v1",
+  "managed-work.report.v1",
+  "managed-work.review.v1",
+  "annotation.note.create.v1",
+  "annotation.note.update.v1",
+  "annotation.note.archive.v1",
+  "annotation.note.restore.v1",
+  "annotation.note.relink.v1",
+  "annotation.note.send.v1",
+  "annotation.object.restore.intent.v1",
 ] as const;
 export type WorkspaceServiceAction = (typeof WORKSPACE_SERVICE_ACTIONS)[number];
 
@@ -93,6 +108,8 @@ export interface WorkspaceServiceOptions {
   readonly terminals?: WorkspaceManagedTerminalPort | undefined;
   readonly ownedCoordinatorAgents?: OwnedCoordinatorAgentPort | undefined;
   readonly planning?: WorkspacePlanningFeature | undefined;
+  readonly annotations?: AnnotationService | undefined;
+  readonly managedWork?: ManagedAgentBackend | undefined;
   readonly clock?: () => Date;
   readonly idFactory?: (kind: string) => string;
 }
@@ -107,6 +124,7 @@ export interface OwnedCoordinatorAgentPort {
     readonly projectId: ProjectId;
     readonly contextId: WorkContextId;
     readonly coordinatorSessionId: AgentSessionId;
+    readonly coordinatorActorId: ActorId;
     readonly workspaceId: WorkspaceId;
     readonly conversationId: ConversationId;
   }): Promise<WorkspaceResult<OwnedCoordinatorAgentBinding>>;

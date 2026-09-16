@@ -17,7 +17,8 @@
     "quicklens-service": "./dist/quicklens.js",
     "quicklens-web-auth": "./dist/quicklens-web-auth.js",
     "quicklens-web": "./dist/quicklens-web.js",
-    "zap-wayfinder": "./dist/wayfinder.js"
+    "zap-wayfinder": "./dist/wayfinder.js",
+    "zap-quick-lens": "./dist/zap-quick-lens.js"
   },
   "exports": {
     "./protocol": {
@@ -84,6 +85,22 @@
       "types": "./dist/cells/workspace-client/index.d.ts",
       "import": "./dist/cells/workspace-client/index.js"
     },
+    "./workspace-annotations": {
+      "types": "./dist/cells/workspace-annotations/index.d.ts",
+      "import": "./dist/cells/workspace-annotations/index.js"
+    },
+    "./product-app": {
+      "types": "./dist/cells/product-app/index.d.ts",
+      "import": "./dist/cells/product-app/index.js"
+    },
+    "./proxy-policy": {
+      "types": "./dist/cells/proxy-policy/index.d.ts",
+      "import": "./dist/cells/proxy-policy/index.js"
+    },
+    "./provider-coordinators": {
+      "types": "./dist/cells/provider-coordinators/index.d.ts",
+      "import": "./dist/cells/provider-coordinators/index.js"
+    },
     "./agent-runtime": {
       "types": "./dist/cells/agent-runtime/index.d.ts",
       "import": "./dist/cells/agent-runtime/index.js"
@@ -103,6 +120,10 @@
     "./managed-terminal": {
       "types": "./dist/cells/managed-terminal/index.d.ts",
       "import": "./dist/cells/managed-terminal/index.js"
+    },
+    "./managed-work": {
+      "types": "./dist/cells/managed-work/index.d.ts",
+      "import": "./dist/cells/managed-work/index.js"
     },
     "./managed-terminal-service": {
       "types": "./dist/cells/managed-terminal-service/index.d.ts",
@@ -137,6 +158,7 @@
     "start:quicklens-service": "node dist/quicklens.js",
     "start:quicklens-web": "node dist/quicklens-web.js",
     "start:wayfinder": "node dist/wayfinder.js",
+    "start": "node dist/zap-quick-lens.js",
     "quicklens:demo": "npm run build:quicklens && electron dist/quicklens/electron/main.js --demo",
     "format": "prettier --write src",
     "format:check": "prettier --check src",

@@ -25,7 +25,9 @@ import {
   HistoryPageSchema,
   type WorkspaceClientPort,
   type WorkspaceResult,
+  type ProductSetupPort,
 } from "../workspace-model/index.ts";
+import { productGatewayOperation } from "./product-gateway.ts";
 
 const CSP = "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
 
@@ -37,6 +39,7 @@ export interface QuicklensGatewayOptions {
   readonly allowedOrigins: readonly string[];
   readonly maximumBodyBytes?: number;
   readonly workspaceSource?: WorkspaceSourceFactory;
+  readonly productSource?: ProductSetupPort;
   readonly multiSession?: boolean;
   readonly maximumSessions?: number;
   readonly pairingTicketTtlMs?: number;
@@ -218,20 +221,22 @@ export function createQuicklensGateway(
     const result =
       path === "/v1/invalidations"
         ? invalidationPage(body.value, invalidations, invalidationSequence)
-        : path.startsWith("/v1/workspace/")
-          ? await workspaceOperation(
-              path,
-              body.value,
-              options.workspaceSource,
-              currentSession?.identity ?? workspaceIdentity,
-              currentSession?.workspacePort ?? workspacePort,
-              request,
-              (port) => {
-                if (currentSession !== undefined) currentSession.workspacePort = port;
-                else workspacePort = port;
-              },
-            )
-          : await operation(path, body.value, options.source, request);
+        : path.startsWith("/v1/product/")
+          ? await productGatewayOperation(path, body.value, options.productSource)
+          : path.startsWith("/v1/workspace/")
+            ? await workspaceOperation(
+                path,
+                body.value,
+                options.workspaceSource,
+                currentSession?.identity ?? workspaceIdentity,
+                currentSession?.workspacePort ?? workspacePort,
+                request,
+                (port) => {
+                  if (currentSession !== undefined) currentSession.workspacePort = port;
+                  else workspacePort = port;
+                },
+              )
+            : await operation(path, body.value, options.source, request);
     send(
       response,
       result.ok ? 200 : result.error.code === "forbidden" ? 403 : 409,

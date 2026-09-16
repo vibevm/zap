@@ -17,7 +17,11 @@ import {
   type Result,
 } from "../protocol/index.ts";
 import { createLocalAgentTransport, type TransportBrokerPort } from "../transport/index.ts";
-import { createCodlensMcpServer, type AgentPlanProposalPort } from "./index.ts";
+import {
+  createCodlensMcpServer,
+  type AgentPlanProposalPort,
+  type ManagedWorkAgentPort,
+} from "./index.ts";
 
 const principalToken = CredentialSchema.parse("principal-token-0000000000000001");
 
@@ -270,6 +274,119 @@ test("MCP plan tools preserve authenticated adapter session and caller context",
     ],
   );
   assert.ok(calls.every((value) => value.includes("actor.1:adapter.session.plan.0001")));
+  await client.close();
+  await server.close();
+});
+
+test("official SDK discovers typed managed tools and preserves the assigned session", async () => {
+  const calls: { session: string; input: unknown }[] = [];
+  const managed: ManagedWorkAgentPort = {
+    profiles: async (session) => {
+      calls.push({ session, input: null });
+      return {
+        ok: true,
+        value: [{ profileId: "profile.codex.managed", label: "Codex managed" }],
+      };
+    },
+    create: async (session, input) => {
+      calls.push({ session, input });
+      return { ok: true, value: { runId: "run.managed.child", state: "prepared" } };
+    },
+    start: async () => ({ ok: true, value: null }),
+    read: async () => ({ ok: true, value: null }),
+    report: async () => ({ ok: true, value: null }),
+    acknowledgeAttachment: async () => ({ ok: true, value: null }),
+  };
+  const server = createCodlensMcpServer({
+    agent: createLocalAgentTransport({
+      broker: fakeBroker(),
+      principalToken,
+      adapterSessionIdFactory: () => "adapter.session.managed.0001",
+    }),
+    managedWork: managed,
+  });
+  const client = new Client({ name: "codlens-managed-test", version: "1.0.0" });
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+  await server.connect(serverTransport);
+  await client.connect(clientTransport);
+  const connected = publicResultSchema.parse(
+    parseSuccess(
+      await client.callTool({
+        name: "codlens_connect",
+        arguments: connectArguments("request.managed"),
+      }),
+    ),
+  );
+  const tools = await client.listTools();
+  const managedToolNames = tools.tools
+    .map((tool) => tool.name)
+    .filter((name) => name.startsWith("codlens_managed_work_"));
+  assert.deepEqual(managedToolNames, [
+    "codlens_managed_work_profiles",
+    "codlens_managed_work_create",
+    "codlens_managed_work_start",
+    "codlens_managed_work_read",
+    "codlens_managed_work_report",
+    "codlens_managed_work_attachment_ack",
+  ]);
+  parseSuccess(
+    await client.callTool({
+      name: "codlens_managed_work_profiles",
+      arguments: { adapterSessionId: connected.adapterSessionId },
+    }),
+  );
+  const created = z.object({ runId: z.string(), state: z.literal("prepared") }).parse(
+    parseSuccess(
+      await client.callTool({
+        name: "codlens_managed_work_create",
+        arguments: {
+          adapterSessionId: connected.adapterSessionId,
+          input: {
+            clientRequestId: "request.managed.create",
+            selection: {
+              mode: "profile_override",
+              profileId: "profile.codex.managed",
+              reasonMarkdown: "Exercise the exact managed MCP fixture profile.",
+            },
+            goal: "Inspect the explicit work target",
+            expectedResult: "A typed report",
+            targetRefs: [
+              {
+                projectId: "project.managed",
+                contextId: "context.managed",
+                domain: "work_task",
+                ref: "task.managed",
+              },
+            ],
+          },
+        },
+      }),
+    ),
+  );
+  assert.equal(created.runId, "run.managed.child");
+  assert.equal(calls.length, 2);
+  assert.ok(calls.every((call) => call.session === connected.adapterSessionId));
+  assert.deepEqual(calls[1]?.input, {
+    clientRequestId: "request.managed.create",
+    selection: {
+      mode: "profile_override",
+      profileId: "profile.codex.managed",
+      reasonMarkdown: "Exercise the exact managed MCP fixture profile.",
+    },
+    goal: "Inspect the explicit work target",
+    expectedResult: "A typed report",
+    targetRefs: [
+      {
+        projectId: "project.managed",
+        contextId: "context.managed",
+        domain: "work_task",
+        ref: "task.managed",
+      },
+    ],
+    contextRefs: [],
+    planRevision: null,
+    budgets: { maximumTurns: 64, wallTimeMs: 3_600_000 },
+  });
   await client.close();
   await server.close();
 });

@@ -1,23 +1,24 @@
 /** Shared Wayfinder broker/agent composition. @scope spec://org.vibevm.zap/lens/PROP-005#server-ownership */
 import { randomUUID } from "node:crypto";
 import { createHash } from "node:crypto";
-import { isAbsolute } from "node:path";
 import { z } from "zod";
 import { openBroker, type LensBroker } from "../broker/index.ts";
 import { createLensHttpGateway, type GatewayAddress, type LensHttpGateway } from "../http/index.ts";
 import {
   ActorIdSchema,
   ClientRequestIdSchema,
-  ConversationIdSchema,
-  CredentialSchema,
-  WorkspaceIdSchema,
+  EnrollPrincipalInputSchema,
   type ActorId,
 } from "../protocol/index.ts";
 import {
   openSqliteAdapterSessionVault,
   type SqliteAdapterSessionVault,
 } from "../session-vault/index.ts";
-import { createLocalPrincipalTransport } from "../transport/index.ts";
+import {
+  AdapterSessions,
+  createLocalPrincipalTransport,
+  createRetainedAgentTransport,
+} from "../transport/index.ts";
 import {
   createBrokerAgentAnswerDelivery,
   createWayfinderAgentPublisher,
@@ -31,45 +32,50 @@ import type {
 import { OwnedCoordinatorAgentBindingSchema } from "../workspace-service/index.ts";
 import { AdapterSessionIdSchema } from "../transport/index.ts";
 import type { WorkspacePlanningFeature } from "../workspace-planning/index.ts";
-
-export const WayfinderAgentGatewayConfigSchema = z
-  .object({
-    databasePath: z.string().min(1).refine(isAbsolute, "broker database path must be absolute"),
-    host: z.enum(["127.0.0.1", "localhost", "::1"]),
-    port: z.number().int().min(0).max(65_535),
-    allowedHosts: z.array(z.string().min(1)).min(1).max(16),
-    allowedOrigins: z.array(z.string().min(1)).max(16),
-    statusToken: CredentialSchema,
-    scopes: z
-      .array(
-        z
-          .object({
-            workspaceId: WorkspaceIdSchema,
-            conversationId: ConversationIdSchema,
-            humanPrincipalToken: CredentialSchema,
-            agentPrincipalToken: CredentialSchema,
-          })
-          .strict(),
-      )
-      .min(1)
-      .max(256),
-  })
-  .strict()
-  .superRefine((config, context) => {
-    const keys = config.scopes.map((scope) => scopeKey(scope.workspaceId, scope.conversationId));
-    if (new Set(keys).size !== keys.length) {
-      context.addIssue({
-        code: "custom",
-        path: ["scopes"],
-        message: "agent gateway scopes must be unique",
-      });
-    }
-  });
-export type WayfinderAgentGatewayConfig = z.infer<typeof WayfinderAgentGatewayConfigSchema>;
+import type {
+  ManagedActorBindingPort,
+  ManagedAgentBackend,
+  WorkAttachmentPort,
+} from "../managed-work/index.ts";
+import { createManagedWorkAgentPort } from "./managed-agent.ts";
+import { createNativeWorkAgentPort } from "./native-agent.ts";
+import {
+  createDeclaredNativeWorkTargetBridge,
+  type DeclaredNativeWorkTargetBridge,
+} from "./native-targets.ts";
+import {
+  openAgentScopeManager,
+  type AgentScopeManager,
+  type WayfinderAgentScopeInput,
+  type WayfinderEnsuredAgentScope,
+} from "./agent-scope.ts";
+import { WayfinderAgentGatewayConfigSchema } from "./agent-config.ts";
+import {
+  prepareCoordinatorMcpLaunch,
+  type CoordinatorMcpLaunch,
+  type CoordinatorMcpLaunchInput,
+} from "./coordinator-mcp.ts";
+import {
+  defaultMcpLaunch,
+  managedBindingFailure,
+  writeManagedMcpConfig,
+} from "./agent-mcp-config.ts";
+export { WayfinderAgentGatewayConfigSchema } from "./agent-config.ts";
+export type { WayfinderAgentGatewayConfig } from "./agent-config.ts";
+export type { CoordinatorMcpLaunch, CoordinatorMcpLaunchInput } from "./coordinator-mcp.ts";
 
 export interface WayfinderAgentFoundation {
   readonly interactions: ReturnType<typeof createWorkspaceInteractionFeature>;
   readonly ownedCoordinators: OwnedCoordinatorAgentPort;
+  readonly managedActors: ManagedActorBindingPort;
+  ensureScope(
+    input: WayfinderAgentScopeInput,
+  ): Promise<WayfinderAgentFoundationResult<WayfinderEnsuredAgentScope>>;
+  prepareOwnedCoordinatorLaunch(
+    input: CoordinatorMcpLaunchInput,
+  ): Promise<WayfinderAgentFoundationResult<CoordinatorMcpLaunch>>;
+  bindManagedWork(backend: ManagedAgentBackend): WayfinderAgentFoundationResult<null>;
+  bindNativeWork(attachments: WorkAttachmentPort): WayfinderAgentFoundationResult<null>;
   start(): Promise<WayfinderAgentFoundationResult<GatewayAddress>>;
   close(): Promise<void>;
 }
@@ -92,22 +98,26 @@ export function openWayfinderAgentFoundation(
     broker.value.close();
     return { ok: false, message: "agent session vault could not be opened" };
   }
-  const answerPorts = new Map(
-    config.data.scopes.map((scope) => [
-      scopeKey(scope.workspaceId, scope.conversationId),
-      createBrokerAgentAnswerDelivery(
-        createLocalPrincipalTransport(broker.value, scope.humanPrincipalToken),
-      ),
-    ]),
-  );
+  const scopeManager = openAgentScopeManager({
+    databasePath: config.data.databasePath,
+    broker: broker.value,
+    store,
+    configured: config.data.scopes,
+  });
+  if (!scopeManager.ok) {
+    vault.value.close();
+    broker.value.close();
+    return { ok: false, message: scopeManager.message };
+  }
   const interactions = createWorkspaceInteractionFeature({
     store,
     agentAnswers: {
       deliver: (input) => {
-        const port = answerPorts.get(
-          scopeKey(input.binding.workspaceId, input.binding.conversationId),
+        const scope = scopeManager.value.resolve(
+          input.binding.workspaceId,
+          input.binding.conversationId,
         );
-        return port === undefined
+        return scope === null
           ? Promise.resolve({
               ok: false,
               error: {
@@ -116,17 +126,43 @@ export function openWayfinderAgentFoundation(
                   "violates REQ spec://org.vibevm.zap/lens/PROP-005#question-routing: no exact human responder is configured for this actor scope",
               },
             })
-          : port.deliver(input);
+          : createBrokerAgentAnswerDelivery(
+              createLocalPrincipalTransport(broker.value, scope.humanPrincipalToken),
+            ).deliver(input);
       },
     },
   });
+  let address: GatewayAddress | null = null;
   const owned = new Map<ActorId, OwnedCoordinatorBinding>();
   const ownedCoordinators = ownedCoordinatorPort(
     broker.value,
     vault.value,
-    config.data.scopes,
+    store,
+    scopeManager.value,
     owned,
+    () => address,
   );
+  let managedBackend: ManagedAgentBackend | undefined;
+  let nativeBridge: DeclaredNativeWorkTargetBridge | undefined;
+  const retainedAgent = createRetainedAgentTransport({
+    broker: broker.value,
+    principalToken: config.data.statusToken,
+    sessions: new AdapterSessions(
+      () => `adapter.foundation.${randomUUID().replaceAll("-", "")}`,
+      vault.value,
+    ),
+  });
+  const managedAgentPort = createManagedWorkAgentPort({
+    agent: retainedAgent,
+    backend: () => managedBackend,
+    store,
+    coordinatorAgents: ownedCoordinators,
+  });
+  const nativeAgentPort = createNativeWorkAgentPort({
+    agent: retainedAgent,
+    bridge: () => nativeBridge,
+    store,
+  });
   const gateway: LensHttpGateway = createLensHttpGateway({
     broker: broker.value,
     agentQuestions: createWayfinderAgentPublisher({ store }),
@@ -135,15 +171,46 @@ export function openWayfinderAgentFoundation(
     statusToken: config.data.statusToken,
     adapterSessionIdFactory: () => `adapter.${randomUUID().replaceAll("-", "")}`,
     adapterSessionVault: vault.value,
+    managedWork: () => (managedBackend === undefined ? undefined : managedAgentPort),
+    nativeWork: () => (nativeBridge === undefined ? undefined : nativeAgentPort),
     ...(planning === undefined ? {} : { planning }),
   });
-  let address: GatewayAddress | null = null;
   let closed = false;
   return {
     ok: true,
     value: {
       interactions,
       ownedCoordinators,
+      managedActors: managedActorPort(
+        broker.value,
+        vault.value,
+        store,
+        scopeManager.value,
+        () => address,
+      ),
+      ensureScope: (input) => scopeManager.value.ensure(input, address),
+      prepareOwnedCoordinatorLaunch: (input) =>
+        prepareCoordinatorMcpLaunch({
+          raw: input,
+          store,
+          scopes: scopeManager.value,
+          vault: vault.value,
+          bindings: owned,
+          address,
+        }),
+      bindManagedWork(backend) {
+        if (managedBackend !== undefined && managedBackend !== backend)
+          return { ok: false, message: "managed work runtime is already bound" };
+        managedBackend = backend;
+        return { ok: true, value: null };
+      },
+      bindNativeWork(attachments) {
+        const next = createDeclaredNativeWorkTargetBridge(attachments);
+        if (nativeBridge !== undefined)
+          return { ok: false, message: "native work attachments are already bound" };
+        nativeBridge = next;
+        return { ok: true, value: null };
+      },
       async start() {
         if (closed) return { ok: false, message: "agent gateway is closed" };
         if (address !== null) return { ok: true, value: address };
@@ -157,9 +224,171 @@ export function openWayfinderAgentFoundation(
         closed = true;
         await gateway.close();
         address = null;
+        scopeManager.value.close();
         vault.value.close();
         broker.value.close();
       },
+    },
+  };
+}
+
+function managedActorPort(
+  broker: LensBroker,
+  vault: SqliteAdapterSessionVault,
+  store: WorkspaceStore,
+  scopes: AgentScopeManager,
+  address: () => GatewayAddress | null,
+): ManagedActorBindingPort {
+  return {
+    async prepare(input) {
+      await Promise.resolve();
+      const launch = store.resolveProjectLaunch(input.request.projectId, input.request.contextId);
+      if (!launch.ok || launch.value.agentScope === null)
+        return managedBindingFailure("forbidden", "managed work has no registered broker scope");
+      const agentScope = launch.value.agentScope;
+      const ensured = await scopes.ensure(
+        {
+          projectId: input.request.projectId,
+          contextId: input.request.contextId,
+          workspaceId: agentScope.workspaceId,
+          conversationId: agentScope.conversationId,
+        },
+        address(),
+      );
+      if (!ensured.ok) return managedBindingFailure("unavailable", ensured.message);
+      const configured = scopes.resolve(agentScope.workspaceId, agentScope.conversationId);
+      if (configured === null)
+        return managedBindingFailure("unavailable", "managed work broker scope is unavailable");
+      const adapterSessionId = AdapterSessionIdSchema.parse(
+        `adapter.managed.${digest(input.runId)}`,
+      );
+      const clientRequestId = ClientRequestIdSchema.parse(`request.managed.${digest(input.runId)}`);
+      const gatewayAddress = address();
+      if (gatewayAddress === null)
+        return managedBindingFailure("unavailable", "managed agent gateway is not started");
+      const host = {
+        kind: input.provider,
+        sessionId: input.runId,
+        subagentId: input.taskId,
+        provenance: "attested" as const,
+      };
+      const capabilities = [
+        "message:emit",
+        "question:ask",
+        "question:cancel",
+        "inbox:read",
+        "inbox:ack",
+        "actor:delegate",
+      ] as const;
+      const listed = vault.list();
+      if (!listed.ok) return managedBindingFailure("unavailable", listed.error.message);
+      const parent =
+        input.requesterActorId === null
+          ? undefined
+          : listed.value.find(
+              ([, session]) =>
+                session.connection.actor.actorId === input.requesterActorId &&
+                session.connection.actor.workspaceId === configured.workspaceId &&
+                session.connection.actor.conversationId === configured.conversationId,
+            );
+      if (input.requesterActorId !== null && parent === undefined)
+        return managedBindingFailure("forbidden", "managed actor parent binding is unavailable");
+      const enrolled =
+        parent === undefined
+          ? broker.enrollPrincipal(
+              EnrollPrincipalInputSchema.parse({
+                kind: "agent",
+                workspaceIds: [configured.workspaceId],
+                conversationIds: [configured.conversationId],
+                capabilities,
+              }),
+            )
+          : null;
+      if (enrolled !== null && !enrolled.ok)
+        return managedBindingFailure("unavailable", enrolled.error.message);
+      const managedPrincipalToken =
+        parent?.[1].principalToken ?? (enrolled?.ok ? enrolled.value.principalToken : null);
+      if (managedPrincipalToken === null)
+        return managedBindingFailure("unavailable", "managed principal is unavailable");
+      const connected =
+        parent === undefined
+          ? broker.connect({
+              principalToken: managedPrincipalToken,
+              clientRequestId,
+              workspaceId: configured.workspaceId,
+              conversationId: configured.conversationId,
+              capabilities: [...capabilities],
+              host,
+              replyPolicy: { kind: "retain" },
+            })
+          : broker.delegate(
+              {
+                principalToken: parent[1].principalToken,
+                bindingToken: parent[1].connection.credentials.bindingToken,
+              },
+              {
+                clientRequestId,
+                capabilities: [...capabilities],
+                host,
+                replyPolicy: { kind: "retain" },
+              },
+            );
+      if (!connected.ok) return managedBindingFailure("unavailable", connected.error.message);
+      const generated = writeManagedMcpConfig({
+        basePath: input.mcpConfigPath,
+        runId: input.runId,
+        provider: input.provider,
+        ...defaultMcpLaunch(input.mcpCommandPath, input.mcpArgs),
+        brokerUrl: `http://${gatewayAddress.host}:${String(gatewayAddress.port)}`,
+        credential: managedPrincipalToken,
+        adapterSessionId,
+        workspaceId: configured.workspaceId,
+        conversationId: configured.conversationId,
+      });
+      if (!generated.ok) return generated;
+      const stored = vault.put(adapterSessionId, {
+        principalToken: managedPrincipalToken,
+        connection: connected.value,
+        host,
+        replyPolicy: { kind: "retain" },
+      });
+      if (!stored.ok) return managedBindingFailure("unavailable", stored.error.message);
+      return {
+        ok: true,
+        value: {
+          actorId: connected.value.actor.actorId,
+          adapterSessionId,
+          mcpConfigPath: generated.value.mcpConfigPath,
+          environment: generated.value.environment,
+        },
+      };
+    },
+    async activate(input) {
+      await Promise.resolve();
+      const listed = vault.list();
+      if (!listed.ok) return managedBindingFailure("unavailable", listed.error.message);
+      const retained = listed.value.find(
+        ([id, session]) =>
+          id === input.adapterSessionId && session.connection.actor.actorId === input.actorId,
+      );
+      if (retained === undefined)
+        return managedBindingFailure("unavailable", "managed broker actor binding is unavailable");
+      const actor = retained[1].connection.actor;
+      const gatewayAddress = address();
+      if (gatewayAddress === null)
+        return managedBindingFailure("unavailable", "managed agent gateway is not started");
+      const generated = writeManagedMcpConfig({
+        basePath: input.mcpConfigPath,
+        runId: input.runId,
+        provider: input.provider,
+        ...defaultMcpLaunch(input.mcpCommandPath, input.mcpArgs),
+        brokerUrl: `http://${gatewayAddress.host}:${String(gatewayAddress.port)}`,
+        credential: retained[1].principalToken,
+        adapterSessionId: input.adapterSessionId,
+        workspaceId: actor.workspaceId,
+        conversationId: actor.conversationId,
+      });
+      return generated;
     },
   };
 }
@@ -168,23 +397,43 @@ interface OwnedCoordinatorBinding extends OwnedCoordinatorAgentBinding {
   readonly coordinatorSessionId: Parameters<
     OwnedCoordinatorAgentPort["bind"]
   >[0]["coordinatorSessionId"];
+  readonly coordinatorActorId: Parameters<
+    OwnedCoordinatorAgentPort["bind"]
+  >[0]["coordinatorActorId"];
 }
 
 function ownedCoordinatorPort(
   broker: LensBroker,
   vault: SqliteAdapterSessionVault,
-  scopes: z.infer<typeof WayfinderAgentGatewayConfigSchema>["scopes"],
+  store: WorkspaceStore,
+  scopes: AgentScopeManager,
   owned: Map<ActorId, OwnedCoordinatorBinding>,
+  address: () => GatewayAddress | null,
 ): OwnedCoordinatorAgentPort {
   return {
     async bind(input) {
       await Promise.resolve();
-      const configured = scopes.find(
-        (scope) =>
-          scope.workspaceId === input.workspaceId && scope.conversationId === input.conversationId,
+      const launch = store.resolveProjectLaunch(input.projectId, input.contextId);
+      if (
+        !launch.ok ||
+        launch.value.agentScope === null ||
+        launch.value.agentScope.workspaceId !== input.workspaceId ||
+        launch.value.agentScope.conversationId !== input.conversationId
+      )
+        return workspaceBrokerFailure("forbidden", "owned coordinator scope is not registered");
+      const ensured = await scopes.ensure(
+        {
+          projectId: input.projectId,
+          contextId: input.contextId,
+          workspaceId: input.workspaceId,
+          conversationId: input.conversationId,
+        },
+        address(),
       );
-      if (configured === undefined)
-        return workspaceBrokerFailure("forbidden", "owned coordinator scope is not configured");
+      if (!ensured.ok) return workspaceBrokerFailure("unavailable", ensured.message);
+      const configured = scopes.resolve(input.workspaceId, input.conversationId);
+      if (configured === null)
+        return workspaceBrokerFailure("unavailable", "owned coordinator scope is unavailable");
       const principalToken = configured.agentPrincipalToken;
       const requestId = ClientRequestIdSchema.parse(
         `request.owned-coordinator.${digest(input.coordinatorSessionId)}`,
@@ -260,6 +509,7 @@ function ownedCoordinatorPort(
         actorId: connected.value.actor.actorId,
         adapterSessionId,
         coordinatorSessionId: input.coordinatorSessionId,
+        coordinatorActorId: input.coordinatorActorId,
       } satisfies OwnedCoordinatorBinding;
       owned.set(binding.actorId, binding);
       return {
@@ -291,7 +541,7 @@ function ownedCoordinatorPort(
             ok: true,
             value: {
               coordinatorSessionId: direct.coordinatorSessionId,
-              coordinatorActorId: direct.actorId,
+              coordinatorActorId: direct.coordinatorActorId,
               adapterSessionId: direct.adapterSessionId,
               forwarding: current !== actorId,
             },
@@ -306,10 +556,6 @@ function ownedCoordinatorPort(
 
 function digest(value: string): string {
   return createHash("sha256").update(value).digest("hex");
-}
-
-function scopeKey(workspaceId: string, conversationId: string): string {
-  return `${workspaceId}\u0000${conversationId}`;
 }
 
 function workspaceBrokerFailure(code: string, message: string) {

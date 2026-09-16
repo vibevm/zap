@@ -36,27 +36,48 @@ export const ManagedTerminalWorkspace = component$<{
   const lease = useSignal<TerminalLeaseView | null>(null);
   const output = useSignal<readonly { readonly data: string }[]>([]);
   const message = useSignal<string | null>(null);
+  const connectionState = useSignal<"connected" | "reconnecting">("connected");
+  const outputError = useSignal<string | null>(null);
+  const gapMessage = useSignal<string | null>(null);
 
-  useVisibleTask$(({ track }) => {
+  const refreshTerminals = $(async (preferred: string | null = null) => {
+    const port = props.port;
+    if (port === undefined) return;
+    const listed = await port.read({
+      operation: "terminal.list.v1",
+      projectId: props.projectId,
+      contextId: props.contextId,
+    });
+    if (!listed.ok || listed.value.operation !== "terminal.list.v1") {
+      connectionState.value = "reconnecting";
+      message.value = listed.ok ? "Terminal list response did not match." : listed.error.message;
+      return;
+    }
+    connectionState.value = "connected";
+    known.value = listed.value.terminals;
+    const currentId = terminal.value?.terminalId;
+    const next =
+      listed.value.terminals.find((item) => item.terminalId === currentId) ??
+      listed.value.terminals.find((item) => item.terminalId === preferred) ??
+      listed.value.terminals.find((item) => item.state === "running") ??
+      listed.value.terminals[0] ??
+      null;
+    terminal.value = next;
+    if (lease.value !== null && next?.controlEpoch !== lease.value.controlEpoch) {
+      lease.value = null;
+      message.value = "Terminal control changed in another client.";
+    }
+  });
+
+  useVisibleTask$(({ track, cleanup }) => {
     const preferred = track(
       () => selectedAgent(props.view, props.selectedActorId)?.terminalId ?? null,
     );
-    const port = props.port;
-    if (port === undefined) return;
-    const load = async (): Promise<void> => {
-      const listed = await port.read({
-        operation: "terminal.list.v1",
-        projectId: props.projectId,
-        contextId: props.contextId,
-      });
-      if (!listed.ok || listed.value.operation !== "terminal.list.v1") return;
-      known.value = listed.value.terminals;
-      terminal.value =
-        listed.value.terminals.find((item) => item.terminalId === preferred) ??
-        listed.value.terminals.find((item) => item.state === "running") ??
-        null;
-    };
-    void load();
+    void refreshTerminals(preferred);
+    const timer = setInterval(() => void refreshTerminals(preferred), 750);
+    cleanup(() => {
+      clearInterval(timer);
+    });
   });
 
   useVisibleTask$(({ track, cleanup }) => {
@@ -75,8 +96,19 @@ export const ManagedTerminalWorkspace = component$<{
         afterSequence: after,
         limit: 128,
       });
-      if (!read.ok || read.value.operation !== "terminal.output.page.v1") return;
+      if (!read.ok || read.value.operation !== "terminal.output.page.v1") {
+        outputError.value = read.ok
+          ? "Terminal output response did not match."
+          : read.error.message;
+        return;
+      }
+      connectionState.value = "connected";
+      outputError.value = null;
       output.value = [...output.value, ...read.value.page.events];
+      gapMessage.value =
+        read.value.page.gap === null
+          ? null
+          : `Output history starts at sequence ${read.value.page.gap.firstAvailableSequence}. ${read.value.page.gap.reason}`;
       after = read.value.page.nextSequence ?? after;
     };
     void poll();
@@ -87,7 +119,7 @@ export const ManagedTerminalWorkspace = component$<{
     });
   });
 
-  if (options.length === 0) return null;
+  if (options.length === 0 && known.value.length === 0) return null;
 
   const capability = TerminalCapabilitySchema.parse(
     terminal.value === null
@@ -106,7 +138,7 @@ export const ManagedTerminalWorkspace = component$<{
 
   return (
     <div>
-      {known.value.length < 2 ? null : (
+      {known.value.length === 0 ? null : (
         <label class="field-label">
           Active terminal
           <select
@@ -120,7 +152,7 @@ export const ManagedTerminalWorkspace = component$<{
           >
             {known.value.map((item) => (
               <option key={item.terminalId} value={item.terminalId}>
-                {`${item.terminalId} · ${item.state}`}
+                {`${shortTerminalId(item.terminalId)} · ${item.state}`}
               </option>
             ))}
           </select>
@@ -147,6 +179,11 @@ export const ManagedTerminalWorkspace = component$<{
         capability={capability}
         output={output.value}
         profileLabel={selected?.label}
+        terminalLabel={terminalLabel(props.view, terminal.value)}
+        terminalState={terminal.value?.state}
+        connectionState={connectionState.value}
+        gapMessage={gapMessage.value}
+        outputError={outputError.value}
         onStart$={
           terminal.value === null
             ? $(async () => {
@@ -230,14 +267,9 @@ export const ManagedTerminalWorkspace = component$<{
                   message.value = released.error.message;
                   return;
                 }
-                terminal.value = {
-                  ...currentTerminal,
-                  controlEpoch: DecimalSchema.parse(
-                    (BigInt(currentLease.controlEpoch) + 1n).toString(),
-                  ),
-                };
                 lease.value = null;
                 message.value = "Input control returned.";
+                await refreshTerminals();
               })
         }
         onInput$={$(async (data) => {
@@ -254,7 +286,10 @@ export const ManagedTerminalWorkspace = component$<{
             expectedControlEpoch: current.controlEpoch,
             data,
           });
-          if (!result.ok) message.value = result.error.message;
+          if (!result.ok) {
+            message.value = result.error.message;
+            await refreshTerminals();
+          }
         })}
         onResize$={$(async (columns, rows) => {
           const port = props.port;
@@ -271,10 +306,72 @@ export const ManagedTerminalWorkspace = component$<{
             columns,
             rows,
           });
-          if (!result.ok) message.value = result.error.message;
+          if (!result.ok) {
+            message.value = result.error.message;
+            await refreshTerminals();
+          }
         })}
+        onInterrupt$={
+          lease.value === null
+            ? undefined
+            : $(async () => {
+                const port = props.port;
+                const current = lease.value;
+                if (port === undefined || current === null) return;
+                const result = await port.command({
+                  operation: "terminal.interrupt.v1",
+                  clientRequestId: workspaceRequestId("managed-interrupt"),
+                  projectId: props.projectId,
+                  contextId: props.contextId,
+                  terminalId: current.terminalId,
+                  leaseId: current.leaseId,
+                  expectedControlEpoch: current.controlEpoch,
+                });
+                message.value = result.ok ? "Interrupt requested." : result.error.message;
+              })
+        }
+        onStop$={
+          lease.value === null || terminal.value?.state !== "running"
+            ? undefined
+            : $(async () => {
+                const port = props.port;
+                const current = lease.value;
+                if (
+                  port === undefined ||
+                  current === null ||
+                  !window.confirm("Stop this managed worker terminal?")
+                )
+                  return;
+                const result = await port.command({
+                  operation: "terminal.stop.v1",
+                  clientRequestId: workspaceRequestId("managed-stop"),
+                  projectId: props.projectId,
+                  contextId: props.contextId,
+                  terminalId: current.terminalId,
+                  leaseId: current.leaseId,
+                  expectedControlEpoch: current.controlEpoch,
+                });
+                if (result.ok) {
+                  lease.value = null;
+                  message.value = "Stop requested; waiting for process exit.";
+                  await refreshTerminals();
+                } else message.value = result.error.message;
+              })
+        }
       />
       {message.value === null ? null : <p class="workspace-muted">{message.value}</p>}
     </div>
   );
 });
+
+function terminalLabel(view: ProjectWorkspaceView, terminal: ManagedTerminalView | null): string {
+  if (terminal === null) return "Managed terminal";
+  return (
+    view.network.agents.find((agent) => agent.terminalId === terminal.terminalId)?.displayName ??
+    shortTerminalId(terminal.terminalId)
+  );
+}
+
+function shortTerminalId(terminalId: string): string {
+  return terminalId.length <= 28 ? terminalId : `${terminalId.slice(0, 25)}…`;
+}

@@ -7,6 +7,7 @@ import {
   EventPageSchema,
   ForwardResultSchema,
   InboxPageSchema,
+  WaitInboxInputSchema,
   MessageEnvelopeSchema,
   MessageIdSchema,
   PublicConnectionSchema,
@@ -59,6 +60,8 @@ export function createAgentHttpClient(options: AgentHttpClientOptions): AgentTra
     emit: (session, input) => sessionCall("/v1/emit", session, input, MessageEnvelopeSchema),
     ask: (session, input) => sessionCall("/v1/ask", session, input, QuestionSchema),
     inbox: (session, input) => sessionCall("/v1/inbox", session, input, InboxPageSchema),
+    waitInbox: (session, input) =>
+      sessionCall("/v1/inbox-wait", session, WaitInboxInputSchema.parse(input), InboxPageSchema),
     planIntent: (session, messageId) =>
       sessionCall(
         "/v1/plan-intent",
@@ -136,6 +139,16 @@ async function httpCommand<O>(
       "reconnect to the configured background broker and reconcile by client request ID",
     );
   }
+}
+
+export function executeAgentSessionHttpCommand<O>(
+  options: AgentHttpClientOptions,
+  path: string,
+  session: AdapterSessionId,
+  input: unknown,
+  schema: ZodType<O>,
+): Promise<Result<O>> {
+  return httpCommand(options.baseUrl, path, options.principalToken, input, schema, session);
 }
 
 const BrokerErrorSchema = z

@@ -134,9 +134,20 @@ function execute(
     case "plan.apply.v1":
     case "plan.reconcile.v1":
     case "plan.decide.v1":
+    case "managed-work.create.v1":
+    case "managed-work.start.v1":
+    case "managed-work.stop.v1":
+    case "managed-work.interrupt.v1":
+    case "managed-work.report.v1":
+    case "managed-work.review.v1":
       return failure(
         "unsupported_operation",
         "execution actions require the shared application runtime and are not store commits",
+      );
+    default:
+      return failure(
+        "unsupported_operation",
+        "workspace command is not owned by the durable store",
       );
   }
 }

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /** Zap Wayfinder local runtime entry point. */
 import {
   acquireWayfinderOwner,

@@ -6,6 +6,7 @@ import {
   WorkspaceCommandResponseSchema,
   WorkspaceErrorSchema,
   WorkspaceReadResponseSchema,
+  ProductSetupResponseSchema,
   type HistoryEvent,
   type WorkspaceClientPort,
   type WorkspaceCommandRequest,
@@ -14,12 +15,35 @@ import {
   type WorkspaceReadRequest,
   type WorkspaceReadResponse,
   type WorkspaceResult,
+  type ProductSetupPort,
+  type ProductSetupResult,
+  type ProductSetupResponse,
 } from "../../cells/workspace-model/index.ts";
 
 export interface WorkspaceIpcBridge {
   read(request: unknown): Promise<unknown>;
   command(request: unknown): Promise<unknown>;
   events(request: unknown): Promise<unknown>;
+}
+
+export interface ProductIpcBridge {
+  request(request: unknown): Promise<unknown>;
+  chooseDirectory(): Promise<unknown>;
+}
+
+export function createProductSetupIpcClient(bridge: ProductIpcBridge): ProductSetupPort {
+  return {
+    request: async (request) => productEnvelope(await bridge.request(request)),
+  };
+}
+
+export function createProductDirectoryPicker(bridge: ProductIpcBridge) {
+  return {
+    chooseDirectory: async (): Promise<string | null> => {
+      const result: unknown = await bridge.chooseDirectory();
+      return typeof result === "string" && result.length > 0 ? result : null;
+    },
+  };
 }
 
 export function createWorkspaceIpcClient(
@@ -42,6 +66,31 @@ export function createWorkspaceIpcClient(
     events,
     subscribe: (request) => subscribe(request.cursor, request.signal, events, pollMilliseconds),
   };
+}
+
+function productEnvelope(value: unknown): ProductSetupResult<ProductSetupResponse> {
+  const parsed = z
+    .union([
+      z.object({ ok: z.literal(true), value: ProductSetupResponseSchema }).strict(),
+      z
+        .object({
+          ok: z.literal(false),
+          error: z
+            .object({
+              code: z.enum(["invalid_input", "not_found", "conflict", "unavailable"]),
+              message: z.string().min(1),
+            })
+            .strict(),
+        })
+        .strict(),
+    ])
+    .safeParse(value);
+  return parsed.success
+    ? parsed.data
+    : {
+        ok: false,
+        error: { code: "unavailable", message: "Product setup IPC response is invalid." },
+      };
 }
 
 async function* subscribe(

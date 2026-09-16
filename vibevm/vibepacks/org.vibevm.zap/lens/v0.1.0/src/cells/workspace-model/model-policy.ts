@@ -12,6 +12,7 @@ import {
   ModelSelectionRequestSchema,
   ModelSelectionSchema,
 } from "../model-policy/index.ts";
+export { ModelSelectionSchema } from "../model-policy/index.ts";
 import {
   AttemptIdSchema,
   ClientIdSchema,

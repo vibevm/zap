@@ -18,6 +18,7 @@ import {
   HostBindingSchema,
   ForwardInboxInputSchema,
   InboxInputSchema,
+  WaitInboxInputSchema,
   type BrokerError,
   type JsonValue,
   type PublicConnection,
@@ -29,6 +30,8 @@ import {
   type AgentTransportPort,
 } from "../transport/index.ts";
 import { AgentQuestionInputSchema } from "../workspace-interaction/index.ts";
+import type { ManagedWorkAgentPort, NativeWorkAgentPort } from "../managed-work/index.ts";
+import { registerWorkTools } from "./work-tools.ts";
 
 export const MCP_PROTOCOL_REVISION = "2025-11-25";
 
@@ -61,6 +64,12 @@ const InboxToolInputSchema = z
     input: InboxInputSchema,
   })
   .strict();
+const WaitInboxToolInputSchema = z
+  .object({
+    adapterSessionId: AdapterSessionIdSchema,
+    input: WaitInboxInputSchema,
+  })
+  .strict();
 const AckToolInputSchema = z
   .object({
     adapterSessionId: AdapterSessionIdSchema,
@@ -86,6 +95,7 @@ const ForwardToolInputSchema = z
   })
   .strict();
 const ContextToolInputSchema = z.object({ adapterSessionId: AdapterSessionIdSchema }).strict();
+const AssignedContextToolInputSchema = z.object({}).strict();
 const PlanProposalToolInputSchema = z
   .object({
     adapterSessionId: AdapterSessionIdSchema,
@@ -105,6 +115,7 @@ const PlanPreparationToolInputSchema = z
     request: z.record(z.string(), z.unknown()),
   })
   .strict();
+export type { ManagedWorkAgentPort, NativeWorkAgentPort } from "../managed-work/index.ts";
 
 export interface AgentPlanProposalPort {
   register(
@@ -158,7 +169,10 @@ export interface AgentPlanProposalPort {
 
 export interface CodlensMcpOptions {
   readonly agent: AgentTransportPort;
+  readonly assignedSession?: AdapterSessionId;
   readonly planProposal?: AgentPlanProposalPort;
+  readonly managedWork?: ManagedWorkAgentPort;
+  readonly nativeWork?: NativeWorkAgentPort;
 }
 
 /**
@@ -173,6 +187,30 @@ export function createCodlensMcpServer(options: CodlensMcpOptions): McpServer {
         "lens/1 durable tools over MCP 2025-11-25. Publish user clarification through /ZapAskUserQuestion (codlens_ask_user_question), then post a short ordinary-text notice. The tool returns immediately; call codlens_inbox only at a later safe point.",
     },
   );
+
+  if (options.assignedSession !== undefined) {
+    const assignedSession = options.assignedSession;
+    server.registerTool(
+      "codlens_assigned_context",
+      {
+        description:
+          "Discover this process's server-assigned adapter session and exact actor scope without exposing credentials.",
+        inputSchema: AssignedContextToolInputSchema,
+        annotations: { readOnlyHint: true },
+      },
+      async () => {
+        const context = await options.agent.context(assignedSession);
+        return toolResult(
+          context.ok
+            ? {
+                ok: true,
+                value: { adapterSessionId: assignedSession, connection: context.value },
+              }
+            : context,
+        );
+      },
+    );
+  }
 
   server.registerTool(
     "codlens_connect",
@@ -376,6 +414,8 @@ export function createCodlensMcpServer(options: CodlensMcpOptions): McpServer {
     );
   }
 
+  registerWorkTools(server, options);
+
   server.registerTool(
     "codlens_inbox",
     {
@@ -385,6 +425,18 @@ export function createCodlensMcpServer(options: CodlensMcpOptions): McpServer {
     },
     async ({ adapterSessionId, input }) =>
       toolResult(await options.agent.inbox(adapterSessionId, input)),
+  );
+
+  server.registerTool(
+    "codlens_inbox_wait",
+    {
+      description:
+        "Wait up to 30 seconds for this idle authenticated actor inbox. Returns without acknowledging, approving, or injecting terminal input.",
+      inputSchema: WaitInboxToolInputSchema,
+      annotations: { readOnlyHint: true },
+    },
+    async ({ adapterSessionId, input }) =>
+      toolResult(await options.agent.waitInbox(adapterSessionId, input)),
   );
 
   server.registerTool(

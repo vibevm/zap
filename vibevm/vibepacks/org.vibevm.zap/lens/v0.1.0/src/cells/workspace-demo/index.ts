@@ -11,16 +11,14 @@ import {
   QuestionAnswerVersionSchema,
   QuestionGroupSchema,
   WorkContextDescriptorSchema,
-  type AgentNetwork,
   type AgentOutputItem,
   type ChatMessage,
   type HistoryEvent,
-  type ProjectId,
   type QuestionAnswerVersion,
   type WorkspaceClientPort,
 } from "../workspace-model/index.ts";
 import { DecimalSchema } from "../protocol/index.ts";
-import { eventInScope, fail, ok, pending } from "./helpers.ts";
+import { createDemoEvent, eventInScope, fail, ok, pending } from "./helpers.ts";
 
 const AT = "2026-09-15T10:00:00.000Z";
 const available = { state: "available" } as const;
@@ -312,6 +310,12 @@ const messages: ChatMessage[] = [
     updatedAt: AT,
   }),
 ];
+const event = createDemoEvent({
+  alphaProjectId: projectAlpha.projectId,
+  alphaContextId: contextAlpha.contextId,
+  betaContextId: contextBeta.contextId,
+  occurredAt: AT,
+});
 const history: HistoryEvent[] = [
   event("history.1", projectAlpha.projectId, "1", "project.registered", "lens", null),
   event("history.2", projectBeta.projectId, "2", "project.registered", "lens", null),
@@ -335,11 +339,11 @@ const history: HistoryEvent[] = [
     },
   }),
 ];
-
 /** @implements spec://org.vibevm.zap/lens/PROP-005#incremental-delivery */
 export function createWorkspaceDemoPort(): WorkspaceClientPort {
   let nextChat = 3;
   let answerVersions: QuestionAnswerVersion[] = [];
+  let currentQuestion = question;
   return {
     read: async (request) => {
       switch (request.operation) {
@@ -397,11 +401,14 @@ export function createWorkspaceDemoPort(): WorkspaceClientPort {
             page: { messages, afterSequence: request.afterSequence, nextSequence: null },
           });
         case "question.get.v1":
-          return ok({ operation: request.operation, detail: { question, answerVersions } });
+          return ok({
+            operation: request.operation,
+            detail: { question: currentQuestion, answerVersions },
+          });
         case "question.list.v1":
           return ok({
             operation: request.operation,
-            questions: request.projectId === projectAlpha.projectId ? [question] : [],
+            questions: request.projectId === projectAlpha.projectId ? [currentQuestion] : [],
           });
         case "session.get.v1":
           return ok({ operation: request.operation, session: coordinator });
@@ -411,9 +418,16 @@ export function createWorkspaceDemoPort(): WorkspaceClientPort {
             sessions: request.projectId === projectAlpha.projectId ? [coordinator] : [],
           });
         case "agent.list.v1":
-          return ok({ operation: request.operation, agents: network(request.projectId).agents });
+          return ok({
+            operation: request.operation,
+            agents: (request.projectId === projectAlpha.projectId ? networkAlpha : networkBeta)
+              .agents,
+          });
         case "agent.network.v1":
-          return ok({ operation: request.operation, network: network(request.projectId) });
+          return ok({
+            operation: request.operation,
+            network: request.projectId === projectAlpha.projectId ? networkAlpha : networkBeta,
+          });
         case "agent.output.page.v1":
           return ok({
             operation: request.operation,
@@ -462,7 +476,26 @@ export function createWorkspaceDemoPort(): WorkspaceClientPort {
           metadata: {},
         });
         answerVersions = [...answerVersions, version];
-        return ok({ operation: request.operation, question, answerVersion: version });
+        currentQuestion = QuestionGroupSchema.parse({
+          ...currentQuestion,
+          state: "answered",
+          revision: String(BigInt(currentQuestion.revision) + 1n),
+          updatedAt: new Date().toISOString(),
+        });
+        return ok({
+          operation: request.operation,
+          question: currentQuestion,
+          answerVersion: version,
+        });
+      }
+      if (request.operation === "question.cancel.v1") {
+        currentQuestion = QuestionGroupSchema.parse({
+          ...currentQuestion,
+          state: "cancelled",
+          revision: String(BigInt(currentQuestion.revision) + 1n),
+          updatedAt: new Date().toISOString(),
+        });
+        return ok({ operation: request.operation, question: currentQuestion });
       }
       if (request.operation === "session.start.v1") {
         return ok({ operation: request.operation, action: pending(request) });
@@ -555,39 +588,6 @@ function output(
     nativeRef: { namespace: "codex.item", value: `${actorId}.${sequence}`, incarnation: "1" },
     occurredAt: AT,
   });
-}
-
-function event(
-  historyEventId: string,
-  projectId: ProjectId,
-  sequence: string,
-  kind: string,
-  source: "lens" | "host" | "zap",
-  actorId: string | null,
-) {
-  return HistoryEventSchema.parse({
-    historyEventId,
-    projectId,
-    contextId:
-      projectId === projectAlpha.projectId ? contextAlpha.contextId : contextBeta.contextId,
-    globalSequence: sequence,
-    projectSequence: sequence,
-    sourceSequence: sequence,
-    kind,
-    source,
-    actorId,
-    occurrenceAt: AT,
-    ingestedAt: AT,
-    sourceEventId: `source.${historyEventId}`,
-    correlationId: null,
-    causationId: null,
-    planProvenance: null,
-    payload: {},
-  });
-}
-
-function network(projectId: ProjectId): AgentNetwork {
-  return projectId === projectAlpha.projectId ? networkAlpha : networkBeta;
 }
 
 export const WORKSPACE_DEMO_LABEL = "Synthetic Zap Quick Lens workspace";

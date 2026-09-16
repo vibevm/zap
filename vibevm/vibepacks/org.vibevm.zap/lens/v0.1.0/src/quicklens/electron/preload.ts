@@ -13,6 +13,8 @@ const channels = {
   workspaceRead: "workspace:read",
   workspaceCommand: "workspace:command",
   workspaceEvents: "workspace:events",
+  productRequest: "product:request",
+  productChooseDirectory: "product:choose-directory",
 };
 
 contextBridge.exposeInMainWorld("quicklensHost", {
@@ -48,4 +50,10 @@ if (workspaceAvailable)
     read: (request: unknown) => ipcRenderer.invoke(channels.workspaceRead, request),
     command: (request: unknown) => ipcRenderer.invoke(channels.workspaceCommand, request),
     events: (request: unknown) => ipcRenderer.invoke(channels.workspaceEvents, request),
+  });
+
+if (workspaceAvailable)
+  contextBridge.exposeInMainWorld("lensProduct", {
+    request: (request: unknown) => ipcRenderer.invoke(channels.productRequest, request),
+    chooseDirectory: () => ipcRenderer.invoke(channels.productChooseDirectory),
   });

@@ -19,7 +19,7 @@ export const WorkspaceHeader = component$<{
       <span class="brand-mark">L</span>
       <div>
         <strong>Zap Quick Lens</strong>
-        <span>Codex project coordination for VibeVM</span>
+        <span>Multi-project planning and agent coordination</span>
       </div>
     </div>
     <div class="workspace-header-context">

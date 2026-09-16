@@ -10,13 +10,15 @@ implementation:
 - **gamelens** — the future game presentation;
 - **codlens** — integration with coding agents.
 
-The current 0.1 development slice provides the headless `lens/1` communication
-foundation and one browser-safe Zap Quick Lens renderer for browser and Electron.
-The renderer exposes plan intent, preview, apply, reconcile and exact Owner
-decision ports. Zap Wayfinder owns the configured ZAP workflow and journals;
-agent MCP processes are authenticated proxies into that shared runtime. Dynamic
-milestone create/revise preparation and successor adoption use one durable
-ordered assessment. A broker receipt does not mean a plan was executed.
+The current 0.1 development slice provides the durable `lens/1` communication
+foundation, normal empty-workspace startup, project registration, explicit
+coordinator launch, a unified multi-project workspace, managed work and the
+browser-safe Zap Quick Lens renderer for browser and Electron. The renderer
+exposes plan intent, preview, apply, reconcile and exact Owner decision ports.
+Zap Wayfinder owns the configured ZAP workflow and journals; agent MCP processes
+are authenticated proxies into that shared runtime. Dynamic milestone
+create/revise preparation and successor adoption use one durable ordered
+assessment. A broker receipt does not mean a plan was executed.
 
 The authenticated workspace renderer accepts a separately paired loopback
 Wayfinder gateway through `?workspace-gateway=<scoped-loopback-url>#workspace-pair=<one-time-token>`.
@@ -38,9 +40,13 @@ observation cursors and actor acknowledgements are separate. Stage 0.1 retains
 the full journal and performs no automatic pruning. Invalid continuation
 boundaries require resynchronization rather than silently skipping history.
 
-MCP itself provides tool calls and durable inbox reads. Host hooks or supported
-native channels can deliver at safe points; idle wake depends on the host,
-version and session configuration. See the [host integration instructions](integrations/README.md).
+MCP itself provides tool calls and durable inbox reads. `codlens_inbox_wait`
+offers an authenticated bounded wait for an idle worker; it returns without
+acknowledging a delivery or granting approval. Host hooks or supported native
+channels can deliver at safe points. There is no universal promise that every
+provider can wake a stopped or busy model process; wake behavior still depends
+on the host, version and session configuration. See the
+[host integration instructions](integrations/README.md).
 
 ## Build and run
 
@@ -56,6 +62,81 @@ The compiled command entry is `dist/cli.js`; `dist/mcp.js` is the MCP stdio
 connector. An installed npm package also provides `codlens` and `codlens-mcp`.
 
 ### Zap Quick Lens renderer
+
+After an installed build, ordinary local startup needs no multi-file JSON:
+
+```text
+zap-quick-lens
+```
+
+The launcher reuses the existing Wayfinder owner for `~/.vibe/zap`, or starts
+one owner, serves the built renderer on loopback, and opens a one-time paired
+browser session. Use `zap-quick-lens --electron` for the same owner in the
+Electron shell. Opening or closing either viewer does not start or stop agents.
+An empty workspace is valid; **Add project** validates an existing directory,
+shows the protected detected profile/model/effort, and leaves inference stopped
+until **Start development** is pressed.
+
+Protected local settings are read from `~/.vibe/zap/settings.json`:
+
+```json
+{
+  "version": 1,
+  "uiPort": 4174,
+  "proxy": { "mode": "inherit" },
+  "coordinatorDefaults": { "modelId": "your-installed-model-id", "effort": "low" }
+}
+```
+
+`proxy.mode` may be `inherit`, `direct`, or `explicit`; explicit proxy URLs may
+not contain credentials. One shared policy applies to owned Codex, Claude Code,
+OpenCode and Qwen Code launches and to managed workers unless a protected
+provider profile supplies a narrower override. A generic explicit example is:
+
+```json
+{
+  "version": 1,
+  "proxy": {
+    "mode": "explicit",
+    "httpsProxy": "http://proxy.example:8080",
+    "noProxy": "localhost,127.0.0.1,::1"
+  }
+}
+```
+
+Credentials belong in the provider's protected environment file, never in the
+proxy URL. Provider profiles distinguish executable discovery, configuration,
+authentication observation and launchability. Merely finding `claude`,
+`opencode`, or `qwen` on `PATH` does not make it launchable: the operator must
+select a protected model and environment first. These settings never enter
+browser project-registration payloads. Existing advanced Wayfinder JSON remains
+available through `zap-quick-lens --config`.
+
+Managed workers and native provider children are different execution paths.
+Managed work has a durable task/run, Lens-owned terminal, explicit model-policy
+selection, bounded packet, typed report and human review. Native children remain
+owned by their provider and expose only the controls and identity evidence that
+provider supplies. Managed worker defaults come from protected policy tier
+bindings; a caller may use an explicit registered-profile override only with an
+explicit reason. Neither path treats terminal output or process exit as an
+accepted result.
+
+The authenticated workspace now renders authorized project regions in one
+pan/zoom map while retaining each project/context boundary. Selecting a project,
+agent, task or run opens its scoped card or terminal; the map does not invent
+cross-project dependencies or authority. Exact objects can carry passive notes
+or deferred instructions. Archived notes and removed objects remain in
+recoverable Trash; restoring a removed object creates an ordinary planning
+intent rather than reviving an old plan.
+
+Current limitations remain material: provider adapters do not claim Pause when
+the provider has no suspension primitive; Stop is the owned-process termination
+path. All four provider families are implemented, but they have not all passed
+a real-model end-to-end run in the current acceptance cycle. Qwen Code was
+verified through an HTTP proxy with a real human-question, browser-answer,
+delivery-acknowledgement and typed-report flow, followed by browser review after
+Wayfinder restart. See the [acceptance record](vibevm/vibespecs/research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md)
+for evidence and the remaining provider limits.
 
 Build the one Qwik 2 renderer and both platform shells:
 

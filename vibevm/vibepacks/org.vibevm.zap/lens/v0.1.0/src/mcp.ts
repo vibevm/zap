@@ -7,9 +7,14 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { z } from "zod";
-import { createAgentHttpClient } from "./cells/http/index.ts";
+import {
+  createAgentHttpClient,
+  createManagedWorkHttpClient,
+  createNativeWorkHttpClient,
+} from "./cells/http/index.ts";
 import { createCodlensMcpServer } from "./cells/mcp/index.ts";
 import { CredentialSchema } from "./cells/protocol/index.ts";
+import { AdapterSessionIdSchema } from "./cells/transport/index.ts";
 import { createAgentPlanningHttpClient } from "./cells/workspace-planning/index.ts";
 
 export async function runMcp(environment: NodeJS.ProcessEnv): Promise<number> {
@@ -25,12 +30,18 @@ export async function runMcp(environment: NodeJS.ProcessEnv): Promise<number> {
     return 2;
   }
   const agent = createAgentHttpClient({ baseUrl, principalToken: principal.data });
+  const assignedSession = AdapterSessionIdSchema.safeParse(
+    environment["CODLENS_ADAPTER_SESSION_ID"],
+  );
   const server = createCodlensMcpServer({
     agent,
+    ...(assignedSession.success ? { assignedSession: assignedSession.data } : {}),
     planProposal: createAgentPlanningHttpClient({
       baseUrl,
       principalToken: principal.data,
     }),
+    managedWork: createManagedWorkHttpClient({ baseUrl, principalToken: principal.data }),
+    nativeWork: createNativeWorkHttpClient({ baseUrl, principalToken: principal.data }),
   });
   await server.connect(new StdioServerTransport());
   return 0;

@@ -433,6 +433,10 @@ export const InboxInputSchema = z
   })
   .strict();
 export type InboxInput = z.input<typeof InboxInputSchema>;
+export const WaitInboxInputSchema = InboxInputSchema.extend({
+  timeoutMilliseconds: z.number().int().min(1).max(30_000),
+}).strict();
+export type WaitInboxInput = z.input<typeof WaitInboxInputSchema>;
 
 export const AckInputSchema = z
   .object({
@@ -548,3 +552,5 @@ export const PrincipalEmitInputSchema = z
   })
   .strict();
 export type PrincipalEmitInput = z.infer<typeof PrincipalEmitInputSchema>;
+
+export { ZAP_MCP_SERVER_NAME, zapPreauthorizedToolNames } from "./zap-tool-policy.ts";

@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS workspace_chat_dispatch (
   session_id TEXT NOT NULL,
   process_epoch TEXT NOT NULL,
   native_turn_id TEXT,
+  transport_correlation TEXT,
   state TEXT NOT NULL,
   UNIQUE(session_id, process_epoch, native_turn_id)
 );
@@ -216,6 +217,11 @@ export class WorkspaceDatabase {
       this.sqlite.exec("PRAGMA synchronous = FULL;");
     }
     this.sqlite.exec(SCHEMA);
+    try {
+      this.sqlite.exec("ALTER TABLE workspace_chat_dispatch ADD COLUMN transport_correlation TEXT");
+    } catch {
+      // Existing databases already contain the additive correlation column.
+    }
   }
 
   close(): void {

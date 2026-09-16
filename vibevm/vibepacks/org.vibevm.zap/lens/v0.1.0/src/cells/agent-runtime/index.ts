@@ -19,6 +19,7 @@ import {
   ExecutionHostIdSchema,
   NativeRefSchema,
   ProjectIdSchema,
+  ProjectObjectReferenceSchema,
   TaskIdSchema,
   WorkContextIdSchema,
 } from "../workspace-model/index.ts";
@@ -158,7 +159,16 @@ export const CoordinatorTurnReceiptSchema = z
   .object({
     coordinatorSessionId: AgentSessionIdSchema,
     nativeThreadId: z.string().min(1).max(512),
-    nativeTurnId: z.string().min(1).max(512),
+    nativeTurnId: z.string().min(1).max(512).nullable(),
+    transportCorrelation: z
+      .object({
+        provenance: z.literal("transport_correlation"),
+        clientMessageId: z.string().min(1).max(512),
+        processEpoch: z.string().min(1).max(160),
+      })
+      .strict()
+      .nullable()
+      .optional(),
     observation: z.enum(["host_accepted", "running"]),
     processEpoch: z.string().min(1).max(160),
   })
@@ -335,6 +345,7 @@ export const WorkPacketSchema = z
     goal: z.string().min(1).max(1_000_000),
     contextRefs: z.array(ArtifactRefIdSchema).max(1_000),
     expectedResult: z.string().min(1).max(100_000),
+    targetRefs: z.array(ProjectObjectReferenceSchema).max(256).default([]),
     sourceBasisRef: z.string().min(1).max(512),
     planRevision: DecimalSchema.nullable(),
     capabilities: z.array(z.string().min(1).max(160)).max(256),

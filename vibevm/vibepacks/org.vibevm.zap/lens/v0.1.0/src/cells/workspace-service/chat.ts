@@ -91,6 +91,7 @@ async function dispatchMessage(
         ? "uncertain"
         : "failed",
     nativeTurnId: sent.ok ? sent.value.nativeTurnId : null,
+    transportCorrelation: sent.ok ? (sent.value.transportCorrelation ?? null) : null,
     updatedAt: actions.clock().toISOString(),
   });
   if (settlement.ok) actions.drainChatReplies(launch);

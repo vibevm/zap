@@ -24,6 +24,7 @@ const DispatchRowSchema = z.object({
   session_id: z.string(),
   process_epoch: z.string(),
   native_turn_id: z.string().nullable(),
+  transport_correlation: z.string().nullable(),
   state: z.string(),
 });
 const CountSchema = z.object({ value: z.bigint() });
@@ -98,8 +99,8 @@ export function claimChatDispatch(
       const claimed = delivery(message, "uncertain", state.now());
       writeMessage(state, claimed);
       state.database.run(
-        `INSERT INTO workspace_chat_dispatch(message_id, session_id, process_epoch, native_turn_id, state)
-         VALUES(?, ?, ?, NULL, 'dispatching')`,
+        `INSERT INTO workspace_chat_dispatch(message_id, session_id, process_epoch, native_turn_id, transport_correlation, state)
+         VALUES(?, ?, ?, NULL, NULL, 'dispatching')`,
         [claimed.messageId, input.data.sessionId, input.data.processEpoch],
       );
       return { ok: true, value: { message: claimed, acquired: true } };
@@ -128,8 +129,15 @@ export function settleChatDispatch(
       ) {
         return failure("conflict", "chat dispatch settlement has a stale session epoch");
       }
-      if (input.data.observation === "host_accepted" && input.data.nativeTurnId === null) {
-        return failure("invalid_input", "host-accepted chat requires a native turn id");
+      if (
+        input.data.observation === "host_accepted" &&
+        input.data.nativeTurnId === null &&
+        (input.data.transportCorrelation ?? null) === null
+      ) {
+        return failure(
+          "invalid_input",
+          "host-accepted chat requires native or transport correlation",
+        );
       }
       const nextState =
         input.data.observation === "host_accepted"
@@ -140,8 +148,15 @@ export function settleChatDispatch(
       const updated = delivery(message, nextState, input.data.updatedAt);
       writeMessage(state, updated);
       state.database.run(
-        `UPDATE workspace_chat_dispatch SET state = ?, native_turn_id = ? WHERE message_id = ?`,
-        [input.data.observation, input.data.nativeTurnId, input.data.messageId],
+        `UPDATE workspace_chat_dispatch SET state = ?, native_turn_id = ?, transport_correlation = ? WHERE message_id = ?`,
+        [
+          input.data.observation,
+          input.data.nativeTurnId,
+          (input.data.transportCorrelation ?? null) === null
+            ? null
+            : JSON.stringify(input.data.transportCorrelation),
+          input.data.messageId,
+        ],
       );
       return { ok: true, value: updated };
     });
@@ -290,7 +305,7 @@ function chatMessage(
 }
 function dispatch(state: WorkspaceState, messageId: z.infer<typeof MessageIdSchema>) {
   return state.database.get(
-    `SELECT session_id, process_epoch, native_turn_id, state
+    `SELECT session_id, process_epoch, native_turn_id, transport_correlation, state
      FROM workspace_chat_dispatch WHERE message_id = ?`,
     DispatchRowSchema,
     [messageId],

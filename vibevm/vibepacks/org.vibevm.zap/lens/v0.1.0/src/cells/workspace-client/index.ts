@@ -334,7 +334,9 @@ function mismatch(expected: string): WorkspaceResult<never> {
 export type { AgentSessionId, WorkspaceClientPort } from "../workspace-model/index.ts";
 export {
   createWorkspaceHttpClient,
+  createWorkspaceHttpConnection,
   parseWorkspaceGateway,
+  type WorkspaceHttpConnection,
   type WorkspaceHttpClientOptions,
 } from "./http.ts";
 export {
@@ -346,3 +348,11 @@ export {
   createWorkspacePlanningDataSource,
   type WorkspacePlanningDataSourceOptions,
 } from "./planning.ts";
+export {
+  readWorkspaceCanvas,
+  type WorkspaceCanvasInput,
+  type WorkspaceCanvasProject,
+  type WorkspaceCanvasSelection,
+} from "./canvas.ts";
+export { createLocalQuestionDraftStore, type QuestionDraftStore } from "./question-drafts.ts";
+export { createQuestionCancelRequest } from "./questions.ts";

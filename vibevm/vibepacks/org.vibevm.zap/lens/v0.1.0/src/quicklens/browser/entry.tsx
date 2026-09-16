@@ -5,14 +5,18 @@ import { createQuicklensDemoDataSource } from "../../cells/quicklens-demo/index.
 import { QuicklensRefSchema, unavailableDataSource } from "../../cells/quicklens-model/index.ts";
 import { QuicklensApp } from "../../cells/quicklens-ui/app.tsx";
 import { createWorkspaceDemoPort, WORKSPACE_DEMO_LABEL } from "../../cells/workspace-demo/index.ts";
-import { createWorkspaceHttpClient } from "../../cells/workspace-client/index.ts";
+import { createWorkspaceHttpConnection } from "../../cells/workspace-client/index.ts";
 import { WorkspaceApp } from "../../cells/workspace-ui/index.tsx";
 import "../../cells/quicklens-ui/styles.css";
 import { createBrowserGatewayBridge } from "./gateway-bridge.ts";
 import { createHostBridgeDataSource } from "./host-bridge.ts";
 import { createQuicklensWebClient } from "./web-gateway.ts";
 import { QuicklensWebRoot } from "./web-root.tsx";
-import { createWorkspaceIpcClient } from "./workspace-ipc.ts";
+import {
+  createProductDirectoryPicker,
+  createProductSetupIpcClient,
+  createWorkspaceIpcClient,
+} from "./workspace-ipc.ts";
 
 const parameters = new URL(window.location.href).searchParams;
 const container = document.getElementById("quicklens-root") ?? document.body;
@@ -28,10 +32,10 @@ const workspacePair = new URLSearchParams(window.location.hash.slice(1)).get("wo
 if (workspacePair !== null) {
   window.history.replaceState({}, "", `${window.location.pathname}${window.location.search}`);
 }
-const workspaceTransport =
+const workspaceConnection =
   workspaceGateway === null
     ? undefined
-    : createWorkspaceHttpClient({
+    : createWorkspaceHttpConnection({
         baseUrl: workspaceGateway,
         origin: window.location.origin,
         ...(workspacePair === null ? {} : { pairingToken: workspacePair }),
@@ -39,13 +43,21 @@ const workspaceTransport =
 const workspacePort = workspaceDemo
   ? createWorkspaceDemoPort()
   : window.lensWorkspace === undefined
-    ? (workspaceTransport ?? undefined)
+    ? (workspaceConnection?.workspace ?? undefined)
     : createWorkspaceIpcClient(window.lensWorkspace);
+const productPort =
+  window.lensProduct === undefined
+    ? workspaceConnection?.product
+    : createProductSetupIpcClient(window.lensProduct);
+const directoryPicker =
+  window.lensProduct === undefined ? undefined : createProductDirectoryPicker(window.lensProduct);
 if (workspacePort !== undefined) {
   await render(
     container,
     <WorkspaceApp
       port={noSerialize(workspacePort)}
+      product={productPort === undefined ? undefined : noSerialize(productPort)}
+      directoryPicker={directoryPicker === undefined ? undefined : noSerialize(directoryPicker)}
       demoLabel={workspaceDemo ? WORKSPACE_DEMO_LABEL : undefined}
     />,
   );

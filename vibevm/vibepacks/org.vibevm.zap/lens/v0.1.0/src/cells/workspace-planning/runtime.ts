@@ -18,7 +18,11 @@ import {
   type WorkspaceResult,
 } from "../workspace-model/index.ts";
 import type { WorkspaceStore } from "../workspace-store/index.ts";
-import type { WorkspacePlanCommand, WorkspacePlanningFeature } from "./types.ts";
+import type {
+  WorkspacePlanCommand,
+  WorkspacePlanningFeature,
+  WorkspacePlanningSourceObserver,
+} from "./types.ts";
 import type { PlanOperationResult, QuicklensSnapshot } from "../quicklens-model/index.ts";
 import { auditAgentPlanning } from "./agent.ts";
 import { recordSourceChange } from "./source-events.ts";
@@ -58,6 +62,7 @@ export interface WorkspacePlanningController {
 export function createWorkspacePlanningController(
   raw: unknown,
   store: WorkspaceStore,
+  sourceObserver?: WorkspacePlanningSourceObserver,
 ): WorkspaceResult<WorkspacePlanningController> {
   const config = WorkspacePlanningRuntimeConfigSchema.safeParse(raw);
   if (!config.success) return failure("invalid_input", "planning runtime configuration is invalid");
@@ -166,7 +171,15 @@ export function createWorkspacePlanningController(
           contexts.set(key(entry.projectId, entry.contextId), opened.value);
           const contextKey = key(entry.projectId, entry.contextId);
           const initial = await opened.value.source.read({ signal: new AbortController().signal });
-          if (initial.ok) snapshots.set(contextKey, initial.value);
+          if (initial.ok) {
+            snapshots.set(contextKey, initial.value);
+            sourceObserver?.observe({
+              projectId: entry.projectId,
+              contextId: entry.contextId,
+              reason: "initial authoritative planning snapshot",
+              snapshot: initial.value,
+            });
+          }
           unsubscribers.push(
             opened.value.source.subscribe?.((reason) => {
               void refreshSource(
@@ -176,6 +189,7 @@ export function createWorkspacePlanningController(
                 reason,
                 opened.value,
                 snapshots,
+                sourceObserver,
               );
             }) ?? (() => undefined),
           );
@@ -258,12 +272,14 @@ async function refreshSource(
   reason: string,
   runtime: QuicklensSourceRuntime,
   snapshots: Map<string, QuicklensSnapshot>,
+  sourceObserver: WorkspacePlanningSourceObserver | undefined,
 ): Promise<void> {
   const result = await runtime.source.read({ signal: new AbortController().signal });
   if (!result.ok) return;
   const contextKey = key(projectId, contextId);
   const before = snapshots.get(contextKey) ?? null;
   recordSourceChange({ store, projectId, contextId, reason, before, after: result.value });
+  sourceObserver?.observe({ projectId, contextId, reason, snapshot: result.value });
   snapshots.set(contextKey, result.value);
 }
 

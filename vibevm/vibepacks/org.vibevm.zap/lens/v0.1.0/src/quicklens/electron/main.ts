@@ -3,7 +3,7 @@ import { join, resolve } from "node:path";
 import { writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
-import { app, BrowserWindow, ipcMain, net, protocol, session } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, session } from "electron";
 
 import {
   createElectronGatewayClient,
@@ -199,6 +199,16 @@ function registerWorkspaceIpc(client: ElectronWorkspaceGatewayClient | null): vo
   ipcMain.handle("workspace:events", (_event, request: unknown) =>
     client === null ? workspaceUnavailable() : client.events(request),
   );
+  ipcMain.handle("product:request", (_event, request: unknown) =>
+    client === null ? workspaceUnavailable() : client.product(request),
+  );
+  ipcMain.handle("product:choose-directory", async () => {
+    const selected = await dialog.showOpenDialog({
+      title: "Choose an existing project directory",
+      properties: ["openDirectory", "createDirectory"],
+    });
+    return selected.canceled ? null : (selected.filePaths[0] ?? null);
+  });
 }
 
 function workspaceUnavailable() {

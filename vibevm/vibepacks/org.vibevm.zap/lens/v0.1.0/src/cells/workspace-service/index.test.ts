@@ -216,6 +216,9 @@ test("workspace service deduplicates clients, scopes projects, and projects nati
   });
   assert.equal(foreign.ok, true);
   service.close();
+  service.close();
+  assert.equal(adapterA.closes, 1);
+  assert.equal(adapterB.closes, 1);
   store.close();
 });
 

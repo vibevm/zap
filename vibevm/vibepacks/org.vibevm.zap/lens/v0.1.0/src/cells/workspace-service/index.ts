@@ -1,5 +1,6 @@
 /** Shared Lens application service. @scope spec://org.vibevm.zap/lens/PROP-005#server-ownership */
 export { InProcessWorkspaceService, createWorkspaceService } from "./service.ts";
+export { managedWorkView, projectManagedWorkClaim } from "./managed-work.ts";
 export {
   WORKSPACE_SERVICE_ACTIONS,
   OwnedCoordinatorAgentBindingSchema,

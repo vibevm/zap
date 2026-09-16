@@ -343,10 +343,15 @@ export function readWorkspace(
     case "model-policy.preview.v1":
     case "model-policy.history.v1":
     case "model-selection.get.v1":
+    case "managed-work.get.v1":
+    case "managed-work.list.v1":
+    case "managed-work.profile.list.v1":
       return failure(
         "unsupported_operation",
         "model policy reads require the shared application runtime",
       );
+    default:
+      return failure("unsupported_operation", "workspace read is not owned by the durable store");
   }
 }
 

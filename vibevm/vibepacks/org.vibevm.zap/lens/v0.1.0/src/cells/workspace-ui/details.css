@@ -1,3 +1,5 @@
+@import "./workspace-panels.css";
+
 .coordinator-controls {
   margin-bottom: 14px;
 }
@@ -256,6 +258,35 @@
   white-space: pre-wrap;
 }
 
+.question-identity,
+.question-attention,
+.question-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.question-identity,
+.question-attention,
+.question-status {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.question-identity span,
+.question-attention span,
+.question-deadline {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+}
+
+.question-deadline.overdue {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 25%, var(--surface-soft));
+}
+
 .rich-question-list {
   display: grid;
   gap: 12px;
@@ -304,6 +335,15 @@
   color: var(--text);
 }
 
+.question-artifacts {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 .question-options {
   display: grid;
   gap: 7px;
@@ -348,6 +388,24 @@
   margin: 12px 0;
 }
 
+.question-cancel {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 10px;
+  background: var(--accent-soft);
+}
+
+.question-actions {
+  margin-top: 10px;
+}
+
+.question-status {
+  margin: 8px 0 0;
+}
+
 .answer-history {
   margin-top: 20px;
   padding-top: 14px;
@@ -362,6 +420,39 @@
   background: var(--surface-soft);
 }
 
+.persisted-answer {
+  padding: 12px;
+  border: 1px solid var(--accent-soft);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.persisted-answer h3,
+.answer-values {
+  margin: 0;
+}
+
+.answer-values div {
+  display: grid;
+  gap: 3px;
+  margin-top: 8px;
+}
+
+.answer-values dt {
+  font-weight: 750;
+}
+
+.answer-values dd {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.answer-note {
+  margin-bottom: 0;
+  white-space: pre-wrap;
+}
+
 .workspace-loading {
   min-height: 300px;
   display: grid;
@@ -369,47 +460,111 @@
   color: var(--muted);
 }
 
-@media (max-width: 1240px) {
-  .workspace-body {
-    grid-template-columns: 220px minmax(480px, 1fr);
-  }
-
-  .activity-panel {
-    position: static;
-    grid-column: 1 / -1;
-  }
-
-  .agent-workspace,
-  .question-workspace {
-    grid-template-columns: 1fr;
-  }
+.workspace-canvas-shell {
+  display: grid;
+  gap: 12px;
 }
 
-@media (max-width: 780px) {
-  .workspace-header {
-    grid-template-columns: 1fr auto;
-  }
+.canvas-toolbar {
+  display: grid;
+  grid-template-columns: minmax(340px, 0.9fr) minmax(360px, 1.1fr);
+  gap: 10px 18px;
+  align-items: center;
+}
 
-  .workspace-header-context {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
+.canvas-toolbar.workspace-panel {
+  padding-block: 14px;
+}
 
-  .workspace-body {
-    grid-template-columns: 1fr;
-  }
+.canvas-toolbar h1,
+.canvas-toolbar p {
+  margin: 0;
+}
 
-  .project-rail,
-  .activity-panel {
-    position: static;
-  }
+.canvas-toolbar h1 {
+  font-size: 1.65rem;
+  line-height: 1.15;
+}
 
-  .project-card-grid,
-  .agent-list {
-    grid-template-columns: 1fr;
-  }
+.canvas-toolbar .field-label select {
+  min-width: 260px;
+}
 
-  .workspace-section-heading {
-    display: grid;
-  }
+.canvas-toolbar-actions,
+.canvas-question-attention {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+
+.canvas-question-attention {
+  justify-content: flex-end;
+}
+
+.workspace-canvas-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-height: 520px;
+}
+
+.workspace-canvas-layout.has-selection {
+  grid-template-columns: minmax(520px, 1fr) minmax(250px, 300px);
+}
+
+.portfolio-canvas {
+  min-width: 0;
+  height: min(62vh, 650px);
+  min-height: 500px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-soft);
+  box-shadow: var(--shadow);
+}
+
+.canvas-inspector {
+  align-self: start;
+  position: sticky;
+  top: 16px;
+  max-height: min(72vh, 760px);
+  overflow: auto;
+}
+
+.canvas-scope,
+.canvas-extension {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--surface-soft);
+  overflow-wrap: anywhere;
+}
+
+.canvas-extension {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.canvas-extension > div,
+.canvas-facts div {
+  display: grid;
+  gap: 3px;
+}
+
+.canvas-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.canvas-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.canvas-diagnostics {
+  margin: 0;
 }

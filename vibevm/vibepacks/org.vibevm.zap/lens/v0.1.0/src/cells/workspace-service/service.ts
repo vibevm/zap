@@ -1,6 +1,5 @@
 /** @scope spec://org.vibevm.zap/lens/PROP-005#server-ownership */
 import { randomUUID } from "node:crypto";
-import { z } from "zod";
 import {
   WorkspaceAccessContextSchema,
   type WorkspaceAccessContext,
@@ -27,22 +26,23 @@ import type {
   WorkspaceServiceAuthorization,
   WorkspaceServiceOptions,
 } from "./types.ts";
+import type { AnnotationCommandRequest } from "../workspace-model/index.ts";
 import { WorkspaceSubscriptionHub } from "./subscriptions.ts";
 import { workspaceFailure } from "./errors.ts";
-import { stateForAgent, type LaunchState } from "./helpers.ts";
+import { stateForAgent } from "./helpers.ts";
 import { startWorkspace, type Launch, type LaunchActions } from "./launch.ts";
 import { controlProject, settleLifecycleEvent } from "./control.ts";
 import { dispatchNextChat, observeChatReply, postCoordinatorChat } from "./chat.ts";
 import { updateModelPolicy } from "./model-policy.ts";
-import { childStateFromEvent } from "./child-state.ts";
+import { updateWorkspaceState } from "./service-state.ts";
 import { commandTerminal, startManagedTerminal } from "./terminal.ts";
 import { notifyOwnedAnswer } from "./answer-notice.ts";
 import { readWorkspace } from "./reads.ts";
+import { commandManagedWork } from "./managed-work.ts";
 import {
   ChildObservationSchema,
   CompletedItemSchema,
   DeltaSchema,
-  HostStatusSchema,
   itemType,
 } from "./event-model.ts";
 
@@ -55,6 +55,8 @@ export class InProcessWorkspaceService implements WorkspaceService {
   readonly #terminals: WorkspaceServiceOptions["terminals"];
   readonly #ownedCoordinatorAgents: WorkspaceServiceOptions["ownedCoordinatorAgents"];
   readonly #planning: WorkspaceServiceOptions["planning"];
+  readonly #managedWork: WorkspaceServiceOptions["managedWork"];
+  readonly #annotations: WorkspaceServiceOptions["annotations"];
   readonly #clock: () => Date;
   readonly #idFactory: (kind: string) => string;
   readonly #launches = new Map<string, Launch>();
@@ -76,6 +78,8 @@ export class InProcessWorkspaceService implements WorkspaceService {
     this.#terminals = options.terminals;
     this.#ownedCoordinatorAgents = options.ownedCoordinatorAgents;
     this.#planning = options.planning;
+    this.#managedWork = options.managedWork;
+    this.#annotations = options.annotations;
     this.#clock = options.clock ?? (() => new Date());
     this.#idFactory = options.idFactory ?? ((kind) => `${kind}.${randomUUID()}`);
     this.#subscriptionsHub = new WorkspaceSubscriptionHub(options.store);
@@ -126,7 +130,10 @@ export class InProcessWorkspaceService implements WorkspaceService {
   close(): void {
     if (this.#closed) return;
     this.#closed = true;
-    for (const unsubscribe of this.#subscriptions.values()) unsubscribe();
+    for (const [adapter, unsubscribe] of this.#subscriptions) {
+      unsubscribe();
+      adapter.close();
+    }
     this.#subscriptions.clear();
     this.#subscriptionsHub.close();
   }
@@ -144,6 +151,8 @@ export class InProcessWorkspaceService implements WorkspaceService {
       this.#planning,
       this.#terminals,
       this.#modelPolicy,
+      this.#managedWork,
+      this.#annotations,
       access,
       request,
     );
@@ -206,6 +215,14 @@ export class InProcessWorkspaceService implements WorkspaceService {
     }
     if (request.operation === "model-policy.update.v1") {
       return updateModelPolicy(this.#modelPolicy, access, request);
+    }
+    if (request.operation.startsWith("managed-work.")) {
+      return commandManagedWork(this.#managedWork, this.#store, access, request);
+    }
+    if (isAnnotationCommand(request)) {
+      return this.#annotations === undefined
+        ? workspaceFailure("unsupported_operation", "annotation service is not configured")
+        : this.#annotations.command(access, request);
     }
     if (
       request.operation === "project.pause.v1" ||
@@ -371,7 +388,7 @@ export class InProcessWorkspaceService implements WorkspaceService {
     }
     const history = this.#store.ingestObservedEvent(this.#historyInput(launch, event, actor));
     if (!history.ok || history.value === null) return;
-    this.#updateState(launch, event, actor);
+    updateWorkspaceState({ launch, event, actor, store: this.#store, now: this.#clock });
     this.#subscriptionsHub.notify(history.value);
     if (
       (event.kind === "turn_completed" &&
@@ -497,72 +514,6 @@ export class InProcessWorkspaceService implements WorkspaceService {
     return this.#store.appendObservedAgentOutput({ sourceEventId, output }).ok;
   }
 
-  #updateState(launch: Launch, event: CoordinatorEvent, actor: AgentDescriptor | undefined): void {
-    const isRoot =
-      event.nativeThreadId === launch.descriptor.nativeThreadRef.value ||
-      event.nativeThreadId === null;
-    let state: LaunchState | null = null;
-    if (event.kind === "process_exited") state = "failed";
-    else if (event.kind === "session_pause_requested") state = "pausing";
-    else if (event.kind === "session_paused") state = "paused";
-    else if (event.kind === "session_stop_requested") state = "stopping";
-    else if (event.kind === "session_stopped") state = "stopped";
-    else if (event.kind === "session_continued") state = "ready";
-    else if (event.kind === "turn_started" && isRoot) state = "running";
-    else if (event.kind === "turn_completed" && isRoot) state = "ready";
-    else if (event.kind === "session_started" || event.kind === "session_resumed") state = "ready";
-    else if (event.kind === "session_status" && isRoot) {
-      const status = z.looseObject({ status: z.unknown() }).safeParse(event.data);
-      if (status.success) {
-        const parsed = HostStatusSchema.safeParse(status.data.status);
-        if (parsed.success) {
-          if (typeof parsed.data === "string") state = parsed.data;
-          else if (parsed.data.type === "systemError") state = "failed";
-          else if (parsed.data.type === "active")
-            state = parsed.data.activeFlags?.includes("waitingOnApproval")
-              ? "waiting_for_user"
-              : "running";
-          else state = parsed.data.type === "closed" ? "stopped" : "ready";
-        }
-      }
-    }
-    if (state !== null && isRoot) {
-      launch.descriptor = {
-        ...launch.descriptor,
-        state: state === "starting" ? "bootstrapping" : state,
-      };
-      launch.session = {
-        ...launch.session,
-        state,
-        revision: DecimalSchema.parse(String(BigInt(launch.session.revision) + 1n)),
-        updatedAt: this.#clock().toISOString(),
-      };
-      this.#store.upsertCoordinatorSession(launch.session);
-      const root = launch.actors.get("__coordinator__");
-      if (root !== undefined) {
-        const updated = {
-          ...root,
-          state: stateForAgent(state),
-          revision: launch.session.revision,
-        } satisfies AgentDescriptor;
-        launch.actors.set("__coordinator__", updated);
-        launch.actors.set(launch.descriptor.nativeThreadRef.value, updated);
-        this.#store.upsertAgent(updated);
-      }
-    } else if (actor !== undefined) {
-      const next = childStateFromEvent(event);
-      if (next !== null) {
-        const updated = {
-          ...actor,
-          state: next,
-          revision: DecimalSchema.parse(String(BigInt(actor.revision) + 1n)),
-        } satisfies AgentDescriptor;
-        launch.actors.set(event.nativeThreadId ?? "", updated);
-        this.#store.upsertAgent(updated);
-      }
-    }
-  }
-
   #subscribe(
     access: WorkspaceAccessContext,
     actions: Set<string>,
@@ -592,6 +543,12 @@ export class InProcessWorkspaceService implements WorkspaceService {
       executionEnabled: execution.ok && execution.value.state === "running",
     };
   }
+}
+
+function isAnnotationCommand(
+  request: WorkspaceCommandRequest,
+): request is AnnotationCommandRequest {
+  return request.operation.startsWith("annotation.");
 }
 
 export function createWorkspaceService(options: WorkspaceServiceOptions): WorkspaceService {

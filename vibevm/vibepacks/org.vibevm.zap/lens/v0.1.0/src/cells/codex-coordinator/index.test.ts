@@ -14,7 +14,7 @@ import {
   HostRequestAnswerSchema,
   type CoordinatorEvent,
 } from "../agent-runtime/index.ts";
-import type { JsonValue } from "../protocol/index.ts";
+import { zapPreauthorizedToolNames, type JsonValue } from "../protocol/index.ts";
 import { AgentSessionIdSchema } from "../workspace-model/index.ts";
 import { OwnedCoordinatorAgentBindingSchema } from "../workspace-service/index.ts";
 import { createCodexCoordinatorAdapter } from "./index.ts";
@@ -67,12 +67,9 @@ test("starts one persistent coordinator with exact profile and explicit coordina
           args: ["mcp", "serve"],
           disabled_tools: ["codlens_connect"],
           default_tools_approval_mode: "prompt",
-          tools: {
-            codlens_context: { approval_mode: "approve" },
-            codlens_ask_user_question: { approval_mode: "approve" },
-            codlens_inbox: { approval_mode: "approve" },
-            codlens_ack: { approval_mode: "approve" },
-          },
+          tools: Object.fromEntries(
+            zapPreauthorizedToolNames(false).map((tool) => [tool, { approval_mode: "approve" }]),
+          ),
           env: {
             CODLENS_URL: "http://127.0.0.1:32191",
             CODLENS_CREDENTIAL_FILE: resolve("fixture-credentials.json"),

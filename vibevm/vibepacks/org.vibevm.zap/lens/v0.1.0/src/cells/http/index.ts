@@ -5,26 +5,30 @@ import { executeHostHook } from "./host-hook.ts";
 import { resumeRetainedSessions } from "./resume.ts";
 import {
   constantEqual,
-  delay,
+  adapterSessionHeader,
+  bearerCredential,
   executePrincipalCommand,
-  hostAllowed,
+  isLoopback,
   parse,
   parsedCall,
   readJson,
+  delay,
   statusOf,
+  validateRequestSource,
 } from "./wire.ts";
 import {
   AckInputSchema,
   AnswerQuestionInputSchema,
   AskInputSchema,
   ConnectInputSchema,
-  CredentialSchema,
   DelegateInputSchema,
   EmitInputSchema,
   ForwardInboxInputSchema,
   EventsInputSchema,
   InboxInputSchema,
+  WaitInboxInputSchema,
   ClientRequestIdSchema,
+  CredentialSchema,
   MessageIdSchema,
   HostBindingSchema,
   type BrokerError,
@@ -47,7 +51,10 @@ import {
   type AgentQuestionPublisher,
 } from "../workspace-interaction/index.ts";
 import type { WorkspacePlanningFeature } from "../workspace-planning/index.ts";
+import type { ManagedWorkAgentPort, NativeWorkAgentPort } from "../managed-work/index.ts";
 import { executeAgentPlanning } from "./agent-planning.ts";
+import { executeInboxWait } from "./inbox-wait.ts";
+import { executeWorkCommand } from "./work-command.ts";
 import {
   addressInfo,
   sendJson,
@@ -78,6 +85,8 @@ export interface LensHttpGatewayOptions {
   readonly streamPollMilliseconds?: number;
   readonly agentQuestions?: AgentQuestionPublisher;
   readonly planning?: WorkspacePlanningFeature;
+  readonly managedWork?: () => ManagedWorkAgentPort | undefined;
+  readonly nativeWork?: () => NativeWorkAgentPort | undefined;
 }
 
 export interface GatewayAddress {
@@ -90,6 +99,8 @@ export interface LensHttpGateway {
   close(): Promise<Result<null>>;
 }
 export { createAgentHttpClient, createPrincipalHttpClient } from "./client.ts";
+export { createManagedWorkHttpClient } from "./managed-work.ts";
+export { createNativeWorkHttpClient } from "./native-work.ts";
 export type { AgentHttpClientOptions } from "./client.ts";
 
 /** Creates a credential-redacting, origin-checked HTTP façade. */
@@ -232,6 +243,7 @@ async function dispatch(
           "ask",
           "ask-user-question",
           "inbox",
+          "inbox-wait",
           "ack",
           "delegate",
           "finish",
@@ -241,6 +253,7 @@ async function dispatch(
           "questions",
           "notice",
           "events",
+          "managed-work",
         ],
         unsupported: ["plan.execute", "generic_mcp.unsolicited_model_wake", "mcp.2026-07-28"],
       },
@@ -338,6 +351,25 @@ async function dispatch(
     );
     return;
   }
+  if (url.pathname === "/v1/inbox-wait") {
+    const input = parse(WaitInboxInputSchema, body.value);
+    if (!input.ok) {
+      sendResult(response, input, 400, request);
+      return;
+    }
+    const controller = new AbortController();
+    response.once("close", () => {
+      controller.abort();
+    });
+    const result = await executeInboxWait(
+      options.broker,
+      auth.value,
+      input.value,
+      controller.signal,
+    );
+    sendResult(response, result, statusOf(result), request);
+    return;
+  }
   const result = await executeActorCommand(
     url.pathname,
     body.value,
@@ -403,6 +435,8 @@ async function executeActorCommand(
   adapterSessionId: AdapterSessionId,
   auth: BindingAuth,
 ): Promise<Result<unknown>> {
+  const work = await executeWorkCommand(path, body, adapterSessionId, options);
+  if (work !== null) return work;
   if (path.startsWith("/v1/agent-plan/")) {
     if (options.planning === undefined)
       return failure("unsupported_operation", "Wayfinder planning is not configured");
@@ -554,43 +588,6 @@ async function streamEvents(
   }
   streams.delete(controller);
   response.end();
-}
-
-function validateRequestSource(
-  request: IncomingMessage,
-  options: LensHttpGatewayOptions,
-): Result<null> {
-  const host = singleHeader(request, "host");
-  if (host === undefined || !hostAllowed(host, options.allowedHosts)) {
-    return failure("unauthorized", "Host header is not allowlisted");
-  }
-  const origin = singleHeader(request, "origin");
-  if (origin !== undefined && !options.allowedOrigins.includes(origin)) {
-    return failure("unauthorized", "Origin header is not allowlisted");
-  }
-  return { ok: true, value: null };
-}
-
-function bearerCredential(request: IncomingMessage): Result<Credential> {
-  const value = singleHeader(request, "authorization");
-  const token = value?.startsWith("Bearer ") ? value.slice(7) : "";
-  const parsed = CredentialSchema.safeParse(token);
-  return parsed.success
-    ? { ok: true, value: parsed.data }
-    : failure("unauthorized", "Bearer credential is missing or malformed");
-}
-
-function adapterSessionHeader(request: IncomingMessage): Result<AdapterSessionId> {
-  const parsed = AdapterSessionIdSchema.safeParse(
-    singleHeader(request, "x-codlens-adapter-session"),
-  );
-  return parsed.success
-    ? { ok: true, value: parsed.data }
-    : failure("unauthorized", "adapter session credential is missing or malformed");
-}
-
-function isLoopback(host: string): boolean {
-  return host === "127.0.0.1" || host === "localhost" || host === "::1";
 }
 
 export type { BrokerError, PrincipalAuth };

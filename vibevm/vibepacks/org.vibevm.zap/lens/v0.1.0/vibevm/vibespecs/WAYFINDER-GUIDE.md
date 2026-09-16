@@ -29,7 +29,71 @@ npm run build:quicklens
 `dist/mcp.js` are the Codlens CLI and MCP connector. The package scripts are
 the source of truth for the current command names.
 
-## Start Zap Wayfinder
+## Normal local start
+
+After an installed build, start the product with:
+
+```text
+zap-quick-lens
+```
+
+The launcher reuses the owner already serving the local Zap data directory or
+starts one owner, serves the built renderer on loopback and opens a one-use
+paired browser session. `zap-quick-lens --electron` opens the same owner through
+the Electron shell. An empty workspace is a valid first screen.
+
+The ordinary setup flow is deliberately two-step:
+
+1. **Add project** selects an existing directory and one protected configured
+   provider profile. Registration validates the directory, persists stable
+   project/context identities and creates an isolated broker scope. It does not
+   start a model.
+2. **Start development** explicitly launches the selected coordinator. Installed,
+   configured, authentication-observed and launchable are separate provider
+   states; a detected executable that still needs a model or protected
+   environment stays unavailable.
+
+Opening or closing a viewer does not start, stop or duplicate a coordinator.
+Projects restored from the product registry are prepared against the live
+runtime before they become launchable.
+
+Protected defaults live in the user-local Zap settings file. A generic shared
+proxy example is:
+
+```json
+{
+  "version": 1,
+  "uiPort": 4174,
+  "proxy": {
+    "mode": "explicit",
+    "httpsProxy": "http://proxy.example:8080",
+    "noProxy": "localhost,127.0.0.1,::1"
+  },
+  "coordinatorDefaults": {
+    "modelId": "your-protected-model-id",
+    "effort": "low"
+  }
+}
+```
+
+The shared proxy policy applies to owned Codex, Claude Code, OpenCode and Qwen
+Code processes and to managed workers. A protected provider profile may select
+`inherit`, `direct` or its own explicit route. Proxy URLs cannot contain
+credentials; provider credentials belong in protected environment files. Local
+Wayfinder, MCP and provider-control loopback addresses remain in the no-proxy
+set, and TLS verification remains enabled.
+
+For Claude Code, OpenCode or Qwen Code, add a protected
+`providerCoordinators` entry with its stable profile ID, provider, absolute
+executable and working directory, selected model/effort, optional argument
+prefix, and optional environment reference. `environmentFiles` maps that
+reference to an absolute protected JSON file; its values are merged only into
+the launched process. `managedWorkers` maps a worker profile and optional policy
+tier to one of those protected source profiles plus its selected model/effort.
+Tier names must be unique. Leaving a detected provider unconfigured keeps it
+visible but unlaunchable rather than guessing a model or credential source.
+
+## Advanced Zap Wayfinder configuration
 
 Run Wayfinder with a strict JSON configuration path:
 
@@ -37,7 +101,7 @@ Run Wayfinder with a strict JSON configuration path:
 node dist/wayfinder.js <wayfinder-config.json>
 ```
 
-The current configuration fields include `version: 1`, `state.databasePath`,
+The advanced configuration fields include `version: 1`, `state.databasePath`,
 `state.modelPolicyDatabasePath`, `gateway.host`, `gateway.port`,
 `gateway.namespace`, `gateway.pairingToken`, `gateway.allowedHosts`,
 `gateway.allowedOrigins`, `profiles`, `projects`, optional `modelPolicies`,
@@ -89,9 +153,12 @@ environment. The renderer does not receive broker credentials, password
 verifiers, or raw agent endpoints.
 
 The shared workspace view reads authorized project lists, project/context
-details, agent networks, output pages, questions, chat, execution state and
-history through `WorkspaceClientPort`. Switching projects changes view scope;
-it does not change another project's context or launch authority.
+details, agent networks, managed tasks/runs, output pages, questions, chat,
+execution state, notes, Trash and history through `WorkspaceClientPort`. Its
+single pan/zoom canvas lays out all authorized project regions. Selecting a
+project, actor, task or run opens the exact scoped card or terminal. Collapse
+and camera state do not merge project contexts, and the graph does not invent
+cross-project edges or authority.
 
 ## Agent and UI channels
 
@@ -125,25 +192,42 @@ These are the actual command names exposed by the package; use the installed
 variables are trusted local environment configuration. Keep their values out
 of agent prompts and public documentation.
 
-A shared `agentGateway` contains a unique `scopes` entry for every registered
-broker workspace/conversation. Each entry uses its own generated agent and
-human-responder credentials. A Codex profile shared by several projects uses
-`lensMcp.scopeCredentials` to map each exact scope to its protected credential
-file. The adapter refuses an unmapped scope before `thread/start`. An owned,
-prebound coordinator receives its adapter session ID and has `codlens_connect`
-disabled, so its MCP process cannot select a different project scope.
+An `agentGateway` may start with no configured scopes. Project registration
+creates each exact workspace/conversation scope lazily, persists its catalog and
+writes separate protected agent and human-responder credential files. A shared
+Codex profile receives the matching scope credential; non-Codex launch
+preparation receives a protected provider-specific MCP config. The gateway
+refuses a mismatched project/context/scope and reuses the same exact scope after
+restart.
+
+Every owned coordinator is prebound to one actor and adapter session. Its MCP
+process can call `codlens_assigned_context` without arguments to discover that
+safe handle and exact scope; no credential is returned. It should not create a
+second actor with `codlens_connect`. Claude Code and Qwen Code receive an MCP
+config file, OpenCode receives its local `mcp` configuration through
+`OPENCODE_CONFIG`, and Codex receives its scoped MCP configuration. Credentials
+remain referenced through protected files rather than model prompts.
 
 Codex, Claude Code, Qwen Code and OpenCode adapters use exact native identity
 where their host exposes it. A display name, prompt text, process label, or
 parent label is never a routing identity. Native child controls remain host
 controlled. A host may report a native child without providing direct input.
 
-Coding workers are selected for task complexity, verification cost and budget.
-Agents used to test protocols use the configured inexpensive test profile; the
-current policy fixtures use the small Luna tier with low effort. No model name
-implies a price, capability, or fallback. Model policy records requested tier
-and effort, resolved profile/model, capability evidence, and later host
-observation separately.
+Coding workers are selected through the project's model policy. Protected
+managed-worker templates bind policy tiers to registered provider profiles,
+models and effort. Ordinary worker creation resolves that policy; an explicit
+profile override names a registered profile and carries a reason. Request text
+cannot invent an executable, working directory, model or provider. Model policy
+records requested tier and effort, resolved profile/model, capability evidence,
+and later host observation separately.
+
+Managed work is the Lens-owned path: it has durable task/run/attempt identities,
+a bounded packet, explicit target references, a real terminal, typed report and
+separate human review. Native provider children remain provider-owned and expose
+only observed native identity and supported controls. A managed worker may
+create a bounded child through authenticated MCP; the server derives project,
+context and parent identity. Process exit, a report and human acceptance remain
+separate records.
 
 ## Coordinator lifecycle
 
@@ -156,6 +240,9 @@ The project lifecycle is per project/context:
 
 - Pause prevents new dispatch and requests supported interruption or a safe
   stopping point. It does not freeze model computation at a token boundary.
+  Claude Code, OpenCode and Qwen Code report Pause as unsupported when the
+  configured adapter has no verified pause primitive; the UI must not present
+  that as a successful suspension.
 - Stop prevents new execution, retains chat/questions/history/results, and
   requests termination of owned work. It does not delete the repository or
   roll back a plan.
@@ -182,6 +269,12 @@ silently interrupt a turn. Rich questions are durable groups with explicit
 answers, revision checks, deadlines, amendments and cancellation. A suggested
 answer is not a submitted answer.
 
+Question publication returns immediately. An idle authenticated worker can use
+`codlens_inbox_wait` with a bounded timeout, then explicitly read and acknowledge
+the addressed delivery. Waiting does not acknowledge, approve or wake a busy
+model. Host hooks may offer safe-point delivery, but there is no universal wake
+guarantee across all provider versions and session modes.
+
 History retains project/context/actor scope, source event identity and source
 ordering. Global display order does not claim a causal clock across projects.
 Reconnections use cursors; missing coverage is reported rather than invented.
@@ -196,6 +289,29 @@ separately authorized project lifecycle action to stop owned resources; it is
 not granted by an observer lease. Logging into Quick Lens or opening chat does
 not grant terminal input. A terminal string that looks like an approval is not
 an authoritative approval.
+
+## Anchored notes and recoverable Trash
+
+**Open notes** on a canvas card works against an exact
+`ProjectObjectReference`: project, semantic object or relationship, agent, work
+task or work run. A passive note records context without dispatching work. A
+deferred instruction is offered only when a declared matching boundary starts.
+Managed work always includes its exact task and run references in that check;
+native work must declare target references explicitly. Empty or unresolved
+native targets stay `waiting_for_target`; prompt text and display labels are
+never guessed as identities.
+
+Offer, read and acknowledgement are separate. The before-work receipt contains
+the exact attachment/version for the addressed actor and attempt. A worker must
+acknowledge that pair explicitly. The same authenticated path is available to
+managed and declared native work through MCP and loopback HTTP.
+
+**Move to Trash** archives a note and suppresses deferred delivery while
+retaining its versions and former anchor. Source observation may also archive a
+removed object with its captured context. Restoring a note restores the note;
+relinking chooses another exact anchor. **Propose restore** for a removed object
+creates an ordinary planning intent. It does not resurrect an obsolete plan or
+infer that temporarily missing or filtered data was deleted.
 
 ## Plan and source boundaries
 
@@ -226,7 +342,7 @@ fragment; every credential value is a protected placeholder):
 ```json
 {
   "planning": {
-    "configDirectory": "C:/zap-wayfinder/config",
+    "configDirectory": "ABSOLUTE_PATH_TO_ZAP_CONFIG",
     "contexts": [
       {
         "projectId": "project.example",
@@ -262,9 +378,12 @@ fragment; every credential value is a protected placeholder):
               "bearer": "REPLACE"
             }
           },
-          "workflowDatabasePath": "C:/zap-wayfinder/state/example-plan.sqlite",
+          "workflowDatabasePath": "ABSOLUTE_PATH_TO_ZAP_STATE/example-plan.sqlite",
           "specifications": [
-            { "root": "C:/projects/example/specifications", "include": ["**/*.md", "**/*.xml"] }
+            {
+              "root": "ABSOLUTE_PATH_TO_PROJECT_SPECIFICATIONS",
+              "include": ["**/*.md", "**/*.xml"]
+            }
           ]
         }
       }
@@ -298,8 +417,16 @@ Developer recovery state is separate from product state. Project facts belong
 in this repository; per-user stewardship, credentials, pairing tickets and
 session recovery records remain local and are never copied into this guide.
 
-Gamelens, Codlens VS Code/IDEA integrations and a future unified canvas can
-reuse the same WorkspaceClientPort and actor/run graph. A unified canvas may
-place project regions in one scene, but it must retain project/context identity
-and cannot merge plans, contexts, camera state, or authority. The current card
-and workspace views do not claim to implement that future canvas.
+Gamelens and Codlens VS Code/IDEA integrations can reuse the same
+WorkspaceClientPort and actor/run graph. The current Quick Lens workspace
+already provides the unified multi-project canvas; future clients must retain
+the same project/context identities and cannot merge plans, camera state or
+authority.
+
+The four provider families have registered drivers, shared proxy and MCP
+preparation. Qwen Code completed a real managed question, browser answer,
+explicit delivery acknowledgement and typed report through an HTTP proxy;
+browser review also succeeded after Wayfinder restart. The current cycle does
+not claim a real-model end-to-end run for every provider. The
+[acceptance record](research/ZAP-PRODUCT-ACCEPTANCE-2026-09-16.md) distinguishes
+live evidence from deterministic adapter tests and records the remaining limits.

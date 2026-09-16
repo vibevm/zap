@@ -28,6 +28,7 @@ import type {
   EventPage,
   EventsInput,
   InboxInput,
+  WaitInboxInput,
   InboxPage,
   MessageEnvelope,
   MessageId,
@@ -97,6 +98,7 @@ export interface AgentTransportPort {
   emit(session: AdapterSessionId, input: EmitInput): Awaitable<Result<MessageEnvelope>>;
   ask(session: AdapterSessionId, input: AskInput): Awaitable<Result<Question>>;
   inbox(session: AdapterSessionId, input: InboxInput): Awaitable<Result<InboxPage>>;
+  waitInbox(session: AdapterSessionId, input: WaitInboxInput): Awaitable<Result<InboxPage>>;
   planIntent(session: AdapterSessionId, messageId: MessageId): Awaitable<Result<MessageEnvelope>>;
   ack(session: AdapterSessionId, input: AckInput): Awaitable<Result<AckResult>>;
   finish(
@@ -185,6 +187,17 @@ export function createRetainedAgentTransport(
       authorized(auth(session), (value) => options.broker.ask(value, input)),
     inbox: async (session, input) =>
       authorized(auth(session), (value) => options.broker.inbox(value, input)),
+    waitInbox: async (session, input) => {
+      const resolved = auth(session);
+      if (!resolved.ok) return resolved;
+      const deadline = Date.now() + input.timeoutMilliseconds;
+      let page = await options.broker.inbox(resolved.value, input);
+      while (page.ok && page.value.deliveries.length === 0 && Date.now() < deadline) {
+        await new Promise((resolve) => setTimeout(resolve, Math.min(50, deadline - Date.now())));
+        page = await options.broker.inbox(resolved.value, input);
+      }
+      return page;
+    },
     planIntent: async (session, messageId) =>
       authorized(auth(session), (value) => options.broker.planIntent(value, messageId)),
     ack: async (session, input) =>

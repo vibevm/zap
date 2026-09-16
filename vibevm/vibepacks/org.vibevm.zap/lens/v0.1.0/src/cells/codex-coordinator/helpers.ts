@@ -12,7 +12,7 @@ import {
   type CoordinatorTurnInput,
   type PendingHostRequest,
 } from "../agent-runtime/index.ts";
-import type { JsonValueSchema } from "../protocol/index.ts";
+import { zapPreauthorizedToolNames, type JsonValueSchema } from "../protocol/index.ts";
 import { NativeRefSchema } from "../workspace-model/index.ts";
 import {
   CodexCommandApprovalResponseSchema,
@@ -102,13 +102,9 @@ export function lensCredentialFile(
 
 function communicationToolPolicy(allowDelegation: boolean) {
   const approved = { approval_mode: "approve" as const };
-  return {
-    codlens_context: approved,
-    codlens_ask_user_question: approved,
-    codlens_inbox: approved,
-    codlens_ack: approved,
-    ...(allowDelegation ? { codlens_delegate: approved } : {}),
-  };
+  return Object.fromEntries(
+    zapPreauthorizedToolNames(allowDelegation).map((tool) => [tool, approved]),
+  );
 }
 
 export function validateExplicitThreadModel(
@@ -226,6 +222,7 @@ export function processProfile(profile: CodexCoordinatorProfile): CodexProcessPr
   return {
     executablePath: profile.executablePath,
     requestTimeoutMs: profile.requestTimeoutMs,
+    ...(profile.proxy === undefined ? {} : { proxy: profile.proxy }),
   };
 }
 

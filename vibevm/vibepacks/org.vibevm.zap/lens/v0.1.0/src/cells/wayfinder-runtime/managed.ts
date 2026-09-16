@@ -50,13 +50,6 @@ export const ManagedRuntimeConfigSchema = z
       }
       ids.add(profile.profileId);
     }
-    if (config.enabled && config.profiles.length === 0) {
-      context.addIssue({
-        code: "custom",
-        path: ["profiles"],
-        message: "enabled managed runtime requires at least one profile",
-      });
-    }
   });
 export type ManagedRuntimeConfig = z.infer<typeof ManagedRuntimeConfigSchema>;
 

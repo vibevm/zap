@@ -12,7 +12,7 @@ import {
   type WorkspaceCommandResponse,
   type WorkspaceResult,
 } from "../workspace-model/index.ts";
-import { ActorIdSchema } from "../protocol/index.ts";
+import { ActorIdSchema, type ActorId } from "../protocol/index.ts";
 import type { ReasoningEffort } from "../model-policy/index.ts";
 import {
   type CoordinatorAdapter,
@@ -186,6 +186,7 @@ export async function restoreWorkspaceLaunch(
     input.projectId,
     input.contextId,
     input.sessionId,
+    scope.coordinatorActorId,
     protectedLaunch.value.agentScope,
   );
   if (!agentBinding.ok) return agentBinding;
@@ -417,6 +418,7 @@ async function startOnce(
     request.projectId,
     request.contextId,
     sessionId,
+    scope.coordinatorActorId,
     launch.value.agentScope,
   );
   if (!agentBinding.ok) return agentBinding;
@@ -518,6 +520,7 @@ async function bindOwnedCoordinator(
   projectId: ProjectId,
   contextId: WorkContextId,
   coordinatorSessionId: ReturnType<typeof AgentSessionIdSchema.parse>,
+  coordinatorActorId: ActorId,
   agentScope: TrustedProjectLaunch["agentScope"],
 ) {
   if (actions.ownedCoordinatorAgents === undefined || agentScope === null)
@@ -526,6 +529,7 @@ async function bindOwnedCoordinator(
     projectId,
     contextId,
     coordinatorSessionId,
+    coordinatorActorId,
     workspaceId: agentScope.workspaceId,
     conversationId: agentScope.conversationId,
   });

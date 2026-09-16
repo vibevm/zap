@@ -9,6 +9,7 @@ export interface ProjectRailProps {
   readonly selectedProjectId: ProjectId | null;
   readonly onSelectAll$: QRL<() => void>;
   readonly onSelectProject$: QRL<(projectId: ProjectId) => void>;
+  readonly onAddProject$?: QRL<() => void> | undefined;
 }
 
 export const ProjectRail = component$<ProjectRailProps>((props) => (
@@ -16,7 +17,7 @@ export const ProjectRail = component$<ProjectRailProps>((props) => (
     <div>
       <p class="eyebrow">Projects</p>
       <h2>Zap Quick Lens workspace</h2>
-      <p class="workspace-muted">Codex coordination and VibeVM planning in one shared view.</p>
+      <p class="workspace-muted">Planning and agent work in one shared view.</p>
     </div>
     <nav aria-label="Project focus">
       <button
@@ -26,7 +27,7 @@ export const ProjectRail = component$<ProjectRailProps>((props) => (
         <span class="project-monogram">∞</span>
         <span>
           <strong>All projects</strong>
-          <small>Portfolio activity and boards</small>
+          <small>Unified map and portfolio activity</small>
         </span>
       </button>
       {props.projects.map((project) => (
@@ -43,6 +44,11 @@ export const ProjectRail = component$<ProjectRailProps>((props) => (
         </button>
       ))}
     </nav>
+    {props.onAddProject$ === undefined ? null : (
+      <button class="button secondary project-add" onClick$={props.onAddProject$}>
+        Add project
+      </button>
+    )}
   </aside>
 ));
 

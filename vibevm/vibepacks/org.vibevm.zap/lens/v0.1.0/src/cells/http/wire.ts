@@ -8,8 +8,49 @@ import {
   ScopedListInputSchema,
   type Credential,
   type Result,
+  CredentialSchema,
 } from "../protocol/index.ts";
-import { failure, type TransportBrokerPort } from "../transport/index.ts";
+import {
+  AdapterSessionIdSchema,
+  failure,
+  type AdapterSessionId,
+  type TransportBrokerPort,
+} from "../transport/index.ts";
+import { singleHeader } from "./server-response.ts";
+
+export function validateRequestSource(
+  request: IncomingMessage,
+  options: { readonly allowedHosts: readonly string[]; readonly allowedOrigins: readonly string[] },
+): Result<null> {
+  const host = singleHeader(request, "host");
+  if (host === undefined || !hostAllowed(host, options.allowedHosts))
+    return failure("unauthorized", "Host header is not allowlisted");
+  const origin = singleHeader(request, "origin");
+  return origin !== undefined && !options.allowedOrigins.includes(origin)
+    ? failure("unauthorized", "Origin header is not allowlisted")
+    : { ok: true, value: null };
+}
+
+export function bearerCredential(request: IncomingMessage): Result<Credential> {
+  const value = singleHeader(request, "authorization");
+  const parsed = CredentialSchema.safeParse(value?.startsWith("Bearer ") ? value.slice(7) : "");
+  return parsed.success
+    ? { ok: true, value: parsed.data }
+    : failure("unauthorized", "Bearer credential is missing or malformed");
+}
+
+export function adapterSessionHeader(request: IncomingMessage): Result<AdapterSessionId> {
+  const parsed = AdapterSessionIdSchema.safeParse(
+    singleHeader(request, "x-codlens-adapter-session"),
+  );
+  return parsed.success
+    ? { ok: true, value: parsed.data }
+    : failure("unauthorized", "adapter session credential is missing or malformed");
+}
+
+export function isLoopback(host: string): boolean {
+  return host === "127.0.0.1" || host === "localhost" || host === "::1";
+}
 
 export async function executePrincipalCommand(
   path: string,

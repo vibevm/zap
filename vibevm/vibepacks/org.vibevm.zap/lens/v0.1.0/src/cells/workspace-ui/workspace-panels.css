@@ -1,0 +1,204 @@
+/* Product, terminal, annotation, and responsive workspace panels. */
+.xterm-terminal-host {
+  height: 320px;
+  min-height: 240px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #12151d;
+}
+
+.managed-terminal-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-bottom: 9px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.project-add {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.product-setup {
+  max-width: 780px;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.product-setup input,
+.product-setup select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.72rem 0.85rem;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.product-directory-row,
+.product-start-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.product-directory-row input {
+  flex: 1;
+}
+
+.product-start-card {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid var(--accent-soft);
+  border-radius: 14px;
+  padding: 1rem;
+  background: var(--surface-muted);
+}
+
+.managed-work-panel,
+.managed-work-create,
+.managed-work-detail,
+.managed-work-report,
+.annotation-panel,
+.annotation-editor {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.managed-work-panel textarea,
+.managed-work-panel select,
+.annotation-panel textarea,
+.annotation-panel input,
+.annotation-panel select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.72rem 0.85rem;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.managed-work-detail,
+.annotation-editor,
+.trash-list article {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  background: var(--surface-muted);
+}
+
+.managed-work-detail > div:first-child,
+.annotation-list button {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.annotation-list,
+.trash-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.annotation-list button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.annotation-list button.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.trash-list article {
+  display: grid;
+  gap: 0.45rem;
+  overflow-wrap: anywhere;
+}
+
+.annotation-panel .canvas-scope,
+.annotation-panel code {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.annotation-anchor summary {
+  cursor: pointer;
+  font-weight: 750;
+}
+
+@media (max-width: 1600px) {
+  .workspace-canvas-layout.has-selection {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .workspace-canvas-layout.has-selection .canvas-inspector {
+    position: static;
+    max-height: none;
+  }
+}
+
+.button.danger {
+  border-color: color-mix(in srgb, #c15f3c 55%, var(--border));
+  color: #c15f3c;
+}
+
+@media (max-width: 1240px) {
+  .workspace-body {
+    grid-template-columns: 220px minmax(480px, 1fr);
+  }
+
+  .activity-panel {
+    position: static;
+    grid-column: 1 / -1;
+  }
+
+  .agent-workspace,
+  .question-workspace,
+  .workspace-canvas-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .canvas-inspector {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 780px) {
+  .workspace-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .workspace-header-context {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .workspace-body {
+    grid-template-columns: 1fr;
+  }
+
+  .project-rail,
+  .activity-panel {
+    position: static;
+  }
+
+  .project-card-grid,
+  .agent-list {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-section-heading {
+    display: grid;
+  }
+}

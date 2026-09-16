@@ -338,7 +338,7 @@ export class ManagedTerminalKernel {
     for (const state of this.#terminals.values()) {
       state.unsubscribeData?.();
       state.unsubscribeExit?.();
-      state.process.stop();
+      if (state.state !== "stopping") state.process.stop();
       state.lease = null;
       state.state = "stopped";
     }

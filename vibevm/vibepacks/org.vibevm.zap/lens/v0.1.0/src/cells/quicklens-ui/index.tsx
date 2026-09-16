@@ -8,6 +8,7 @@ import type { QuicklensDataSource } from "../quicklens-model/index.ts";
 import { QuicklensApp } from "./app.tsx";
 
 export { QuicklensApp } from "./app.tsx";
+export { PortfolioCanvas } from "./portfolio-canvas.tsx";
 
 export function mountQuicklens(container: Document | Element, source: QuicklensDataSource) {
   return render(container, <QuicklensApp source={noSerialize(source)} />);
