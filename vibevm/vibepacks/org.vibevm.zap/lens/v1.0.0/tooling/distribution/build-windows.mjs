@@ -37,8 +37,17 @@ const DIRECTORY_NAME = `zap-windows-x64-${VERSION}`;
 const CARGO_TARGET = "x86_64-pc-windows-msvc";
 const SOURCE_REPOSITORY = "https://github.com/vibevm/zap.git";
 const PUBLIC_COMMANDS = Object.freeze([
+  ["codlens", "dist/cli.js"],
+  ["codlens-mcp", "dist/mcp.js"],
+  ["quicklens-service", "dist/quicklens.js"],
+  ["quicklens-web-auth", "dist/quicklens-web-auth.js"],
+  ["quicklens-web", "dist/quicklens-web.js"],
+  ["zap-wayfinder", "dist/wayfinder.js"],
   ["zap-quicklens", "dist/zap-quick-lens.js"],
+  ["zap-quick-lens", "dist/zap-quick-lens.js"],
   ["zap-server", "dist/zap-server.js"],
+  ["zap-mock-agent", "dist/zap-mock-agent.js"],
+  ["zap", null],
 ]);
 
 export async function buildWindowsDistribution(input, ports = {}) {
@@ -109,6 +118,13 @@ export async function buildWindowsDistribution(input, ports = {}) {
           npmEnvironment,
         ),
         "locked Lens production dependency installation",
+      );
+      await ensureElectronRuntime(
+        lensBuild,
+        nodeExecutable,
+        runner,
+        npmEnvironment,
+        options.offline,
       );
       await verifyLensRuntime(lensBuild);
 
@@ -258,14 +274,28 @@ async function stageBundle(input) {
 
 async function verifyLensRuntime(root) {
   for (const path of [
-    "dist/zap-quick-lens.js",
-    "dist/zap-server.js",
+    ...new Set(PUBLIC_COMMANDS.map(([, entry]) => entry).filter((entry) => entry !== null)),
     "node_modules/electron/dist/electron.exe",
     "node_modules/node-pty/package.json",
   ])
     await requireFile(join(root, ...path.split("/")), `Lens runtime ${path}`);
   if (!(await containsNativeAddon(join(root, "node_modules", "node-pty"))))
     failure("Lens runtime has no native node-pty addon");
+}
+
+export async function ensureElectronRuntime(root, nodeExecutable, runner, environment, offline) {
+  const electronRoot = join(root, "node_modules", "electron");
+  const executable = join(electronRoot, "dist", "electron.exe");
+  if ((await pathKind(executable)) === "file") return;
+  if (offline) failure("offline binary build has no cached Electron runtime");
+  const installer = join(electronRoot, "install.js");
+  await requireFile(installer, "Electron runtime installer");
+  await runChecked(
+    runner,
+    command(nodeExecutable, [installer], electronRoot, environment),
+    "Electron runtime installation",
+  );
+  await requireFile(executable, "Electron runtime executable");
 }
 
 async function containsNativeAddon(root) {
@@ -324,9 +354,13 @@ if (entry === undefined) {
 } else {
   const generation = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
   const node = resolve(generation, "payload", "node", "node.exe");
-  const script = resolve(generation, "payload", "app", ...entry.split("/"));
   const engine = resolve(generation, "payload", "bin", "zap.exe");
-  const child = spawn(node, [script, ...args], {
+  const executable = entry === null ? engine : node;
+  const launchArgs =
+    entry === null
+      ? args
+      : [resolve(generation, "payload", "app", ...entry.split("/")), ...args];
+  const child = spawn(executable, launchArgs, {
     cwd: process.cwd(),
     env: { ...process.env, ZAP_ENGINE_BINARY: engine },
     stdio: "inherit",

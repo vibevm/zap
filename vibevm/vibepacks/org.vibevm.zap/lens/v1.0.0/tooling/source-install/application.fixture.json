@@ -11,7 +11,19 @@
     "name": "lens",
     "version": "1.0.0"
   },
-  "commands": ["zap-quicklens", "zap-server"],
+  "commands": [
+    "codlens",
+    "codlens-mcp",
+    "quicklens-service",
+    "quicklens-web-auth",
+    "quicklens-web",
+    "zap-wayfinder",
+    "zap-server",
+    "zap-quicklens",
+    "zap-quick-lens",
+    "zap-mock-agent",
+    "zap"
+  ],
   "expected": {
     "installStatus": "ready",
     "uninstallStatus": "undeployed",

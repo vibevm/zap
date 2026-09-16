@@ -43,7 +43,7 @@ test("generic install returns the immutable management adapter and exact public 
     assert.equal(reply.applicationId, scenario.applicationId);
     assert.equal(reply.status, scenario.expected.installStatus);
     assert.deepEqual(reply.commands, scenario.commands);
-    assert.equal(reply.launchers.length, 4);
+    assert.equal(reply.launchers.length, scenario.commands.length * 2);
     assert.equal(
       reply.launchers.every(
         (launcher) =>

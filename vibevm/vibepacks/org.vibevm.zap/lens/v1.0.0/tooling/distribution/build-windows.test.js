@@ -4,7 +4,30 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import test from "node:test";
-import { buildWindowsDistribution, portableContentHash } from "./build-windows.mjs";
+import {
+  buildWindowsDistribution,
+  ensureElectronRuntime,
+  portableContentHash,
+} from "./build-windows.mjs";
+
+test("offline bundle build refuses an Electron package without cached native runtime", async () => {
+  const root = await mkdtemp(join(tmpdir(), "zap electron offline "));
+  try {
+    await writeRuntimeEntry(root, "node_modules/electron/install.js");
+    await assert.rejects(
+      ensureElectronRuntime(
+        root,
+        join(root, "node.exe"),
+        { run: async () => ({ code: 0, stdout: "", stderr: "" }) },
+        {},
+        true,
+      ),
+      /offline binary build has no cached Electron runtime/u,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
 
 test("portable source hash matches the Vibe recipe-1 order-trap golden", async () => {
   const root = await mkdtemp(join(tmpdir(), "zap portable hash "));
@@ -89,15 +112,29 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
           return { code: 0, stdout: "", stderr: "" };
         }
         if (request.args.includes("run") && request.args.includes("build")) {
-          await writeRuntimeEntry(request.cwd, "dist/zap-quick-lens.js");
-          await writeRuntimeEntry(request.cwd, "dist/zap-server.js");
+          for (const entry of [
+            "dist/cli.js",
+            "dist/mcp.js",
+            "dist/quicklens.js",
+            "dist/quicklens-web-auth.js",
+            "dist/quicklens-web.js",
+            "dist/wayfinder.js",
+            "dist/zap-server.js",
+            "dist/zap-quick-lens.js",
+            "dist/zap-mock-agent.js",
+          ])
+            await writeRuntimeEntry(request.cwd, entry);
           return { code: 0, stdout: "", stderr: "" };
         }
         if (request.args.includes("ci") && request.args.includes("--omit=dev")) {
-          await writeRuntimeEntry(request.cwd, "node_modules/electron/dist/electron.exe");
           await writeRuntimeEntry(request.cwd, "node_modules/electron/package.json");
+          await writeRuntimeEntry(request.cwd, "node_modules/electron/install.js");
           await writeRuntimeEntry(request.cwd, "node_modules/node-pty/package.json");
           await writeRuntimeEntry(request.cwd, "node_modules/node-pty/build/Release/pty.node");
+          return { code: 0, stdout: "", stderr: "" };
+        }
+        if (request.args[0]?.endsWith("electron\\install.js")) {
+          await writeRuntimeEntry(request.cwd, "dist/electron.exe");
           return { code: 0, stdout: "", stderr: "" };
         }
         return { code: 0, stdout: "", stderr: "" };
@@ -113,7 +150,7 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
         sourceCommit,
         sourceTree,
         cargoExecutable: "cargo",
-        offline: true,
+        offline: false,
       },
       {
         runner,
@@ -126,6 +163,8 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
       },
     );
     assert.equal(result.descriptor.management.entry, "management/launch.cmd");
+    assert.equal(result.descriptor.application.commands.length, 11);
+    assert.equal(result.descriptor.launchers.length, 11);
     assert.equal(
       result.descriptor.files.some((file) => file.path.endsWith("pty.node")),
       true,
@@ -161,6 +200,10 @@ test("builder binds bundled Node, production dependencies, Rust engine and stabl
     );
     assert.equal(
       commands.some((request) => request.args.includes("--target")),
+      true,
+    );
+    assert.equal(
+      commands.some((request) => request.args[0]?.endsWith("electron\\install.js")),
       true,
     );
   } finally {

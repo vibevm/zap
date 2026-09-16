@@ -13,6 +13,19 @@ import {
 
 const SOURCE_COMMIT = "a".repeat(40);
 const SOURCE_TREE = `sha256-tree/1:${"b".repeat(64)}`;
+const COMMANDS = [
+  "codlens",
+  "codlens-mcp",
+  "quicklens-service",
+  "quicklens-web-auth",
+  "quicklens-web",
+  "zap-wayfinder",
+  "zap-server",
+  "zap-quicklens",
+  "zap-quick-lens",
+  "zap-mock-agent",
+  "zap",
+];
 
 test("distribution descriptor exhaustively binds relative payload and standalone launchers", async () => {
   const root = await mkdtemp(join(tmpdir(), "zap distribution manifest "));
@@ -21,18 +34,7 @@ test("distribution descriptor exhaustively binds relative payload and standalone
     const descriptor = await sealDistributionDirectory(root, {
       sourceCommit: SOURCE_COMMIT,
       sourceTree: SOURCE_TREE,
-      launchers: [
-        {
-          command: "zap-quicklens",
-          path: "launchers/zap-quicklens.cmd",
-          destination: "zap-quicklens.cmd",
-        },
-        {
-          command: "zap-server",
-          path: "launchers/zap-server.cmd",
-          destination: "zap-server.cmd",
-        },
-      ],
+      launchers: fixtureLaunchers(),
     });
     assert.deepEqual(descriptor.management, {
       runtime: "builtin",
@@ -45,20 +47,19 @@ test("distribution descriptor exhaustively binds relative payload and standalone
     assert.deepEqual(
       descriptor.files.map((file) => file.path),
       [
-        "launchers/zap-quicklens.cmd",
-        "launchers/zap-server.cmd",
+        ...COMMANDS.map((command) => `launchers/${command}.cmd`),
         "management/launch.cmd",
         "payload/app/dist/zap-quick-lens.js",
         "payload/app/dist/zap-server.js",
         "payload/bin/zap.exe",
         "payload/node/node.exe",
-      ],
+      ].sort((left, right) => left.localeCompare(right, "en")),
     );
     assert.deepEqual(await verifyDistributionDirectory(root), descriptor);
     const parsed = parseDescriptor(
       JSON.parse(await readFile(join(root, DISTRIBUTION_DESCRIPTOR), "utf8")),
     );
-    assert.deepEqual(parsed.application.commands, ["zap-quicklens", "zap-server"]);
+    assert.deepEqual(parsed.application.commands, COMMANDS);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -72,34 +73,18 @@ test("distribution descriptor refuses traversal, case collisions, links and post
       sealDistributionDirectory(root, {
         sourceCommit: SOURCE_COMMIT,
         sourceTree: SOURCE_TREE,
-        launchers: [
-          { command: "zap-quicklens", path: "../zap.cmd", destination: "zap-quicklens.cmd" },
-          {
-            command: "zap-server",
-            path: "launchers/zap-server.cmd",
-            destination: "zap-server.cmd",
-          },
-        ],
+        launchers: fixtureLaunchers().map((launcher) =>
+          launcher.command === "zap-quicklens" ? { ...launcher, path: "../zap.cmd" } : launcher,
+        ),
       }),
       /not portable|not relative/u,
     );
     const descriptor = await sealDistributionDirectory(root, {
       sourceCommit: SOURCE_COMMIT,
       sourceTree: SOURCE_TREE,
-      launchers: [
-        {
-          command: "zap-quicklens",
-          path: "launchers/zap-quicklens.cmd",
-          destination: "zap-quicklens.cmd",
-        },
-        {
-          command: "zap-server",
-          path: "launchers/zap-server.cmd",
-          destination: "zap-server.cmd",
-        },
-      ],
+      launchers: fixtureLaunchers(),
     });
-    assert.equal(descriptor.files.length, 7);
+    assert.equal(descriptor.files.length, 16);
     await writeFile(join(root, "payload", "bin", "zap.exe"), "changed\n");
     await assert.rejects(
       verifyDistributionDirectory(root),
@@ -120,8 +105,7 @@ async function fixturePayload(root) {
   ])
     await mkdir(join(root, ...directory.split("/")), { recursive: true });
   for (const [path, content] of [
-    ["launchers/zap-quicklens.cmd", "@echo off\r\n"],
-    ["launchers/zap-server.cmd", "@echo off\r\n"],
+    ...COMMANDS.map((command) => [`launchers/${command}.cmd`, "@echo off\r\n"]),
     ["management/launch.cmd", "@echo off\r\n"],
     ["payload/app/dist/zap-quick-lens.js", "// quick lens\n"],
     ["payload/app/dist/zap-server.js", "// server\n"],
@@ -129,4 +113,12 @@ async function fixturePayload(root) {
     ["payload/node/node.exe", "fixture node\n"],
   ])
     await writeFile(join(root, ...path.split("/")), content);
+}
+
+function fixtureLaunchers() {
+  return COMMANDS.map((command) => ({
+    command,
+    path: `launchers/${command}.cmd`,
+    destination: `${command}.cmd`,
+  }));
 }

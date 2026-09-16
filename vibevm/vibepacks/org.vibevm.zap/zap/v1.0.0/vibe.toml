@@ -19,7 +19,19 @@ id = "zap"
 installer_package = "org.vibevm.zap/lens@=1.0.0"
 runtime = "node"
 entry = "tooling/source-install/application.mjs"
-commands = ["zap-quicklens", "zap-server"]
+commands = [
+  "codlens",
+  "codlens-mcp",
+  "quicklens-service",
+  "quicklens-web-auth",
+  "quicklens-web",
+  "zap-wayfinder",
+  "zap-server",
+  "zap-quicklens",
+  "zap-quick-lens",
+  "zap-mock-agent",
+  "zap",
+]
 
 [application.distribution]
 repository = "vibevm/zap"

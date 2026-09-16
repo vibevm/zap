@@ -6,11 +6,12 @@ import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "nod
 import { pathToFileURL } from "node:url";
 import { executeBootstrap, inspectBootstrap, parseBootstrapArgs } from "./bootstrap.mjs";
 import { createNodeBootstrapPorts } from "./bootstrap-system.mjs";
+import { LENS_COMMANDS } from "./bootstrap-manifest.mjs";
 
 export const APPLICATION_CONTEXT_PROTOCOL = "vibe-application-context/1";
 export const APPLICATION_RESULT_PROTOCOL = "vibe-application-result/1";
 export const APPLICATION_ID = "zap";
-export const APPLICATION_COMMANDS = Object.freeze(["zap-quicklens", "zap-server"]);
+export const APPLICATION_COMMANDS = Object.freeze([...LENS_COMMANDS, "zap"]);
 const PUBLIC_NPM_REGISTRY = "https://registry.npmjs.org/";
 const OPERATIONS = new Set(["install", "update", "uninstall"]);
 

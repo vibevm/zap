@@ -13,7 +13,19 @@ export const APPLICATION = Object.freeze({
     name: "lens",
     version: "1.0.0",
   }),
-  commands: Object.freeze(["zap-quicklens", "zap-server"]),
+  commands: Object.freeze([
+    "codlens",
+    "codlens-mcp",
+    "quicklens-service",
+    "quicklens-web-auth",
+    "quicklens-web",
+    "zap-wayfinder",
+    "zap-server",
+    "zap-quicklens",
+    "zap-quick-lens",
+    "zap-mock-agent",
+    "zap",
+  ]),
 });
 
 export async function sealDistributionDirectory(root, input) {
