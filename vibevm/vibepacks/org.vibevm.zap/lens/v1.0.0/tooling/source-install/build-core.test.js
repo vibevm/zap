@@ -58,6 +58,13 @@ test("build stages an immutable Lens generation and reuses exact inputs", async 
       runner.commands.some((command) => command.cwd.includes("Source Lens")),
       true,
     );
+    const productionInstall = runner.commands.find((command) =>
+      command.args.includes("--omit=dev"),
+    );
+    assert.match(
+      basename(dirname(productionInstall.cwd)),
+      /^\.pending-[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/u,
+    );
     const secondRunner = fakeRunner(fixture.lensRoot);
     const second = await buildSourceInstallation(fixture.input, {
       nativeNode: process.execPath,

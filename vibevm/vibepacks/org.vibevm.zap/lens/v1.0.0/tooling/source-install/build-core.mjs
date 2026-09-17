@@ -94,7 +94,7 @@ export async function buildSourceInstallation(input, ports = {}) {
 
 async function createGeneration(state) {
   const stagingRoot = state.generationsRoot;
-  const staging = join(stagingRoot, `.pending-${state.generationId}-${randomUUID()}`);
+  const staging = join(stagingRoot, `.pending-${randomUUID()}`);
   if (!contained(stagingRoot, staging)) failure("generation staging path escaped its owner");
   await ensureOwnedDirectory(stagingRoot, staging);
   try {

@@ -65,26 +65,55 @@ export async function resolveNpmCli(nativeNode = process.execPath) {
 
 export function createCommandRunner(options = {}) {
   const maximumBytes = options.maximumBytes ?? 1024 * 1024;
+  const spawnCommand = options.spawn ?? spawn;
   return {
     run(command) {
       return new Promise((resolveResult, reject) => {
-        const child = spawn(command.executable, command.args, {
-          cwd: command.cwd,
-          env: command.environment,
-          shell: false,
-          windowsHide: true,
-          stdio: ["ignore", "pipe", "pipe"],
-        });
+        let child;
+        try {
+          child = spawnCommand(command.executable, command.args, {
+            cwd: command.cwd,
+            env: command.environment,
+            shell: false,
+            windowsHide: true,
+            stdio: ["ignore", "pipe", "pipe"],
+          });
+        } catch (error) {
+          reject(error);
+          return;
+        }
         let stdout = Buffer.alloc(0);
         let stderr = Buffer.alloc(0);
+        let settled = false;
+        const rejectOnce = (channel, error) => {
+          if (settled) return;
+          settled = true;
+          try {
+            child.kill();
+          } catch {
+            // The original stream/process error remains authoritative.
+          }
+          const diagnostic = boundedDiagnostic(
+            error instanceof Error ? error.message : String(error),
+          );
+          reject(
+            new Error(`${channel} failed${diagnostic === "" ? "" : `: ${diagnostic}`}`, {
+              cause: error,
+            }),
+          );
+        };
         child.stdout.on("data", (chunk) => {
           stdout = retainTail(stdout, chunk, maximumBytes);
         });
+        child.stdout.once("error", (error) => rejectOnce("command stdout stream", error));
         child.stderr.on("data", (chunk) => {
           stderr = retainTail(stderr, chunk, maximumBytes);
         });
-        child.once("error", reject);
-        child.once("exit", (code, signal) => {
+        child.stderr.once("error", (error) => rejectOnce("command stderr stream", error));
+        child.once("error", (error) => rejectOnce("command process", error));
+        child.once("close", (code, signal) => {
+          if (settled) return;
+          settled = true;
           resolveResult({
             code,
             signal,
