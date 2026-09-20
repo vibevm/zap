@@ -73,4 +73,25 @@ test("adapter evidence combines verified adapter controls with model effort choi
     providerCoordinatorAdapterEvidence(qwen, qwenReference, "2026-09-16T12:00:00.000Z").effort,
     { mode: "unsupported" },
   );
+
+  const opus = EXECUTION_MODEL_REFERENCE.find((entry) => entry.modelId === "claude-opus-5");
+  assert.notEqual(opus, undefined);
+  if (opus === undefined) return;
+  const claude = ProviderCoordinatorProfileSchema.parse({
+    profileId: "profile.claude.evidence",
+    provider: "claude_code",
+    executablePath: resolve("claude.exe"),
+    cwd: resolve("."),
+    modelId: "claude-haiku-4-5-20251001",
+    effort: null,
+    endpoint: null,
+  });
+  assert.deepEqual(
+    providerCoordinatorAdapterEvidence(claude, opus, "2026-09-16T12:00:00.000Z").effort,
+    {
+      mode: "configurable",
+      allowedValues: ["low", "medium", "high", "xhigh", "max"],
+      defaultValue: "high",
+    },
+  );
 });

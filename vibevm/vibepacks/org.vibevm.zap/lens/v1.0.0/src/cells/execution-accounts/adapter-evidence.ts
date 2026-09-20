@@ -65,7 +65,7 @@ export function providerCoordinatorAdapterEvidence(
     modalities: modalities(verifiedToolCapabilities),
     effort:
       profile.provider === "claude_code"
-        ? configuredEffort(profile.effort, reference)
+        ? referenceControlledEffort(profile.effort, reference, "output_config.effort")
         : { mode: "unsupported" },
     context: {
       mode: "unknown",
@@ -88,12 +88,13 @@ export function managedAdapterEvidence(
     executionModes: ["managed"],
     invocationScopes: ["managed_agent"],
     modalities: modalities(verifiedToolCapabilities),
-    effort:
-      profile.provider === "codex" && profile.effortSupported
-        ? configuredEffort(profile.effort, reference)
-        : profile.effortSupported
-          ? configuredEffort(profile.effort, reference)
-          : { mode: "unsupported" },
+    effort: profile.effortSupported
+      ? profile.provider === "codex"
+        ? referenceControlledEffort(profile.effort, reference, "reasoning.effort")
+        : profile.provider === "claude_code"
+          ? referenceControlledEffort(profile.effort, reference, "output_config.effort")
+          : configuredEffort(profile.effort, reference)
+      : { mode: "unsupported" },
     context:
       profile.provider === "codex"
         ? codexContext(profile.contextWindowTokens, reference)
@@ -138,13 +139,21 @@ function codexEffort(
           allowedValues: [...observed.supportedEfforts],
           defaultValue: observed.defaultEffort,
         };
+  return referenceControlledEffort(configured, reference, "reasoning.effort");
+}
+
+function referenceControlledEffort(
+  configured: string | null | undefined,
+  reference: ExecutionModelReference,
+  control: string,
+): EffortCapability {
   const configuredValue = ReasoningEffortSchema.safeParse(configured);
   const supported = reference.effort.values.flatMap((value) => {
     const parsed = ReasoningEffortSchema.safeParse(value);
     return parsed.success ? [parsed.data] : [];
   });
   const referenceDefault = ReasoningEffortSchema.safeParse(reference.effort.defaultValue);
-  if (reference.effort.control === "reasoning.effort" && supported.length > 0)
+  if (reference.effort.control === control && supported.length > 0)
     return {
       mode: "configurable",
       allowedValues: [...supported],
