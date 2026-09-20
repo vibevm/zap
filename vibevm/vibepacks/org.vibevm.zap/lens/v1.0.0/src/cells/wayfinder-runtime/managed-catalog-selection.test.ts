@@ -119,8 +119,53 @@ test("managed catalog selection materializes and later revocation fences launch"
     });
     assert.equal(configuration.ok, true);
     if (!configuration.ok) return;
+    const originalConfiguration = configuration.value.snapshot.configurations.find(
+      (candidate) => candidate.connectionId === connectionRecord.connectionId,
+    );
+    assert.notEqual(originalConfiguration, undefined);
+    if (originalConfiguration === undefined) return;
+    const archivedConfiguration = await service.upsertConfiguration(caller, {
+      ...mutation(configuration.value.snapshot, "archive-configuration"),
+      configuration: { ...originalConfiguration, enabled: false },
+    });
+    assert.equal(archivedConfiguration.ok, true);
+    if (!archivedConfiguration.ok) return;
+    const archivedConnection = await service.upsertConnection(caller, {
+      ...mutation(archivedConfiguration.value.snapshot, "archive-connection"),
+      connection: { ...connectionRecord, enabled: false },
+    });
+    assert.equal(archivedConnection.ok, true);
+    if (!archivedConnection.ok) return;
+    const restoredConnection = await service.createConnection(caller, {
+      ...mutation(archivedConnection.value.snapshot, "restore-connection-through-add"),
+      bindingId: "binding.codex.test",
+      displayName: null,
+    });
+    assert.equal(restoredConnection.ok, true);
+    if (!restoredConnection.ok) return;
+    const restoredConnectionRecord = restoredConnection.value.snapshot.connections.find(
+      (candidate) => candidate.launchBindingId === "binding.codex.test",
+    );
+    assert.equal(restoredConnectionRecord?.connectionId, connectionRecord.connectionId);
+    assert.equal(restoredConnectionRecord?.enabled, true);
+    const restoredConfiguration = await service.createConfiguration(caller, {
+      ...mutation(restoredConnection.value.snapshot, "restore-configuration-through-add"),
+      connectionId: connectionRecord.connectionId,
+      referenceId: reference.referenceId,
+      displayName: null,
+    });
+    assert.equal(restoredConfiguration.ok, true);
+    if (!restoredConfiguration.ok) return;
+    const restoredConfigurationRecord = restoredConfiguration.value.snapshot.configurations.find(
+      (candidate) => candidate.connectionId === connectionRecord.connectionId,
+    );
+    assert.equal(
+      restoredConfigurationRecord?.configurationId,
+      originalConfiguration.configurationId,
+    );
+    assert.equal(restoredConfigurationRecord?.enabled, true);
     const secondConnection = await service.createConnection(caller, {
-      ...mutation(configuration.value.snapshot, "connection-second"),
+      ...mutation(restoredConfiguration.value.snapshot, "connection-second"),
       bindingId: "binding.codex.second",
       displayName: "Second Codex account",
     });

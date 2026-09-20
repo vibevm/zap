@@ -213,6 +213,36 @@ export class AuthenticatedExecutionCatalogService implements ExecutionCatalogSer
     );
     if (binding === undefined)
       return failure("not_found", "protected execution binding is unavailable");
+    const existing = current.value.connections.find(
+      (candidate) => candidate.launchBindingId === binding.bindingId,
+    );
+    if (existing !== undefined) {
+      if (existing.enabled) return failure("conflict", "this account connection is already active");
+      const restored = await this.#options.authority.validateConnection({
+        access: access.value,
+        connection: {
+          ...existing,
+          displayName: request.data.displayName ?? existing.displayName,
+          enabled: true,
+        },
+      });
+      if (!restored.ok) return restored;
+      if (
+        nameConflict(
+          current.value.connections,
+          restored.value.connectionId,
+          restored.value.displayName,
+        )
+      )
+        return failure("conflict", "connection display name is already in use");
+      const snapshot = nextCatalog(current.value, this.#clock, {
+        connections: upsert(current.value.connections, restored.value, "connectionId"),
+      });
+      return this.#options.store.replaceSnapshot(
+        access.value,
+        mutation(request.data, "connection_upsert", restored.value.connectionId, snapshot),
+      );
+    }
     const connectionId = stableId(
       "connection",
       access.value.principalId,
@@ -313,6 +343,34 @@ export class AuthenticatedExecutionCatalogService implements ExecutionCatalogSer
     );
     if (reference === undefined)
       return failure("not_found", "execution model reference is unavailable");
+    const existing = current.value.configurations.find(
+      (candidate) =>
+        candidate.connectionId === connection.connectionId &&
+        candidate.modelId === reference.modelId,
+    );
+    if (existing !== undefined) {
+      if (existing.enabled)
+        return failure("conflict", "this named model configuration is already active");
+      const normalized = await this.#options.authority.validateConfiguration({
+        access: access.value,
+        connection,
+        configuration: { ...existing, enabled: false },
+      });
+      if (!normalized.ok) return normalized;
+      const restored = await this.#options.authority.validateConfiguration({
+        access: access.value,
+        connection,
+        configuration: { ...normalized.value, enabled: true },
+      });
+      if (!restored.ok) return restored;
+      const snapshot = nextCatalog(current.value, this.#clock, {
+        configurations: upsert(current.value.configurations, restored.value, "configurationId"),
+      });
+      return this.#options.store.replaceSnapshot(
+        access.value,
+        mutation(request.data, "configuration_upsert", restored.value.configurationId, snapshot),
+      );
+    }
     const configurationId = stableId(
       "configuration",
       access.value.principalId,
