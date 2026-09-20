@@ -100,12 +100,14 @@ export function createRuntimeExecutionCatalogAuthority(input: {
         request.configuration.context.mode === "unknown"
           ? canonical.value.context
           : request.configuration.context;
-      if (!effortSubset(effort, canonical.value.adapterEffort))
+      const effortSupported = effortSubset(effort, canonical.value.adapterEffort);
+      const contextSupported = contextSubset(context, canonical.value.adapterContext);
+      if (request.configuration.enabled && !effortSupported)
         return failure(
           "invalid_input",
           `Saved effort choices for ${request.configuration.modelId} are not supported by the current ${request.connection.agentProduct.replaceAll("_", " ")} adapter. Available adapter effort: ${effortDescription(canonical.value.adapterEffort)}.`,
         );
-      if (!contextSubset(context, canonical.value.adapterContext))
+      if (request.configuration.enabled && !contextSupported)
         return failure(
           "invalid_input",
           `Saved context choices for ${request.configuration.modelId} are not supported by the current ${request.connection.agentProduct.replaceAll("_", " ")} adapter. Available adapter context: ${contextDescription(canonical.value.adapterContext)}.`,
@@ -117,8 +119,8 @@ export function createRuntimeExecutionCatalogAuthority(input: {
           enabled: request.configuration.enabled,
           scores: request.configuration.scores,
           usageBucketIds: request.configuration.usageBucketIds,
-          effort,
-          context,
+          effort: effortSupported ? effort : canonical.value.effort,
+          context: contextSupported ? context : canonical.value.context,
         },
       };
     },

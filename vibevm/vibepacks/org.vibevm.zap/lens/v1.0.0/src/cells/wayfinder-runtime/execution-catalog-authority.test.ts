@@ -193,4 +193,22 @@ test("saving a legacy unknown Claude capability adopts current Opus effort evide
     allowedValues: ["low", "medium", "high", "xhigh", "max"],
     defaultValue: "high",
   });
+
+  const archived = await authority.validateConfiguration({
+    access,
+    connection: connection.value,
+    configuration: {
+      ...configuration.value,
+      enabled: false,
+      effort: { mode: "configurable", allowedValues: ["ultra"], defaultValue: "ultra" },
+    },
+  });
+  assert.equal(archived.ok, true, archived.ok ? undefined : archived.error.message);
+  if (!archived.ok) return;
+  assert.equal(archived.value.enabled, false);
+  assert.deepEqual(archived.value.effort, {
+    mode: "configurable",
+    allowedValues: ["low", "medium", "high", "xhigh", "max"],
+    defaultValue: "high",
+  });
 });
