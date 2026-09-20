@@ -529,7 +529,7 @@ export async function sha256File(path) {
 
 function failure(message) {
   throw new Error(
-    `violates REQ spec://org.vibevm.zap/lens/PROP-017#binary: ${message}; fix surface: rebuild the standalone Windows x64 distribution`,
+    `violates REQ spec://org.vibevm.zap/lens/PROP-017#binary: ${message}; fix surface: rebuild the standalone Zap distribution`,
   );
 }
 

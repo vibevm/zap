@@ -137,7 +137,14 @@ export async function buildPosixDistribution(input, ports = {}) {
         ),
         "locked Lens production dependency installation",
       );
-      await requireFile(join(lensBuild, ...target.electron.split("/")), "Electron runtime executable");
+      await ensureElectronRuntime(
+        lensBuild,
+        nodeExecutable,
+        runner,
+        npmEnvironment,
+        options.offline,
+        target.electron,
+      );
       await verifyLensRuntime(lensBuild, target.electron);
 
       const cargoEnvironment = { ...process.env, CARGO_TARGET_DIR: cargoTarget };
@@ -310,6 +317,28 @@ async function verifyLensRuntime(root, electron) {
     await requireFile(join(root, ...path.split("/")), `Lens runtime ${path}`);
   if (!(await containsNativeAddon(join(root, "node_modules", "node-pty"))))
     failure("Lens runtime has no native node-pty addon");
+}
+
+async function ensureElectronRuntime(
+  root,
+  nodeExecutable,
+  runner,
+  environment,
+  offline,
+  executablePath,
+) {
+  const electronRoot = join(root, "node_modules", "electron");
+  const executable = join(root, ...executablePath.split("/"));
+  if ((await pathKind(executable)) === "file") return;
+  if (offline) failure("offline binary build has no cached Electron runtime");
+  const installer = join(electronRoot, "install.js");
+  await requireFile(installer, "Electron runtime installer");
+  await runChecked(
+    runner,
+    command(nodeExecutable, [installer], electronRoot, environment),
+    "Electron runtime installation",
+  );
+  await requireFile(executable, "Electron runtime executable");
 }
 
 function publicLauncher(publicCommand) {
