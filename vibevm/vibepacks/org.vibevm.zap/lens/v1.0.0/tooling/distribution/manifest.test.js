@@ -6,6 +6,7 @@ import { join } from "node:path";
 import test from "node:test";
 import {
   DISTRIBUTION_DESCRIPTOR,
+  distributionDescriptor,
   parseDescriptor,
   sealDistributionDirectory,
   verifyDistributionDirectory,
@@ -93,6 +94,33 @@ test("distribution descriptor refuses traversal, case collisions, links and post
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test("Linux descriptors require and preserve an explicit libc ABI", () => {
+  const files = [
+    { path: "management/launch.sh", sha256: "c".repeat(64), size: 1 },
+    ...COMMANDS.map((command) => ({
+      path: `launchers/${command}`,
+      sha256: "d".repeat(64),
+      size: 1,
+    })),
+  ];
+  const input = {
+    sourceCommit: SOURCE_COMMIT,
+    sourceTree: SOURCE_TREE,
+    os: "linux",
+    arch: "x86_64",
+    libc: "gnu",
+    launchers: COMMANDS.map((command) => ({
+      command,
+      path: `launchers/${command}`,
+      destination: command,
+    })),
+    files,
+  };
+  assert.equal(distributionDescriptor(input).libc, "gnu");
+  assert.throws(() => distributionDescriptor({ ...input, libc: undefined }), /unsupported/u);
+  assert.equal(parseDescriptor(distributionDescriptor({ ...input, libc: "musl" })).libc, "musl");
 });
 
 async function fixturePayload(root) {

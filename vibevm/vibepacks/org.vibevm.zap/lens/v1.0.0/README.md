@@ -90,9 +90,12 @@ credentials. See the
 [source-install guide](vibevm/vibespecs/SOURCE-INSTALL-GUIDE.md).
 Use `--npm-registry <credential-free-http(s)-url>` only when the build must
 override the registry already selected by npm configuration.
-On Windows, the default engine build requires Visual Studio Build Tools with
-Desktop development with C++ and a Windows SDK; `--lens-only` omits that engine
-build. After moving the original checkout, status and uninstall remain
+Source builds use the current platform toolchain: Windows requires Visual
+Studio Build Tools with Desktop development with C++ and a Windows SDK, while
+Linux/macOS use their native Rust/C++ build tools. `--lens-only` omits the
+engine build. Published binary installations select a native Windows x64,
+Linux x64-musl, Linux x64-GNU, macOS Intel or macOS ARM64 bundle and require none of those
+build tools. After moving the original checkout, status and uninstall remain
 available from the retained Lens slot under
 `<settings>/opt/apps/zap/vibevm/vibedeps/org.vibevm.zap.lens/1.0.0/tooling/install-source.mjs`.
 Advanced-bootstrap updates still require `--registry` pointing at an existing

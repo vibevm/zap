@@ -1,0 +1,241 @@
+name: Build and publish Zap distributions
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Replace the mutable v1.0.0 release after all five builds succeed
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zap-distribution-1.0.0
+  cancel-in-progress: false
+
+jobs:
+  native:
+    name: ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Windows x86_64
+            runner: windows-2025
+            target: windows-x64
+            cargo_target: x86_64-pc-windows-msvc
+            builder: build-windows.mjs
+          - label: macOS Intel
+            runner: macos-15-intel
+            target: macos-x64
+            cargo_target: x86_64-apple-darwin
+            builder: build-posix.mjs
+          - label: macOS ARM64
+            runner: macos-15
+            target: macos-arm64
+            cargo_target: aarch64-apple-darwin
+            builder: build-posix.mjs
+          - label: Linux x86_64 GNU
+            runner: ubuntu-24.04
+            target: linux-x64-gnu
+            cargo_target: x86_64-unknown-linux-gnu
+            builder: build-posix.mjs
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Check out the exact release source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Select Node.js 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+
+      - name: Select Rust target
+        shell: bash
+        run: rustup target add '${{ matrix.cargo_target }}'
+
+      - name: Build Windows distribution
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $lens = Join-Path $env:GITHUB_WORKSPACE 'vibevm/vibepacks/org.vibevm.zap/lens/v1.0.0'
+          $engine = Join-Path $env:GITHUB_WORKSPACE 'vibevm/vibepacks/org.vibevm.zap/zap/v1.0.0'
+          $out = Join-Path $env:RUNNER_TEMP 'zap-dist'
+          $target = Join-Path $env:RUNNER_TEMP 'zap-cargo'
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          $witness = node "$lens/tooling/distribution/build-windows.mjs" --source-root $env:GITHUB_WORKSPACE --print-source-witness | ConvertFrom-Json
+          $nodeRoot = Split-Path -Parent (Get-Command node.exe).Source
+          node "$lens/tooling/distribution/build-windows.mjs" `
+            --source-root $env:GITHUB_WORKSPACE `
+            --lens-root $lens `
+            --engine-root $engine `
+            --node-root $nodeRoot `
+            --output $out `
+            --source-commit $witness.sourceCommit `
+            --source-tree $witness.sourceTree `
+            --cargo-target-dir $target
+
+      - name: Build macOS distribution
+        if: ${{ runner.os == 'macOS' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          lens="$GITHUB_WORKSPACE/vibevm/vibepacks/org.vibevm.zap/lens/v1.0.0"
+          engine="$GITHUB_WORKSPACE/vibevm/vibepacks/org.vibevm.zap/zap/v1.0.0"
+          out="$RUNNER_TEMP/zap-dist"
+          target="$RUNNER_TEMP/zap-cargo"
+          mkdir -p "$out"
+          witness="$(node "$lens/tooling/distribution/build-posix.mjs" --source-root "$GITHUB_WORKSPACE" --print-source-witness)"
+          commit="$(node -e 'const v=JSON.parse(process.argv[1]);process.stdout.write(v.sourceCommit)' "$witness")"
+          tree="$(node -e 'const v=JSON.parse(process.argv[1]);process.stdout.write(v.sourceTree)' "$witness")"
+          node_root="$(node -p "require('path').resolve(process.execPath, '..', '..')")"
+          node "$lens/tooling/distribution/build-posix.mjs" \
+            --target '${{ matrix.target }}' \
+            --source-root "$GITHUB_WORKSPACE" \
+            --lens-root "$lens" \
+            --engine-root "$engine" \
+            --node-root "$node_root" \
+            --output "$out" \
+            --source-commit "$commit" \
+            --source-tree "$tree" \
+            --cargo-target-dir "$target"
+
+      - name: Build GNU/Linux distribution
+        if: ${{ runner.os == 'Linux' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          lens="$GITHUB_WORKSPACE/vibevm/vibepacks/org.vibevm.zap/lens/v1.0.0"
+          engine="$GITHUB_WORKSPACE/vibevm/vibepacks/org.vibevm.zap/zap/v1.0.0"
+          out="$RUNNER_TEMP/zap-dist"
+          target="$RUNNER_TEMP/zap-cargo"
+          mkdir -p "$out"
+          witness="$(node "$lens/tooling/distribution/build-posix.mjs" --source-root "$GITHUB_WORKSPACE" --print-source-witness)"
+          commit="$(node -e 'const v=JSON.parse(process.argv[1]);process.stdout.write(v.sourceCommit)' "$witness")"
+          tree="$(node -e 'const v=JSON.parse(process.argv[1]);process.stdout.write(v.sourceTree)' "$witness")"
+          node_root="$(node -p "require('path').resolve(process.execPath, '..', '..')")"
+          node "$lens/tooling/distribution/build-posix.mjs" \
+            --target '${{ matrix.target }}' \
+            --source-root "$GITHUB_WORKSPACE" \
+            --lens-root "$lens" \
+            --engine-root "$engine" \
+            --node-root "$node_root" \
+            --output "$out" \
+            --source-commit "$commit" \
+            --source-tree "$tree" \
+            --cargo-target-dir "$target"
+
+      - name: Retain platform release output
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: zap-${{ matrix.target }}
+          path: |
+            ${{ runner.temp }}/zap-dist/*.zip
+            ${{ runner.temp }}/zap-dist/*.build.json
+          if-no-files-found: error
+
+  linux:
+    name: Linux x86_64 musl
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the exact release source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Build inside the exact Alpine Node runtime family
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/zap-dist" "$RUNNER_TEMP/zap-cargo"
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/src:ro" \
+            -v "$RUNNER_TEMP/zap-dist:/out" \
+            -v "$RUNNER_TEMP/zap-cargo:/cargo-target" \
+            node:24-alpine sh -lc '
+              set -euo pipefail
+              apk add --no-cache bash build-base curl git python3 tar zip
+              git config --global --add safe.directory /src
+              curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+              export PATH="$HOME/.cargo/bin:$PATH"
+              rustup target add x86_64-unknown-linux-musl
+              lens=/src/vibevm/vibepacks/org.vibevm.zap/lens/v1.0.0
+              engine=/src/vibevm/vibepacks/org.vibevm.zap/zap/v1.0.0
+              witness="$(node "$lens/tooling/distribution/build-posix.mjs" --source-root /src --print-source-witness)"
+              commit="$(node -e '"'"'const v=JSON.parse(process.argv[1]);process.stdout.write(v.sourceCommit)'"'"' "$witness")"
+              tree="$(node -e '"'"'const v=JSON.parse(process.argv[1]);process.stdout.write(v.sourceTree)'"'"' "$witness")"
+              node "$lens/tooling/distribution/build-posix.mjs" \
+                --target linux-x64-musl \
+                --source-root /src \
+                --lens-root "$lens" \
+                --engine-root "$engine" \
+                --node-root /usr/local \
+                --output /out \
+                --source-commit "$commit" \
+                --source-tree "$tree" \
+                --cargo-target-dir /cargo-target
+            '
+
+      - name: Retain Linux release output
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: zap-linux-x64-musl
+          path: |
+            ${{ runner.temp }}/zap-dist/*.zip
+            ${{ runner.temp }}/zap-dist/*.build.json
+          if-no-files-found: error
+
+  publish:
+    name: Replace the complete mutable v1.0.0 release
+    if: ${{ inputs.publish }}
+    needs: [native, linux]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the exact release source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Restore all platform outputs
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          pattern: zap-*
+          path: dist
+          merge-multiple: true
+
+      - name: Compose and inspect the complete release index
+        shell: bash
+        run: |
+          set -euo pipefail
+          lens="$GITHUB_WORKSPACE/vibevm/vibepacks/org.vibevm.zap/lens/v1.0.0"
+          node "$lens/tooling/distribution/create-index.mjs" dist/*.build.json --output dist/DISTRIBUTIONS.json
+          test "$(find dist -maxdepth 1 -name '*.zip' | wc -l)" -eq 5
+          test "$(find dist -maxdepth 1 -name '*.build.json' | wc -l)" -eq 5
+
+      - name: Move the mutable tag only after every artifact is ready
+        shell: bash
+        run: |
+          set -euo pipefail
+          git tag --force v1.0.0 "$GITHUB_SHA"
+          git push --force origin refs/tags/v1.0.0
+
+      - name: Replace the mutable GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release delete v1.0.0 --repo "$GITHUB_REPOSITORY" --yes || true
+          gh release create v1.0.0 \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --latest \
+            --title 'Zap 1.0.0' \
+            --notes 'Mutable 1.0.0 distribution release built from the exact tagged source.' \
+            dist/DISTRIBUTIONS.json dist/*.zip

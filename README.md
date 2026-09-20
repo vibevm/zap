@@ -22,10 +22,11 @@ zap-quicklens
 ```
 
 `zap-server` starts the same product and HTTP UI without opening a viewer.
-Verified Windows x64 releases contain Node.js 24, production npm dependencies
-(including Electron and node-pty), and the Rust `zap.exe`; they do not require
-a host Node.js or Rust installation. Vibe can instead build from this source
-when the user explicitly chooses the source route.
+Verified Windows x64, Linux x64-musl, Linux x64-GNU, macOS Intel and macOS ARM64 releases
+contain Node.js 24, production npm dependencies (including Electron and
+node-pty), and the matching Rust `zap` executable; they do not require a host
+Node.js or Rust installation. Vibe selects the current platform from the strict
+release index and can instead build from source when explicitly requested.
 
 ## Develop
 

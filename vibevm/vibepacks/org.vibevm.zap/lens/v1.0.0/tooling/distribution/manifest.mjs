@@ -44,8 +44,13 @@ export async function sealDistributionDirectory(root, input) {
 export function distributionDescriptor(input) {
   const sourceCommit = digest(input.sourceCommit, "sourceCommit", /^[a-f0-9]{40,64}$/u);
   const sourceTree = digest(input.sourceTree, "sourceTree", /^sha256-tree\/1:[a-f0-9]{64}$/u);
-  const launchers = launchersValue(input.launchers);
+  const target = targetValue(input.os ?? "windows", input.arch ?? "x86_64", input.libc);
+  const launchers = launchersValue(input.launchers, target.os);
   const files = filesValue(input.files);
+  const managementEntry =
+    input.managementEntry ??
+    (target.os === "windows" ? "management/launch.cmd" : "management/launch.sh");
+  portablePath(managementEntry);
   for (const launcher of launchers)
     if (!files.some((file) => file.path === launcher.path))
       failure(`launcher is absent from files: ${launcher.path}`);
@@ -57,11 +62,12 @@ export function distributionDescriptor(input) {
       installerPackage: { ...APPLICATION.installerPackage },
       commands: [...APPLICATION.commands],
     },
-    os: "windows",
-    arch: "x86_64",
+    os: target.os,
+    arch: target.arch,
+    ...(target.libc === undefined ? {} : { libc: target.libc }),
     sourceCommit,
     sourceTree,
-    management: { runtime: "builtin", entry: "management/launch.cmd" },
+    management: { runtime: "builtin", entry: managementEntry },
     launchers,
     files,
   };
@@ -89,7 +95,7 @@ export function parseDescriptor(value) {
     "management",
     "launchers",
     "files",
-  ]);
+  ], ["libc"]);
   if (value.protocol !== DISTRIBUTION_PROTOCOL) failure("descriptor protocol is unsupported");
   exactObject(value.application, "application", ["id", "package", "installerPackage", "commands"]);
   if (value.application.id !== APPLICATION.id) failure("application id differs from Zap");
@@ -101,14 +107,15 @@ export function parseDescriptor(value) {
   );
   if (JSON.stringify(value.application.commands) !== JSON.stringify(APPLICATION.commands))
     failure("application commands differ from Zap");
-  if (value.os !== "windows" || value.arch !== "x86_64")
-    failure("distribution target is unsupported");
+  const target = targetValue(value.os, value.arch, value.libc);
   digest(value.sourceCommit, "sourceCommit", /^[a-f0-9]{40,64}$/u);
   digest(value.sourceTree, "sourceTree", /^sha256-tree\/1:[a-f0-9]{64}$/u);
   exactObject(value.management, "management", ["runtime", "entry"]);
-  if (value.management.runtime !== "builtin" || value.management.entry !== "management/launch.cmd")
+  const expectedManagement =
+    target.os === "windows" ? "management/launch.cmd" : "management/launch.sh";
+  if (value.management.runtime !== "builtin" || value.management.entry !== expectedManagement)
     failure("distribution management must use the built-in installer");
-  const launchers = launchersValue(value.launchers);
+  const launchers = launchersValue(value.launchers, target.os);
   const files = filesValue(value.files);
   for (const launcher of launchers)
     if (!files.some((file) => file.path === launcher.path))
@@ -121,11 +128,12 @@ export function parseDescriptor(value) {
       installerPackage: { ...APPLICATION.installerPackage },
       commands: [...APPLICATION.commands],
     },
-    os: "windows",
-    arch: "x86_64",
+    os: target.os,
+    arch: target.arch,
+    ...(target.libc === undefined ? {} : { libc: target.libc }),
     sourceCommit: value.sourceCommit,
     sourceTree: value.sourceTree,
-    management: { runtime: "builtin", entry: "management/launch.cmd" },
+    management: { runtime: "builtin", entry: expectedManagement },
     launchers,
     files,
   };
@@ -168,7 +176,7 @@ async function sha256File(path) {
   return digest.digest("hex");
 }
 
-function launchersValue(value) {
+function launchersValue(value, os = "windows") {
   if (!Array.isArray(value) || value.length !== APPLICATION.commands.length)
     failure("launchers must cover every public command exactly once");
   const seen = new Set();
@@ -179,7 +187,8 @@ function launchersValue(value) {
       failure("launcher command is unknown or duplicated");
     seen.add(launcher.command);
     const destination = portablePath(launcher.destination);
-    if (destination.includes("/") || !destination.startsWith(`${launcher.command}.`))
+    const expected = os === "windows" ? `${launcher.command}.cmd` : launcher.command;
+    if (destination.includes("/") || destination !== expected)
       failure("launcher destination must be one opt/bin filename for its command");
     const destinationIdentity = destination.toLocaleLowerCase("en-US");
     if (destinations.has(destinationIdentity)) failure("launcher destination is duplicated");
@@ -187,6 +196,15 @@ function launchersValue(value) {
     return { command: launcher.command, path: portablePath(launcher.path), destination };
   });
   return rows.sort((left, right) => left.command.localeCompare(right.command, "en"));
+}
+
+function targetValue(os, arch, libc) {
+  const supported =
+    (os === "windows" && arch === "x86_64" && libc === undefined) ||
+    (os === "linux" && arch === "x86_64" && (libc === "musl" || libc === "gnu")) ||
+    (os === "macos" && (arch === "x86_64" || arch === "aarch64") && libc === undefined);
+  if (!supported) failure("distribution target is unsupported");
+  return { arch, libc, os };
 }
 
 function filesValue(value) {
@@ -243,10 +261,14 @@ function digest(value, name, expression) {
   return value;
 }
 
-function exactObject(value, name, fields) {
+function exactObject(value, name, fields, optional = []) {
   if (value === null || typeof value !== "object" || Array.isArray(value))
     failure(`${name} must be an object`);
-  if (Object.keys(value).sort().join(",") !== [...fields].sort().join(","))
+  const keys = Object.keys(value);
+  if (
+    fields.some((field) => !keys.includes(field)) ||
+    keys.some((key) => !fields.includes(key) && !optional.includes(key))
+  )
     failure(`${name} has missing or unknown fields`);
 }
 
@@ -266,6 +288,6 @@ async function kind(path) {
 
 function failure(message) {
   throw new Error(
-    `violates REQ spec://org.vibevm.zap/lens/PROP-017#binary: ${message}; fix surface: rebuild the exact Windows x64 Zap distribution`,
+    `violates REQ spec://org.vibevm.zap/lens/PROP-017#binary: ${message}; fix surface: rebuild the exact Zap platform distribution`,
   );
 }

@@ -1,4 +1,4 @@
-# Build the Windows x64 Zap distribution {#root}
+# Build the native Zap distributions {#root}
 
 `guide r2`
 
@@ -26,9 +26,14 @@ exclude `dist`.
 
 ## Build {#build}
 
-Use an unpacked official Node.js 24 Windows x64 distribution that includes npm
-and its license. Put output outside the source checkout. Substitute the two
-values printed by the witness command:
+The release workflow builds five native targets from the same witness: Windows
+x64, Linux x64-musl, Linux x64-GNU, macOS Intel and macOS ARM64. Each runner uses Node.js 24
+for its own platform and puts output outside the source checkout. Windows uses
+`build-windows.mjs`; POSIX runners use `build-posix.mjs --target linux-x64-musl`,
+`linux-x64-gnu`,
+`macos-x64` or `macos-arm64` with the same source/node/output arguments.
+
+The Windows spelling remains:
 
 ```text
 node <lens>/tooling/distribution/build-windows.mjs `
@@ -54,10 +59,11 @@ toolchain/target retries; it never changes the committed source witness.
 
 ## Release boundary {#release}
 
-The output directory and ZIP are candidate artifacts. They are not published
+Each output directory and ZIP is a candidate artifact. They are not published
 or accepted merely because the builder completed. Vibe core must verify the
 descriptor and ZIP, compare application and source identity with the strict
 release index, install into an isolated settings root, exercise both public
 commands, and prove source-independent uninstall. Release automation then
-publishes the ZIP and strict `vibe-application-distribution-index/1` asset; the
-source tree stays unchanged.
+publishes only after all five receipts name the same source commit/tree. The
+composed strict `vibe-application-distribution-index/1` contains exactly five
+platform rows; the source tree stays unchanged.

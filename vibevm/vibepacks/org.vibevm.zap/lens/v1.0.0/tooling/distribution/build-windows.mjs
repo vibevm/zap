@@ -31,12 +31,12 @@ import {
 
 export { inspectSourceWitness, portableContentHash } from "./source-witness.mjs";
 
-const VERSION = "1.0.0";
+export const VERSION = "1.0.0";
 const ARCHIVE_NAME = `zap-windows-x64-${VERSION}.zip`;
 const DIRECTORY_NAME = `zap-windows-x64-${VERSION}`;
 const CARGO_TARGET = "x86_64-pc-windows-msvc";
-const SOURCE_REPOSITORY = "https://github.com/vibevm/zap.git";
-const PUBLIC_COMMANDS = Object.freeze([
+export const SOURCE_REPOSITORY = "https://github.com/vibevm/zap.git";
+export const PUBLIC_COMMANDS = Object.freeze([
   ["codlens", "dist/cli.js"],
   ["codlens-mcp", "dist/mcp.js"],
   ["quicklens-service", "dist/quicklens.js"],
@@ -298,7 +298,7 @@ export async function ensureElectronRuntime(root, nodeExecutable, runner, enviro
   await requireFile(executable, "Electron runtime executable");
 }
 
-async function containsNativeAddon(root) {
+export async function containsNativeAddon(root) {
   for (const entry of await readdir(root, { withFileTypes: true })) {
     const path = join(root, entry.name);
     if (entry.isDirectory() && (await containsNativeAddon(path))) return true;
@@ -307,7 +307,7 @@ async function containsNativeAddon(root) {
   return false;
 }
 
-async function copySourceTree(source, destination) {
+export async function copySourceTree(source, destination) {
   const excluded = new Set([".git", ".vibe", "dist", "node_modules", "target"]);
   await cp(source, destination, {
     recursive: true,
@@ -377,13 +377,13 @@ if (entry === undefined) {
 `;
 }
 
-async function nodeLicensePath(nodeRoot) {
+export async function nodeLicensePath(nodeRoot) {
   for (const name of ["LICENSE", "LICENSE.txt"])
     if ((await pathKind(join(nodeRoot, name))) === "file") return join(nodeRoot, name);
   failure("portable Node license is unavailable");
 }
 
-function parseCargoMetadata(value) {
+export function parseCargoMetadata(value) {
   try {
     const parsed = JSON.parse(value);
     if (!Array.isArray(parsed.packages)) failure("cargo metadata packages are unavailable");
@@ -394,7 +394,7 @@ function parseCargoMetadata(value) {
   }
 }
 
-function bundledNodeEnvironment(nodeRoot) {
+export function bundledNodeEnvironment(nodeRoot) {
   const environment = Object.fromEntries(
     Object.entries(process.env).filter(([name]) => name.toLowerCase() !== "path"),
   );
@@ -416,7 +416,7 @@ function absoluteOutsideSource(value, sourceRoot, label) {
   return path;
 }
 
-function validateInput(value) {
+export function validateInput(value) {
   if (value === null || typeof value !== "object" || Array.isArray(value))
     failure("input is invalid");
   for (const field of ["sourceRoot", "lensRoot", "engineRoot", "nodeRoot", "outputDirectory"])
@@ -471,7 +471,7 @@ async function createZip(source, destination, runner) {
   );
 }
 
-function createRunner() {
+export function createRunner() {
   return {
     async run(request) {
       const { spawn } = await import("node:child_process");
@@ -493,21 +493,21 @@ function createRunner() {
   };
 }
 
-function command(executable, args, cwd, environment = process.env) {
+export function command(executable, args, cwd, environment = process.env) {
   return { executable, args, cwd, environment };
 }
 
-async function runChecked(runner, request, label) {
+export async function runChecked(runner, request, label) {
   const result = await runner.run(request);
   if (result.code !== 0) failure(`${label} failed with exit ${result.code}`);
   return result;
 }
 
-async function requireFile(path, label) {
+export async function requireFile(path, label) {
   if ((await pathKind(path)) !== "file") failure(`${label} is unavailable`);
 }
 
-async function pathKind(path) {
+export async function pathKind(path) {
   try {
     const metadata = await lstat(path);
     if (metadata.isSymbolicLink()) return "link";
@@ -521,7 +521,7 @@ async function pathKind(path) {
   }
 }
 
-async function sha256File(path) {
+export async function sha256File(path) {
   const digest = createHash("sha256");
   digest.update(await readFile(path));
   return digest.digest("hex");
