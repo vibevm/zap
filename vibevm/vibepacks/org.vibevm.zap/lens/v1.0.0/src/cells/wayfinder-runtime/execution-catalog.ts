@@ -92,13 +92,23 @@ export function createRuntimeExecutionCatalogAuthority(input: {
         createdAt: request.configuration.createdAt,
       });
       if (!canonical.ok) return canonical;
-      if (
-        !effortSubset(request.configuration.effort, canonical.value.adapterEffort) ||
-        !contextSubset(request.configuration.context, canonical.value.adapterContext)
-      )
+      const effort =
+        request.configuration.effort.mode === "unknown"
+          ? canonical.value.effort
+          : request.configuration.effort;
+      const context =
+        request.configuration.context.mode === "unknown"
+          ? canonical.value.context
+          : request.configuration.context;
+      if (!effortSubset(effort, canonical.value.adapterEffort))
         return failure(
           "invalid_input",
-          "configuration effort or context exceeds installed adapter evidence",
+          `Saved effort choices for ${request.configuration.modelId} are not supported by the current ${request.connection.agentProduct.replaceAll("_", " ")} adapter. Available adapter effort: ${effortDescription(canonical.value.adapterEffort)}.`,
+        );
+      if (!contextSubset(context, canonical.value.adapterContext))
+        return failure(
+          "invalid_input",
+          `Saved context choices for ${request.configuration.modelId} are not supported by the current ${request.connection.agentProduct.replaceAll("_", " ")} adapter. Available adapter context: ${contextDescription(canonical.value.adapterContext)}.`,
         );
       return {
         ok: true,
@@ -107,8 +117,8 @@ export function createRuntimeExecutionCatalogAuthority(input: {
           enabled: request.configuration.enabled,
           scores: request.configuration.scores,
           usageBucketIds: request.configuration.usageBucketIds,
-          effort: request.configuration.effort,
-          context: request.configuration.context,
+          effort,
+          context,
         },
       };
     },
@@ -539,6 +549,22 @@ function contextSubset(owner: ContextCapability, adapter: ContextCapability): bo
       owner.documentedMaximumTokens === null ||
       owner.documentedMaximumTokens <= adapter.documentedMaximumTokens)
   );
+}
+
+function effortDescription(capability: EffortCapability): string {
+  return capability.mode === "configurable"
+    ? capability.allowedValues.join(", ")
+    : capability.mode.replaceAll("_", " ");
+}
+
+function contextDescription(capability: ContextCapability): string {
+  if (capability.mode === "configurable")
+    return capability.allowedTokens.map((tokens) => `${String(tokens)} tokens`).join(", ");
+  if (capability.mode === "fixed")
+    return capability.tokens === null
+      ? "provider-controlled fixed context"
+      : `${String(capability.tokens)} tokens`;
+  return capability.mode.replaceAll("_", " ");
 }
 function mapAccountResult<T>(
   result:

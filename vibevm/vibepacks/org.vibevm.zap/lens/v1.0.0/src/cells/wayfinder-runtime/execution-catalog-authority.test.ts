@@ -107,3 +107,90 @@ test("host-configured provider model remains exact and editable without public m
     assert.equal(edited.value.displayName, "OpenCode · Laguna exact");
   }
 });
+
+test("saving a legacy unknown Claude capability adopts current Opus effort evidence", async () => {
+  const bindingId = "binding.claude.local";
+  const hostId = ExecutionHostIdSchema.parse("host.catalog.claude");
+  const access = ExecutionCatalogStoreAccessSchema.parse({
+    principalId: PrincipalIdSchema.parse("principal.catalog.claude"),
+    actorId: null,
+    clientId: ClientIdSchema.parse("client.catalog.claude"),
+    authorizedProjectIds: [],
+    hostId,
+    catalogAdministrator: true,
+  });
+  const accounts = createExecutionAccountIsolation([
+    {
+      bindingId,
+      hostId,
+      displayName: "Claude local account",
+      enabled: true,
+      setupGuidance: "Use the protected Claude configuration directory.",
+      kind: "claude_config_dir",
+      agentProduct: "claude_code",
+      homePath: "C:/fixture/claude",
+    },
+  ]);
+  assert.equal(accounts.ok, true);
+  if (!accounts.ok) return;
+  const profile = ProviderCoordinatorProfileSchema.parse({
+    profileId: "profile.claude.local",
+    provider: "claude_code",
+    executablePath: "C:/fixture/claude.exe",
+    cwd: "C:/fixture",
+    modelId: "claude-haiku-4-5-20251001",
+    effort: null,
+    endpoint: null,
+    accountBindingId: bindingId,
+    executionHostId: hostId,
+  });
+  const authority = createRuntimeExecutionCatalogAuthority({
+    accounts: accounts.value,
+    codexProfiles: [],
+    providerProfiles: [profile],
+    managedProfiles: [],
+    observedAt: "2026-09-21T00:00:00.000Z",
+  });
+  const references = await authority.modelReferences(access);
+  assert.equal(references.ok, true);
+  if (!references.ok) return;
+  const opus = references.value.find((entry) => entry.modelId === "claude-opus-5");
+  assert.notEqual(opus, undefined);
+  if (opus === undefined) return;
+  const connection = await authority.createConnection({
+    access,
+    bindingId,
+    connectionId: "connection.claude.local",
+    displayName: "Claude local account",
+    now: "2026-09-21T00:00:00.000Z",
+  });
+  assert.equal(connection.ok, true);
+  if (!connection.ok) return;
+  const configuration = await authority.createConfiguration({
+    access,
+    connection: connection.value,
+    referenceId: opus.referenceId,
+    configurationId: "configuration.claude.opus",
+    displayName: "Claude Code · Opus 5",
+    now: "2026-09-21T00:00:00.000Z",
+  });
+  assert.equal(configuration.ok, true, configuration.ok ? undefined : configuration.error.message);
+  if (!configuration.ok) return;
+
+  const upgraded = await authority.validateConfiguration({
+    access,
+    connection: connection.value,
+    configuration: {
+      ...configuration.value,
+      adapterEffort: { mode: "unknown", reason: "legacy profile had no default" },
+      effort: { mode: "unknown", reason: "legacy profile had no default" },
+    },
+  });
+  assert.equal(upgraded.ok, true, upgraded.ok ? undefined : upgraded.error.message);
+  if (!upgraded.ok) return;
+  assert.deepEqual(upgraded.value.effort, {
+    mode: "configurable",
+    allowedValues: ["low", "medium", "high", "xhigh", "max"],
+    defaultValue: "high",
+  });
+});
