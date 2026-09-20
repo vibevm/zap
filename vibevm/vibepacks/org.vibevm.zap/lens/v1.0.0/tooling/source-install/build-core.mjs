@@ -1,6 +1,7 @@
 /** Immutable source-install runtime generation. @scope spec://org.vibevm.zap/lens/PROP-016#payload */
 import { randomUUID } from "node:crypto";
 import { chmod, copyFile, cp, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { BUILD_ROOT_RELATIVE, SOURCE_INSTALL_ID, SOURCE_INSTALL_PROTOCOL } from "./contract.mjs";
 import {
@@ -279,17 +280,62 @@ async function ensureElectronRuntime(lensRoot, nativeNode, runner, offline, envi
   const electronRoot = join(lensRoot, "node_modules", "electron");
   const executable = electronExecutable(electronRoot);
   if (await executableFile(executable)) return;
-  if (offline)
-    failure("offline source build has no cached Electron runtime after locked npm install");
+  const electronCache = offline ? await cachedElectronRoot(electronRoot, environment) : null;
+  if (offline && electronCache === null)
+    failure("offline source build has no exact cached Electron runtime archive");
   const installer = join(electronRoot, "install.js");
   if (!(await regularFile(installer))) failure("Electron postinstall entry is unavailable");
   await runChecked(
     runner,
-    command(nativeNode, [installer], dirname(installer), environment),
+    command(
+      nativeNode,
+      [installer],
+      dirname(installer),
+      electronCache === null ? environment : { ...environment, ELECTRON_CACHE: electronCache },
+    ),
     "Electron runtime postinstall",
   );
   if (!(await executableFile(executable)))
     failure("Electron postinstall completed without its native runtime");
+}
+
+async function cachedElectronRoot(electronRoot, environment) {
+  const packageDocument = JSON.parse(await readFile(join(electronRoot, "package.json"), "utf8"));
+  const version = typeof packageDocument.version === "string" ? packageDocument.version : null;
+  if (version === null) return null;
+  const filename = `electron-v${version}-${process.platform}-${process.arch}.zip`;
+  const roots = [
+    environment.ELECTRON_CACHE,
+    process.platform === "win32" && typeof environment.LOCALAPPDATA === "string"
+      ? join(environment.LOCALAPPDATA, "electron", "Cache")
+      : null,
+    process.platform === "win32" ? join(homedir(), "AppData", "Local", "electron", "Cache") : null,
+    process.platform === "darwin" && typeof environment.HOME === "string"
+      ? join(environment.HOME, "Library", "Caches", "electron")
+      : null,
+    process.platform === "darwin" ? join(homedir(), "Library", "Caches", "electron") : null,
+    process.platform !== "win32" &&
+    process.platform !== "darwin" &&
+    typeof environment.HOME === "string"
+      ? join(environment.HOME, ".cache", "electron")
+      : null,
+    process.platform !== "win32" && process.platform !== "darwin"
+      ? join(homedir(), ".cache", "electron")
+      : null,
+  ].filter((value) => typeof value === "string" && value.length > 0);
+  for (const root of roots) {
+    if (await regularFile(join(root, filename))) return root;
+    let entries;
+    try {
+      entries = await readdir(root, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+    for (const entry of entries) {
+      if (entry.isDirectory() && (await regularFile(join(root, entry.name, filename)))) return root;
+    }
+  }
+  return null;
 }
 
 async function verifyRuntimePayload(runtimeRoot) {

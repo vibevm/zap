@@ -2,6 +2,10 @@
 import { dirname, join, relative, resolve, sep } from "node:path";
 
 const PACKAGE_VERSION = "1.0.0";
+const CACHED_ENGINE_CLOSURE = Object.freeze([
+  { group: "org.vibevm.ai-native", name: "rust-ai-native-lang", version: "1.0.0" },
+  { group: "org.vibevm.ai-native", name: "core-ai-native", version: "1.0.0" },
+]);
 const EXCLUDED_NAMES = new Set([
   ".git",
   ".vibe",
@@ -20,8 +24,9 @@ export async function prepareSourceRegistrySnapshot(plan, fs) {
   requireContained(plan.installerRoot, destination);
   requireContained(plan.installerRoot, temporary);
   requireContained(plan.installerRoot, backup);
-  await validatePackageSource(plan.lensSourceRoot, "lens", fs);
-  if (!plan.lensOnly) await validatePackageSource(plan.engineSourceRoot, "zap", fs);
+  await validatePackageSource(plan.lensSourceRoot, "org.vibevm.zap", "lens", fs);
+  if (!plan.lensOnly)
+    await validatePackageSource(plan.engineSourceRoot, "org.vibevm.zap", "zap", fs);
   await fs.mkdir(parent, { recursive: true });
   await rejectLinkedAncestors(plan.settingsDir, parent, fs);
   await rejectUnsafeDestination(temporary, fs);
@@ -31,9 +36,18 @@ export async function prepareSourceRegistrySnapshot(plan, fs) {
   await fs.rm(backup, { recursive: true, force: true });
   await fs.mkdir(temporary, { recursive: true });
   try {
-    await copyTree(plan.lensSourceRoot, packageDestination(temporary, "lens"), fs);
+    await copyTree(
+      plan.lensSourceRoot,
+      packageDestination(temporary, "org.vibevm.zap", "lens", PACKAGE_VERSION),
+      fs,
+    );
     if (!plan.lensOnly)
-      await copyTree(plan.engineSourceRoot, packageDestination(temporary, "zap"), fs);
+      await copyTree(
+        plan.engineSourceRoot,
+        packageDestination(temporary, "org.vibevm.zap", "zap", PACKAGE_VERSION),
+        fs,
+      );
+    if (!plan.lensOnly) await includeCachedEngineClosure(plan, temporary, fs);
     const current = await pathKind(destination, fs);
     if (current === "other") throw new Error("source registry destination is not a directory");
     if (current === "directory") await fs.rename(destination, backup);
@@ -56,8 +70,27 @@ export async function prepareSourceRegistrySnapshot(plan, fs) {
   }
 }
 
-function packageDestination(registryRoot, name) {
-  return join(registryRoot, "org.vibevm.zap", name, `v${PACKAGE_VERSION}`);
+function packageDestination(registryRoot, group, name, version) {
+  return join(registryRoot, group, name, `v${version}`);
+}
+
+async function includeCachedEngineClosure(plan, registryRoot, fs) {
+  for (const entry of CACHED_ENGINE_CLOSURE) {
+    const versionedSource = join(
+      plan.settingsDir,
+      "cache",
+      entry.group,
+      entry.name,
+      `v${entry.version}`,
+    );
+    if ((await pathKind(versionedSource, fs)) !== "directory") continue;
+    await validatePackageSource(versionedSource, entry.group, entry.name, fs);
+    await copyTree(
+      versionedSource,
+      packageDestination(registryRoot, entry.group, entry.name, entry.version),
+      fs,
+    );
+  }
 }
 
 async function copyTree(source, destination, fs) {
@@ -76,11 +109,11 @@ async function copyTree(source, destination, fs) {
   }
 }
 
-async function validatePackageSource(sourceRoot, expectedName, fs) {
+async function validatePackageSource(sourceRoot, expectedGroup, expectedName, fs) {
   const manifest = await fs.readFile(join(sourceRoot, "vibe.toml"), "utf8");
   for (const [field, value] of [
     ["name", expectedName],
-    ["group", "org.vibevm.zap"],
+    ["group", expectedGroup],
     ["version", PACKAGE_VERSION],
   ]) {
     const expression = new RegExp(`^${field}\\s*=\\s*"${value.replaceAll(".", "\\.")}"\\s*$`, "m");

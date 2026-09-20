@@ -69,6 +69,18 @@ node tooling/install-source.mjs install --registry <local-registry> --settings-d
 the Vibe, npm and Cargo dependency caches needed by this installation are
 already present. Add `--lens-only` to omit the Rust engine.
 
+For the normal engine build, pre-warm the exact Vibe package dependency closure
+once when necessary:
+
+```text
+vibe cache add org.vibevm.ai-native/rust-ai-native-lang@=1.0.0
+```
+
+The source installer copies only that validated pinned closure from the same
+Vibe settings root into its transactional local registry snapshot. Subsequent
+`vibe update -g org.vibevm.zap/zap --local-source` runs need no registry
+network access.
+
 The locked source dependencies use the canonical public npm registry. npm still
 honors its ordinary protected configuration; for an isolated build, pass an
 explicit credential-free HTTP(S) registry:
