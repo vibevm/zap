@@ -10,6 +10,14 @@ Enable only the configurations you want Zap to use. Reference entries and
 their specialization scores are editable starting preferences, not measured
 benchmarks or permission to launch a model.
 
+Use **Archive** to remove an account connection or named configuration from the
+working list without breaking prior run history. Archived items are excluded
+from routing and live under the collapsed **Archived** section, where they can
+be restored. Archiving an account also archives its configurations; restore the
+account first, then restore only the model configurations you still want. The
+collapsed advanced model reference library is background data, not a list of
+installed models.
+
 Managed work selects a specialization explicitly. The shared resolver filters
 unavailable or unauthorized choices before applying the economy/quality slider,
 specialization scores and applicable fresh subscription readings. Preview and
@@ -17,6 +25,12 @@ dispatch use the same ranking rules. A manual selection has a recorded reason.
 The run retains its chosen configuration, account, model, effort and context.
 Changing the catalog affects future work; it does not move a conversation to
 another account.
+
+The economy/quality slider ranks eligible named configurations; it does not
+silently rewrite their reasoning effort. Each configurable model has its own
+allowed effort set and explicit default effort. Draft edits, including archive
+and restore, take effect only after **Save changes** and are called out as
+unsaved until then.
 
 ## Additional Codex or Claude accounts
 

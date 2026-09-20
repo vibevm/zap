@@ -9,13 +9,10 @@ export const ExecutionReferenceTable = component$<{
   readonly references: readonly ExecutionModelReferenceView[];
 }>((props) => (
   <details class="execution-reference-table">
-    <summary>
-      Reference models · {props.references.length} · {referenceFamilyCount(props.references)}{" "}
-      families
-    </summary>
+    <summary>Advanced model reference library · {props.references.length} entries</summary>
     <p class="workspace-muted">
-      Reference entries describe known models. Only a saved configuration validated against a
-      protected connection is available for dispatch.
+      This is background reference data, not a list of installed or active models. Only a named
+      configuration shown above can be used for dispatch.
     </p>
     <div class="execution-reference-grid">
       {props.references.map((reference) => (
@@ -86,8 +83,4 @@ function humanFamilyName(modelId: string): string {
   if (modelId.startsWith("grok")) return "Grok";
   if (modelId.startsWith("zap-mock")) return "ZapMock synthetic";
   return "Catalog reference";
-}
-
-function referenceFamilyCount(references: readonly ExecutionModelReferenceView[]): number {
-  return new Set(references.map((reference) => reference.modelFamilyId)).size;
 }

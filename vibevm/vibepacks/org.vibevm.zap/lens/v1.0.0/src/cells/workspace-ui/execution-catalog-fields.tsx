@@ -16,6 +16,7 @@ export const ConnectionEditor = component$<{
   readonly canAdmin: boolean;
   readonly refreshing: boolean;
   readonly onChange$: QRL<(value: ExecutionConnectionRecord) => void>;
+  readonly onArchive$: QRL<() => void>;
   readonly onRefreshUsage$?: QRL<() => void | Promise<void>>;
 }>((props) => (
   <article class="execution-catalog-card">
@@ -35,17 +36,6 @@ export const ConnectionEditor = component$<{
       <Metadata label="Protected binding" value={props.connection.launchBindingId} />
       <Metadata label="Status" value={props.connection.enabled ? "Enabled" : "Disabled"} />
     </dl>
-    <label class="execution-toggle">
-      <input
-        type="checkbox"
-        checked={props.connection.enabled}
-        disabled={!props.canAdmin}
-        onChange$={(_, element) =>
-          props.onChange$({ ...props.connection, enabled: element.checked })
-        }
-      />
-      Allow future dispatch
-    </label>
     <p class="workspace-muted">{props.connection.setupGuidance}</p>
     <div class="execution-actions">
       {props.onRefreshUsage$ === undefined ? null : (
@@ -57,6 +47,13 @@ export const ConnectionEditor = component$<{
           {props.refreshing ? "Refreshing usage…" : "Refresh usage"}
         </button>
       )}
+      <button
+        class="button secondary danger"
+        disabled={!props.canAdmin}
+        onClick$={props.onArchive$}
+      >
+        Archive account
+      </button>
     </div>
     <div class="execution-usage-list">
       {props.usage.length === 0 ? (
@@ -80,6 +77,7 @@ export const ConfigurationEditor = component$<{
   readonly usage: readonly UsageObservation[];
   readonly canAdmin: boolean;
   readonly onChange$: QRL<(value: ExecutionConfigurationRecord) => void>;
+  readonly onArchive$: QRL<() => void>;
 }>((props) => (
   <article class="execution-catalog-card execution-configuration">
     <label class="field-label execution-name">
@@ -105,17 +103,6 @@ export const ConfigurationEditor = component$<{
       <Metadata label="Effort" value={effortSummary(props.configuration)} />
       <Metadata label="Context" value={contextSummary(props.configuration)} />
     </dl>
-    <label class="execution-toggle">
-      <input
-        type="checkbox"
-        checked={props.configuration.enabled}
-        disabled={!props.canAdmin}
-        onChange$={(_, element) =>
-          props.onChange$({ ...props.configuration, enabled: element.checked })
-        }
-      />
-      Allow future dispatch
-    </label>
     {props.configuration.adapterEffort.mode !== "configurable" ||
     props.configuration.effort.mode !== "configurable" ? (
       <p class="workspace-muted">
@@ -141,6 +128,23 @@ export const ConfigurationEditor = component$<{
             </label>
           );
         })}
+        <label class="execution-default-choice">
+          Default effort
+          <select
+            value={props.configuration.effort.defaultValue ?? ""}
+            onChange$={(_, element) => {
+              updateDefaultEffort(props.configuration, element.value, props.onChange$);
+            }}
+          >
+            <option value="">Provider default</option>
+            {props.configuration.effort.allowedValues.map((effort) => (
+              <option key={effort} value={effort}>
+                {friendly(effort)}
+              </option>
+            ))}
+          </select>
+          <small>Used when a task does not request a specific effort.</small>
+        </label>
       </fieldset>
     )}
     {props.configuration.adapterContext.mode !== "configurable" ||
@@ -269,6 +273,54 @@ export const ConfigurationEditor = component$<{
       {props.configuration.synthetic ? "Synthetic fixture identity" : "Configured identity"} ·{" "}
       {props.configuration.modalities.map(friendly).join(", ")}
     </p>
+    <div class="execution-actions">
+      <button
+        class="button secondary danger"
+        disabled={!props.canAdmin}
+        onClick$={props.onArchive$}
+      >
+        Archive configuration
+      </button>
+    </div>
+  </article>
+));
+
+export const ArchivedConnectionCard = component$<{
+  readonly connection: ExecutionConnectionRecord;
+  readonly canAdmin: boolean;
+  readonly onRestore$: QRL<() => void>;
+}>((props) => (
+  <article class="execution-catalog-card execution-archived-card">
+    <strong>{props.connection.displayName}</strong>
+    <span>{agentLabel(props.connection.agentProduct)}</span>
+    <small>{props.connection.launchBindingId}</small>
+    <button class="button secondary" disabled={!props.canAdmin} onClick$={props.onRestore$}>
+      Restore account
+    </button>
+  </article>
+));
+
+export const ArchivedConfigurationCard = component$<{
+  readonly configuration: ExecutionConfigurationRecord;
+  readonly connectionName: string;
+  readonly connectionEnabled: boolean;
+  readonly canAdmin: boolean;
+  readonly onRestore$: QRL<() => void>;
+}>((props) => (
+  <article class="execution-catalog-card execution-archived-card">
+    <strong>{props.configuration.displayName}</strong>
+    <span>{props.configuration.modelId}</span>
+    <small>{props.connectionName}</small>
+    {!props.connectionEnabled ? (
+      <small>Restore the account connection before restoring this configuration.</small>
+    ) : null}
+    <button
+      class="button secondary"
+      disabled={!props.canAdmin || !props.connectionEnabled}
+      onClick$={props.onRestore$}
+    >
+      Restore configuration
+    </button>
   </article>
 ));
 
@@ -371,6 +423,23 @@ function updateContexts(
   void change({
     ...configuration,
     context: { ...configuration.context, allowedTokens, defaultTokens },
+  });
+}
+
+function updateDefaultEffort(
+  configuration: ExecutionConfigurationRecord,
+  value: string,
+  change: QRL<(value: ExecutionConfigurationRecord) => void>,
+): void {
+  if (configuration.effort.mode !== "configurable") return;
+  const defaultValue =
+    value === ""
+      ? null
+      : configuration.effort.allowedValues.find((candidate) => candidate === value);
+  if (value !== "" && defaultValue === undefined) return;
+  void change({
+    ...configuration,
+    effort: { ...configuration.effort, defaultValue: defaultValue ?? null },
   });
 }
 

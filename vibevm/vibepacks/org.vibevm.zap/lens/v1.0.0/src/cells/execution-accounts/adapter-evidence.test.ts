@@ -6,7 +6,7 @@ import { EXECUTION_MODEL_REFERENCE } from "../execution-catalog/index.ts";
 import { codexAdapterEvidence, providerCoordinatorAdapterEvidence } from "./index.ts";
 import { ProviderCoordinatorProfileSchema } from "../provider-coordinators/index.ts";
 
-test("adapter evidence exposes only installed profile choices and verified tools", () => {
+test("adapter evidence combines verified adapter controls with model effort choices", () => {
   const reference = EXECUTION_MODEL_REFERENCE.find((entry) => entry.modelId === "gpt-5.6-sol");
   assert.notEqual(reference, undefined);
   if (reference === undefined) return;
@@ -23,7 +23,7 @@ test("adapter evidence exposes only installed profile choices and verified tools
   const plain = codexAdapterEvidence(profile, reference, "2026-09-16T12:00:00.000Z");
   assert.deepEqual(plain.effort, {
     mode: "configurable",
-    allowedValues: ["low"],
+    allowedValues: ["none", "low", "medium", "high", "xhigh", "max"],
     defaultValue: "low",
   });
   assert.deepEqual(plain.modalities, ["text"]);

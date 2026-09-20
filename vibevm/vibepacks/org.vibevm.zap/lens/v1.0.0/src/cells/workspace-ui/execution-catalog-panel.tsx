@@ -13,7 +13,19 @@ import {
   type ExecutionSelectionRequest,
 } from "../execution-catalog/index.ts";
 import { TaskClassSchema, TaskPurposeSchema } from "../model-policy/index.ts";
-import { ConfigurationEditor, ConnectionEditor } from "./execution-catalog-fields.tsx";
+import {
+  ArchivedConfigurationCard,
+  ArchivedConnectionCard,
+  ConfigurationEditor,
+  ConnectionEditor,
+} from "./execution-catalog-fields.tsx";
+import {
+  archiveConfiguration,
+  archiveConnection,
+  partitionExecutionCatalog,
+  restoreConfiguration,
+  restoreConnection,
+} from "./execution-catalog-archive.ts";
 import {
   ExecutionReferenceTable,
   preferredExecutionReference,
@@ -102,6 +114,30 @@ export const ExecutionCatalogPanel = component$<{
       ),
     };
   });
+  const setConnectionArchived = $((connectionId: string, archived: boolean) => {
+    const current = draft.value;
+    if (current === null) return;
+    draft.value = archived
+      ? archiveConnection(current, connectionId)
+      : restoreConnection(current, connectionId);
+    if (archived && selectedConnectionId.value === connectionId) {
+      selectedConnectionId.value =
+        draft.value.connections.find((connection) => connection.enabled)?.connectionId ?? "";
+    }
+    status.value = archived
+      ? "Account and its configurations moved to Archived. Save changes to keep this."
+      : "Account restored. Save changes to keep this.";
+  });
+  const setConfigurationArchived = $((configurationId: string, archived: boolean) => {
+    const current = draft.value;
+    if (current === null) return;
+    draft.value = archived
+      ? archiveConfiguration(current, configurationId)
+      : restoreConfiguration(current, configurationId);
+    status.value = archived
+      ? "Configuration moved to Archived. Save changes to keep this."
+      : "Configuration restored. Save changes to keep this.";
+  });
   const setEconomyQuality = $((value: number) => {
     const current = draft.value;
     if (current === null) return;
@@ -149,7 +185,7 @@ export const ExecutionCatalogPanel = component$<{
         return;
       }
       draft.value = result.value;
-      status.value = "Execution catalog saved.";
+      status.value = "Changes saved.";
     } finally {
       busy.value = false;
     }
@@ -183,14 +219,17 @@ export const ExecutionCatalogPanel = component$<{
     );
   }
   const catalog = draft.value;
+  const rows = partitionExecutionCatalog(catalog);
+  const dirty =
+    props.snapshot !== null && JSON.stringify(catalog) !== JSON.stringify(props.snapshot);
   return (
     <details class="workspace-panel execution-catalog-panel" open>
       <summary>Accounts, agents and task routing</summary>
       <div class="workspace-section-heading">
         <div>
           <p class="eyebrow">Execution catalog</p>
-          <h2>Allowed execution choices</h2>
-          <p>Name first, then agent, account, model, effort and context.</p>
+          <h2>Agent accounts and routing</h2>
+          <p>Choose the accounts and named model configurations Zap may use.</p>
         </div>
         <div class="execution-actions">
           <span class="count-chip">rev {catalog.catalogRevision}</span>
@@ -199,13 +238,15 @@ export const ExecutionCatalogPanel = component$<{
           </button>
           <button
             class="button primary"
-            disabled={!props.administrator || busy.value}
+            disabled={!props.administrator || busy.value || !dirty}
             onClick$={() => run(() => props.onSave$(catalog))}
           >
-            Save catalog
+            Save changes
           </button>
         </div>
       </div>
+      {dirty ? <p class="workspace-notice">You have unsaved catalog changes.</p> : null}
+      {status.value === null ? null : <p class="workspace-muted">{status.value}</p>}
       {!props.administrator ? (
         <p class="workspace-notice">
           Read-only view. Catalog changes require local owner administration authority.
@@ -215,7 +256,7 @@ export const ExecutionCatalogPanel = component$<{
       <section class="execution-preferences">
         <h3>Routing preference</h3>
         <label class="field-label">
-          Economy ↔ Quality · {catalog.preferences.economyQuality}
+          Prefer economy ↔ Prefer quality · {catalog.preferences.economyQuality}
           <input
             type="range"
             min={0}
@@ -227,6 +268,10 @@ export const ExecutionCatalogPanel = component$<{
             }}
           />
         </label>
+        <p class="workspace-muted">
+          This ranks eligible named configurations. It does not change a model&apos;s reasoning
+          effort; set that configuration&apos;s default effort below.
+        </p>
         <label class="execution-toggle">
           <input
             type="checkbox"
@@ -295,14 +340,14 @@ export const ExecutionCatalogPanel = component$<{
             </div>
           )}
         </div>
-        {catalog.connections.length === 0 ? (
+        {rows.activeConnections.length === 0 ? (
           <div class="workspace-empty compact">
             <strong>No authorized account connections</strong>
             <span>Add a protected binding to create the first account connection.</span>
           </div>
         ) : (
           <div class="execution-catalog-grid">
-            {catalog.connections.map((connection) => (
+            {rows.activeConnections.map((connection) => (
               <ConnectionEditor
                 key={connection.connectionId}
                 connection={connection}
@@ -314,6 +359,7 @@ export const ExecutionCatalogPanel = component$<{
                 canAdmin={props.administrator}
                 refreshing={busy.value}
                 onChange$={changeConnection}
+                onArchive$={$(() => setConnectionArchived(connection.connectionId, true))}
                 {...(props.onRefreshUsage$ === undefined
                   ? {}
                   : { onRefreshUsage$: $(() => refreshUsage(connection.connectionId)) })}
@@ -344,7 +390,7 @@ export const ExecutionCatalogPanel = component$<{
                 );
               }}
             >
-              {catalog.connections.map((connection) => (
+              {rows.activeConnections.map((connection) => (
                 <option
                   key={connection.connectionId}
                   value={connection.connectionId}
@@ -391,14 +437,14 @@ export const ExecutionCatalogPanel = component$<{
             )}
           </div>
         </div>
-        {catalog.configurations.length === 0 ? (
+        {rows.activeConfigurations.length === 0 ? (
           <div class="workspace-empty compact">
             <strong>No execution configurations</strong>
             <span>Select an authorized connection and add its first model configuration.</span>
           </div>
         ) : (
           <div class="execution-catalog-grid">
-            {catalog.configurations.map((configuration) => {
+            {rows.activeConfigurations.map((configuration) => {
               const connection = catalog.connections.find(
                 (candidate) => candidate.connectionId === configuration.connectionId,
               );
@@ -412,12 +458,60 @@ export const ExecutionCatalogPanel = component$<{
                   )}
                   canAdmin={props.administrator}
                   onChange$={changeConfiguration}
+                  onArchive$={$(() =>
+                    setConfigurationArchived(configuration.configurationId, true),
+                  )}
                 />
               );
             })}
           </div>
         )}
       </section>
+
+      {rows.archivedConnections.length + rows.archivedConfigurations.length === 0 ? null : (
+        <details class="execution-archive">
+          <summary>
+            Archived · {rows.archivedConnections.length} accounts ·{" "}
+            {rows.archivedConfigurations.length} configurations
+          </summary>
+          <p class="workspace-muted">
+            Archived items are hidden from normal routing and remain available for audit history.
+          </p>
+          {rows.archivedConnections.length === 0 ? null : (
+            <div class="execution-catalog-grid">
+              {rows.archivedConnections.map((connection) => (
+                <ArchivedConnectionCard
+                  key={connection.connectionId}
+                  connection={connection}
+                  canAdmin={props.administrator}
+                  onRestore$={$(() => setConnectionArchived(connection.connectionId, false))}
+                />
+              ))}
+            </div>
+          )}
+          {rows.archivedConfigurations.length === 0 ? null : (
+            <div class="execution-catalog-grid">
+              {rows.archivedConfigurations.map((configuration) => {
+                const connection = catalog.connections.find(
+                  (candidate) => candidate.connectionId === configuration.connectionId,
+                );
+                return (
+                  <ArchivedConfigurationCard
+                    key={configuration.configurationId}
+                    configuration={configuration}
+                    connectionName={connection?.displayName ?? "Missing connection"}
+                    connectionEnabled={connection?.enabled ?? false}
+                    canAdmin={props.administrator}
+                    onRestore$={$(() =>
+                      setConfigurationArchived(configuration.configurationId, false),
+                    )}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </details>
+      )}
 
       <ExecutionReferenceTable references={props.modelReferences} />
 

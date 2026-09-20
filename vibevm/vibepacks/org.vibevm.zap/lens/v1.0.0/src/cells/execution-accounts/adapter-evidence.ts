@@ -138,6 +138,23 @@ function codexEffort(
           allowedValues: [...observed.supportedEfforts],
           defaultValue: observed.defaultEffort,
         };
+  const configuredValue = ReasoningEffortSchema.safeParse(configured);
+  const supported = reference.effort.values.flatMap((value) => {
+    const parsed = ReasoningEffortSchema.safeParse(value);
+    return parsed.success ? [parsed.data] : [];
+  });
+  const referenceDefault = ReasoningEffortSchema.safeParse(reference.effort.defaultValue);
+  if (reference.effort.control === "reasoning.effort" && supported.length > 0)
+    return {
+      mode: "configurable",
+      allowedValues: [...supported],
+      defaultValue:
+        configuredValue.success && supported.includes(configuredValue.data)
+          ? configuredValue.data
+          : referenceDefault.success
+            ? referenceDefault.data
+            : null,
+    };
   return configuredEffort(configured, reference);
 }
 
