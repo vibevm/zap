@@ -145,6 +145,7 @@ export async function buildPosixDistribution(input, ports = {}) {
         options.offline,
         target.electron,
       );
+      await rm(join(lensBuild, "node_modules", ".bin"), { recursive: true, force: true });
       await verifyLensRuntime(lensBuild, target.electron);
 
       const cargoEnvironment = { ...process.env, CARGO_TARGET_DIR: cargoTarget };
@@ -266,6 +267,7 @@ async function stageBundle(input) {
   for (const directory of ["dist", "node_modules"])
     await cp(join(input.lensBuild, directory), join(app, directory), {
       recursive: true,
+      dereference: directory === "node_modules",
       force: false,
       errorOnExist: true,
     });
