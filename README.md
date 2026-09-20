@@ -21,6 +21,12 @@ vibe install -g org.vibevm.zap/zap
 zap-quicklens
 ```
 
+`zap-quicklens` and `zap-quicklens start` run Zap independently and return to
+the shell. Use `zap-quicklens stop` to stop that owner. For an attached
+foreground process use `zap-quicklens log`; use `zap-quicklens debug` for the
+deepest safe lifecycle diagnostics. Background output is appended to
+`~/.vibe/zap/logs/quicklens.log` (or the equivalent selected `--state-dir`).
+
 `zap-server` starts the same product and HTTP UI without opening a viewer.
 Verified Windows x64, Linux x64-musl, Linux x64-GNU, macOS Intel and macOS ARM64 releases
 contain Node.js 24, production npm dependencies (including Electron and

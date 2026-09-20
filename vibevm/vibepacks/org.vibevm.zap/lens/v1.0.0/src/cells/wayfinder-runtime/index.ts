@@ -506,6 +506,9 @@ export function createWayfinderRuntime(
         multiSession: true,
         productSource: product.value,
         productCatalogAdministrator: true,
+        ...(options.observeGatewayRequest === undefined
+          ? {}
+          : { observeRequest: options.observeGatewayRequest }),
         workspaceSource: (identity) =>
           createDynamicWorkspacePort({
             service,

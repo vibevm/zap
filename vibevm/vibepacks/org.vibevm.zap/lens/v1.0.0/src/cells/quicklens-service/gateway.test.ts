@@ -12,12 +12,14 @@ import { createQuicklensGateway } from "./gateway.ts";
 
 test("one-time pairing creates an HttpOnly scoped session for named operations", async (context) => {
   const token = randomBytes(32).toString("base64url");
+  const observed: { readonly path: string; readonly status: number }[] = [];
   const opened = createQuicklensGateway({
     source: fixtureSource(),
     namespace: "alpha",
     pairingToken: token,
     allowedHosts: ["127.0.0.1"],
     allowedOrigins: ["http://quicklens.test"],
+    observeRequest: (event) => observed.push(event),
   });
   assert.equal(opened.ok, true);
   if (!opened.ok) return;
@@ -77,6 +79,15 @@ test("one-time pairing creates an HttpOnly scoped session for named operations",
     body: "{}",
   });
   assert.equal(foreign.status, 403);
+  assert.equal(
+    observed.some((event) => event.path.endsWith("/pair") && event.status === 200),
+    true,
+  );
+  assert.equal(
+    observed.some((event) => event.path.endsWith("/read") && event.status === 200),
+    true,
+  );
+  assert.equal(JSON.stringify(observed).includes(token), false);
 });
 
 test("two localhost gateways keep distinct scoped cookies and invalidation cursors", async (context) => {

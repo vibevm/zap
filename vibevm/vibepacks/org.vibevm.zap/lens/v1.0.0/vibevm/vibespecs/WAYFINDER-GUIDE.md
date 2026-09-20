@@ -67,9 +67,25 @@ After an installed build, start the product with:
 zap-quicklens
 ```
 
-The launcher reuses the owner already serving the local Zap data directory or
-starts one owner, serves the built renderer on loopback and opens a one-use
-paired browser session. The legacy `zap-quick-lens` alias is retained.
+The default command is independent: it starts one background owner, waits for
+readiness, opens a one-use paired browser session and returns to the shell. It
+reuses an owner already serving the selected local Zap data directory. The
+legacy `zap-quick-lens` alias is retained. Lifecycle commands are:
+
+```text
+zap-quicklens start
+zap-quicklens stop
+zap-quicklens log
+zap-quicklens debug
+```
+
+`start` is the explicit spelling of the default independent launch. `stop`
+uses the exact owner record and its authenticated loopback control; it does not
+kill a PID discovered by name. `log` runs in the foreground with ordinary
+lifecycle events and `debug` adds detailed, credential-free composition data.
+Foreground modes remain attached to the terminal and respond to its interrupt.
+The independent process appends output under `<state-dir>/logs/quicklens.log`;
+pairing tickets and protected provider payloads are not written there.
 `zap-quicklens --electron` opens the same owner through
 the Electron shell. An empty workspace is a valid first screen.
 

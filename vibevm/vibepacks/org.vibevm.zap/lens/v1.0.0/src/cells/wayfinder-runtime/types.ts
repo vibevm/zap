@@ -29,6 +29,12 @@ export interface WayfinderRuntimeOptions {
   readonly managedControlAdapters?: readonly ManagedProviderControlAdapter[];
   readonly annotations?: AnnotationService;
   readonly annotationRestoreIntent?: AnnotationRestoreIntentPort;
+  readonly observeGatewayRequest?: (event: {
+    readonly method: string;
+    readonly path: string;
+    readonly status: number;
+    readonly durationMs: number;
+  }) => void;
 }
 
 export interface WayfinderReceipt {

@@ -45,6 +45,7 @@ export interface WayfinderOwnerLease {
   publish(
     gateway: { readonly host: string; readonly port: number; readonly basePath: string },
     issueTicket: () => OwnerResult<{ readonly ticket: string; readonly expiresAt: string }>,
+    requestStop?: () => void,
   ): Promise<OwnerResult<void>>;
   close(): Promise<void>;
 }
@@ -77,20 +78,26 @@ export function acquireWayfinderOwner(databasePath: string): OwnerResult<Wayfind
   return {
     ok: true,
     value: {
-      async publish(gateway, issueTicket) {
+      async publish(gateway, issueTicket, requestStop) {
         if (server !== undefined) return { ok: true, value: undefined };
         server = createServer((request, response) => {
-          if (
-            request.method !== "POST" ||
-            request.url !== "/ticket" ||
-            request.headers.authorization !== `Bearer ${secret}`
-          ) {
+          if (request.method !== "POST" || request.headers.authorization !== `Bearer ${secret}`) {
             response.writeHead(404).end();
             return;
           }
-          const ticket = issueTicket();
-          response.writeHead(ticket.ok ? 200 : 503, { "content-type": "application/json" });
-          response.end(JSON.stringify(ticket));
+          if (request.url === "/ticket") {
+            const ticket = issueTicket();
+            response.writeHead(ticket.ok ? 200 : 503, { "content-type": "application/json" });
+            response.end(JSON.stringify(ticket));
+            return;
+          }
+          if (request.url === "/stop" && requestStop !== undefined) {
+            response.writeHead(202, { "content-type": "application/json" });
+            response.end(JSON.stringify({ ok: true, value: { accepted: true } }));
+            setImmediate(requestStop);
+            return;
+          }
+          response.writeHead(404).end();
         });
         const listening = await listen(server);
         if (!listening.ok) return listening;
@@ -108,6 +115,44 @@ export function acquireWayfinderOwner(databasePath: string): OwnerResult<Wayfind
       },
     },
   };
+}
+
+export async function requestRunningOwnerStop(databasePath: string): Promise<OwnerResult<void>> {
+  const path = ownerPath(databasePath);
+  const state = readOwnerState(path);
+  if (state.state === "absent")
+    return failure("not_found", "no running Wayfinder owns this state database");
+  if (state.state === "invalid")
+    return failure("unavailable", "Wayfinder owner record is incomplete or unreadable");
+  const record = state.record;
+  if (!pidAlive(record.pid)) {
+    clearStale(path);
+    return failure("not_found", "no running Wayfinder owns this state database");
+  }
+  if (record.controlPort === null)
+    return failure("unavailable", "Wayfinder owner is still starting");
+  try {
+    const response = await fetch(`http://127.0.0.1:${String(record.controlPort)}/stop`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${record.secret}` },
+      signal: AbortSignal.timeout(5_000),
+    });
+    const raw: unknown = await response.json();
+    const accepted = z
+      .object({
+        ok: z.literal(true),
+        value: z.object({ accepted: z.literal(true) }).strict(),
+      })
+      .strict()
+      .safeParse(raw);
+    if (!accepted.success)
+      return failure("unavailable", "running Wayfinder refused the stop request");
+    return (await waitUntilStopped(path, record.ownerId, record.pid))
+      ? { ok: true, value: undefined }
+      : failure("unavailable", "running Wayfinder did not stop within five seconds");
+  } catch {
+    return failure("unavailable", "running Wayfinder owner control is unavailable");
+  }
 }
 
 export async function requestRunningOwnerTicket(databasePath: string): Promise<
@@ -204,6 +249,21 @@ function pidAlive(pid: number): boolean {
   } catch {
     return false;
   }
+}
+
+async function waitUntilStopped(path: string, ownerId: string, pid: number): Promise<boolean> {
+  const deadline = Date.now() + 5_000;
+  while (Date.now() < deadline) {
+    const state = readOwnerState(path);
+    if (
+      state.state === "absent" ||
+      (state.state === "valid" && state.record.ownerId !== ownerId) ||
+      !pidAlive(pid)
+    )
+      return true;
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+  return false;
 }
 
 function listen(server: Server): Promise<OwnerResult<number>> {

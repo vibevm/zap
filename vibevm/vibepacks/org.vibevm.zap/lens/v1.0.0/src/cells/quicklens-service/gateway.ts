@@ -44,6 +44,14 @@ export interface QuicklensGatewayOptions {
   readonly multiSession?: boolean;
   readonly maximumSessions?: number;
   readonly pairingTicketTtlMs?: number;
+  readonly observeRequest?: (event: QuicklensGatewayRequestEvent) => void;
+}
+
+export interface QuicklensGatewayRequestEvent {
+  readonly method: string;
+  readonly path: string;
+  readonly status: number;
+  readonly durationMs: number;
 }
 
 export interface WorkspaceSessionIdentity {
@@ -133,6 +141,17 @@ export function createQuicklensGateway(
     if (invalidations.length > 100) invalidations.shift();
   });
   const server = createServer((request, response) => {
+    const startedAt = performance.now();
+    const path =
+      request.url === undefined ? "(missing)" : new URL(request.url, "http://loopback").pathname;
+    response.once("finish", () => {
+      options.observeRequest?.({
+        method: request.method ?? "UNKNOWN",
+        path,
+        status: response.statusCode,
+        durationMs: Math.round((performance.now() - startedAt) * 100) / 100,
+      });
+    });
     void dispatch(request, response).catch(() => {
       send(response, 500, qerror("unavailable", "Quicklens gateway request failed"), request);
     });

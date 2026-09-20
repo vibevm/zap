@@ -10,7 +10,11 @@ export type {
   ManagedRuntimeController,
   ManagedWorkerLaunchRequest,
 } from "./managed.ts";
-export { acquireWayfinderOwner, requestRunningOwnerTicket } from "./owner.ts";
+export {
+  acquireWayfinderOwner,
+  requestRunningOwnerStop,
+  requestRunningOwnerTicket,
+} from "./owner.ts";
 export type { OwnerResult, WayfinderOwnerLease } from "./owner.ts";
 export type {
   WayfinderReceipt,

@@ -16,6 +16,12 @@ vibe install -g org.vibevm.zap/zap
 zap-quicklens
 ```
 
+The default command starts an independent application and returns to the
+terminal. `zap-quicklens start` is the explicit equivalent;
+`zap-quicklens stop` shuts down that exact state owner. During development use
+`zap-quicklens log` for an attached ordinary log stream or
+`zap-quicklens debug` for detailed safe request and composition diagnostics.
+
 Update and removal use `vibe update -g org.vibevm.zap/zap` and
 `vibe uninstall -g org.vibevm.zap/zap`. An older Vibe CLI must itself be
 updated before it can read the new global application declaration.

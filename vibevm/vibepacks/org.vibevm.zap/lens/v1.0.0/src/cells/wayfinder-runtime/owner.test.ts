@@ -3,7 +3,11 @@ import assert from "node:assert/strict";
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
-import { acquireWayfinderOwner, requestRunningOwnerTicket } from "./owner.ts";
+import {
+  acquireWayfinderOwner,
+  requestRunningOwnerStop,
+  requestRunningOwnerTicket,
+} from "./owner.ts";
 
 test("one live owner issues fresh attach tickets without another state owner", async () => {
   const directory = mkdtempSync(join(process.env["TEMP"] ?? process.cwd(), "wayfinder-owner-"));
@@ -61,5 +65,26 @@ test("owner creates the state parent and never removes an in-progress unreadable
   assert.equal(refused.ok, false);
   if (!refused.ok) assert.equal(refused.error.code, "unavailable");
   assert.equal(existsSync(ownerPath), true);
+  rmSync(directory, { recursive: true, force: true });
+});
+
+test("authenticated owner control stops only the exact live owner", async () => {
+  const directory = mkdtempSync(join(process.env["TEMP"] ?? process.cwd(), "wayfinder-stop-"));
+  const databasePath = join(directory, "workspace.sqlite");
+  const owner = acquireWayfinderOwner(databasePath);
+  assert.equal(owner.ok, true);
+  if (!owner.ok) return;
+  const published = await owner.value.publish(
+    { host: "127.0.0.1", port: 43111, basePath: "/workspace" },
+    () => ({ ok: true, value: { ticket: "ticket.stop", expiresAt: "expiry.stop" } }),
+    () => void owner.value.close(),
+  );
+  assert.equal(published.ok, true);
+  const stopped = await requestRunningOwnerStop(databasePath);
+  assert.equal(stopped.ok, true, stopped.ok ? undefined : stopped.error.message);
+  assert.equal(existsSync(`${databasePath}.owner.json`), false);
+  const absent = await requestRunningOwnerStop(databasePath);
+  assert.equal(absent.ok, false);
+  if (!absent.ok) assert.equal(absent.error.code, "not_found");
   rmSync(directory, { recursive: true, force: true });
 });

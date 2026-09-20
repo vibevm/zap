@@ -2,7 +2,7 @@
 /** Ordinary Zap Quick Lens launcher. @scope spec://org.vibevm.zap/lens/PROP-010#start-and-projects */
 import { randomBytes } from "node:crypto";
 import { spawn } from "node:child_process";
-import { existsSync } from "node:fs";
+import { chmodSync, closeSync, existsSync, mkdirSync, openSync } from "node:fs";
 import { createRequire } from "node:module";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
@@ -23,6 +23,7 @@ import {
   acquireWayfinderOwner,
   createWayfinderRuntime,
   loadWayfinderConfig,
+  requestRunningOwnerStop,
   requestRunningOwnerTicket,
   type OwnerResult,
   type WayfinderOwnerLease,
@@ -35,6 +36,14 @@ export interface ZapProductLauncherInput {
   readonly commandName?: "zap-quicklens" | "zap-server";
   readonly forceNoOpen?: boolean;
   readonly serverMode?: boolean;
+}
+
+type QuickLensCommand = "start" | "stop" | "log" | "debug";
+type LauncherLogLevel = "silent" | "normal" | "debug";
+
+interface LauncherLogger {
+  info(message: string, details?: Record<string, unknown>): void;
+  debug(message: string, details?: Record<string, unknown>): void;
 }
 
 export async function runZapProductLauncher(input: ZapProductLauncherInput = {}): Promise<void> {
@@ -55,17 +64,235 @@ export async function runZapProductLauncher(input: ZapProductLauncherInput = {})
     fail("zap-server does not open a presentation; use zap-quicklens --electron", 2);
     return;
   }
-  await main(args, mode);
+  if (mode.serverMode) {
+    await main(args, mode, logger("normal"), { reuseExisting: true, suppressReceipt: false });
+    return;
+  }
+  const parsed = parseCommand(args);
+  if (!parsed.ok) {
+    fail(parsed.message, 2);
+    return;
+  }
+  if (parsed.command === "stop") {
+    await stopIndependent(parsed.args, logger("normal"));
+    return;
+  }
+  const backgroundWorker = process.env["ZAP_QUICKLENS_BACKGROUND_CHILD"] === "1";
+  if (parsed.command === "start" && !backgroundWorker) {
+    await startIndependent(parsed.args, mode);
+    return;
+  }
+  const level: LauncherLogLevel = parsed.command === "debug" ? "debug" : "normal";
+  await main(parsed.args, mode, logger(level), {
+    reuseExisting: false,
+    suppressReceipt: backgroundWorker,
+  });
+}
+
+function parseCommand(
+  args: readonly string[],
+):
+  | { readonly ok: true; readonly command: QuickLensCommand; readonly args: readonly string[] }
+  | { readonly ok: false; readonly message: string } {
+  const first = args[0];
+  if (first === undefined || first.startsWith("-")) return { ok: true, command: "start", args };
+  if (first === "start" || first === "stop" || first === "log" || first === "debug")
+    return { ok: true, command: first, args: args.slice(1) };
+  return {
+    ok: false,
+    message: `unknown Zap Quick Lens command \`${first}\`; use start, stop, log or debug`,
+  };
+}
+
+async function startIndependent(
+  args: readonly string[],
+  mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
+): Promise<void> {
+  const target = await controlTarget(args);
+  if (!target.ok) {
+    fail(target.message, 2);
+    return;
+  }
+  const presentation = args.includes("--electron") ? "electron" : "browser";
+  const shouldOpen = !mode.forceNoOpen && !args.includes("--no-open");
+  const running = await requestRunningOwnerTicket(target.databasePath);
+  if (running.ok) {
+    const url = attachUrl(running.value.gateway, running.value.ticket, target.uiOrigin);
+    emit(mode, {
+      url,
+      reusedOwner: true,
+      databasePath: target.databasePath,
+      presentation,
+      background: true,
+    });
+    if (shouldOpen)
+      openPresentation(presentation, url, running.value.gateway, running.value.ticket);
+    return;
+  }
+  if (running.error.code !== "not_found") {
+    fail(running.error.message, 1);
+    return;
+  }
+  const entry = process.argv[1];
+  if (entry === undefined) {
+    fail("Zap Quick Lens entrypoint is unavailable for background launch", 1);
+    return;
+  }
+  const logDirectory = join(target.stateDirectory, "logs");
+  mkdirSync(logDirectory, { recursive: true });
+  const logPath = join(logDirectory, "quicklens.log");
+  const descriptor = openSync(logPath, "a", 0o600);
+  chmodSync(logPath, 0o600);
+  const child = spawn(process.execPath, [...process.execArgv, entry, "log", ...args, "--no-open"], {
+    detached: true,
+    windowsHide: true,
+    stdio: ["ignore", descriptor, descriptor],
+    env: { ...process.env, ZAP_QUICKLENS_BACKGROUND_CHILD: "1" },
+  });
+  closeSync(descriptor);
+  let spawnError: Error | null = null;
+  child.once("error", (error) => {
+    spawnError = error;
+  });
+  const ready = await waitForOwner(target.databasePath, child, () => spawnError, 30_000);
+  if (!ready.ok) {
+    child.kill();
+    fail(`${ready.message}. Background log: ${logPath}`, 1);
+    return;
+  }
+  child.unref();
+  const url = attachUrl(ready.gateway, ready.ticket, target.uiOrigin);
+  emit(mode, {
+    url,
+    reusedOwner: false,
+    databasePath: target.databasePath,
+    presentation,
+    background: true,
+    pid: child.pid,
+    logPath,
+  });
+  if (shouldOpen) openPresentation(presentation, url, ready.gateway, ready.ticket);
+}
+
+async function stopIndependent(args: readonly string[], log: LauncherLogger): Promise<void> {
+  const target = await controlTarget(args);
+  if (!target.ok) {
+    fail(target.message, 2);
+    return;
+  }
+  log.info("Requesting Zap Quick Lens shutdown", { databasePath: target.databasePath });
+  const stopped = await requestRunningOwnerStop(target.databasePath);
+  if (!stopped.ok) {
+    if (stopped.error.code === "not_found") {
+      console.log("Zap Quick Lens is not running.");
+      return;
+    }
+    fail(stopped.error.message, 1);
+    return;
+  }
+  console.log("Zap Quick Lens stopped.");
+}
+
+async function controlTarget(args: readonly string[]): Promise<
+  | {
+      readonly ok: true;
+      readonly stateDirectory: string;
+      readonly databasePath: string;
+      readonly uiOrigin: string;
+    }
+  | { readonly ok: false; readonly message: string }
+> {
+  const stateDirectory = resolve(option(args, "--state-dir") ?? join(homedir(), ".vibe", "zap"));
+  const settings = await loadProductLocalSettings(join(stateDirectory, "settings.json"));
+  if (!settings.ok) return { ok: false, message: settings.message };
+  const advancedPath = option(args, "--config");
+  const advanced = advancedPath === undefined ? null : await loadWayfinderConfig(advancedPath);
+  if (advanced !== null && !advanced.ok) return { ok: false, message: advanced.error.message };
+  return {
+    ok: true,
+    stateDirectory,
+    databasePath: resolve(
+      advanced?.ok === true
+        ? advanced.value.state.databasePath
+        : join(stateDirectory, "workspace.sqlite"),
+    ),
+    uiOrigin: `http://127.0.0.1:${String(settings.value.uiPort)}`,
+  };
+}
+
+async function waitForOwner(
+  databasePath: string,
+  child: ReturnType<typeof spawn>,
+  spawnError: () => Error | null,
+  timeoutMs: number,
+): Promise<
+  | {
+      readonly ok: true;
+      readonly ticket: string;
+      readonly gateway: { readonly host: string; readonly port: number; readonly basePath: string };
+    }
+  | { readonly ok: false; readonly message: string }
+> {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const error = spawnError();
+    if (error !== null) return { ok: false, message: error.message };
+    if (child.exitCode !== null)
+      return {
+        ok: false,
+        message: `background Zap Quick Lens exited with code ${String(child.exitCode)}`,
+      };
+    const ticket = await requestRunningOwnerTicket(databasePath);
+    if (ticket.ok) return { ok: true, ticket: ticket.value.ticket, gateway: ticket.value.gateway };
+    if (
+      ticket.error.code !== "not_found" &&
+      ticket.error.message !== "Wayfinder owner is still starting"
+    )
+      return { ok: false, message: ticket.error.message };
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  return {
+    ok: false,
+    message: `background Zap Quick Lens did not become ready within ${String(timeoutMs / 1_000)} seconds`,
+  };
+}
+
+function logger(level: LauncherLogLevel): LauncherLogger {
+  const write = (kind: "INFO" | "DEBUG", message: string, details?: Record<string, unknown>) => {
+    if (level === "silent" || (kind === "DEBUG" && level !== "debug")) return;
+    const suffix = details === undefined ? "" : ` ${JSON.stringify(details)}`;
+    console.log(`[${new Date().toISOString()}] ${kind} ${message}${suffix}`);
+  };
+  return {
+    info: (message, details) => {
+      write("INFO", message, details);
+    },
+    debug: (message, details) => {
+      write("DEBUG", message, details);
+    },
+  };
 }
 
 async function main(
   args: readonly string[],
   mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
+  log: LauncherLogger,
+  behavior: { readonly reuseExisting: boolean; readonly suppressReceipt: boolean },
 ): Promise<void> {
   const advancedPath = option(args, "--config");
   const stateDirectory = resolve(option(args, "--state-dir") ?? join(homedir(), ".vibe", "zap"));
   const presentation = args.includes("--electron") ? "electron" : "browser";
   const shouldOpen = !mode.forceNoOpen && !args.includes("--no-open");
+  log.debug("Resolved launcher inputs", {
+    pid: process.pid,
+    platform: process.platform,
+    node: process.version,
+    stateDirectory,
+    advancedConfig: advancedPath ?? null,
+    presentation,
+    shouldOpen,
+  });
+  log.info("Loading Zap settings");
   const settings = await loadProductLocalSettings(join(stateDirectory, "settings.json"));
   if (!settings.ok) {
     fail(settings.message, 2);
@@ -81,10 +308,25 @@ async function main(
   const databasePath = resolve(
     config?.state.databasePath ?? join(stateDirectory, "workspace.sqlite"),
   );
+  log.debug("Resolved local runtime", {
+    databasePath,
+    uiOrigin,
+    configuredProjects: config?.projects.length ?? 0,
+    configuredProfiles: config?.profiles.length ?? 0,
+  });
   const existing = await requestRunningOwnerTicket(databasePath);
   if (existing.ok) {
+    if (!behavior.reuseExisting) {
+      fail(
+        "Zap Quick Lens is already running; use `zap-quicklens start` to open it or `zap-quicklens stop` before a foreground run",
+        1,
+      );
+      return;
+    }
     const url = attachUrl(existing.value.gateway, existing.value.ticket, uiOrigin);
-    emit(mode, receipt(mode, { url, reusedOwner: true, databasePath, presentation }));
+    if (!behavior.suppressReceipt)
+      emit(mode, receipt(mode, { url, reusedOwner: true, databasePath, presentation }));
+    log.info("Attached to the running Zap owner", { databasePath });
     if (shouldOpen)
       openPresentation(presentation, url, existing.value.gateway, existing.value.ticket);
     return;
@@ -93,6 +335,7 @@ async function main(
     fail(existing.error.message, 1);
     return;
   }
+  log.info("Starting Zap owner", { databasePath });
   await startNewOwner(
     databasePath,
     stateDirectory,
@@ -101,6 +344,8 @@ async function main(
     presentation,
     shouldOpen,
     mode,
+    log,
+    behavior.suppressReceipt,
   );
 }
 
@@ -129,8 +374,14 @@ function printHelp(
     [
       "Zap Quick Lens",
       "",
-      "Usage: zap-quicklens [options]",
+      "Usage: zap-quicklens [start|stop|log|debug] [options]",
       "Legacy alias: zap-quick-lens",
+      "",
+      "Commands:",
+      "  start               Start independently and return to the terminal (default)",
+      "  stop                Stop the independent application for this state directory",
+      "  log                 Run in the foreground with ordinary lifecycle logs",
+      "  debug               Run in the foreground with detailed diagnostics",
       "",
       "Options:",
       "  --state-dir <path>  Store settings and workspace state under this directory",
@@ -150,6 +401,8 @@ async function startNewOwner(
   client: "browser" | "electron",
   open: boolean,
   mode: Required<Pick<ZapProductLauncherInput, "commandName" | "forceNoOpen" | "serverMode">>,
+  log: LauncherLogger,
+  suppressReceipt: boolean,
 ): Promise<void> {
   const owner = acquireWayfinderOwner(database);
   if (!owner.ok) {
@@ -165,6 +418,7 @@ async function startNewOwner(
     fail(ui.error.message, 1);
     return;
   }
+  log.info("Quick Lens UI is listening", { origin: ui.value.origin });
   const config =
     configured === undefined
       ? await defaultConfig(database, ui.value.origin, settings)
@@ -174,6 +428,15 @@ async function startNewOwner(
     managedControlAdapters: createNativeManagedProviderControlAdapters({
       directory: join(stateRoot, "managed-control"),
     }),
+    observeGatewayRequest: (event) => {
+      if (
+        event.path.endsWith("/pair") ||
+        event.path.endsWith("/workspace/command") ||
+        event.path.includes("/product/")
+      )
+        log.info("Quick Lens request", event);
+      else log.debug("Quick Lens request", event);
+    },
   });
   if (!created.ok) {
     await closeOwner(undefined, ui.value, owner.value);
@@ -186,12 +449,30 @@ async function startNewOwner(
     fail(started.error.message, 1);
     return;
   }
+  log.info("Wayfinder gateway is listening", {
+    host: started.value.host,
+    port: started.value.port,
+    basePath: started.value.basePath,
+  });
   const gateway = {
     host: started.value.host,
     port: started.value.port,
     basePath: started.value.basePath,
   };
-  const published = await owner.value.publish(gateway, () => ownerTicket(created.value));
+  let closing = false;
+  const close = async (reason: string): Promise<void> => {
+    if (closing) return;
+    closing = true;
+    log.info("Stopping Zap Quick Lens", { reason });
+    await closeOwner(created.value, ui.value, owner.value);
+    log.info("Zap Quick Lens stopped");
+    process.exit(0);
+  };
+  const published = await owner.value.publish(
+    gateway,
+    () => ownerTicket(created.value),
+    () => void close("control request"),
+  );
   if (!published.ok) {
     await closeOwner(created.value, ui.value, owner.value);
     fail(published.error.message, 1);
@@ -204,23 +485,25 @@ async function startNewOwner(
     return;
   }
   const url = attachUrl(gateway, ticket.value.ticket, ui.value.origin);
-  emit(
-    mode,
-    receipt(mode, {
-      url,
-      reusedOwner: false,
-      databasePath: database,
-      presentation: client,
-      stateRoot,
-    }),
-  );
+  if (!suppressReceipt)
+    emit(
+      mode,
+      receipt(mode, {
+        url,
+        reusedOwner: false,
+        databasePath: database,
+        presentation: client,
+        stateRoot,
+      }),
+    );
+  log.info("Zap Quick Lens is ready", {
+    pid: process.pid,
+    databasePath: database,
+    presentation: client,
+  });
   if (open) openPresentation(client, url, gateway, ticket.value.ticket);
-  const close = async (): Promise<void> => {
-    await closeOwner(created.value, ui.value, owner.value);
-    process.exit(0);
-  };
-  process.once("SIGINT", () => void close());
-  process.once("SIGTERM", () => void close());
+  process.once("SIGINT", () => void close("SIGINT"));
+  process.once("SIGTERM", () => void close("SIGTERM"));
   setInterval(() => undefined, 60_000);
 }
 

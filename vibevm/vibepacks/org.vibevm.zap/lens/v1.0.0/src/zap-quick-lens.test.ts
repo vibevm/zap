@@ -31,7 +31,9 @@ test("--help exits before creating state or starting the product", async () => {
     const result = await output(child);
     assert.equal(result.code, 0);
     assert.match(result.stdout, /^Zap Quick Lens\r?\n/);
-    assert.match(result.stdout, /Usage: zap-quicklens \[options\]/);
+    assert.match(result.stdout, /Usage: zap-quicklens \[start\|stop\|log\|debug\] \[options\]/);
+    assert.match(result.stdout, /start\s+Start independently/);
+    assert.match(result.stdout, /debug\s+Run in the foreground/);
     assert.match(result.stdout, /Legacy alias: zap-quick-lens/);
     assert.match(result.stdout, /--state-dir <path>/);
     assert.equal(result.stderr, "");
@@ -52,7 +54,7 @@ test("ordinary launcher starts empty then a second invocation reuses the owner",
       coordinatorDefaults: { modelId: "gpt-5.6-luna", effort: "low" },
     }),
   );
-  const owner = launch(state);
+  const owner = launchLog(state);
   try {
     const first = await receipt(owner);
     assert.equal(first.reusedOwner, false);
@@ -83,7 +85,7 @@ test("ordinary launcher starts empty then a second invocation reuses the owner",
         ),
       true,
     );
-    const secondProcess = launch(state);
+    const secondProcess = launchStart(state);
     const second = await receipt(secondProcess);
     assert.equal(await exitCode(secondProcess), 0);
     assert.equal(second.reusedOwner, true);
@@ -96,10 +98,72 @@ test("ordinary launcher starts empty then a second invocation reuses the owner",
   }
 });
 
-function launch(state: string): ChildProcess {
+test("default start detaches and stop closes the independent owner", async () => {
+  const state = await mkdtemp(join(tmpdir(), "zap-quick-lens-background-"));
+  await writeFile(
+    join(state, "settings.json"),
+    JSON.stringify({
+      version: 1,
+      uiPort: 42741,
+      proxy: { mode: "inherit" },
+      coordinatorDefaults: { modelId: "gpt-5.6-luna", effort: "low" },
+    }),
+  );
+  try {
+    const startedProcess = launchStart(state);
+    const started = await receipt(startedProcess);
+    assert.equal(await exitCode(startedProcess), 0);
+    assert.equal(started.reusedOwner, false);
+    assert.equal(existsSync(join(state, "workspace.sqlite.owner.json")), true);
+
+    const stoppedProcess = spawn(
+      process.execPath,
+      [
+        "--experimental-strip-types",
+        "src/zap-quick-lens.ts",
+        "stop",
+        "--state-dir",
+        state,
+        "--no-open",
+      ],
+      { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+    );
+    const stopped = await output(stoppedProcess);
+    assert.equal(stopped.code, 0, stopped.stderr);
+    assert.match(stopped.stdout, /Zap Quick Lens stopped\./);
+    assert.equal(existsSync(join(state, "workspace.sqlite.owner.json")), false);
+    assert.equal(existsSync(join(state, "logs", "quicklens.log")), true);
+  } finally {
+    await rm(state, { recursive: true, force: true });
+  }
+});
+
+function launchLog(state: string): ChildProcess {
   return spawn(
     process.execPath,
-    ["--experimental-strip-types", "src/zap-quick-lens.ts", "--state-dir", state, "--no-open"],
+    [
+      "--experimental-strip-types",
+      "src/zap-quick-lens.ts",
+      "log",
+      "--state-dir",
+      state,
+      "--no-open",
+    ],
+    { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+  );
+}
+
+function launchStart(state: string): ChildProcess {
+  return spawn(
+    process.execPath,
+    [
+      "--experimental-strip-types",
+      "src/zap-quick-lens.ts",
+      "start",
+      "--state-dir",
+      state,
+      "--no-open",
+    ],
     { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
   );
 }
@@ -108,6 +172,7 @@ function receipt(child: ChildProcess): Promise<z.infer<typeof ReceiptSchema>> {
   return new Promise((resolve, reject) => {
     let stdout = "";
     let stderr = "";
+    let settled = false;
     child.stdout?.setEncoding("utf8");
     child.stderr?.setEncoding("utf8");
     child.stderr?.on("data", (chunk: string) => {
@@ -115,23 +180,20 @@ function receipt(child: ChildProcess): Promise<z.infer<typeof ReceiptSchema>> {
     });
     child.stdout?.on("data", (chunk: string) => {
       stdout += chunk;
-      const boundary = stdout.indexOf("\n");
-      if (boundary < 0) return;
-      try {
-        const raw: unknown = JSON.parse(stdout.slice(0, boundary));
-        resolve(ReceiptSchema.parse(raw));
-      } catch (error) {
-        reject(
-          error instanceof Error
-            ? error
-            : new Error(
-                "violates REQ spec://org.vibevm.zap/lens/PROP-010#start-and-projects: launcher receipt could not be parsed; fix surface: emit one JSON receipt line",
-              ),
-        );
+      for (const line of stdout.split(/\r?\n/u)) {
+        if (!line.startsWith("{")) continue;
+        try {
+          const raw: unknown = JSON.parse(line);
+          settled = true;
+          resolve(ReceiptSchema.parse(raw));
+          return;
+        } catch {
+          continue;
+        }
       }
     });
     child.once("exit", (code) => {
-      if (!stdout.includes("\n")) reject(new Error(`launcher exited ${String(code)}: ${stderr}`));
+      if (!settled) reject(new Error(`launcher exited ${String(code)}: ${stderr}\n${stdout}`));
     });
   });
 }

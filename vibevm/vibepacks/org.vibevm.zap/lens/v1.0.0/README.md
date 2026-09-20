@@ -138,9 +138,13 @@ After an installed build, ordinary local startup needs no multi-file JSON:
 zap-quicklens
 ```
 
-The launcher reuses the existing Wayfinder owner for `~/.vibe/zap`, or starts
-one owner, serves the built renderer on loopback, and opens a one-time paired
-browser session. The legacy `zap-quick-lens` spelling remains supported. Use
+The default launcher runs independently and returns to the shell. It reuses the
+existing Wayfinder owner for `~/.vibe/zap`, or starts one owner, serves the
+built renderer on loopback, and opens a one-time paired browser session. Use
+`zap-quicklens stop` to stop it, `zap-quicklens log` for an attached ordinary
+log stream, and `zap-quicklens debug` for detailed safe diagnostics. Background
+output is appended under `~/.vibe/zap/logs/quicklens.log`. The legacy
+`zap-quick-lens` spelling remains supported. Use
 `zap-quicklens --electron` for the same owner in the
 Electron shell. Opening or closing either viewer does not start or stop agents.
 An empty workspace is valid; **Add project** validates an existing directory,
